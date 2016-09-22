@@ -1,5 +1,8 @@
 package messageObjects;
 
-public class LoginMessage {
+import java.io.Serializable;
+
+public class LoginMessage extends UserMessage implements Serializable{
+	
 
 }

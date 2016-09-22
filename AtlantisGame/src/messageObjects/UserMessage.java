@@ -1,5 +1,7 @@
 package messageObjects;
 
-public class UserMessage {
+import java.io.Serializable;
+
+public class UserMessage extends Message implements Serializable {
 
 }
