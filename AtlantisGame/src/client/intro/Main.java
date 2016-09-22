@@ -1,5 +1,5 @@
 //Ali and KevinTheKing
-package client;
+package client.intro;
 	
 import javafx.application.Application;
 import javafx.stage.Stage;
