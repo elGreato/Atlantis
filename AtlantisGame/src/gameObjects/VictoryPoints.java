@@ -1,4 +1,4 @@
-package client;
+package gameObjects;
 
 public class VictoryPoints {
 
