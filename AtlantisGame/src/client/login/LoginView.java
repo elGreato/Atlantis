@@ -1,5 +1,5 @@
 package client.login;
 
-public class loginView {
+public class LoginView {
 
 }

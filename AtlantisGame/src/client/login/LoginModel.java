@@ -1,5 +1,5 @@
 package client.login;
 
-public class loginModel {
+public class LoginModel {
 
 }

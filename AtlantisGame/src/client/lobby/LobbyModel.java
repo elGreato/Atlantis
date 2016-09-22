@@ -1,5 +1,5 @@
 package client.lobby;
 
-public class lobbyView {
+public class LobbyModel {
 
 }
