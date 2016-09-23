@@ -11,6 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+
+
 public class Player extends VBox{
 	private Label lblName= new Label();
 	
@@ -35,12 +37,10 @@ public class Player extends VBox{
 		playerHand = new PlayerHand(name);
 		
 		// empty Labels for cards
-		for (int i=0; i<(playerHand.getNumCards()); i++){
-			Label lblCard = new Label("a card ");
-			
+		for (int i=0; i<5; i++){
+		Label lblCard = new Label("a card ");
 		// set class ID for css later
 		lblCard.getStylesheets().add("card");	
-		
 		hboxCards.getChildren().add(lblCard);
 		}
 		
@@ -72,6 +72,17 @@ public class Player extends VBox{
 		this.getChildren().add(vpHolder);    
 		this.getChildren().add(lblPlayerImage);
 		this.getChildren().add(hboxCards);
-	}		
-							
+	}	
+	//this method is from the first semester as well
+	 public void addCard(Card card) {
+	        // Add card to the hand
+	        playerHand.addCard(card);
+	        
+	        // Determine which label this is (index from 0 to 4)
+	        int index = playerHand.getNumCards() - 1;
+	        
+	        // Get the label from the HBox, and update it
+	        Label cardLabel = (Label) hboxCards.getChildren().get(index);
+	        cardLabel.setGraphic(card.colorChoice.addImage());
+	    }						
 }
