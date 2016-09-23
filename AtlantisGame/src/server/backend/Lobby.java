@@ -1,4 +1,4 @@
-package server;
+package server.backend;
 
 public class Lobby {
 
