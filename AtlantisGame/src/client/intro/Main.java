@@ -1,6 +1,7 @@
 //Ali and KevinTheKing
 package client.intro;
 	
+import gameObjects.Player;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -15,7 +16,18 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,400,400);
+			
+		Player p1 = new Player("ali");
+		Player p2= new Player  ("kevin");
+		Player p3= new Player("idiot");
+		Player p4 = new Player("Stefan");
+		
+			root.setTop(p1);
+			root.setBottom(p2);
+			root.setCenter(p3);
+			root.setLeft(p4);
+			
+			Scene scene = new Scene(root,800,800);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
