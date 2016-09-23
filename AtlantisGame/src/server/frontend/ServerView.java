@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 public class ServerView {
 	
-	private Stage stage;
+	protected Stage stage;
 	private Scene scene;
 	
 	private VBox root;

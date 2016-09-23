@@ -13,7 +13,7 @@ public class LoginController {
 	{
 		this.view = view;
 		
-		//Cosmetic stuff
+		//Some cosmetic stuff
 		view.createPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e)
 			{
