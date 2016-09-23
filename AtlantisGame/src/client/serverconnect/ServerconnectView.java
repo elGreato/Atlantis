@@ -11,8 +11,8 @@ public class ServerconnectView {
 	private VBox root;
 	private HBox controls;
 	private Label descriptionlbl;
-	private TextField iptxt;
-	private Button okButton; 
+	protected TextField iptxt;
+	protected Button okButton; 
 	
 	
 	public ServerconnectView(Stage stage)

@@ -1,7 +1,11 @@
 package client.serverconnect;
 
 public class ServerconnectModel {
-	public ServerconnectModel()
+	
+	
+	
+	//sets up connection to server
+	protected void setUpConnection(String text)
 	{
 		
 	}
