@@ -32,7 +32,7 @@ public class Card {
 		case green: index=1;break;
 		default:index=2;
 		}
-		return 
+		return
 	}
 	
 	
