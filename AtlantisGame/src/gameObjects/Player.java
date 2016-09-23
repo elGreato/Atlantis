@@ -27,13 +27,15 @@ public class Player extends VBox{
 	private int numberOfCards=5;
 	
 	
-	
-	
 	public Player(String name){
-		super();  //the player extends vbox 
-	
+		//the player extends vbox 
+		super();  
+		
+		//create the player hand
+		playerHand = new PlayerHand(name);
+		
 		// empty Labels for cards
-		for (int i=0; i<numberOfCards; i++){
+		for (int i=0; i<(playerHand.getNumCards()); i++){
 			Label lblCard = new Label();
 			
 		// set class ID for css later
@@ -52,7 +54,6 @@ public class Player extends VBox{
 		paths[1]="images4players/player2.png";
 		paths[2]="images4players/player3.png";
 		paths[3]="images4players/player4.png";
-		
 		Random r= new Random();
 		int index =  (r.nextInt(paths.length));
 		Image image = new Image(getClass().getResourceAsStream(paths[index]));
@@ -61,21 +62,18 @@ public class Player extends VBox{
 		
 		
 		
-		//create the player hand
-		
-		playerHand = new PlayerHand(name);
-		
 		//set CSS ID for player
 		this.getStylesheets().add("player");
 		
 		// set the victory Points
-		
 		vpHolder.setText(String.valueOf(victoryPoints));
 		
 		
+		
 		this.getChildren().add(lblName);
-		this.getChildren().add(vpHolder);    //,/*lblPlayerImage,*/ vpHolder);   // i need to add vp as well somehow
+		this.getChildren().add(vpHolder);    
 		this.getChildren().add(lblPlayerImage);
+		this.getChildren().add(hboxCards);
 	}		
 							
 }
