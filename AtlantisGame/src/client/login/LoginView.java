@@ -9,22 +9,24 @@ public class LoginView {
 	private Stage stage;
 	private Scene scene;
 	private VBox root;
-	private TitledPane loginPane;
-	private TitledPane createPane;
+	protected TitledPane loginPane;
+	protected TitledPane createPane;
 	
 	private GridPane login;
 	private Label logindescriptionlbl;
 	private Label loginusernamelbl;
 	private Label loginpasswordlbl;
-	private TextField loginusernametxt;
-	private PasswordField loginpasswordtxt;
+	protected TextField loginusernametxt;
+	protected PasswordField loginpasswordtxt;
+	protected Button loginButton;
 	
 	private GridPane create;
 	private Label createdescriptionlbl;
 	private Label createusernamelbl;
 	private Label createpasswordlbl;
-	private TextField createusernametxt;
-	private PasswordField createpasswordtxt;
+	protected TextField createusernametxt;
+	protected PasswordField createpasswordtxt;
+	protected Button createButton;
 	
 	
 	public LoginView()
@@ -37,12 +39,14 @@ public class LoginView {
 		loginpasswordlbl = new Label("Password: ");
 		loginusernametxt = new TextField();
 		loginpasswordtxt = new PasswordField();
+		loginButton = new Button("Login");
 		
-		login.add(logindescriptionlbl, 0, 0, 2, 1);
+		login.add(logindescriptionlbl, 0, 0, 3, 1);
 		login.add(loginusernamelbl, 0, 1);
 		login.add(loginpasswordlbl, 0, 2);
 		login.add(loginusernametxt, 1, 1);
 		login.add(loginpasswordtxt, 1, 2);
+		login.add(loginButton, 1, 3);
 		
 		create = new GridPane();
 		createdescriptionlbl = new Label("Enter your preferred username and the password below: ");
@@ -50,12 +54,14 @@ public class LoginView {
 		createpasswordlbl = new Label("Password: ");
 		createusernametxt = new TextField();
 		createpasswordtxt = new PasswordField();
+		createButton = new Button("Create");
 		
-		create.add(createdescriptionlbl, 0, 0, 2, 1);
+		create.add(createdescriptionlbl, 0, 0, 3, 1);
 		create.add(createusernamelbl, 0, 1);
 		create.add(createpasswordlbl, 0, 2);
 		create.add(createusernametxt, 1, 1);
 		create.add(createpasswordtxt, 1, 2);
+		create.add(createButton, 1, 3);
 		
 		loginPane = new TitledPane();
 		loginPane.setText("Login");
