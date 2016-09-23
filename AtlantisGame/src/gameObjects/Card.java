@@ -15,7 +15,7 @@ public class Card {
 	Color yellow = Color.YELLOW;
 	Color green = Color.LIGHTSEAGREEN;
 	Color purple = Color.PURPLE;
-	Color brown = Color.BROWN;*/
+	Color brown = Color.BROWN;*/ 
 	
 	public enum ColorChoice { blue,red,gray,yellow,green,purple,brown;
 		 
