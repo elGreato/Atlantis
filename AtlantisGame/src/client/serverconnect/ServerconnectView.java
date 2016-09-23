@@ -6,13 +6,15 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class ServerconnectView {
-	private Stage stage;
+	protected Stage stage;
 	private Scene scene;
 	private VBox root;
 	private HBox controls;
 	private Label descriptionlbl;
 	protected TextField iptxt;
 	protected Button okButton; 
+	
+	
 	
 	
 	public ServerconnectView(Stage stage)
@@ -40,5 +42,9 @@ public class ServerconnectView {
 	public void start()
 	{
 		stage.show();
+	}
+	
+	public void close() {
+		stage.close();
 	}
 }
