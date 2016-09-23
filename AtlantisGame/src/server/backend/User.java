@@ -1,4 +1,4 @@
-package server;
+package server.backend;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

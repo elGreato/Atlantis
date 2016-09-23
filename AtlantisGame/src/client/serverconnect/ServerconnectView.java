@@ -20,7 +20,7 @@ public class ServerconnectView {
 	public ServerconnectView(Stage stage)
 	{
 		this.stage = stage;
-		stage.setTitle("Atlantis game");
+		stage.setTitle("Atlantis");
 		
 		root = new VBox();
 		
