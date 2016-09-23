@@ -5,7 +5,7 @@ import java.util.ArrayList;
 //Ali
 public class PlayerHand {
 	
-	private int handSize;
+	private int handSize=5;
 	private String playerName; 
 	private ArrayList<Card> cards = new ArrayList<>(); 
 	

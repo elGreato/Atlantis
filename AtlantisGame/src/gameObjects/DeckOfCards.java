@@ -22,21 +22,22 @@ public class DeckOfCards {
 	}
 
 	public void shuffle(){
-		// first we remove any cards in the deck
+		// first we remove any cards in the deck 
 		cards.clear();
 		
 		// Add all 105 cards
-        for (Card.ColorChoice color : Card.ColorChoice.values()) {
-                Card card = new Card(color);
-                cards.add(card);
-            
+		for (int i=0; i<15; i++) {
+			
+			for (Card.ColorChoice c: Card.ColorChoice.values()) //used nested loop to multiply # of colors with #of cards	
+                cards.add(new Card(c));
         }
+		
 		// now since we added them on a row we shuffle them
         
-        Collections.shuffle(cards);  // credits goes to Prof. Bradly Richard from first semester poker example
+        Collections.shuffle(cards);  
 	}
 	
 	public Card deal(){
-		  return (cards.size() > 0) ? cards.remove(cards.size()-1) : null;  // same source
+		  return (cards.size() > 0) ? cards.remove(cards.size()-1) : null;  // Prof Bradly Richard from the first semester
 	}
 }
