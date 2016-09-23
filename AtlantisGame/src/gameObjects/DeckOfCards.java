@@ -22,7 +22,7 @@ public class DeckOfCards {
 	}
 
 	public void shuffle(){
-		// first we remove any cards in the deck
+		// first we remove any cards in the deck 
 		cards.clear();
 		
 		// Add all 105 cards
