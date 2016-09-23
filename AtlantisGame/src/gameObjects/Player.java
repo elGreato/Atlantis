@@ -36,7 +36,7 @@ public class Player extends VBox{
 		
 		// empty Labels for cards
 		for (int i=0; i<(playerHand.getNumCards()); i++){
-			Label lblCard = new Label();
+			Label lblCard = new Label("a card ");
 			
 		// set class ID for css later
 		lblCard.getStylesheets().add("card");	
@@ -58,9 +58,7 @@ public class Player extends VBox{
 		int index =  (r.nextInt(paths.length));
 		Image image = new Image(getClass().getResourceAsStream(paths[index]));
 		lblPlayerImage.setGraphic(new ImageView(image));
-		
-		
-		
+
 		
 		//set CSS ID for player
 		this.getStylesheets().add("player");
