@@ -38,7 +38,7 @@ public class Player extends VBox{
 		
 		// empty Labels for cards
 		for (int i=0; i<5; i++){
-		Label lblCard = new Label("a card ");
+		Label lblCard = new Label(" ");
 		// set class ID for css later
 		lblCard.getStylesheets().add("card");	
 		hboxCards.getChildren().add(lblCard);
