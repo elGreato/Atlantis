@@ -41,12 +41,12 @@ public class ServerModel implements Runnable{
 		String username = view.dbusernametxt.getText();
 		String password = view.dbpasswordtxt.getText();
 		
-		//Test if connection to database is possible
+		//Test if setting up a connection to mysql is possible
 		try {
 			
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", username, password);
 			view.dbconnectbtn.setDisable(true);
-			view.dbconnectbtn.setText("Connected..");
+			view.dbconnectbtn.setText("Connected...");
 			
 		} catch (SQLException e) {
 			
@@ -57,42 +57,56 @@ public class ServerModel implements Runnable{
 			
 		}
 		
-		//Test if database for atlantis exists
-		
+		testDatabase();
+
+	}
+	
+	//Test database for validity
+	public void testDatabase()
+	{
 		try {
 			Statement teststmt = con.createStatement();
 			teststmt.executeUpdate("USE ATLANTISDB;");
+			teststmt.executeQuery("SELECT username, userpwd, games_played, games_won, games_lost FROM users");
 			
 		}
 		catch(SQLException e)
 		{
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("No instance existing");
-			alert.setContentText("Did not detect an instance of atlantisdb on localhost. Create?");
+			alert.setContentText("Did not detect a valid instance of atlantisdb on this host. Create?");
 			Optional<ButtonType> answer = alert.showAndWait();
 			if(answer.get() == ButtonType.OK)
 			{
-				try {
-					Statement createstmt = con.createStatement();
-					createstmt.executeUpdate("CREATE DATABASE IF NOT EXISTS ATLANTISDB;");
-					createstmt.executeUpdate("USE ATLANTISDB;");
-					createstmt.executeUpdate("CREATE TABLE IF NOT EXISTS users ("
-							 + "username VARCHAR(10) PRIMARY KEY,"
-							 + "userpwd VARCHAR(10),"
-							 + "games_played INT(5),"
-							 + "games_won INT(5),"
-							 + "games_lost INT(5));");
-					
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
+				createDatabase();
 			}
 		}
 	}
 	
 	
+	//Create new valid database
+	public void createDatabase()
+	{
+		try {
+			Statement createstmt = con.createStatement();
+			createstmt.executeUpdate("DROP DATABASE IF EXISTS atlantisdb");
+			createstmt.executeUpdate("CREATE DATABASE atlantisdb;");
+			createstmt.executeUpdate("USE ATLANTISDB;");
+			createstmt.executeUpdate("CREATE TABLE IF NOT EXISTS users ("
+					 + "username VARCHAR(10) PRIMARY KEY,"
+					 + "userpwd VARCHAR(10),"
+					 + "games_played INT(5),"
+					 + "games_won INT(5),"
+					 + "games_lost INT(5));");
+			
+		} catch (SQLException e1) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Unexpected error");
+			alert.setContentText("An unexpected error occured when trying to create the database. Try to restart the application or the system.");
+			alert.showAndWait();;
+		}
+		
+	}
 	
 	//Creates new thread for listener (JavaFX crashes when doing this without a thread)
 	protected void startServer()
