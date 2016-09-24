@@ -1,5 +1,13 @@
 package server.backend;
 
-public class Lobby {
+import java.sql.Connection;
+import java.util.ArrayList;
 
+import gameObjects.Game;
+
+public class Lobby {
+	private ArrayList<User> users;
+	private ArrayList<Game> waitingGames;
+	private ArrayList<Game> runningGames;
+	private Connection dbAccessCon;
 }

@@ -91,7 +91,7 @@ public class ServerModel implements Runnable{
 			Statement createstmt = con.createStatement();
 			createstmt.executeUpdate("DROP DATABASE IF EXISTS atlantisdb");
 			createstmt.executeUpdate("CREATE DATABASE atlantisdb;");
-			createstmt.executeUpdate("USE ATLANTISDB;");
+			createstmt.executeUpdate("USE atlantisdb;");
 			createstmt.executeUpdate("CREATE TABLE IF NOT EXISTS users ("
 					 + "username VARCHAR(10) PRIMARY KEY,"
 					 + "userpwd VARCHAR(10),"
