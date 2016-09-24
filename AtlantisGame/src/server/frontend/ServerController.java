@@ -34,7 +34,7 @@ public class ServerController {
 		view.dbconnectbtn.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e)
 			{
-				
+				model.connectToDatabase();
 			}
 		});
 		
