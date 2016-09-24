@@ -36,8 +36,9 @@ public class ServerView {
 		serverState.setText("Server");
 		
 		serverPane = new GridPane();
-		serverlbl = new Label("Start server: ");
+		serverlbl = new Label("Start server (Connect to database first): ");
 		serverstartbtn = new Button("Start");
+		serverstartbtn.setDisable(true);
 		
 		serverPane.add(serverlbl, 0, 0, 3, 1);
 		serverPane.add(serverstartbtn, 0, 1);
@@ -64,7 +65,7 @@ public class ServerView {
 		dbState.setContent(dbPane);
 		
 		root = new VBox();
-		root.getChildren().addAll(serverState, dbState);
+		root.getChildren().addAll(dbState, serverState);
 		
 		scene = new Scene(root);
 		stage.setScene(scene);

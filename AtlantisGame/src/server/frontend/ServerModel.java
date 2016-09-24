@@ -8,9 +8,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Optional;
 
-
+import gameObjects.Game;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -68,7 +69,8 @@ public class ServerModel implements Runnable{
 			Statement teststmt = con.createStatement();
 			teststmt.executeUpdate("USE ATLANTISDB;");
 			teststmt.executeQuery("SELECT username, userpwd, games_played, games_won, games_lost FROM users");
-			
+			view.serverstartbtn.setDisable(false);
+			view.dbState.setText("Database (connected)");
 		}
 		catch(SQLException e)
 		{
@@ -99,6 +101,9 @@ public class ServerModel implements Runnable{
 					 + "games_won INT(5),"
 					 + "games_lost INT(5));");
 			
+			view.serverstartbtn.setDisable(false);
+			view.dbState.setText("Database (connected)");
+			
 		} catch (SQLException e1) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Unexpected error");
@@ -113,6 +118,7 @@ public class ServerModel implements Runnable{
 	{
 		view.serverstartbtn.setDisable(true);
 		view.serverstartbtn.setText("Running...");
+		view.serverState.setText("Server (running)");
 		Thread listener = new Thread(this);
 		listener.start();
 	}
@@ -143,7 +149,7 @@ public class ServerModel implements Runnable{
 				{
 					view.serverstartbtn.setDisable(false);
 					view.serverstartbtn.setText("Start");
-					
+					view.serverState.setText("Server");
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setTitle("Socket error");
 					alert.setContentText("An error with the socket occured. Server stopped.");
