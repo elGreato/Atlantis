@@ -11,6 +11,7 @@ import messageObjects.LoginMessage;
 public class User implements Runnable{
 	
 	private String username;
+	private boolean loggedIn;
 	
 	private Lobby lobby;
 	
@@ -33,24 +34,42 @@ public class User implements Runnable{
 			ois = new ObjectInputStream(client.getInputStream());
 			oos = new ObjectOutputStream(client.getOutputStream());
 			
-			//get login or create message from user
-			Object loginOrCreate = ois.readObject();
+			loginUser();
 			
-			if(loginOrCreate instanceof LoginMessage)
-			{
-				
-			}
-			else if(loginOrCreate instanceof CreateUserMessage)
-			{
-				
-			}
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} 
+	}
+	
+	
+	
+	//get login or create messages from user till user is logged in and will therefore be redirected to lobby.
+	private void loginUser()
+	{
+		loggedIn = false;
+		
+		while(!loggedIn)
+		{
+			try{
+				Object loginOrCreate = ois.readObject();
+		
+				if(loginOrCreate instanceof LoginMessage)
+				{
+			
+				}
+				else if(loginOrCreate instanceof CreateUserMessage)
+				{
+				
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
