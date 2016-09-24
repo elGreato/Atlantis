@@ -9,13 +9,6 @@ import javafx.scene.paint.Color;
  */
 
 public class Card {
-	/*Color blue = Color.BLUE;
-	Color red = Color.RED;
-	Color gray = Color.GRAY;
-	Color yellow = Color.YELLOW;
-	Color green = Color.LIGHTSEAGREEN;
-	Color purple = Color.PURPLE;
-	Color brown = Color.BROWN;*/ 
 	
 	public enum ColorChoice { blue,red,gray,yellow,green,purple,brown;
 		 
