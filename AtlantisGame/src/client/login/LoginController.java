@@ -4,14 +4,17 @@ import com.sun.glass.ui.View;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 public class LoginController {
 	private LoginView view;
 	private LoginModel model;
+	private int maxLength;
 	
 	public LoginController(LoginView view, LoginModel model)
 	{
+		maxLength = 15;
 		this.view = view;
 		this.model = model;
 		
@@ -61,8 +64,40 @@ public class LoginController {
 			}
 		});
 		
+		//consume entries who would be too long for database
 		
-		
+		view.createusernametxt.textProperty().addListener((observable, oldValue, newValue) -> {
+		    if(newValue.length() > 15)
+		    {
+		    	String s = newValue.substring(0,15);
+		    	view.createusernametxt.setText(s);
+		    	
+		    }
+		});
+		view.createpasswordtxt.textProperty().addListener((observable, oldValue, newValue) -> {
+		    if(newValue.length() > 15)
+		    {
+		    	String s = newValue.substring(0,15);
+		    	view.createpasswordtxt.setText(s);
+		    	
+		    }
+		});
+		view.loginusernametxt.textProperty().addListener((observable, oldValue, newValue) -> {
+		    if(newValue.length() > 15)
+		    {
+		    	String s = newValue.substring(0,15);
+		    	view.loginusernametxt.setText(s);
+		    	
+		    }
+		});
+		view.loginpasswordtxt.textProperty().addListener((observable, oldValue, newValue) -> {
+		    if(newValue.length() > 15)
+		    {
+		    	String s = newValue.substring(0,15);
+		    	view.loginpasswordtxt.setText(s);
+		    	
+		    }
+		});
 	}
 	
 	

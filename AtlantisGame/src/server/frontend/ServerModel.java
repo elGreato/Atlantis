@@ -67,16 +67,18 @@ public class ServerModel implements Runnable{
 	{
 		try {
 			Statement teststmt = con.createStatement();
-			teststmt.executeUpdate("USE ATLANTISDB;");
+			teststmt.executeUpdate("USE atlantisdb;");
 			teststmt.executeQuery("SELECT username, userpwd, games_played, games_won, games_lost FROM users");
 			view.serverstartbtn.setDisable(false);
 			view.dbState.setText("Database (connected)");
+			
 		}
 		catch(SQLException e)
 		{
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("No instance existing");
-			alert.setContentText("Did not detect a valid instance of atlantisdb on this host. Create?");
+			alert.setContentText("Did not detect a valid instance of atlantisdb on this host. Create?"
+					+ "Warning: If there is an existing instance of 'atlantisdb', it will be deleted");
 			Optional<ButtonType> answer = alert.showAndWait();
 			if(answer.get() == ButtonType.OK)
 			{
@@ -95,8 +97,8 @@ public class ServerModel implements Runnable{
 			createstmt.executeUpdate("CREATE DATABASE atlantisdb;");
 			createstmt.executeUpdate("USE atlantisdb;");
 			createstmt.executeUpdate("CREATE TABLE IF NOT EXISTS users ("
-					 + "username VARCHAR(10) PRIMARY KEY,"
-					 + "userpwd VARCHAR(10),"
+					 + "username VARCHAR(16) PRIMARY KEY,"
+					 + "userpwd VARCHAR(16),"
 					 + "games_played INT(5),"
 					 + "games_won INT(5),"
 					 + "games_lost INT(5));");
@@ -123,7 +125,14 @@ public class ServerModel implements Runnable{
 		listener.start();
 	}
 	
-
+	//Init last database update before closing server through lobby
+	public void lastDbUpdate()
+	{
+		if(lobby != null)
+		{
+			lobby.lastDbUpdate();
+		}
+	}
 	
 	//Server loop
 	@Override
@@ -132,6 +141,7 @@ public class ServerModel implements Runnable{
 		try 
 		{
 			serverSocket = new ServerSocket(61452,10,null);
+			lobby = new Lobby(con);
 			
 			while(true)
 			{

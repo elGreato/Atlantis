@@ -52,6 +52,7 @@ public class ServerController {
 				
 				if(selection.get() == ButtonType.OK )
 				{
+					model.lastDbUpdate();
 					System.exit(0);
 				}
 				else
