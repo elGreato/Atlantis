@@ -65,7 +65,8 @@ public class User implements Runnable{
 				}
 				else if(loginOrCreate instanceof CreateUserMessage)
 				{
-				
+					CreateUserMessage createMessage = (CreateUserMessage)loginOrCreate;
+					System.out.println(createMessage.getUsername() + createMessage.getPassword());
 				}
 				
 			} catch (IOException e) {

@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.WindowEvent;
 
 public class ServerController {
@@ -21,6 +22,7 @@ public class ServerController {
 		
 		//Start server
 		view.serverstartbtn.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
 			public void handle(ActionEvent e)
 			{
 				model.startServer();
@@ -40,6 +42,7 @@ public class ServerController {
 		
 		//Closes java application and stops all threads.
 		view.stage.setOnCloseRequest(new EventHandler<WindowEvent>(){
+			@Override
 			public void handle(WindowEvent e)
 			{
 				Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -57,6 +60,29 @@ public class ServerController {
 				}
 			}
 		});
+		
+		//Cosmetic stuff
+		view.serverState.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				view.serverState.setExpanded(true);
+				
+			}
+			
+		});
+		view.dbState.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				view.dbState.setExpanded(true);
+				
+			}
+			
+		});
+			
+		
+		
 		
 	}
 }

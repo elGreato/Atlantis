@@ -35,7 +35,7 @@ public class UserInfo {
 	}
 	
 	
-	//Getters and setters
+	//Getters
 	public String getUsername() {
 		return username;
 	}

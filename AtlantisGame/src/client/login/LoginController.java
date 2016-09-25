@@ -57,7 +57,7 @@ public class LoginController {
 		view.createButton.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e)
 			{
-				
+				model.processNewUser();
 			}
 		});
 		

@@ -12,4 +12,11 @@ public class CreateUserMessage extends UserMessage implements Serializable{
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public CreateUserMessage(String username, String password)
+	{
+		this.setUsername(username);
+		this.password = password;
+	}
+
 }
