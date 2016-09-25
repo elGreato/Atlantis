@@ -11,7 +11,9 @@ import messageObjects.LoginMessage;
 public class User implements Runnable{
 	
 	private String username;
+	
 	private boolean loggedIn;
+	private boolean connected;
 	
 	private Lobby lobby;
 	
@@ -29,6 +31,7 @@ public class User implements Runnable{
 	//Executed after user specific thread has been created by server loop
 	public void run()
 	{
+		connected = true;
 		
 		try {
 			ois = new ObjectInputStream(client.getInputStream());
@@ -38,7 +41,7 @@ public class User implements Runnable{
 			
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			connected = false;
 			e.printStackTrace();
 		} 
 	}
@@ -50,7 +53,7 @@ public class User implements Runnable{
 	{
 		loggedIn = false;
 		
-		while(!loggedIn)
+		while(!loggedIn && connected)
 		{
 			try{
 				Object loginOrCreate = ois.readObject();
@@ -66,13 +69,16 @@ public class User implements Runnable{
 				}
 				
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				connected = false;
 				e.printStackTrace();
+				
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		
+
 		
 	}
 }
