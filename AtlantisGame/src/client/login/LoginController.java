@@ -54,6 +54,7 @@ public class LoginController {
 		view.loginButton.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e)
 			{
+				view.loginButton.setDisable(true);
 				model.processLogin();
 			}
 		});
@@ -71,6 +72,7 @@ public class LoginController {
 				}
 				else
 				{
+					view.createButton.setDisable(true);
 					model.processNewUser();
 				}
 			}

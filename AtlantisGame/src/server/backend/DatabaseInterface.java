@@ -111,7 +111,28 @@ public class DatabaseInterface implements Runnable {
 				newUserIterator.remove();
 			}
 		}
-		//Update stats
+		
+		//Update user stats
+		if(!userUpdates.isEmpty())
+		{
+			Iterator<UserInfo> userUpdateIterator = newUsers.iterator();
+			while(userUpdateIterator.hasNext())
+			{
+				UserInfo updateUser = userUpdateIterator.next();
+				try {
+					PreparedStatement s = dbAccessCon.prepareStatement("UPDATE users SET games_played = ?, games_won = ?, games_lost = ? WHERE username = ?;");
+					s.setInt(1, updateUser.getGamesPlayed());
+					s.setInt(2, updateUser.getGamesWon());
+					s.setInt(3, updateUser.getGamesLost());
+					s.setString(4, updateUser.getUsername());
+					s.executeUpdate();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				userUpdateIterator.remove();
+			}
+		}
 	}
 	
 	
