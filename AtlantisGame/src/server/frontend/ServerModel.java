@@ -97,8 +97,8 @@ public class ServerModel implements Runnable{
 			createstmt.executeUpdate("CREATE DATABASE atlantisdb;");
 			createstmt.executeUpdate("USE atlantisdb;");
 			createstmt.executeUpdate("CREATE TABLE IF NOT EXISTS users ("
-					 + "username VARCHAR(16) PRIMARY KEY,"
-					 + "userpwd VARCHAR(16),"
+					 + "username VARCHAR(15) PRIMARY KEY,"
+					 + "userpwd VARCHAR(15),"
 					 + "games_played INT(5),"
 					 + "games_won INT(5),"
 					 + "games_lost INT(5));");
