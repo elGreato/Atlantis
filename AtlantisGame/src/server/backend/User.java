@@ -10,7 +10,7 @@ import messageObjects.LoginMessage;
 
 public class User implements Runnable{
 	
-	private String username;
+	private UserInfo userInfo;
 	
 	private boolean loggedIn;
 	private boolean connected;
