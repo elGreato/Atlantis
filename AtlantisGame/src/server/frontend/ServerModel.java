@@ -71,6 +71,8 @@ public class ServerModel implements Runnable{
 			teststmt.executeQuery("SELECT username, userpwd, games_played, games_won, games_lost FROM users");
 			view.serverstartbtn.setDisable(false);
 			view.dbState.setText("Database (connected)");
+			view.dbusernametxt.setDisable(true);
+			view.dbpasswordtxt.setDisable(true);
 			
 		}
 		catch(SQLException e)
@@ -105,6 +107,8 @@ public class ServerModel implements Runnable{
 			
 			view.serverstartbtn.setDisable(false);
 			view.dbState.setText("Database (connected)");
+			view.dbusernametxt.setDisable(true);
+			view.dbpasswordtxt.setDisable(true);
 			
 		} catch (SQLException e1) {
 			Alert alert = new Alert(AlertType.ERROR);

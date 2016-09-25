@@ -66,7 +66,16 @@ public class User implements Runnable{
 				else if(loginOrCreate instanceof CreateUserMessage)
 				{
 					CreateUserMessage createMessage = (CreateUserMessage)loginOrCreate;
-					lobby.createNewUser(createMessage.getUsername(), createMessage.getPassword());
+					userInfo = lobby.createNewUser(createMessage.getUsername(), createMessage.getPassword());
+					if(userInfo != null)
+					{
+						//inform user about successful create and login
+						loggedIn = true;
+					}
+					else
+					{
+						//inform user about username already taken
+					}
 					System.out.println(createMessage.getUsername() + createMessage.getPassword());
 					
 				}

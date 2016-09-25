@@ -4,6 +4,8 @@ import com.sun.glass.ui.View;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
@@ -60,7 +62,17 @@ public class LoginController {
 		view.createButton.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e)
 			{
-				model.processNewUser();
+				if(view.createpasswordtxt.getText().length() < 5)
+				{
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Password information");
+					alert.setContentText("Please enter a password that has between 5 and 15 letters.");
+					alert.showAndWait();
+				}
+				else
+				{
+					model.processNewUser();
+				}
 			}
 		});
 		
@@ -79,6 +91,11 @@ public class LoginController {
 		    {
 		    	String s = newValue.substring(0,15);
 		    	view.createpasswordtxt.setText(s);
+		    	
+		    	Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Password information");
+				alert.setContentText("Please enter a password that has between 5 and 15 letters.");
+				alert.showAndWait();
 		    	
 		    }
 		});

@@ -18,9 +18,15 @@ public class Lobby {
 	public Lobby(Connection dbAccessCon)
 	{
 		this.dbAccessCon = dbAccessCon;
-		databaseAccess = new DatabaseInterface(dbAccessCon);
-		userInfoAllUsers = new ArrayList<UserInfo>();
 		
+		databaseAccess = new DatabaseInterface(dbAccessCon);
+		
+		userInfoAllUsers = databaseAccess.getUsers();
+		
+		for(UserInfo ui:userInfoAllUsers)
+		{
+			System.out.println(ui.getUsername());
+		}
 	}
 	
 	

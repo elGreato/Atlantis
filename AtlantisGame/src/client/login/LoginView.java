@@ -79,6 +79,7 @@ public class LoginView {
 		
 		stage.setScene(scene);
 		stage.setTitle("Atlantis");
+		stage.setResizable(false);
 	}
 	
 	public void start()

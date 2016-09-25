@@ -2,6 +2,7 @@ package server.backend;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -20,6 +21,9 @@ public class DatabaseInterface implements Runnable {
 		this.dbAccessCon = con;
 		newUsers = new ArrayList<UserInfo>();
 		userUpdates = new ArrayList<UserInfo>();
+		
+		Thread dbUpdater = new Thread(this);
+		dbUpdater.start();
 	}
 	
 	@Override
@@ -27,7 +31,7 @@ public class DatabaseInterface implements Runnable {
 
 		isRunning = true;
 				
-		//Update database every x minutes
+		//Update database every 2 minutes
 		while(isRunning)
 		{
 			updateDatabase();
@@ -48,6 +52,27 @@ public class DatabaseInterface implements Runnable {
 	{
 		ArrayList<UserInfo> userInfo = new ArrayList<UserInfo>();
 		
+
+		try {
+			
+			Statement getUsersFromDb = dbAccessCon.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = getUsersFromDb.executeQuery("SELECT * from users");
+			
+			while (rs.next())
+			{
+				String username = rs.getString("username");
+				String userpwd = rs.getString("userpwd");
+				int games_played = rs.getInt("games_played");
+				int games_won = rs.getInt("games_won");
+				int games_lost = rs.getInt("games_lost");
+				UserInfo user = new UserInfo(username, userpwd, games_played, games_won, games_lost);
+				userInfo.add(user);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return userInfo;
 	}
 	
@@ -64,7 +89,7 @@ public class DatabaseInterface implements Runnable {
 		updateDatabase();
 	}
 	
-	//Updates database with new data (called every x minutes and just before server app is closed)
+	//Updates database with new data (called every 2 minutes and just before server app is closed)
 	private synchronized void updateDatabase()
 	{
 		//Add new users

@@ -70,6 +70,7 @@ public class ServerView {
 		scene = new Scene(root);
 		stage.setScene(scene);
 		stage.setTitle("Atlantis server frontend");
+		stage.setResizable(false);
 	}
 	public void start()
 	{

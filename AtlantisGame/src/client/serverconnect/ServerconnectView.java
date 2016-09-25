@@ -36,7 +36,7 @@ public class ServerconnectView {
 		scene = new Scene(root);
 		
 		stage.setScene(scene);
-		
+		stage.setResizable(false);
 	}
 	
 	public void start()
