@@ -57,12 +57,14 @@ public class User implements Runnable{
 		
 				if(loginOrCreate instanceof LoginMessage)
 				{
-			
+					LoginMessage loginMessage = (LoginMessage)loginOrCreate;
+					System.out.println(loginMessage.getUsername() + loginMessage.getPassword());
 				}
 				else if(loginOrCreate instanceof CreateUserMessage)
 				{
 				
 				}
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -71,5 +73,6 @@ public class User implements Runnable{
 				e.printStackTrace();
 			}
 		}
+		
 	}
 }

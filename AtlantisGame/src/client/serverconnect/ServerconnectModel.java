@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import client.login.LoginController;
+import client.login.LoginModel;
 import client.login.LoginView;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -13,8 +14,6 @@ import javafx.scene.control.Alert.AlertType;
 public class ServerconnectModel {
 	
 	private ServerconnectView view;
-	private ObjectOutputStream oos;
-	private ObjectInputStream ois;
 	private Socket socket;
 	
 	public ServerconnectModel(ServerconnectView view)
@@ -29,11 +28,11 @@ public class ServerconnectModel {
 		
 		try{
 			socket = new Socket(text, 61452);
-			oos = new ObjectOutputStream(socket.getOutputStream());
-			ois = new ObjectInputStream(socket.getInputStream());
+
 			
 			LoginView loginView = new LoginView();
-			LoginController loginController = new LoginController(loginView);
+			LoginModel loginModel = new LoginModel(socket, loginView);
+			LoginController loginController = new LoginController(loginView, loginModel);
 			loginView.start();
 			view.close();
 			

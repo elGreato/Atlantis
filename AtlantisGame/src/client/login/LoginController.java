@@ -8,10 +8,12 @@ import javafx.scene.input.MouseEvent;
 
 public class LoginController {
 	private LoginView view;
+	private LoginModel model;
 	
-	public LoginController(LoginView view)
+	public LoginController(LoginView view, LoginModel model)
 	{
 		this.view = view;
+		this.model = model;
 		
 		//Some cosmetic stuff
 		view.createPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -47,7 +49,7 @@ public class LoginController {
 		view.loginButton.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e)
 			{
-				
+				model.processLogin();
 			}
 		});
 		
