@@ -23,10 +23,6 @@ public class Lobby {
 		
 		userInfoAllUsers = databaseAccess.getUsers();
 		
-		for(UserInfo ui:userInfoAllUsers)
-		{
-			System.out.println(ui.getUsername());
-		}
 	}
 	
 	
@@ -62,20 +58,17 @@ public class Lobby {
 		databaseAccess.lastUpdate();
 	}
 
-	//logs in users
+	//Checks validity of entered passwords from login requests
 	public synchronized UserInfo loginUser(String username, String password) {
 		for(UserInfo ui: userInfoAllUsers)
 		{
 			
 			if(ui.getUsername().equals(username) && ui.getPassword().equals(password))
 			{
-				
 				return ui;
-				
-				
 			}
 		}
-		System.out.println(username);
+		
 		return null;
 	}
 }

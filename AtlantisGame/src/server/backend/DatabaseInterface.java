@@ -26,6 +26,8 @@ public class DatabaseInterface implements Runnable {
 		dbUpdater.start();
 	}
 	
+	
+	//Loop of the thread that is responsible for constantly updating database
 	@Override
 	public void run() {
 
@@ -36,8 +38,9 @@ public class DatabaseInterface implements Runnable {
 		{
 			updateDatabase();
 			
-			//wait 2 minutes
+			
 			try {
+				//wait 2 minutes
 				Thread.sleep(2*60*1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -47,10 +50,11 @@ public class DatabaseInterface implements Runnable {
 		}
 	}
 	
+	
 	//Get all user data from database
 	public ArrayList<UserInfo> getUsers()
 	{
-		ArrayList<UserInfo> userInfo = new ArrayList<UserInfo>();
+		ArrayList<UserInfo> userInfos = new ArrayList<UserInfo>();
 		
 
 		try {
@@ -66,21 +70,26 @@ public class DatabaseInterface implements Runnable {
 				int games_won = rs.getInt("games_won");
 				int games_lost = rs.getInt("games_lost");
 				UserInfo user = new UserInfo(username, userpwd, games_played, games_won, games_lost);
-				userInfo.add(user);
+				userInfos.add(user);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return userInfo;
+		return userInfos;
 	}
+	
 	
 	//Add user to list with users to be added in the next update
 	public void addNewUserToDatabase(UserInfo addUser)
 	{
-		newUsers.add(addUser);
+		synchronized(newUsers)
+		{
+			newUsers.add(addUser);
+		}
 	}
+	
 	
 	//Update database before closing server
 	public void lastUpdate()
@@ -89,50 +98,62 @@ public class DatabaseInterface implements Runnable {
 		updateDatabase();
 	}
 	
-	//Updates database with new data (called every 2 minutes and just before server app is closed)
-	private synchronized void updateDatabase()
+	
+	//Updates database with new data (called every 2 minutes and once just before the server app is closed)
+	private void updateDatabase()
 	{
-		//Add new users
-		if(!newUsers.isEmpty())
+		
+		
+		//Add new users. Copy list(thread safe) and add the items copied to the database
+		ArrayList<UserInfo> newUsersCopy;
+		synchronized(newUsers)
 		{
-			Iterator<UserInfo> newUserIterator = newUsers.iterator();
-			while(newUserIterator.hasNext())
-			{
-				UserInfo addUser = newUserIterator.next();
-				try {
-					PreparedStatement s = dbAccessCon.prepareStatement("INSERT INTO users VALUES (?, ?, 0, 0, 0);");
-					s.setString(1, addUser.getUsername());
-					s.setString(2, addUser.getPassword());
-					s.executeUpdate();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				newUserIterator.remove();
+			newUsersCopy = new ArrayList<UserInfo>(newUsers);
+			newUsers.clear();
+		}
+		Iterator<UserInfo> newUserCopyIterator = newUsersCopy.iterator();
+		while(newUserCopyIterator.hasNext())
+		{
+			UserInfo addUser = newUserCopyIterator.next();
+			try {
+				PreparedStatement s = dbAccessCon.prepareStatement("INSERT INTO users VALUES (?, ?, 0, 0, 0);");
+				s.setString(1, addUser.getUsername());
+				s.setString(2, addUser.getPassword());
+				s.executeUpdate();
+			} catch (SQLException e) {
+			// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			newUserCopyIterator.remove();
+				
 		}
 		
-		//Update user stats
-		if(!userUpdates.isEmpty())
+		
+		//Update user stats. Copy list(thread safe) and add the items copied to the database.
+		ArrayList<UserInfo> userUpdatesCopy;
+		synchronized(userUpdates)
 		{
-			Iterator<UserInfo> userUpdateIterator = newUsers.iterator();
-			while(userUpdateIterator.hasNext())
-			{
-				UserInfo updateUser = userUpdateIterator.next();
-				try {
-					PreparedStatement s = dbAccessCon.prepareStatement("UPDATE users SET games_played = ?, games_won = ?, games_lost = ? WHERE username = ?;");
-					s.setInt(1, updateUser.getGamesPlayed());
-					s.setInt(2, updateUser.getGamesWon());
-					s.setInt(3, updateUser.getGamesLost());
-					s.setString(4, updateUser.getUsername());
-					s.executeUpdate();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				userUpdateIterator.remove();
-			}
+			userUpdatesCopy = new ArrayList<UserInfo>(userUpdates);
+			userUpdates.clear();
 		}
+		Iterator<UserInfo> userUpdateCopyIterator = userUpdatesCopy.iterator();
+		while(userUpdateCopyIterator.hasNext())
+			{
+			UserInfo updateUser = userUpdateCopyIterator.next();
+			try {
+				PreparedStatement s = dbAccessCon.prepareStatement("UPDATE users SET games_played = ?, games_won = ?, games_lost = ? WHERE username = ?;");
+				s.setInt(1, updateUser.getGamesPlayed());
+				s.setInt(2, updateUser.getGamesWon());
+				s.setInt(3, updateUser.getGamesLost());
+				s.setString(4, updateUser.getUsername());
+				s.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			userUpdateCopyIterator.remove();
+		}
+		
 	}
 	
 	
