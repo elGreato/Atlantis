@@ -26,6 +26,8 @@ public class DatabaseInterface implements Runnable {
 		dbUpdater.start();
 	}
 	
+	
+	//Loop of the thread that is responsible for constantly updating database
 	@Override
 	public void run() {
 
@@ -36,8 +38,9 @@ public class DatabaseInterface implements Runnable {
 		{
 			updateDatabase();
 			
-			//wait 2 minutes
+			
 			try {
+				//wait 2 minutes
 				Thread.sleep(2*60*1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -46,6 +49,7 @@ public class DatabaseInterface implements Runnable {
 			
 		}
 	}
+	
 	
 	//Get all user data from database
 	public ArrayList<UserInfo> getUsers()
@@ -76,6 +80,7 @@ public class DatabaseInterface implements Runnable {
 		return userInfos;
 	}
 	
+	
 	//Add user to list with users to be added in the next update
 	public void addNewUserToDatabase(UserInfo addUser)
 	{
@@ -85,6 +90,7 @@ public class DatabaseInterface implements Runnable {
 		}
 	}
 	
+	
 	//Update database before closing server
 	public void lastUpdate()
 	{
@@ -92,10 +98,13 @@ public class DatabaseInterface implements Runnable {
 		updateDatabase();
 	}
 	
-	//Updates database with new data (called every 2 minutes and just before server app is closed)
+	
+	//Updates database with new data (called every 2 minutes and once just before the server app is closed)
 	private void updateDatabase()
 	{
-		//Add new users
+		
+		
+		//Add new users. Copy list(thread safe) and add the items copied to the database
 		ArrayList<UserInfo> newUsersCopy;
 		synchronized(newUsers)
 		{
@@ -120,7 +129,7 @@ public class DatabaseInterface implements Runnable {
 		}
 		
 		
-		//Update user stats
+		//Update user stats. Copy list(thread safe) and add the items copied to the database.
 		ArrayList<UserInfo> userUpdatesCopy;
 		synchronized(userUpdates)
 		{

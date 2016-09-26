@@ -23,12 +23,14 @@ public class User implements Runnable{
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
 	
+	
 	//Get information about objects from server
 	public User(Socket client, Lobby lobby)
 	{
 		this.client = client;
 		this.lobby = lobby;
 	}
+	
 	
 	//Executed after user specific thread has been created by server loop
 	public void run()
@@ -39,7 +41,7 @@ public class User implements Runnable{
 			ois = new ObjectInputStream(client.getInputStream());
 			oos = new ObjectOutputStream(client.getOutputStream());
 			
-			loginUser();
+			processLoginOrCreateMessages();
 			
 			
 		} catch (IOException e) {
@@ -49,55 +51,24 @@ public class User implements Runnable{
 	}
 	
 	
-	
 	//get login or create messages from user till user is logged in and will therefore be redirected to lobby.
-	private void loginUser()
+	private void processLoginOrCreateMessages()
 	{
 		loggedIn = false;
 		
 		while(!loggedIn && connected)
 		{
 			try{
+				
 				Object loginOrCreate = ois.readObject();
 		
 				if(loginOrCreate instanceof LoginMessage)
 				{
-					LoginMessage loginMessage = (LoginMessage)loginOrCreate;
-					userInfo = lobby.loginUser(loginMessage.getUsername(), loginMessage.getPassword());
-					
-					if(userInfo != null)
-					{
-						//inform user about successful login, send user information at the same time
-						UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo.getUsername(), userInfo.getGamesPlayed(), userInfo.getGamesWon(), userInfo.getGamesLost());
-						oos.writeObject(nowLoggedInAs);
-						loggedIn = true;
-					}
-					else
-					{
-						//inform user about wrong credentials entered
-						ErrorMessage wrongEntry = new ErrorMessage("The credentials you entered are not correct. Try again!");
-						oos.writeObject(wrongEntry);
-					}
+					loginUser(loginOrCreate);
 				}
 				else if(loginOrCreate instanceof CreateUserMessage)
 				{
-					CreateUserMessage createMessage = (CreateUserMessage)loginOrCreate;
-					userInfo = lobby.createNewUser(createMessage.getUsername(), createMessage.getPassword());
-					if(userInfo != null)
-					{
-						//inform user about successful create and login, send user information at the same time
-						UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo.getUsername(), userInfo.getGamesPlayed(), userInfo.getGamesWon(), userInfo.getGamesLost());
-						oos.writeObject(nowLoggedInAs);
-						loggedIn = true;
-					}
-					else
-					{
-						//inform user about username already taken
-						ErrorMessage usernameTaken = new ErrorMessage("This username is already taken. Please try another one.");
-						oos.writeObject(usernameTaken);
-					}
-					
-					
+					createUser(loginOrCreate);
 				}
 				
 			} catch (IOException e) {
@@ -110,7 +81,49 @@ public class User implements Runnable{
 			}
 		}
 		
+	}
 
+	
+	//Send data to lobby to check availability of username and inform user about result
+	private void createUser(Object loginOrCreate) throws IOException{
+		
+		CreateUserMessage createMessage = (CreateUserMessage)loginOrCreate;
+		userInfo = lobby.createNewUser(createMessage.getUsername(), createMessage.getPassword());
+		if(userInfo != null)
+		{
+			//inform user about successful create and login, send user information at the same time
+			UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo.getUsername(), userInfo.getGamesPlayed(), userInfo.getGamesWon(), userInfo.getGamesLost());
+			oos.writeObject(nowLoggedInAs);
+			loggedIn = true;
+		}
+		else
+		{
+			//inform user about username already taken
+			ErrorMessage usernameTaken = new ErrorMessage("This username is already taken. Please try another one.");
+			oos.writeObject(usernameTaken);
+		}
+	}
+
+	
+	//Send data to lobby to check password and inform user about result
+	private void loginUser(Object loginOrCreate) throws IOException {
+		
+		LoginMessage loginMessage = (LoginMessage)loginOrCreate;
+		userInfo = lobby.loginUser(loginMessage.getUsername(), loginMessage.getPassword());
+		
+		if(userInfo != null)
+		{
+			//inform user about successful login, send user information at the same time
+			UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo.getUsername(), userInfo.getGamesPlayed(), userInfo.getGamesWon(), userInfo.getGamesLost());
+			oos.writeObject(nowLoggedInAs);
+			loggedIn = true;
+		}
+		else
+		{
+			//inform user about wrong credentials entered
+			ErrorMessage wrongEntry = new ErrorMessage("The credentials you entered are not correct. Try again!");
+			oos.writeObject(wrongEntry);
+		}
 		
 	}
 }
