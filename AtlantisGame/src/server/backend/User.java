@@ -6,7 +6,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import messageObjects.CreateUserMessage;
+import messageObjects.ErrorMessage;
 import messageObjects.LoginMessage;
+import messageObjects.UserInfoMessage;
 
 public class User implements Runnable{
 	
@@ -69,12 +71,17 @@ public class User implements Runnable{
 					userInfo = lobby.createNewUser(createMessage.getUsername(), createMessage.getPassword());
 					if(userInfo != null)
 					{
-						//inform user about successful create and login
+						System.out.println("UserCreated");
+						//inform user about successful create and login, send user information at the same time
+						UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo.getUsername(), userInfo.getGamesPlayed(), userInfo.getGamesWon(), userInfo.getGamesLost());
+						oos.writeObject(nowLoggedInAs);
 						loggedIn = true;
 					}
 					else
 					{
 						//inform user about username already taken
+						ErrorMessage usernameTaken = new ErrorMessage("This username is already taken. Please try another one.");
+						oos.writeObject(usernameTaken);
 					}
 					System.out.println(createMessage.getUsername() + createMessage.getPassword());
 					

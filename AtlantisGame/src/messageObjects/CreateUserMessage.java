@@ -15,7 +15,7 @@ public class CreateUserMessage extends UserMessage implements Serializable{
 	
 	public CreateUserMessage(String username, String password)
 	{
-		this.setUsername(username);
+		super(username);
 		this.password = password;
 	}
 

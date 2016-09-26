@@ -15,7 +15,7 @@ public class LoginMessage extends UserMessage implements Serializable{
 	
 	public LoginMessage(String username, String password)
 	{
-		this.setUsername(username);
+		super(username);
 		this.password = password;
 	}
 
