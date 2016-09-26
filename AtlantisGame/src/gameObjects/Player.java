@@ -28,6 +28,8 @@ public class Player extends VBox{
 	
 	private int numberOfCards=5;
 	
+	private Pawn pawn;
+	
 	
 	public Player(String name){
 		//the player extends vbox 
@@ -37,7 +39,7 @@ public class Player extends VBox{
 		playerHand = new PlayerHand(name);
 		
 		// empty Labels for cards
-		for (int i=0; i<5; i++){
+		for (int i=0; i<numberOfCards; i++){
 		Label lblCard = new Label(" ");
 		// set class ID for css later
 		lblCard.getStylesheets().add("card");	
@@ -66,7 +68,10 @@ public class Player extends VBox{
 		// set the victory Points
 		vpHolder.setText(String.valueOf(victoryPoints));
 		
-		
+		// create 3 pawns for each player
+		for (int i=0; i>3;i++){
+			Pawn pawn = new Pawn();
+		}
 		
 		this.getChildren().add(lblName);
 		this.getChildren().add(vpHolder);    
