@@ -40,6 +40,7 @@ public class LoginModel {
 		
 	}
 	
+	//Sends entered login data to server and processes the answer it gets about it
 	protected void processLogin()
 	{
 		try {
@@ -73,11 +74,14 @@ public class LoginModel {
 		}
 	}
 	
+	//Sends 'create new user' data to server and processes the answer about it
 	protected void processNewUser()
 	{
 		try {
 			oos.writeObject(new CreateUserMessage(view.createusernametxt.getText(), view.createpasswordtxt.getText()));
+			
 			Object reply = ois.readObject();
+			
 			if(reply instanceof ErrorMessage)
 			{
 				ErrorMessage em = (ErrorMessage)reply;
