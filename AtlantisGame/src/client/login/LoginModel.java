@@ -44,11 +44,32 @@ public class LoginModel {
 	{
 		try {
 			oos.writeObject(new LoginMessage(view.loginusernametxt.getText(), view.loginpasswordtxt.getText()));
+			Object reply = ois.readObject();
+			if(reply instanceof ErrorMessage)
+			{
+				ErrorMessage em = (ErrorMessage)reply;
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Atlantis server notification");
+				alert.setContentText(em.getMessage());
+				alert.showAndWait();
+				view.loginButton.setDisable(false);
+			}
+			else if(reply instanceof UserInfoMessage)
+			{
+				UserInfoMessage nowLoggedInAs = (UserInfoMessage)reply;
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Atlantis server notification");
+				alert.setContentText("Succesfully logged in as '" + nowLoggedInAs.getUsername() + "'");
+				alert.showAndWait();
+			}
 		} catch (IOException e) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Unexpected error");
 			alert.setContentText("An unexpected error ocurred. Please try to restart the program");
 			alert.showAndWait();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	

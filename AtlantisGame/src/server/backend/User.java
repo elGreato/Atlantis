@@ -63,7 +63,21 @@ public class User implements Runnable{
 				if(loginOrCreate instanceof LoginMessage)
 				{
 					LoginMessage loginMessage = (LoginMessage)loginOrCreate;
-					System.out.println(loginMessage.getUsername() + loginMessage.getPassword());
+					userInfo = lobby.loginUser(loginMessage.getUsername(), loginMessage.getPassword());
+					
+					if(userInfo != null)
+					{
+						//inform user about successful login, send user information at the same time
+						UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo.getUsername(), userInfo.getGamesPlayed(), userInfo.getGamesWon(), userInfo.getGamesLost());
+						oos.writeObject(nowLoggedInAs);
+						loggedIn = true;
+					}
+					else
+					{
+						//inform user about wrong credentials entered
+						ErrorMessage wrongEntry = new ErrorMessage("The credentials you entered are not correct. Try again!");
+						oos.writeObject(wrongEntry);
+					}
 				}
 				else if(loginOrCreate instanceof CreateUserMessage)
 				{
@@ -71,7 +85,6 @@ public class User implements Runnable{
 					userInfo = lobby.createNewUser(createMessage.getUsername(), createMessage.getPassword());
 					if(userInfo != null)
 					{
-						System.out.println("UserCreated");
 						//inform user about successful create and login, send user information at the same time
 						UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo.getUsername(), userInfo.getGamesPlayed(), userInfo.getGamesWon(), userInfo.getGamesLost());
 						oos.writeObject(nowLoggedInAs);
@@ -83,7 +96,7 @@ public class User implements Runnable{
 						ErrorMessage usernameTaken = new ErrorMessage("This username is already taken. Please try another one.");
 						oos.writeObject(usernameTaken);
 					}
-					System.out.println(createMessage.getUsername() + createMessage.getPassword());
+					
 					
 				}
 				

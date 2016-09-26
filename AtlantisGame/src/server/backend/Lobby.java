@@ -61,4 +61,21 @@ public class Lobby {
 	{
 		databaseAccess.lastUpdate();
 	}
+
+	//logs in users
+	public synchronized UserInfo loginUser(String username, String password) {
+		for(UserInfo ui: userInfoAllUsers)
+		{
+			
+			if(ui.getUsername().equals(username) && ui.getPassword().equals(password))
+			{
+				
+				return ui;
+				
+				
+			}
+		}
+		System.out.println(username);
+		return null;
+	}
 }
