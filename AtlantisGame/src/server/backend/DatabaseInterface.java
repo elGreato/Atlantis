@@ -27,7 +27,7 @@ public class DatabaseInterface implements Runnable {
 	}
 	
 	
-	//Loop of the thread that is responsible for constantly updating database
+	//Loop of the thread that is responsible for constantly updating database, thread safe
 	@Override
 	public void run() {
 
