@@ -34,7 +34,7 @@ public class MainBoard extends GridPane {
 		this.add(new AtlantisTile(0), 0, 0,2,2);
 		
 		//put the mainland Tile
-		this.add(new MainLand(999), 8, 8,2,2);
+		this.add(new MainLand(999), 8, 8,2,2); 
 		
 		
 		
