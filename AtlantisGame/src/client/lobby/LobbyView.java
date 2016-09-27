@@ -6,6 +6,7 @@ import gameObjects.GameListItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -20,11 +21,10 @@ public class LobbyView {
 	private Stage stage;
 	private Scene scene;
 	
-	private BorderPane root;
-	private VBox gamesSection;
-	private VBox statsSection;
+	private GridPane root;
 	private TitledPane createGameSection;
 	private TitledPane joinGameSection;
+	private VBox joinGameSectionContent;
 	private GridPane createGameControls;
 	
 	private Label title;
@@ -36,18 +36,20 @@ public class LobbyView {
 	private TableView leaderBoard;
 	private ObservableList<GameListItem> gameData;
 	
+	private Button joinButton;
+	
 	public LobbyView()
 	{
 		
 		gameData = FXCollections.observableArrayList();
 		
 		
-		root = new BorderPane();
-		gamesSection = new VBox();
-		statsSection = new VBox();
+		root = new GridPane();
 		createGameControls = new GridPane();
 		
+		
 		gameList = new TableView<GameListItem>();
+		//Columns for table
 		gameNameCol = new TableColumn("Name");
 		gameNameCol.setResizable(false);
 		playersCol = new TableColumn("Players");
@@ -56,30 +58,37 @@ public class LobbyView {
 		playersRegCol.setResizable(false);
 		playersMaxCol = new TableColumn("Max.");
 		playersMaxCol.setResizable(false);
-
+		
+		//Connect table content to variables
 		gameNameCol.setCellValueFactory(new PropertyValueFactory<GameListItem, String>("gameName"));
 		playersRegCol.setCellValueFactory(new PropertyValueFactory<GameListItem, Integer>("registeredPlayers"));
 		playersMaxCol.setCellValueFactory(new PropertyValueFactory<GameListItem, Integer>("maxPlayers"));
 		
+		//Draw table
 		playersCol.getColumns().addAll(playersRegCol, playersMaxCol);
 		gameList.getColumns().addAll(gameNameCol, playersCol);
 		gameList.setPrefWidth(gameNameCol.getWidth() + playersCol.getWidth()+2);
 		gameList.autosize();
 		gameList.setItems(gameData);
 		
+		//Example entry
 		gameData.add(new GameListItem("ProGame",3,4));
 		
-		joinGameSection = new TitledPane("Join game",gameList);
+		joinButton = new Button("Join game");
+		joinGameSectionContent = new VBox();
+		joinGameSectionContent.getChildren().addAll(gameList, joinButton);
+		joinGameSection = new TitledPane("Join game", joinGameSectionContent);
 		joinGameSection.setExpanded(true);
+		
+		
 		createGameSection = new TitledPane("Create game",createGameControls);
 		createGameSection.setExpanded(true);
 		
-		gamesSection.getChildren().addAll(joinGameSection,createGameSection);
-		
 		title = new Label("ATLANTIS LOBBY");
 		
-		root.setLeft(gamesSection);
-		root.setTop(title);
+		root.add(title,0,0,3,1);
+		root.add(joinGameSection,0,1);
+		root.add(createGameSection, 0, 2);
 		
 		
 		scene = new Scene(root);
