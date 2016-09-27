@@ -9,9 +9,11 @@ import javafx.scene.shape.Rectangle;
 
 public class WaterTile extends Tile {
 	Rectangle water = new Rectangle(50, 50);
+	int waterId;
 
 	public WaterTile(final int tileId) {
 		super(tileId);
+		waterId=tileId;
 
 		water.setFill(Color.LIGHTBLUE);
 		this.getChildren().add(water);
@@ -30,6 +32,10 @@ public class WaterTile extends Tile {
 			}
 
 		});}
+	public int getWaterId() {
+		return waterId;
+	}
+	
 	//}
 	public boolean hasPawn() {
 		return false;
