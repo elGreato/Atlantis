@@ -17,16 +17,24 @@ public class MainBoard extends GridPane {
 	 */
 
 	public MainBoard(int numberOfTiles){
-		this.numberOfTiles=numberOfTiles;
 		
+		this.numberOfTiles=numberOfTiles;
+			//this is part of view for later
 		this.setHgap(3);
 		this.setVgap(3);
 		
+		// distribute water tiles as a base board
 		for (int i = 0; i < Math.sqrt(numberOfTiles); i++) {
 			for (int k=0; k<Math.sqrt(numberOfTiles); k++){
 			this.add(new WaterTile(i),i,k);
 
 			}
 		}
+		// put the Atlantis Tile
+		
+		
+		
+		
+		
 	}
 }
