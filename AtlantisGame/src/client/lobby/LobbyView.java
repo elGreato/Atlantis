@@ -20,9 +20,7 @@ public class LobbyView {
 	private Stage stage;
 	private Scene scene;
 	
-	private BorderPane root;
-	private VBox gamesSection;
-	private VBox statsSection;
+	private GridPane root;
 	private TitledPane createGameSection;
 	private TitledPane joinGameSection;
 	private GridPane createGameControls;
@@ -42,9 +40,7 @@ public class LobbyView {
 		gameData = FXCollections.observableArrayList();
 		
 		
-		root = new BorderPane();
-		gamesSection = new VBox();
-		statsSection = new VBox();
+		root = new GridPane();
 		createGameControls = new GridPane();
 		
 		gameList = new TableView<GameListItem>();
@@ -74,12 +70,11 @@ public class LobbyView {
 		createGameSection = new TitledPane("Create game",createGameControls);
 		createGameSection.setExpanded(true);
 		
-		gamesSection.getChildren().addAll(joinGameSection,createGameSection);
-		
 		title = new Label("ATLANTIS LOBBY");
 		
-		root.setLeft(gamesSection);
-		root.setTop(title);
+		root.add(title,0,0,3,1);
+		root.add(joinGameSection,0,1);
+		root.add(createGameSection, 0, 2);
 		
 		
 		scene = new Scene(root);
