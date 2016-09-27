@@ -2,11 +2,12 @@ package client.intro;
 
 import gameObjects.Card;
 import gameObjects.DeckOfCards;
+import gameObjects.MainBoard;
 import gameObjects.Player;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class MainAli extends Application {
@@ -31,11 +32,14 @@ public class MainAli extends Application {
                 card = deck.deal(); 
                 p2.addCard(card);
                 }
-	        
+	   /*     MainBoard b = new MainBoard();
+	        Pane p = new Pane();
+	        p.getChildren().add(b.createBoard());*/
+	       
 	        
 	        
 	        BorderPane root = new BorderPane();
-	        
+	     //   root.setCenter();
 	        root.setTop(p1);
 	        root.setBottom(p2);
 	        primaryStage.setScene(new Scene(root, 800, 850));
