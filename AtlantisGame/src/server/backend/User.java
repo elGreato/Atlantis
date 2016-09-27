@@ -7,6 +7,7 @@ import java.net.Socket;
 
 import messageObjects.CreateUserMessage;
 import messageObjects.ErrorMessage;
+import messageObjects.GameMessage;
 import messageObjects.LoginMessage;
 import messageObjects.UserInfoMessage;
 
@@ -42,7 +43,7 @@ public class User implements Runnable{
 			oos = new ObjectOutputStream(client.getOutputStream());
 			
 			processLoginOrCreateMessages();
-			
+			processLobbyAndGameActivity();
 			
 		} catch (IOException e) {
 			connected = false;
@@ -51,6 +52,9 @@ public class User implements Runnable{
 	}
 	
 	
+
+
+
 	//get login or create messages from user till user is logged in and will therefore be redirected to lobby.
 	private void processLoginOrCreateMessages()
 	{
@@ -88,7 +92,7 @@ public class User implements Runnable{
 	private void createUser(Object loginOrCreate) throws IOException{
 		
 		CreateUserMessage createMessage = (CreateUserMessage)loginOrCreate;
-		userInfo = lobby.createNewUser(createMessage.getUsername(), createMessage.getPassword());
+		userInfo = lobby.createNewUser(createMessage.getUsername(), createMessage.getPassword(), this);
 		if(userInfo != null)
 		{
 			//inform user about successful create and login, send user information at the same time
@@ -109,7 +113,7 @@ public class User implements Runnable{
 	private void loginUser(Object loginOrCreate) throws IOException {
 		
 		LoginMessage loginMessage = (LoginMessage)loginOrCreate;
-		userInfo = lobby.loginUser(loginMessage.getUsername(), loginMessage.getPassword());
+		userInfo = lobby.loginUser(loginMessage.getUsername(), loginMessage.getPassword(), this);
 		
 		if(userInfo != null)
 		{
@@ -125,5 +129,31 @@ public class User implements Runnable{
 			oos.writeObject(wrongEntry);
 		}
 		
+	}
+	
+	//Loop for receiving messages from the lobby and from the games that the user currently plays
+	private void processLobbyAndGameActivity() {
+		// TODO Auto-generated method stub
+		while(loggedIn && connected)
+		{
+			try {
+				Object receivedMessage = ois.readObject();
+				if(receivedMessage instanceof GameMessage)
+				{
+					
+				}
+				
+				
+				
+				
+			} catch (ClassNotFoundException e) {
+				
+				e.printStackTrace();
+			} catch (IOException e) {
+				loggedIn = false;
+				connected = false;
+				e.printStackTrace();
+			}
+		}
 	}
 }

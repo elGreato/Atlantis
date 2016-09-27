@@ -23,11 +23,13 @@ public class Lobby {
 		
 		userInfoAllUsers = databaseAccess.getUsers();
 		
+		onlineUsers = new ArrayList<User>();
+		
 	}
 	
 	
 	//checks if username already exists and creates new user if it doesn't
-	public synchronized UserInfo createNewUser(String username, String password)
+	public synchronized UserInfo createNewUser(String username, String password, User user)
 	{
 		
 		boolean userNameAvailable = true;
@@ -43,6 +45,7 @@ public class Lobby {
 		if(userNameAvailable)
 		{
 			userInfoAllUsers.add(newUser);
+			onlineUsers.add(user);
 			databaseAccess.addNewUserToDatabase(newUser);
 			return newUser;
 		}
@@ -59,12 +62,13 @@ public class Lobby {
 	}
 
 	//Checks validity of entered passwords from login requests
-	public synchronized UserInfo loginUser(String username, String password) {
+	public synchronized UserInfo loginUser(String username, String password, User user) {
 		for(UserInfo ui: userInfoAllUsers)
 		{
 			
 			if(ui.getUsername().equals(username) && ui.getPassword().equals(password))
 			{
+				onlineUsers.add(user);
 				return ui;
 			}
 		}
