@@ -1,9 +1,15 @@
 package client.lobby;
 
+import java.util.ArrayList;
+
+import gameObjects.GameListItem;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -17,28 +23,46 @@ public class LobbyView {
 	private VBox statsSection;
 	
 	private Label title;
-	private TableView<String> gameList;
-	private TableColumn gameNameCol;
-	private TableColumn playersCol;
-	private TableColumn playersRegCol;
-	private TableColumn playersMaxCol;
+	private TableView<GameListItem> gameList;
+	private TableColumn<GameListItem, String> gameNameCol;
+	private TableColumn<GameListItem, ?> playersCol;
+	private TableColumn<GameListItem, Integer> playersRegCol;
+	private TableColumn<GameListItem, Integer> playersMaxCol;
 	private TableView leaderBoard;
-	
+	private ObservableList<GameListItem> gameData;
 	
 	public LobbyView()
 	{
+		
+		gameData = FXCollections.observableArrayList();
+		
+		
 		root = new BorderPane();
 		gamesSection = new VBox();
 		statsSection = new VBox();
 		
-		gameList = new TableView<String>();
+		gameList = new TableView<GameListItem>();
 		gameNameCol = new TableColumn("Name");
+		gameNameCol.setResizable(false);
 		playersCol = new TableColumn("Players");
+		playersCol.setResizable(false);
 		playersRegCol = new TableColumn("Reg.");
+		playersRegCol.setResizable(false);
 		playersMaxCol = new TableColumn("Max.");
+		playersMaxCol.setResizable(false);
+
+		gameNameCol.setCellValueFactory(new PropertyValueFactory<GameListItem, String>("gameName"));
+		playersRegCol.setCellValueFactory(new PropertyValueFactory<GameListItem, Integer>("registeredPlayers"));
+		playersMaxCol.setCellValueFactory(new PropertyValueFactory<GameListItem, Integer>("maxPlayers"));
+		
 		playersCol.getColumns().addAll(playersRegCol, playersMaxCol);
 		gameList.getColumns().addAll(gameNameCol, playersCol);
+		gameList.setPrefWidth(gameNameCol.getWidth() + playersCol.getWidth()+2);
+		gameList.autosize();
 		gamesSection.getChildren().add(gameList);
+		gameList.setItems(gameData);
+		
+		gameData.add(new GameListItem("ProGame",3,4));
 		
 		title = new Label("ATLANTIS LOBBY");
 		
@@ -54,5 +78,11 @@ public class LobbyView {
 	public void start() {
 		// TODO Auto-generated method stub
 		stage.show();
+	}
+	
+	public void updateGameList(ArrayList<GameListItem> update)
+	{
+		gameData.clear();
+		gameData.addAll(update);
 	}
 }
