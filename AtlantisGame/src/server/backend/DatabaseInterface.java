@@ -14,7 +14,7 @@ public class DatabaseInterface implements Runnable {
 	private ArrayList<UserInfo> newUsers;
 	private ArrayList<UserInfo> userUpdates;
 	private boolean isRunning;
-	
+	private Boolean workingOnDatabase;
 	
 	public DatabaseInterface(Connection con)
 	{
@@ -32,19 +32,35 @@ public class DatabaseInterface implements Runnable {
 	public void run() {
 
 		isRunning = true;
-				
+		
+		workingOnDatabase = new Boolean(true);	
+		
 		//Update database every 2 minutes
 		while(isRunning)
 		{
+			
 			updateDatabase();
+			
+			
+			synchronized(workingOnDatabase)
+			{
+				workingOnDatabase = false;
+				workingOnDatabase.notify();
+			}
 			
 			
 			try {
 				//wait 2 minutes
 				Thread.sleep(2*60*1000);
+				
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//continue normally
+			}
+			
+			
+			synchronized(workingOnDatabase)
+			{
+				workingOnDatabase = true;
 			}
 			
 		}
@@ -91,10 +107,24 @@ public class DatabaseInterface implements Runnable {
 	}
 	
 	
-	//Update database before closing server
+	//Wait till other thread has finished updating the database. Then, update database for the last time before closing server.
 	public void lastUpdate()
 	{
-		isRunning = false;
+		//Loop that says that thread should wait till the other thread has finished working on the database.
+		synchronized(workingOnDatabase)
+		{
+			while(workingOnDatabase)
+			{
+				try {
+				workingOnDatabase.wait();
+				} catch (InterruptedException e) {
+				//Thread will continue with updateDatabase() below
+				}
+			}
+			isRunning = false;
+		}
+		
+		
 		updateDatabase();
 	}
 	
