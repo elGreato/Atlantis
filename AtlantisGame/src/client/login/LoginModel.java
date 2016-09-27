@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import client.lobby.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import messageObjects.CreateUserMessage;
@@ -57,11 +58,13 @@ public class LoginModel {
 			}
 			else if(reply instanceof UserInfoMessage)
 			{
+				
 				UserInfoMessage nowLoggedInAs = (UserInfoMessage)reply;
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Atlantis server notification");
-				alert.setContentText("Succesfully logged in as '" + nowLoggedInAs.getUsername() + "'");
-				alert.showAndWait();
+				LobbyView lobbyView = new LobbyView();
+				LobbyModel lobbyModel = new LobbyModel(lobbyView);
+				LobbyController lobbyController = new LobbyController(lobbyView, lobbyModel);
+				lobbyView.start();
+				
 			}
 		} catch (IOException e) {
 			Alert alert = new Alert(AlertType.ERROR);
@@ -94,10 +97,18 @@ public class LoginModel {
 			else if(reply instanceof UserInfoMessage)
 			{
 				UserInfoMessage nowLoggedInAs = (UserInfoMessage)reply;
+				
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Atlantis server notification");
 				alert.setContentText("Account '" + nowLoggedInAs.getUsername() + "' successfully created.");
 				alert.showAndWait();
+				
+				LobbyView lobbyView = new LobbyView();
+				LobbyModel lobbyModel = new LobbyModel(lobbyView);
+				LobbyController lobbyController = new LobbyController(lobbyView, lobbyModel);
+				lobbyView.start();
+				
+				
 			}
 			
 		} catch (IOException e) {

@@ -44,8 +44,8 @@ public class DatabaseInterface implements Runnable {
 			
 			synchronized(workingOnDatabase)
 			{
-				workingOnDatabase = false;
 				workingOnDatabase.notify();
+				workingOnDatabase = false;
 			}
 			
 			
