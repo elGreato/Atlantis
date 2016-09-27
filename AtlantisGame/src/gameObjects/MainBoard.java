@@ -14,7 +14,7 @@ public class MainBoard {
 		for (int i =0; i<numberOfTiles;i++){
 			initialBoard.put(i, new WaterTile(i));
 		}
-		return initialBoard;
+		return initialBoard; 
 	}
 	
 }
