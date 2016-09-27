@@ -35,7 +35,7 @@ public class DatabaseInterface implements Runnable {
 		
 		workingOnDatabase = new Boolean(true);	
 		
-		//Update database every 2 minutes
+		//Thread updates database every 2 minutes
 		while(isRunning)
 		{
 			
