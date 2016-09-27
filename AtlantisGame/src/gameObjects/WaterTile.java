@@ -26,7 +26,7 @@ public class WaterTile extends Tile {
 			@Override
 			public void handle(MouseEvent e) {
 				water.setFill(Color.BLUE);
-				//e.consume();
+				//e.consume(); 
 			}
 
 		});}
