@@ -9,8 +9,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -21,6 +23,9 @@ public class LobbyView {
 	private BorderPane root;
 	private VBox gamesSection;
 	private VBox statsSection;
+	private TitledPane createGameSection;
+	private TitledPane joinGameSection;
+	private GridPane createGameControls;
 	
 	private Label title;
 	private TableView<GameListItem> gameList;
@@ -40,6 +45,7 @@ public class LobbyView {
 		root = new BorderPane();
 		gamesSection = new VBox();
 		statsSection = new VBox();
+		createGameControls = new GridPane();
 		
 		gameList = new TableView<GameListItem>();
 		gameNameCol = new TableColumn("Name");
@@ -59,10 +65,16 @@ public class LobbyView {
 		gameList.getColumns().addAll(gameNameCol, playersCol);
 		gameList.setPrefWidth(gameNameCol.getWidth() + playersCol.getWidth()+2);
 		gameList.autosize();
-		gamesSection.getChildren().add(gameList);
 		gameList.setItems(gameData);
 		
 		gameData.add(new GameListItem("ProGame",3,4));
+		
+		joinGameSection = new TitledPane("Join game",gameList);
+		joinGameSection.setExpanded(true);
+		createGameSection = new TitledPane("Create game",createGameControls);
+		createGameSection.setExpanded(true);
+		
+		gamesSection.getChildren().addAll(joinGameSection,createGameSection);
 		
 		title = new Label("ATLANTIS LOBBY");
 		
