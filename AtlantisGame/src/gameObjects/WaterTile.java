@@ -23,12 +23,12 @@ public class WaterTile extends Tile {
 //	@Override
 	
 //	public void dosmthin() {
-		this.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+		this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent e) {
 				water.setFill(Color.BLUE);
-				//e.consume(); 
+				e.consume(); 
 			}
 
 		});}

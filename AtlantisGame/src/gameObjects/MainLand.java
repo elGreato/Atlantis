@@ -18,7 +18,8 @@ public class MainLand extends Tile{
 		super(id);
 		
 		Image im = new Image(getClass().getResourceAsStream("images4Tiles/mainLand.jpg")); 
-		this.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+		this.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
+				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 		
 		
 	}
