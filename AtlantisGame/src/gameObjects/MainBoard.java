@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javafx.scene.layout.GridPane;
-
+// remember to check MVC slides for girdpane resizing
 public class MainBoard extends GridPane {
 	private final int numberOfTiles;
 
