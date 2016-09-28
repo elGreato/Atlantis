@@ -64,7 +64,7 @@ public class LoginModel {
 				LobbyModel lobbyModel = new LobbyModel(lobbyView);
 				LobbyController lobbyController = new LobbyController(lobbyView, lobbyModel);
 				lobbyView.start();
-				
+				view.close();
 			}
 		} catch (IOException e) {
 			Alert alert = new Alert(AlertType.ERROR);
@@ -107,7 +107,7 @@ public class LoginModel {
 				LobbyModel lobbyModel = new LobbyModel(lobbyView);
 				LobbyController lobbyController = new LobbyController(lobbyView, lobbyModel);
 				lobbyView.start();
-				
+				view.close();
 				
 			}
 			
