@@ -84,21 +84,50 @@ public class Lobby {
 		String gameName = createMsg.getGameName();
 		String password = createMsg.getPassword();
 		int maxPlayers = createMsg.getMaxPlayers();
+		
+		boolean nameAvailable = true;
 		for(Game g: waitingGames)
 		{
-			
+			if(g.getName()== gameName)
+			{
+				nameAvailable = false;
+			}
 		}
 		for(Game g: runningGames)
 		{
-			
+			if(g.getName()==gameName)
+			{
+				nameAvailable=false;
+			}
 		}
-		Game newGame = new Game(gameName,password, maxPlayers, user);
+		if(nameAvailable)
+		{
+			Game newGame = new Game(gameName,password, maxPlayers, user);
+			waitingGames.add(newGame);
+			updateLobby(newGame);
+			
+			serverAnswer = "Game successfully created!";
+		}
+		else
+		{
+			serverAnswer = "Game name currently taken. Please select another name.";
+		}
+		
 		return serverAnswer;
 	}
 	
 	public synchronized String joinGame(User user, GameJoinMessage joinMsg)
 	{
 		String serverAnswer = new String("");
+		//look if password is right
+		//look if maxPlayers is already reached
+		//look if same user already joined this game
+		
+		//add user to game
+		
+		//if players = maxPlayers -> game.start -> remove from waiting games and put in running games
+		
+		//updateLobby
 		
 		return serverAnswer;
 	}
