@@ -119,8 +119,16 @@ public class Lobby {
 	public synchronized String joinGame(User user, GameJoinMessage joinMsg)
 	{
 		String serverAnswer = new String("");
-		//look if password is right
-		//look if maxPlayers is already reached
+		String gameName = joinMsg.getGameName();
+		String password = joinMsg.getGamePassword();
+		for(Game g: waitingGames)
+		{
+			if(g.getName() == gameName && g.getPassword() == password && g.getMaxPlayers() > g.getNumOfRegisteredPlayers())
+			{
+				
+			}
+		}
+		
 		//look if same user already joined this game
 		
 		//add user to game

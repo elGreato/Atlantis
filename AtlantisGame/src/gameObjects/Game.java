@@ -31,7 +31,14 @@ public class Game {
 	public int getMaxPlayers() {
 		return maxPlayers;
 	}
+	public ArrayList<User> getUsers() {
+		return users;
+	}
 
+	public int getNumOfRegisteredPlayers() {
+		// TODO Auto-generated method stub
+		return users.size();
+	}
 	//adds new player to game
 	public void addUser(User user)
 	{
@@ -43,5 +50,7 @@ public class Game {
 	{
 		//Here the game starts
 	}
+
+
 	
 }

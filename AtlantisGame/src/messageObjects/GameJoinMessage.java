@@ -1,6 +1,8 @@
 package messageObjects;
 
-public class GameJoinMessage {
+import java.io.Serializable;
+
+public class GameJoinMessage implements Serializable {
 	private String gameName;
 	private String gamePassword;
 	
