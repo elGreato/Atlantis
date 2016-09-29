@@ -16,7 +16,7 @@ import messageObjects.UserInfoMessage;
 public class User implements Runnable{
 	
 	private UserInfo userInfo;
-	
+
 	private boolean loggedIn;
 	private boolean connected;
 	
@@ -26,6 +26,10 @@ public class User implements Runnable{
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
 	
+	//Required Getters/Setters
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
 	
 	//Get information about objects from server
 	public User(Socket client, Lobby lobby)

@@ -121,15 +121,56 @@ public class Lobby {
 		String serverAnswer = new String("");
 		String gameName = joinMsg.getGameName();
 		String password = joinMsg.getGamePassword();
+		
+		boolean gameFound = false;
 		for(Game g: waitingGames)
 		{
-			if(g.getName() == gameName && g.getPassword() == password && g.getMaxPlayers() > g.getNumOfRegisteredPlayers())
+			
+			if(g.getName() == gameName && g.getPassword() == password)
 			{
+				gameFound = true;
+				 if(g.getMaxPlayers() > g.getNumOfRegisteredPlayers())
+				 {
+					 for(User u: g.getUsers())
+					 {
+						 if (user.getUserInfo().getUsername() == u.getUserInfo().getUsername())
+						 {
+							 serverAnswer = "You have already registered for this game.";
+						 }
+						 else
+						 {
+							 g.addUser(user);
+							 serverAnswer = "You have successfully registered for this game.";
+							 //update lobby
+							 if(g.getNumOfRegisteredPlayers()==g.getMaxPlayers())
+							 {
+								 //Start game, inform users
+								 g.start();
+								 runningGames.add(g);
+								 waitingGames.remove(g);
+							 }
+							 
+						 }
+					 }
+				 }
+				 else
+				 {
+					 serverAnswer = "The game is full. Please select another game.";
+				 }
+			}
+			else if(g.getName() == gameName)
+			{
+				gameFound = true;
+				serverAnswer = "Wrong password entered!";
 				
 			}
 		}
+		if(!gameFound)
+		{
+			serverAnswer = "Game could not be found anymore in lobby. Please select another game";
+		}
 		
-		//look if same user already joined this game
+
 		
 		//add user to game
 		
