@@ -9,7 +9,7 @@ import client.lobby.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import messageObjects.CreateUserMessage;
-import messageObjects.ErrorMessage;
+import messageObjects.ServerInfoMessage;
 import messageObjects.LoginMessage;
 import messageObjects.UserInfoMessage;
 
@@ -47,9 +47,9 @@ public class LoginModel {
 		try {
 			oos.writeObject(new LoginMessage(view.loginusernametxt.getText(), view.loginpasswordtxt.getText()));
 			Object reply = ois.readObject();
-			if(reply instanceof ErrorMessage)
+			if(reply instanceof ServerInfoMessage)
 			{
-				ErrorMessage em = (ErrorMessage)reply;
+				ServerInfoMessage em = (ServerInfoMessage)reply;
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Atlantis server notification");
 				alert.setContentText(em.getMessage());
@@ -85,9 +85,9 @@ public class LoginModel {
 			
 			Object reply = ois.readObject();
 			
-			if(reply instanceof ErrorMessage)
+			if(reply instanceof ServerInfoMessage)
 			{
-				ErrorMessage em = (ErrorMessage)reply;
+				ServerInfoMessage em = (ServerInfoMessage)reply;
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Atlantis server notification");
 				alert.setContentText(em.getMessage());

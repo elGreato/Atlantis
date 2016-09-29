@@ -6,8 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import messageObjects.CreateUserMessage;
-import messageObjects.ErrorMessage;
-import messageObjects.GameMessage;
+import messageObjects.ServerInfoMessage;
+import messageObjects.GameJoinMessage;
 import messageObjects.LoginMessage;
 import messageObjects.UserInfoMessage;
 
@@ -103,7 +103,7 @@ public class User implements Runnable{
 		else
 		{
 			//inform user about username already taken
-			ErrorMessage usernameTaken = new ErrorMessage("This username is already taken. Please try another one.");
+			ServerInfoMessage usernameTaken = new ServerInfoMessage("This username is already taken. Please try another one.");
 			oos.writeObject(usernameTaken);
 		}
 	}
@@ -125,7 +125,7 @@ public class User implements Runnable{
 		else
 		{
 			//inform user about wrong credentials entered
-			ErrorMessage wrongEntry = new ErrorMessage("The credentials you entered are not correct. Try again!");
+			ServerInfoMessage wrongEntry = new ServerInfoMessage("The credentials you entered are not correct. Try again!");
 			oos.writeObject(wrongEntry);
 		}
 		
@@ -138,7 +138,7 @@ public class User implements Runnable{
 		{
 			try {
 				Object receivedMessage = ois.readObject();
-				if(receivedMessage instanceof GameMessage)
+				if(receivedMessage instanceof GameJoinMessage)
 				{
 					
 				}
