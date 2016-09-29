@@ -79,7 +79,7 @@ public class LobbyView {
 		gamePassCol.setCellValueFactory(cellData -> {
             boolean hasPassword = cellData.getValue().getHasPassword();
             String cellInfo;
-            if(hasPassword == true)
+            if(hasPassword)
             {
                 cellInfo = "Yes";
             }
@@ -102,6 +102,7 @@ public class LobbyView {
 		
 		//Example entry
 		gameData.add(new GameListItem("ProGame",true, 3,4));
+		gameData.add(new GameListItem("TheHackerz",false, 1,2));
 		
 		joinButton = new Button("Join game");
 		joinPassword = new TextField("Password");
