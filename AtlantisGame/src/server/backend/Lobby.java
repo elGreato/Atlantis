@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 import gameObjects.Game;
+import messageObjects.CreateGameMessage;
+import messageObjects.GameJoinMessage;
 
 public class Lobby {
 	private ArrayList<User> onlineUsers;
@@ -74,5 +76,23 @@ public class Lobby {
 		}
 		
 		return null;
+	}
+	
+	public synchronized String createGame(User user, CreateGameMessage createMsg)
+	{
+		String serverAnswer = new String("");
+		
+		return serverAnswer;
+	}
+	
+	public synchronized String joinGame(User user, GameJoinMessage joinMsg)
+	{
+		String serverAnswer = new String("");
+		
+		return serverAnswer;
+	}
+	public synchronized void updateLobby(Game game)
+	{
+		
 	}
 }
