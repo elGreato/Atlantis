@@ -5,9 +5,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import messageObjects.CreateGameMessage;
 import messageObjects.CreateUserMessage;
 import messageObjects.ServerInfoMessage;
 import messageObjects.GameJoinMessage;
+import messageObjects.InGameMessage;
 import messageObjects.LoginMessage;
 import messageObjects.UserInfoMessage;
 
@@ -138,9 +140,21 @@ public class User implements Runnable{
 		{
 			try {
 				Object receivedMessage = ois.readObject();
-				if(receivedMessage instanceof GameJoinMessage)
+				if(receivedMessage instanceof InGameMessage)
 				{
-					
+					InGameMessage igm = (InGameMessage)receivedMessage;
+				}
+				else if(receivedMessage instanceof GameJoinMessage)
+				{
+					GameJoinMessage gjm = (GameJoinMessage)receivedMessage;
+					String answer = lobby.joinGame(this, gjm);
+					oos.writeObject(new ServerInfoMessage(answer));
+				}
+				else if(receivedMessage instanceof CreateGameMessage)
+				{
+					CreateGameMessage cgm = (CreateGameMessage)receivedMessage;
+					String answer = lobby.createGame(this, cgm);
+					oos.writeObject(new ServerInfoMessage(answer));
 				}
 				
 				

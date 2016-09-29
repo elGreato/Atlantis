@@ -81,7 +81,18 @@ public class Lobby {
 	public synchronized String createGame(User user, CreateGameMessage createMsg)
 	{
 		String serverAnswer = new String("");
-		
+		String gameName = createMsg.getGameName();
+		String password = createMsg.getPassword();
+		int maxPlayers = createMsg.getMaxPlayers();
+		for(Game g: waitingGames)
+		{
+			
+		}
+		for(Game g: runningGames)
+		{
+			
+		}
+		Game newGame = new Game(gameName,password, maxPlayers, user);
 		return serverAnswer;
 	}
 	

@@ -11,10 +11,11 @@ public class Game {
 	private ArrayList<User> users; //connection to communication interface(players are sepearte entity)
 	private int maxPlayers;
 	
-	public Game(String name, String password, User creator) {
+	public Game(String name, String password, int maxPlayers, User creator) {
 		
 		this.name = name;
 		this.password = password;
+		this.maxPlayers = maxPlayers;
 		users = new ArrayList<User>();
 		users.add(creator);
 	}
