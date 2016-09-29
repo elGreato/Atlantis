@@ -141,13 +141,14 @@ public class Lobby {
 						 {
 							 g.addUser(user);
 							 serverAnswer = "You have successfully registered for this game.";
+							
 							 //update lobby
+							 
+							 
 							 if(g.getNumOfRegisteredPlayers()==g.getMaxPlayers())
 							 {
-								 //Start game, inform users
-								 g.start();
-								 runningGames.add(g);
-								 waitingGames.remove(g);
+								 initiateGameStart(g);
+								 
 							 }
 							 
 						 }
@@ -180,6 +181,16 @@ public class Lobby {
 		
 		return serverAnswer;
 	}
+	
+	private void initiateGameStart(Game g) {
+		//Start game, inform users
+		 g.start();
+		 runningGames.add(g);
+		 waitingGames.remove(g);
+		
+	}
+
+
 	public synchronized void updateLobby(Game game)
 	{
 		
