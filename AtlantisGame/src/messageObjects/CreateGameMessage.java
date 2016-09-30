@@ -2,7 +2,7 @@ package messageObjects;
 
 import java.io.Serializable;
 
-public class CreateGameMessage implements Serializable{
+public class CreateGameMessage extends LobbyMessage implements Serializable{
 
 	private String gameName;
 	private String password;

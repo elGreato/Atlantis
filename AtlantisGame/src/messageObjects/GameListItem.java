@@ -9,7 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 //For games not started yet in lobby, nothing to do with an actual game instance
 
 
-public class GameListItem implements Serializable{
+public class GameListItem extends LobbyMessage implements Serializable{
 
 	private SimpleStringProperty gameName;
 	private SimpleIntegerProperty registeredPlayers;

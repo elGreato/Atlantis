@@ -11,6 +11,7 @@ import messageObjects.ServerInfoMessage;
 import messageObjects.GameJoinMessage;
 import messageObjects.InGameMessage;
 import messageObjects.LoginMessage;
+import messageObjects.Message;
 import messageObjects.UserInfoMessage;
 
 public class User implements Runnable{
@@ -173,5 +174,10 @@ public class User implements Runnable{
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public synchronized void sendMessage(Message m) {
+		// TODO Auto-generated method stub
+		
 	}
 }

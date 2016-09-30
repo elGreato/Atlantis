@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import gameObjects.Game;
 import messageObjects.CreateGameMessage;
 import messageObjects.GameJoinMessage;
+import messageObjects.GameListItem;
 
 public class Lobby {
 	private ArrayList<User> onlineUsers;
@@ -151,6 +152,7 @@ public class Lobby {
 								 
 							 }
 							 
+							 updateLobby(g);
 						 }
 					 }
 				 }
@@ -171,13 +173,6 @@ public class Lobby {
 			serverAnswer = "Game could not be found anymore in lobby. Please select another game";
 		}
 		
-
-		
-		//add user to game
-		
-		//if players = maxPlayers -> game.start -> remove from waiting games and put in running games
-		
-		//updateLobby
 		
 		return serverAnswer;
 	}
@@ -193,6 +188,17 @@ public class Lobby {
 
 	public synchronized void updateLobby(Game game)
 	{
+		boolean hasPassword = true;
 		
+		if(game.getPassword().equals(""));
+		{
+			hasPassword = false;
+		}
+		GameListItem updatedGame = new GameListItem(game.getName(),hasPassword, game.getNumOfRegisteredPlayers(), game.getMaxPlayers());
+		
+		for(User u: onlineUsers)
+		{
+			u.sendMessage(updatedGame);
+		}
 	}
 }
