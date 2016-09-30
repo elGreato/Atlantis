@@ -48,6 +48,7 @@ public class Lobby {
 		if(userNameAvailable)
 		{
 			userInfoAllUsers.add(newUser);
+			sendWholeLobby();
 			onlineUsers.add(user);
 			databaseAccess.addNewUserToDatabase(newUser);
 			return newUser;
@@ -58,6 +59,26 @@ public class Lobby {
 		}
 		
 	}
+	private synchronized void sendWholeLobby() {
+		
+		ArrayList<GameListItem> allGamesInLobby = new ArrayList<GameListItem>(); 
+		for(Game game: waitingGames)
+		{
+			boolean hasPassword = true;
+			if(game.getPassword().equals(""));
+			{
+				hasPassword = false;
+			}
+			GameListItem prepToSendGame = new GameListItem(game.getName(),hasPassword, game.getNumOfRegisteredPlayers(), game.getMaxPlayers());
+			allGamesInLobby.add(prepToSendGame);
+		}
+		
+		
+		
+		
+	}
+
+
 	//Initiate last database update before closing server
 	public void lastDbUpdate()
 	{
@@ -71,6 +92,7 @@ public class Lobby {
 			
 			if(ui.getUsername().equals(username) && ui.getPassword().equals(password))
 			{
+				sendWholeLobby();
 				onlineUsers.add(user);
 				return ui;
 			}
@@ -89,14 +111,14 @@ public class Lobby {
 		boolean nameAvailable = true;
 		for(Game g: waitingGames)
 		{
-			if(g.getName()== gameName)
+			if(g.getName().equals(gameName))
 			{
 				nameAvailable = false;
 			}
 		}
 		for(Game g: runningGames)
 		{
-			if(g.getName()==gameName)
+			if(g.getName().equals(gameName))
 			{
 				nameAvailable=false;
 			}
@@ -127,14 +149,14 @@ public class Lobby {
 		for(Game g: waitingGames)
 		{
 			
-			if(g.getName() == gameName && g.getPassword() == password)
+			if(g.getName().equals(gameName) && g.getPassword().equals(password))
 			{
 				gameFound = true;
 				 if(g.getMaxPlayers() > g.getNumOfRegisteredPlayers())
 				 {
 					 for(User u: g.getUsers())
 					 {
-						 if (user.getUserInfo().getUsername() == u.getUserInfo().getUsername())
+						 if (user.getUserInfo().getUsername().equals(u.getUserInfo().getUsername()))
 						 {
 							 serverAnswer = "You have already registered for this game.";
 						 }
@@ -161,7 +183,7 @@ public class Lobby {
 					 serverAnswer = "The game is full. Please select another game.";
 				 }
 			}
-			else if(g.getName() == gameName)
+			else if(g.getName().equals(gameName))
 			{
 				gameFound = true;
 				serverAnswer = "Wrong password entered!";
