@@ -28,6 +28,8 @@ public class Lobby {
 		
 		onlineUsers = new ArrayList<User>();
 		
+		waitingGames = new ArrayList<Game>();
+		runningGames = new ArrayList<Game>();
 	}
 	
 	

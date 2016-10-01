@@ -42,9 +42,14 @@ public class LobbyView {
 	private TextField joinPassword;
 	private Button joinButton;
 	
-	private TextField newGameName;
-	private TextField newGamePassword;
-	private ComboBox newGameNumPlayers;
+	private Label createGameNamelbl;
+	private TextField createGameNametxt;
+	private Label createGamePasswordlbl;
+	private TextField createGamePasswordtxt;
+	private Label createNumPlayerslbl;
+	private ComboBox<Integer> createNumPlayerscbx;
+	private Button createButton;
+	
 	private TableView leaderBoard;
 	
 	private ObservableList<GameListItem> gameData;
@@ -113,7 +118,21 @@ public class LobbyView {
 		joinGameSection = new TitledPane("Join game", joinGameSectionContent);
 		joinGameSection.setExpanded(true);
 		
-		
+		createGameNamelbl = new Label("Name: ");
+		createGameNametxt = new TextField();
+		createGamePasswordlbl = new Label("Password: ");
+		createGamePasswordtxt = new TextField();
+		createNumPlayerslbl = new Label("No. of players: ");
+		createNumPlayerscbx = new ComboBox();
+		createNumPlayerscbx.getItems().addAll(2, 3, 4);
+		createButton = new Button("Create");
+		createGameControls.add(createGameNamelbl, 0, 0);
+		createGameControls.add(createGameNametxt, 1, 0);
+		createGameControls.add(createGamePasswordlbl, 0, 1);
+		createGameControls.add(createGamePasswordtxt, 1, 1);
+		createGameControls.add(createNumPlayerslbl, 0, 2);
+		createGameControls.add(createNumPlayerscbx, 1, 2);
+		createGameControls.add(createButton, 1, 3);
 		createGameSection = new TitledPane("Create game",createGameControls);
 		createGameSection.setExpanded(true);
 		
