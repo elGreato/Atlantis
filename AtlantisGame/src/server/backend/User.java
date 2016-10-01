@@ -105,6 +105,7 @@ public class User implements Runnable{
 			//inform user about successful create and login, send user information at the same time
 			UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo.getUsername(), userInfo.getGamesPlayed(), userInfo.getGamesWon(), userInfo.getGamesLost());
 			oos.writeObject(nowLoggedInAs);
+			lobby.sendWholeLobby(this);
 			loggedIn = true;
 		}
 		else

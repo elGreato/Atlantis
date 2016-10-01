@@ -188,7 +188,7 @@ public class Lobby {
 		for(Game game: waitingGames)
 		{
 			boolean hasPassword = true;
-			if(game.getPassword().equals(""));
+			if(game.getPassword().equals(""))
 			{
 				hasPassword = false;
 			}
@@ -207,8 +207,9 @@ public class Lobby {
 	{
 		boolean hasPassword = true;
 		
-		if(game.getPassword().equals(""));
+		if(game.getPassword().equals(""))
 		{
+			System.out.println(game.getPassword());
 			hasPassword = false;
 		}
 		GameListItem updatedGame = new GameListItem(game.getName(),hasPassword, game.getNumOfRegisteredPlayers(), game.getMaxPlayers());
