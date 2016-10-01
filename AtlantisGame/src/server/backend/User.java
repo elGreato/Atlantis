@@ -127,6 +127,7 @@ public class User implements Runnable{
 			//inform user about successful login, send user information at the same time
 			UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo.getUsername(), userInfo.getGamesPlayed(), userInfo.getGamesWon(), userInfo.getGamesLost());
 			oos.writeObject(nowLoggedInAs);
+			lobby.sendWholeLobby(this);
 			loggedIn = true;
 		}
 		else
@@ -157,9 +158,13 @@ public class User implements Runnable{
 				}
 				else if(receivedMessage instanceof CreateGameMessage)
 				{
+					System.out.println("create game message received");
 					CreateGameMessage cgm = (CreateGameMessage)receivedMessage;
 					String answer = lobby.createGame(this, cgm);
+					System.out.println("Create game message processed");
 					oos.writeObject(new ServerInfoMessage(answer));
+					System.out.println("Answer sent");
+				
 				}
 				
 				
@@ -174,10 +179,17 @@ public class User implements Runnable{
 				e.printStackTrace();
 			}
 		}
+		
+		//ADD: logout user
 	}
 
 	public synchronized void sendMessage(Message m) {
-		// TODO Auto-generated method stub
+		try {
+			oos.writeObject(m);
+		} catch (IOException e) {
+			loggedIn = false;
+			connected = false;
+		}
 		
 	}
 }

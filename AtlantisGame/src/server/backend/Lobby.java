@@ -7,6 +7,7 @@ import gameObjects.Game;
 import messageObjects.CreateGameMessage;
 import messageObjects.GameJoinMessage;
 import messageObjects.GameListItem;
+import messageObjects.GameListItemList;
 
 public class Lobby {
 	private ArrayList<User> onlineUsers;
@@ -33,7 +34,7 @@ public class Lobby {
 	}
 	
 	
-	//checks if username already exists and creates new user if it doesn't
+	//checks if username already exists and creates new user if it doesn't. If create user successful user will be informed and logged in.
 	public synchronized UserInfo createNewUser(String username, String password, User user)
 	{
 		
@@ -50,8 +51,6 @@ public class Lobby {
 		if(userNameAvailable)
 		{
 			userInfoAllUsers.add(newUser);
-			sendWholeLobby();
-			onlineUsers.add(user);
 			databaseAccess.addNewUserToDatabase(newUser);
 			return newUser;
 		}
@@ -61,31 +60,6 @@ public class Lobby {
 		}
 		
 	}
-	private synchronized void sendWholeLobby() {
-		
-		ArrayList<GameListItem> allGamesInLobby = new ArrayList<GameListItem>(); 
-		for(Game game: waitingGames)
-		{
-			boolean hasPassword = true;
-			if(game.getPassword().equals(""));
-			{
-				hasPassword = false;
-			}
-			GameListItem prepToSendGame = new GameListItem(game.getName(),hasPassword, game.getNumOfRegisteredPlayers(), game.getMaxPlayers());
-			allGamesInLobby.add(prepToSendGame);
-		}
-		
-		
-		
-		
-	}
-
-
-	//Initiate last database update before closing server
-	public void lastDbUpdate()
-	{
-		databaseAccess.lastUpdate();
-	}
 
 	//Checks validity of entered passwords from login requests
 	public synchronized UserInfo loginUser(String username, String password, User user) {
@@ -94,8 +68,6 @@ public class Lobby {
 			
 			if(ui.getUsername().equals(username) && ui.getPassword().equals(password))
 			{
-				sendWholeLobby();
-				onlineUsers.add(user);
 				return ui;
 			}
 		}
@@ -103,6 +75,7 @@ public class Lobby {
 		return null;
 	}
 	
+	//Creates new game from user input
 	public synchronized String createGame(User user, CreateGameMessage createMsg)
 	{
 		String serverAnswer = new String("");
@@ -141,6 +114,7 @@ public class Lobby {
 		return serverAnswer;
 	}
 	
+	//Makes user join a game if preconditions are met
 	public synchronized String joinGame(User user, GameJoinMessage joinMsg)
 	{
 		String serverAnswer = new String("");
@@ -167,9 +141,6 @@ public class Lobby {
 							 g.addUser(user);
 							 serverAnswer = "You have successfully registered for this game.";
 							
-							 //update lobby
-							 
-							 
 							 if(g.getNumOfRegisteredPlayers()==g.getMaxPlayers())
 							 {
 								 initiateGameStart(g);
@@ -201,6 +172,7 @@ public class Lobby {
 		return serverAnswer;
 	}
 	
+	//If a game is full the game will be started automatically
 	private void initiateGameStart(Game g) {
 		//Start game, inform users
 		 g.start();
@@ -209,7 +181,28 @@ public class Lobby {
 		
 	}
 
-
+	//After informing the user about the successful login, all the lobby data including games has to be sent to the user. After that the user is added to the group that gets automatic updates called onlineUsers
+	public synchronized void sendWholeLobby(User user) {
+		System.out.println("Try to send lobby");
+		ArrayList<GameListItem> allGamesInLobby = new ArrayList<GameListItem>(); 
+		for(Game game: waitingGames)
+		{
+			boolean hasPassword = true;
+			if(game.getPassword().equals(""));
+			{
+				hasPassword = false;
+			}
+			GameListItem prepToSendGame = new GameListItem(game.getName(),hasPassword, game.getNumOfRegisteredPlayers(), game.getMaxPlayers());
+			allGamesInLobby.add(prepToSendGame);
+		}
+		GameListItemList listOfGames = new GameListItemList(allGamesInLobby);
+		user.sendMessage(listOfGames);
+		onlineUsers.add(user);
+		
+		
+		
+	}
+	//Informs logged in users about changes in lobby
 	public synchronized void updateLobby(Game game)
 	{
 		boolean hasPassword = true;
@@ -224,5 +217,13 @@ public class Lobby {
 		{
 			u.sendMessage(updatedGame);
 		}
+	}
+	
+
+
+	//Initiate last database update before closing server
+	public void lastDbUpdate()
+	{
+		databaseAccess.lastUpdate();
 	}
 }

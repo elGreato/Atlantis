@@ -2,57 +2,56 @@ package messageObjects;
 
 import java.io.Serializable;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 
 //For games not started yet in lobby, nothing to do with an actual game instance
 
 
 public class GameListItem extends LobbyMessage implements Serializable{
 
-	private SimpleStringProperty gameName;
-	private SimpleIntegerProperty registeredPlayers;
-	private SimpleIntegerProperty maxPlayers;
-	private SimpleBooleanProperty hasPassword;
+	private String gameName;
+	private Integer registeredPlayers;
+	private Integer maxPlayers;
+	private Boolean hasPassword;
 	
 	public GameListItem(String gameName, boolean hasPassword, int registeredPlayers, int maxPlayers) {
 		
-		this.gameName = new SimpleStringProperty(gameName);
-		this.hasPassword = new SimpleBooleanProperty(hasPassword);
-		this.registeredPlayers = new SimpleIntegerProperty(registeredPlayers);
-		this.maxPlayers = new SimpleIntegerProperty(maxPlayers);
+		this.gameName = gameName;
+		this.hasPassword = hasPassword;
+		this.registeredPlayers = registeredPlayers;
+		this.maxPlayers = maxPlayers;
 	}
 	
 	public String getGameName() {
-		return gameName.get();
+		return gameName;
 	}
 
 	public void setGameName(String gameName) {
-		this.gameName.set(gameName);
+		this.gameName = gameName;
 	}
 
 	public Integer getRegisteredPlayers() {
-		return registeredPlayers.get();
+		return registeredPlayers;
 	}
 
 	public void setRegisteredPlayers(Integer registeredPlayers) {
-		this.registeredPlayers.set(registeredPlayers);
+		this.registeredPlayers = registeredPlayers;
 	}
 
 	public Integer getMaxPlayers() {
-		return maxPlayers.get();
+		return maxPlayers;
 	}
 
 	public void setMaxPlayers(Integer maxPlayers) {
-		this.maxPlayers.set(maxPlayers);;
+		this.maxPlayers = maxPlayers;
 	}
 
 	public Boolean getHasPassword() {
-		return hasPassword.get();
+		return hasPassword;
 	}
 
 	public void setHasPassword(Boolean hasPassword) {
-		this.hasPassword.set(hasPassword);
+		this.hasPassword = hasPassword;
 	}
+	
+	
 }

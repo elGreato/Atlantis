@@ -7,6 +7,9 @@ import java.io.ObjectOutputStream;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import messageObjects.CreateGameMessage;
+import messageObjects.GameListItem;
+import messageObjects.GameListItemList;
 import messageObjects.InGameMessage;
 import messageObjects.ServerInfoMessage;
 
@@ -19,30 +22,85 @@ public class LobbyModel implements Runnable{
 	private ObjectInputStream ois;
 	
 	
-	public LobbyModel(LobbyView lobbyView, ObjectOutputStream oos, ObjectInputStream ois) {
+	public LobbyModel(LobbyView view, ObjectOutputStream oos, ObjectInputStream ois) {
 		this.view = view;
-		
+		this.oos = oos;
+		this.ois = ois;
+
+	}
+	
+	public void startListener()
+	{
 		listener = new Thread(this);
 		listener.start();
 	}
 	
-	
 	@Override
 	public void run() {
+		
+		
+		
 		boolean connected = true;
 		while(connected)
 		{
 			try {
+				System.out.println("Ready to read");
 				Object obj = ois.readObject();
-				
+				System.out.println("Read an object");
 				if(obj instanceof InGameMessage)
 				{
 					
 				}
 				else if(obj instanceof ServerInfoMessage)
 				{
+					System.out.println("Recieved info from server");
+					ServerInfoMessage serverInfoMessage = (ServerInfoMessage)obj;
+					Platform.runLater(new Runnable()
+					{
+						
+						@Override
+						public void run() 
+						{
+							Alert alert = new Alert(AlertType.INFORMATION);
+							alert.setTitle("Server information");
+							alert.setContentText(serverInfoMessage.getMessage());
+							alert.showAndWait();
+							
+						}
+						
+					});
+				}
+				else if(obj instanceof GameListItem)
+				{
+					System.out.println("Recieved update from games from server");
+					GameListItemDataModel updatedGame = new GameListItemDataModel((GameListItem)obj);
+					
+					boolean wasGameUpdate = false;
+					for(GameListItemDataModel g : view.gameData)
+					{
+						if(g.getGameName().equals(updatedGame.getGameName()))
+						{
+							g = updatedGame;
+							wasGameUpdate = true;
+						}
+					}
+					if(!wasGameUpdate)
+					{
+						view.gameData.add(updatedGame);
+					}
+				}
+				else if(obj instanceof GameListItemList)
+				{
+					System.out.println("I'm receiving a gameList");
+					GameListItemList glil = (GameListItemList)obj;
+					view.gameData.clear();
+					for(GameListItem g : glil.getGames())
+					{
+						view.gameData.add(new GameListItemDataModel(g));
+					}
 					
 				}
+				
 			} catch (ClassNotFoundException e) {
 				
 				e.printStackTrace();
@@ -50,7 +108,7 @@ public class LobbyModel implements Runnable{
 			} catch (IOException e) {
 				
 				connected = false;
-				
+				e.printStackTrace();
 				Platform.runLater(new Runnable(){
 					public void run()
 					{
@@ -63,6 +121,19 @@ public class LobbyModel implements Runnable{
 			}
 		}
 		
+	}
+
+	public void createGame() {
+		CreateGameMessage createGameMsg = new CreateGameMessage(view.createGameNametxt.getText(), view.createGamePasswordtxt.getText(), view.createNumPlayerscbx.getValue());
+		try {
+			oos.writeObject(createGameMsg);
+			System.out.println("new game sent to server");
+		} catch (IOException e) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Connection error");
+			alert.setContentText("Connection to server lost. Please try to restart the program later.");
+			alert.showAndWait();
+		}
 	}
 
 	

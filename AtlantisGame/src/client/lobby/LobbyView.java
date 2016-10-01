@@ -33,12 +33,12 @@ public class LobbyView {
 	private GridPane createGameControls;
 	
 	private Label title;
-	private TableView<GameListItem> gameList;
-	protected TableColumn<GameListItem, String> gameNameCol;
-	protected TableColumn<GameListItem, String> gamePassCol;
-	protected TableColumn<GameListItem, Integer> playersCol;
-	protected TableColumn<GameListItem, Integer> playersRegCol;
-	protected TableColumn<GameListItem, Integer> playersMaxCol;
+	private TableView<GameListItemDataModel> gameList;
+	protected TableColumn<GameListItemDataModel, String> gameNameCol;
+	protected TableColumn<GameListItemDataModel, String> gamePassCol;
+	protected TableColumn<GameListItemDataModel, Integer> playersCol;
+	protected TableColumn<GameListItemDataModel, Integer> playersRegCol;
+	protected TableColumn<GameListItemDataModel, Integer> playersMaxCol;
 	protected TextField joinPassword;
 	protected Button joinButton;
 	
@@ -50,22 +50,22 @@ public class LobbyView {
 	protected ComboBox<Integer> createNumPlayerscbx;
 	protected Button createButton;
 	
+	
 	private TableView leaderBoard;
 	
-	protected ObservableList<GameListItem> gameData;
+	protected ObservableList<GameListItemDataModel> gameData;
 	
 	
 	public LobbyView()
 	{
-		
 		gameData = FXCollections.observableArrayList();
-		
+		System.out.println("Initialized gameList");
 		
 		root = new GridPane();
 
 		
 		
-		gameList = new TableView<GameListItem>();
+		gameList = new TableView<GameListItemDataModel>();
 		//Columns for table
 		gameNameCol = new TableColumn("Name");
 		gameNameCol.setResizable(false);
@@ -79,7 +79,7 @@ public class LobbyView {
 		playersMaxCol.setResizable(false);
 		
 		//Connect table content to variables
-		gameNameCol.setCellValueFactory(new PropertyValueFactory<GameListItem, String>("gameName"));
+		gameNameCol.setCellValueFactory(new PropertyValueFactory<GameListItemDataModel, String>("gameName"));
 		//table cell boolean to string by http://stackoverflow.com/questions/36436169/boolean-to-string-in-tableview-javafx
 		gamePassCol.setCellValueFactory(cellData -> {
             boolean hasPassword = cellData.getValue().getHasPassword();
@@ -95,8 +95,8 @@ public class LobbyView {
 
          return new ReadOnlyStringWrapper(cellInfo);
         });
-		playersRegCol.setCellValueFactory(new PropertyValueFactory<GameListItem, Integer>("registeredPlayers"));
-		playersMaxCol.setCellValueFactory(new PropertyValueFactory<GameListItem, Integer>("maxPlayers"));
+		playersRegCol.setCellValueFactory(new PropertyValueFactory<GameListItemDataModel, Integer>("registeredPlayers"));
+		playersMaxCol.setCellValueFactory(new PropertyValueFactory<GameListItemDataModel, Integer>("maxPlayers"));
 		
 		//Draw table
 		playersCol.getColumns().addAll(playersRegCol, playersMaxCol);
@@ -106,8 +106,9 @@ public class LobbyView {
 		gameList.setItems(gameData);
 		
 		//Example entry
-		gameData.add(new GameListItem("ProGame",true, 3,4));
-		gameData.add(new GameListItem("TheHackerz",false, 1,2));
+		gameData.add(new GameListItemDataModel(new GameListItem("ProGame",true, 3,4)));
+		gameData.add(new GameListItemDataModel(new GameListItem("TheHackerz",false, 1,2)));
+		System.out.println("added items to game list");
 		
 		
 		joinButton = new Button("Join game");
@@ -155,11 +156,8 @@ public class LobbyView {
 	public void start() {
 		// TODO Auto-generated method stub
 		stage.show();
+		
 	}
 	
-	public void updateGameList(ArrayList<GameListItem> update)
-	{
-		gameData.clear();
-		gameData.addAll(update);
-	}
+
 }

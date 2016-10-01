@@ -6,7 +6,7 @@ import javafx.event.EventHandler;
 public class LobbyController {
 	private LobbyView view;
 	private LobbyModel model;
-	public LobbyController(LobbyView lobbyView, LobbyModel lobbyModel) {
+	public LobbyController(LobbyView view, LobbyModel model) {
 		this.view = view;
 		this.model = model;
 		
@@ -16,7 +16,7 @@ public class LobbyController {
 			@Override
 			public void handle(ActionEvent arg0) {
 				
-				
+				model.createGame();
 			}
 			
 		});
