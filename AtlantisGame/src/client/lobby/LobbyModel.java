@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import messageObjects.CreateGameMessage;
+import messageObjects.GameJoinMessage;
 import messageObjects.GameListItem;
 import messageObjects.GameListItemList;
 import messageObjects.InGameMessage;
@@ -80,8 +81,16 @@ public class LobbyModel implements Runnable{
 					{
 						if(g.getGameName().equals(updatedGame.getGameName()))
 						{
-							g = updatedGame;
 							wasGameUpdate = true;
+							if(updatedGame.getRegisteredPlayers()<updatedGame.getMaxPlayers())
+							{
+								g = updatedGame;
+							}
+							
+							else
+							{
+								view.gameData.remove(g);
+							}
 						}
 					}
 					if(!wasGameUpdate)
@@ -134,6 +143,27 @@ public class LobbyModel implements Runnable{
 			alert.setContentText("Connection to server lost. Please try to restart the program later.");
 			alert.showAndWait();
 		}
+	}
+
+	public void joinGame() {
+	
+		GameListItemDataModel gameToJoin = view.gameList.getSelectionModel().getSelectedItem();
+		
+		if(!gameToJoin.equals(null))
+		{
+			System.out.println(gameToJoin.getGameName());
+			GameJoinMessage joinGamemsg = new GameJoinMessage(gameToJoin.getGameName(), view.joinPassword.getText());
+			try {
+				oos.writeObject(joinGamemsg);
+			} catch (IOException e) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Connection error");
+				alert.setContentText("Connection to server lost. Please try to restart the program later.");
+				alert.showAndWait();
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
 	

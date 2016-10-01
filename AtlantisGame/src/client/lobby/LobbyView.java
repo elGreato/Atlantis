@@ -33,7 +33,7 @@ public class LobbyView {
 	private GridPane createGameControls;
 	
 	private Label title;
-	private TableView<GameListItemDataModel> gameList;
+	protected TableView<GameListItemDataModel> gameList;
 	protected TableColumn<GameListItemDataModel, String> gameNameCol;
 	protected TableColumn<GameListItemDataModel, String> gamePassCol;
 	protected TableColumn<GameListItemDataModel, Integer> playersCol;
@@ -127,8 +127,9 @@ public class LobbyView {
 		createGamePasswordlbl = new Label("Password: ");
 		createGamePasswordtxt = new TextField();
 		createNumPlayerslbl = new Label("No. of players: ");
-		createNumPlayerscbx = new ComboBox();
+		createNumPlayerscbx = new ComboBox<Integer>();
 		createNumPlayerscbx.getItems().addAll(2, 3, 4);
+		createNumPlayerscbx.setValue(2);
 		createButton = new Button("Create");
 		
 		createGameControls.add(createGameNamelbl, 0, 0);

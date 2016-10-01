@@ -2,6 +2,7 @@ package server.backend;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import gameObjects.Game;
 import messageObjects.CreateGameMessage;
@@ -122,50 +123,55 @@ public class Lobby {
 		String password = joinMsg.getGamePassword();
 		
 		boolean gameFound = false;
-		for(Game g: waitingGames)
+		Iterator<Game> gameIt = waitingGames.iterator();
+		while(gameIt.hasNext())
 		{
-			
+			Game g = gameIt.next();
 			if(g.getName().equals(gameName) && g.getPassword().equals(password))
 			{
 				gameFound = true;
 				 if(g.getMaxPlayers() > g.getNumOfRegisteredPlayers())
 				 {
-					 for(User u: g.getUsers())
+					 boolean alreadyRegistered = false;
+					 for(User u:g.getUsers())
 					 {
 						 if (user.getUserInfo().getUsername().equals(u.getUserInfo().getUsername()))
 						 {
+							 alreadyRegistered = true;
 							 serverAnswer = "You have already registered for this game.";
 						 }
-						 else
+					 }
+					 if(!alreadyRegistered)
+					 {
+						 System.out.println("I'm here");
+						 g.addUser(user);
+						 serverAnswer = "You have successfully registered for this game.";
+					
+						 if(g.getNumOfRegisteredPlayers()==g.getMaxPlayers())
 						 {
-							 g.addUser(user);
-							 serverAnswer = "You have successfully registered for this game.";
-							
-							 if(g.getNumOfRegisteredPlayers()==g.getMaxPlayers())
-							 {
-								 initiateGameStart(g);
-								 
-							 }
-							 
-							 updateLobby(g);
+							 initiateGameStart(g);
+						 
 						 }
+						 System.out.println(g.getNumOfRegisteredPlayers());
+						 updateLobby(g);
+						 System.out.println("updated lobby");
+					 }
+					 else
+					 {
+						 serverAnswer = "The game is full. Please select another game.";
 					 }
 				 }
-				 else
+				 else if(g.getName().equals(gameName))
 				 {
-					 serverAnswer = "The game is full. Please select another game.";
+					 gameFound = true;
+					 serverAnswer = "Wrong password entered!";
+				
 				 }
 			}
-			else if(g.getName().equals(gameName))
+			if(!gameFound)
 			{
-				gameFound = true;
-				serverAnswer = "Wrong password entered!";
-				
+				serverAnswer = "Game could not be found anymore in lobby. Please select another game";
 			}
-		}
-		if(!gameFound)
-		{
-			serverAnswer = "Game could not be found anymore in lobby. Please select another game";
 		}
 		
 		
