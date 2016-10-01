@@ -150,7 +150,11 @@ public class Lobby {
 					
 						 if(g.getNumOfRegisteredPlayers()==g.getMaxPlayers())
 						 {
-							 initiateGameStart(g);
+							 //starts game
+							 g.start();
+							 runningGames.add(g);
+							 gameIt.remove();
+							
 						 
 						 }
 						 System.out.println(g.getNumOfRegisteredPlayers());
@@ -181,14 +185,6 @@ public class Lobby {
 		return serverAnswer;
 	}
 	
-	//If a game is full the game will be started automatically
-	private void initiateGameStart(Game g) {
-		//Start game, inform users
-		 g.start();
-		 runningGames.add(g);
-		 waitingGames.remove(g);
-		
-	}
 
 	//After informing the user about the successful login, all the lobby data including games has to be sent to the user. After that the user is added to the group that gets automatic updates called onlineUsers
 	public synchronized void sendWholeLobby(User user) {

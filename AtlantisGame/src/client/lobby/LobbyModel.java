@@ -77,7 +77,6 @@ public class LobbyModel implements Runnable{
 					System.out.println("Recieved update from games from server");
 					GameListItemDataModel updatedGame = new GameListItemDataModel((GameListItem)obj);
 					System.out.println(updatedGame.getRegisteredPlayers());
-					boolean wasGameUpdate = false;
 					
 					Iterator<GameListItemDataModel> gameListIt = view.gameData.iterator();
 					while(gameListIt.hasNext())
@@ -85,24 +84,14 @@ public class LobbyModel implements Runnable{
 						GameListItemDataModel g = gameListIt.next();
 						if(g.getGameName().equals(updatedGame.getGameName()))
 						{
-							wasGameUpdate = true;
-							if(updatedGame.getRegisteredPlayers()<updatedGame.getMaxPlayers())
-							{
-								
-								view.gameData.remove(g);
-								view.gameData.add(updatedGame);
-							}
-							
-							else
-							{
-								view.gameData.remove(g);
-							}
+							gameListIt.remove();
 						}
 					}
-					if(!wasGameUpdate)
+					if(updatedGame.getRegisteredPlayers()<updatedGame.getMaxPlayers())
 					{
 						view.gameData.add(updatedGame);
 					}
+					
 				}
 				else if(obj instanceof GameListItemList)
 				{
