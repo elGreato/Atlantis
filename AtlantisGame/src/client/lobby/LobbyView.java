@@ -34,25 +34,25 @@ public class LobbyView {
 	
 	private Label title;
 	private TableView<GameListItem> gameList;
-	private TableColumn<GameListItem, String> gameNameCol;
-	private TableColumn<GameListItem, String> gamePassCol;
-	private TableColumn<GameListItem, Integer> playersCol;
-	private TableColumn<GameListItem, Integer> playersRegCol;
-	private TableColumn<GameListItem, Integer> playersMaxCol;
-	private TextField joinPassword;
-	private Button joinButton;
+	protected TableColumn<GameListItem, String> gameNameCol;
+	protected TableColumn<GameListItem, String> gamePassCol;
+	protected TableColumn<GameListItem, Integer> playersCol;
+	protected TableColumn<GameListItem, Integer> playersRegCol;
+	protected TableColumn<GameListItem, Integer> playersMaxCol;
+	protected TextField joinPassword;
+	protected Button joinButton;
 	
 	private Label createGameNamelbl;
-	private TextField createGameNametxt;
+	protected TextField createGameNametxt;
 	private Label createGamePasswordlbl;
-	private TextField createGamePasswordtxt;
+	protected TextField createGamePasswordtxt;
 	private Label createNumPlayerslbl;
-	private ComboBox<Integer> createNumPlayerscbx;
-	private Button createButton;
+	protected ComboBox<Integer> createNumPlayerscbx;
+	protected Button createButton;
 	
 	private TableView leaderBoard;
 	
-	private ObservableList<GameListItem> gameData;
+	protected ObservableList<GameListItem> gameData;
 	
 	
 	public LobbyView()
@@ -62,7 +62,7 @@ public class LobbyView {
 		
 		
 		root = new GridPane();
-		createGameControls = new GridPane();
+
 		
 		
 		gameList = new TableView<GameListItem>();
@@ -109,6 +109,7 @@ public class LobbyView {
 		gameData.add(new GameListItem("ProGame",true, 3,4));
 		gameData.add(new GameListItem("TheHackerz",false, 1,2));
 		
+		
 		joinButton = new Button("Join game");
 		joinPassword = new TextField("Password");
 		joinGameSectionContent = new GridPane();
@@ -118,6 +119,8 @@ public class LobbyView {
 		joinGameSection = new TitledPane("Join game", joinGameSectionContent);
 		joinGameSection.setExpanded(true);
 		
+		
+		createGameControls = new GridPane();
 		createGameNamelbl = new Label("Name: ");
 		createGameNametxt = new TextField();
 		createGamePasswordlbl = new Label("Password: ");
@@ -126,6 +129,7 @@ public class LobbyView {
 		createNumPlayerscbx = new ComboBox();
 		createNumPlayerscbx.getItems().addAll(2, 3, 4);
 		createButton = new Button("Create");
+		
 		createGameControls.add(createGameNamelbl, 0, 0);
 		createGameControls.add(createGameNametxt, 1, 0);
 		createGameControls.add(createGamePasswordlbl, 0, 1);
