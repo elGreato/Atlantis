@@ -78,18 +78,28 @@ public class LobbyModel implements Runnable{
 					GameListItemDataModel updatedGame = new GameListItemDataModel((GameListItem)obj);
 					System.out.println(updatedGame.getRegisteredPlayers());
 					
+					boolean isSelected = false;
+					
 					Iterator<GameListItemDataModel> gameListIt = view.gameData.iterator();
 					while(gameListIt.hasNext())
 					{
 						GameListItemDataModel g = gameListIt.next();
 						if(g.getGameName().equals(updatedGame.getGameName()))
 						{
+							if(view.gameList.getSelectionModel().getSelectedItem().equals(g))
+							{
+								isSelected = true;
+							}
 							gameListIt.remove();
 						}
 					}
 					if(updatedGame.getRegisteredPlayers()<updatedGame.getMaxPlayers())
 					{
 						view.gameData.add(updatedGame);
+						if(isSelected)
+						{
+							view.gameList.getSelectionModel().select(updatedGame);
+						}
 					}
 					
 				}

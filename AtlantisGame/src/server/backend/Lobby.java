@@ -124,7 +124,7 @@ public class Lobby {
 		
 		boolean gameFound = false;
 		Iterator<Game> gameIt = waitingGames.iterator();
-		while(gameIt.hasNext())
+		while(gameIt.hasNext() && !gameFound)
 		{
 			Game g = gameIt.next();
 			if(g.getName().equals(gameName) && g.getPassword().equals(password))
@@ -175,12 +175,13 @@ public class Lobby {
 				 serverAnswer = "Wrong password entered!";
 			
 			}
-			if(!gameFound)
-			{
-				serverAnswer = "Game could not be found anymore in lobby. Please select another game";
-			}
+
 		}
 		
+		if(!gameFound)
+		{
+			serverAnswer = "Game could not be found anymore in lobby. Please select another game";
+		}
 		
 		return serverAnswer;
 	}
