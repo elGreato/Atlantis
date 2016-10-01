@@ -130,6 +130,7 @@ public class Lobby {
 			if(g.getName().equals(gameName) && g.getPassword().equals(password))
 			{
 				gameFound = true;
+				System.out.println(g.getMaxPlayers() + " " + g.getNumOfRegisteredPlayers());
 				 if(g.getMaxPlayers() > g.getNumOfRegisteredPlayers())
 				 {
 					 boolean alreadyRegistered = false;
@@ -156,17 +157,19 @@ public class Lobby {
 						 updateLobby(g);
 						 System.out.println("updated lobby");
 					 }
-					 else
-					 {
-						 serverAnswer = "The game is full. Please select another game.";
-					 }
+
 				 }
-				 else if(g.getName().equals(gameName))
+				 else
 				 {
-					 gameFound = true;
-					 serverAnswer = "Wrong password entered!";
-				
+					 serverAnswer = "The game is full. Please select another game.";
 				 }
+
+			}
+			else if(g.getName().equals(gameName))
+			{
+				 gameFound = true;
+				 serverAnswer = "Wrong password entered!";
+			
 			}
 			if(!gameFound)
 			{
@@ -223,6 +226,7 @@ public class Lobby {
 		for(User u: onlineUsers)
 		{
 			u.sendMessage(updatedGame);
+			System.out.println(updatedGame.getRegisteredPlayers());
 		}
 	}
 	

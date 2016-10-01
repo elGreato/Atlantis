@@ -3,6 +3,7 @@ package client.lobby;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Iterator;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -75,16 +76,21 @@ public class LobbyModel implements Runnable{
 				{
 					System.out.println("Recieved update from games from server");
 					GameListItemDataModel updatedGame = new GameListItemDataModel((GameListItem)obj);
-					
+					System.out.println(updatedGame.getRegisteredPlayers());
 					boolean wasGameUpdate = false;
-					for(GameListItemDataModel g : view.gameData)
+					
+					Iterator<GameListItemDataModel> gameListIt = view.gameData.iterator();
+					while(gameListIt.hasNext())
 					{
+						GameListItemDataModel g = gameListIt.next();
 						if(g.getGameName().equals(updatedGame.getGameName()))
 						{
 							wasGameUpdate = true;
 							if(updatedGame.getRegisteredPlayers()<updatedGame.getMaxPlayers())
 							{
-								g = updatedGame;
+								
+								view.gameData.remove(g);
+								view.gameData.add(updatedGame);
 							}
 							
 							else
