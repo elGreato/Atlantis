@@ -31,6 +31,20 @@ public class LobbyController {
 			
 		});
 		
+		//listener from http://stackoverflow.com/questions/26424769/javafx8-how-to-create-listener-for-selection-of-row-in-tableview
+		view.gameList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+			
+		    if(newSelection.getHasPassword())
+		    {
+		    	view.joinPassword.setDisable(false);
+		    }
+		    else
+		    {
+		    	view.joinPassword.setDisable(true);
+		    	view.joinPassword.setText("");
+		    }
+		});
+		
 	
 	}
 	
