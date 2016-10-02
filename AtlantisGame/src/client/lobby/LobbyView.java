@@ -166,7 +166,7 @@ public class LobbyView {
 		root.add(createGameSection, 0, 2);
 		root.add(chatSection, 1, 2);
 		
-		
+		createGameSection.setMaxHeight(Double.MAX_VALUE);
 		scene = new Scene(root);
 		stage = new Stage();
 		stage.setScene(scene);
