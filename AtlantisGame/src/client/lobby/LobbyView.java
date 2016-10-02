@@ -57,6 +57,7 @@ public class LobbyView {
 	
 	protected TextArea chatHistory;
 	protected TextField chatField;
+	protected Button chatButton;
 	
 	private TableView leaderBoard;
 	
@@ -154,9 +155,11 @@ public class LobbyView {
 		
 		chatHistory = new TextArea();
 		chatField = new TextField();
+		chatButton = new Button("Send");
 		chatContent = new GridPane();
-		chatContent.add(chatHistory, 0, 0);
+		chatContent.add(chatHistory, 0, 0, 2, 1);
 		chatContent.add(chatField, 0, 1);
+		chatContent.add(chatButton, 1, 1);
 		chatSection = new TitledPane("Chat", chatContent);
 		
 		title = new Label("ATLANTIS LOBBY");

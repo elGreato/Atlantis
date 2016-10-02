@@ -13,7 +13,9 @@ import messageObjects.GameJoinMessage;
 import messageObjects.GameListItem;
 import messageObjects.GameListItemList;
 import messageObjects.InGameMessage;
+import messageObjects.LobbyChatMessage;
 import messageObjects.ServerInfoMessage;
+import server.backend.UserInfo;
 
 public class LobbyModel implements Runnable{
 
@@ -23,6 +25,7 @@ public class LobbyModel implements Runnable{
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
 	
+	private UserInfo user;
 	
 	public LobbyModel(LobbyView view, ObjectOutputStream oos, ObjectInputStream ois) {
 		this.view = view;
@@ -126,10 +129,7 @@ public class LobbyModel implements Runnable{
 				Platform.runLater(new Runnable(){
 					public void run()
 					{
-						Alert alert = new Alert(AlertType.ERROR);
-						alert.setTitle("Connection error");
-						alert.setContentText("Connection to server lost. Please try to restart the program later.");
-						alert.showAndWait();
+						connectionLost();
 					}
 				});
 			}
@@ -143,10 +143,8 @@ public class LobbyModel implements Runnable{
 			oos.writeObject(createGameMsg);
 			System.out.println("new game sent to server");
 		} catch (IOException e) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Connection error");
-			alert.setContentText("Connection to server lost. Please try to restart the program later.");
-			alert.showAndWait();
+			connectionLost();
+
 		}
 	}
 
@@ -161,13 +159,26 @@ public class LobbyModel implements Runnable{
 			try {
 				oos.writeObject(joinGamemsg);
 			} catch (IOException e) {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Connection error");
-				alert.setContentText("Connection to server lost. Please try to restart the program later.");
-				alert.showAndWait();
-				e.printStackTrace();
+				connectionLost();
 			}
 		}
+		
+	}
+
+	public void sendChatMessage() {
+		LobbyChatMessage chatMessage = new LobbyChatMessage(view.chatField.getText());
+		try {
+			oos.writeObject(chatMessage);
+		} catch (IOException e) {
+			connectionLost();
+		}
+	}
+	
+	private void connectionLost() {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Connection error");
+		alert.setContentText("Connection to server lost. Please try to restart the program later.");
+		alert.showAndWait();
 		
 	}
 

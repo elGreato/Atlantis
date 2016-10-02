@@ -104,6 +104,7 @@ public class LoginModel {
 				alert.setContentText("Account '" + nowLoggedInAs.getUsername() + "' successfully created.");
 				alert.showAndWait();
 				
+				
 				LobbyView lobbyView = new LobbyView();
 				LobbyModel lobbyModel = new LobbyModel(lobbyView, oos, ois);
 				LobbyController lobbyController = new LobbyController(lobbyView, lobbyModel);

@@ -45,6 +45,14 @@ public class LobbyController {
 		    }
 		});
 		
+		view.chatButton.setOnAction(new EventHandler<ActionEvent>()
+			{
+				public void handle(ActionEvent e)
+				{
+					model.sendChatMessage();
+				}
+			});
+		
 	
 	}
 	
