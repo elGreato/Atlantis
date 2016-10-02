@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -39,6 +40,7 @@ public class LobbyView {
 	protected TableColumn<GameListItemDataModel, Integer> playersCol;
 	protected TableColumn<GameListItemDataModel, Integer> playersRegCol;
 	protected TableColumn<GameListItemDataModel, Integer> playersMaxCol;
+	private Label joinPasswordlbl;
 	protected TextField joinPassword;
 	protected Button joinButton;
 	
@@ -66,6 +68,7 @@ public class LobbyView {
 		
 		
 		gameList = new TableView<GameListItemDataModel>();
+		gameList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		//Columns for table
 		gameNameCol = new TableColumn("Name");
 		gameNameCol.setResizable(false);
@@ -112,11 +115,13 @@ public class LobbyView {
 		
 		
 		joinButton = new Button("Join game");
-		joinPassword = new TextField("Password");
+		joinPassword = new TextField();
+		joinPasswordlbl = new Label("Password: ");
 		joinGameSectionContent = new GridPane();
-		joinGameSectionContent.add(gameList, 0,0,2,1);
-		joinGameSectionContent.add(joinPassword,0,1);
-		joinGameSectionContent.add(joinButton,1,1);
+		joinGameSectionContent.add(gameList, 0,0,3,1);
+		joinGameSectionContent.add(joinPasswordlbl, 0, 1);
+		joinGameSectionContent.add(joinPassword,1,1);
+		joinGameSectionContent.add(joinButton,2,1);
 		joinGameSection = new TitledPane("Join game", joinGameSectionContent);
 		joinGameSection.setExpanded(true);
 		
@@ -124,7 +129,7 @@ public class LobbyView {
 		createGameControls = new GridPane();
 		createGameNamelbl = new Label("Name: ");
 		createGameNametxt = new TextField();
-		createGamePasswordlbl = new Label("Password: ");
+		createGamePasswordlbl = new Label("Password (opt.): ");
 		createGamePasswordtxt = new TextField();
 		createNumPlayerslbl = new Label("No. of players: ");
 		createNumPlayerscbx = new ComboBox<Integer>();
