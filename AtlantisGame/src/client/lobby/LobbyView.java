@@ -14,6 +14,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -30,8 +31,10 @@ public class LobbyView {
 	private GridPane root;
 	private TitledPane createGameSection;
 	private TitledPane joinGameSection;
+	private TitledPane chatSection;
 	private GridPane joinGameSectionContent;
 	private GridPane createGameControls;
+	private GridPane chatContent;
 	
 	private Label title;
 	protected TableView<GameListItemDataModel> gameList;
@@ -52,6 +55,8 @@ public class LobbyView {
 	protected ComboBox<Integer> createNumPlayerscbx;
 	protected Button createButton;
 	
+	protected TextArea chatHistory;
+	protected TextField chatField;
 	
 	private TableView leaderBoard;
 	
@@ -147,11 +152,19 @@ public class LobbyView {
 		createGameSection = new TitledPane("Create game",createGameControls);
 		createGameSection.setExpanded(true);
 		
+		chatHistory = new TextArea();
+		chatField = new TextField();
+		chatContent = new GridPane();
+		chatContent.add(chatHistory, 0, 0);
+		chatContent.add(chatField, 0, 1);
+		chatSection = new TitledPane("Chat", chatContent);
+		
 		title = new Label("ATLANTIS LOBBY");
 		
 		root.add(title,0,0,3,1);
 		root.add(joinGameSection,0,1);
 		root.add(createGameSection, 0, 2);
+		root.add(chatSection, 1, 2);
 		
 		
 		scene = new Scene(root);
