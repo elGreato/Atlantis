@@ -43,7 +43,7 @@ public class Lobby {
 		
 		for(UserInfo ui: userInfoAllUsers)
 		{
-			if(ui.getUsername().equals(username))
+			if(ui.getUsername().toLowerCase().equals(username.toLowerCase()))
 			{
 				userNameAvailable = false;
 			}
