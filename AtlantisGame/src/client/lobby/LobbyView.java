@@ -78,7 +78,7 @@ public class LobbyView {
 		//Columns for table
 		gameNameCol = new TableColumn("Name");
 		gameNameCol.setResizable(false);
-		gamePassCol = new TableColumn("PW");
+		gamePassCol = new TableColumn("Password");
 		gamePassCol.setResizable(false);
 		playersCol = new TableColumn("Players");
 		playersCol.setResizable(false);
@@ -114,10 +114,6 @@ public class LobbyView {
 		gameList.autosize();
 		gameList.setItems(gameData);
 		
-		//Example entry
-		gameData.add(new GameListItemDataModel(new GameListItem("ProGame",true, 3,4)));
-		gameData.add(new GameListItemDataModel(new GameListItem("TheHackerz",false, 1,2)));
-		System.out.println("added items to game list");
 		
 		
 		joinButton = new Button("Join game");
