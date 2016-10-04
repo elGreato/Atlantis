@@ -131,7 +131,7 @@ public class LobbyModel implements Runnable{
 				{
 					String gameName = ((GameStartMessage)obj).getGameName();
 					GameView gameView = new GameView();
-					GameModel gameModel = new GameModel(gameName, gameView);
+					GameModel gameModel = new GameModel(gameName, this, gameView);
 					GameController gameController = new GameController(gameView, gameModel);
 					runningGames.add(gameModel);
 				}
@@ -168,7 +168,7 @@ public class LobbyModel implements Runnable{
 		
 	}
 
-	public void createGame() {
+	public synchronized void createGame() {
 		CreateGameMessage createGameMsg = new CreateGameMessage(view.createGameNametxt.getText(), view.createGamePasswordtxt.getText(), view.createNumPlayerscbx.getValue());
 		try {
 			oos.writeObject(createGameMsg);
@@ -179,7 +179,7 @@ public class LobbyModel implements Runnable{
 		}
 	}
 
-	public void joinGame() {
+	public synchronized void joinGame() {
 	
 		GameListItemDataModel gameToJoin = view.gameList.getSelectionModel().getSelectedItem();
 		
@@ -196,7 +196,7 @@ public class LobbyModel implements Runnable{
 		
 	}
 
-	public void sendChatMessage() {
+	public synchronized void sendChatMessage() {
 		LobbyChatMessage chatMessage = new LobbyChatMessage(view.chatField.getText());
 		try {
 			oos.writeObject(chatMessage);
@@ -204,6 +204,16 @@ public class LobbyModel implements Runnable{
 			connectionLost();
 		}
 	}
+
+	public synchronized void sendInGameMessage(InGameMessage msg)
+	{
+		try {
+			oos.writeObject(msg);
+		} catch (IOException e) {
+			connectionLost();
+		}
+	}
+	
 	
 	private void connectionLost() {
 		Alert alert = new Alert(AlertType.ERROR);
