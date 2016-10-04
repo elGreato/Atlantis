@@ -2,13 +2,15 @@ package gameObjects;
 
 import java.util.ArrayList;
 
+import messageObjects.InGameMessage;
 import server.backend.User;
 
 public class Game {
 
 	private String name;
 	private String password;
-	private ArrayList<User> users; //connection to communication interface(players are sepearte entity)
+	//send Message trough sendMessage method of User, get player name stats etc through userInfo field of User
+	private ArrayList<User> users; 
 	private int maxPlayers;
 	
 	//Constructor (doesn't start game)
@@ -45,10 +47,19 @@ public class Game {
 		users.add(user);
 		
 	}
-	
+	//Here the game starts
 	public void start()
 	{
-		//Here the game starts
+		//Informs clients about game start
+		for(User u : users)
+		{
+			u.initiateGameStart(this);
+		}
+	}
+	
+	//Here messages from clients arrive
+	public synchronized void processMessage(InGameMessage igm) {
+		
 	}
 
 

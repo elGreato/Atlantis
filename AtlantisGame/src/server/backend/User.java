@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
+import gameObjects.Game;
 import messageObjects.CreateGameMessage;
 import messageObjects.CreateUserMessage;
 import messageObjects.ServerInfoMessage;
 import messageObjects.GameJoinMessage;
+import messageObjects.GameStartMessage;
 import messageObjects.InGameMessage;
 import messageObjects.LoginMessage;
 import messageObjects.Message;
@@ -26,6 +29,8 @@ public class User implements Runnable{
 	private Socket client;
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
+	
+	private ArrayList<Game> runningGames;
 	
 	//Required Getters/Setters
 	public UserInfo getUserInfo() {
@@ -142,7 +147,9 @@ public class User implements Runnable{
 	
 	//Loop for receiving messages from the lobby and from the games that the user currently plays
 	private void processLobbyAndGameActivity() {
-		// TODO Auto-generated method stub
+
+		runningGames = new ArrayList<Game>();
+		
 		while(loggedIn && connected)
 		{
 			try {
@@ -150,6 +157,14 @@ public class User implements Runnable{
 				if(receivedMessage instanceof InGameMessage)
 				{
 					InGameMessage igm = (InGameMessage)receivedMessage;
+					for(Game g : runningGames)
+					{
+						if(igm.getGameName().equals(g.getName()))
+						{
+							g.processMessage(igm);
+							break;
+						}
+					}
 				}
 				else if(receivedMessage instanceof GameJoinMessage)
 				{
@@ -167,8 +182,6 @@ public class User implements Runnable{
 					System.out.println("Answer sent");
 				
 				}
-				
-				
 				
 				
 			} catch (ClassNotFoundException e) {
@@ -192,5 +205,17 @@ public class User implements Runnable{
 			connected = false;
 		}
 		
+	}
+	
+	public synchronized void initiateGameStart(Game game)
+	{
+		runningGames.add(game);
+		try {
+			oos.writeObject(new GameStartMessage(game.getName()));
+		} catch (IOException e) {
+			e.printStackTrace();
+			loggedIn = false;
+			connected = false;
+		}
 	}
 }

@@ -19,6 +19,7 @@ public class GameModel {
 		this.gameName = gameName;
 		msgOut = lobbyModel;
 		this.view = gameView;
+		
 	}
 	
 	//Here messages from server arrive
