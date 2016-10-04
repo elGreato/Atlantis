@@ -3,8 +3,12 @@ package client.lobby;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 
+import client.game.GameController;
+import client.game.GameModel;
+import client.game.GameView;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -12,6 +16,7 @@ import messageObjects.CreateGameMessage;
 import messageObjects.GameJoinMessage;
 import messageObjects.GameListItem;
 import messageObjects.GameListItemList;
+import messageObjects.GameStartMessage;
 import messageObjects.InGameMessage;
 import messageObjects.LobbyChatMessage;
 import messageObjects.ServerInfoMessage;
@@ -27,10 +32,14 @@ public class LobbyModel implements Runnable{
 	
 	private UserInfo user;
 	
+	private ArrayList<GameModel> runningGames;
+	
 	public LobbyModel(LobbyView view, ObjectOutputStream oos, ObjectInputStream ois) {
 		this.view = view;
 		this.oos = oos;
 		this.ois = ois;
+		
+		runningGames = new ArrayList<GameModel>();
 
 	}
 	
@@ -116,6 +125,28 @@ public class LobbyModel implements Runnable{
 						view.gameData.add(new GameListItemDataModel(g));
 					}
 					
+				}
+				
+				else if (obj instanceof GameStartMessage)
+				{
+					String gameName = ((GameStartMessage)obj).getGameName();
+					GameView gameView = new GameView();
+					GameModel gameModel = new GameModel(gameName, gameView);
+					GameController gameController = new GameController(gameView, gameModel);
+					runningGames.add(gameModel);
+				}
+				else if(obj instanceof InGameMessage)
+				{
+					InGameMessage msg = (InGameMessage)obj;
+					String gameName = msg.getGameName();
+					for(GameModel gm : runningGames)
+					{
+						if (gm.getGameName().equals(gameName))
+						{
+							gm.processMessage(msg);
+							break;
+						}
+					}
 				}
 				
 			} catch (ClassNotFoundException e) {
