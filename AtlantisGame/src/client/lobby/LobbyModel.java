@@ -129,11 +129,18 @@ public class LobbyModel implements Runnable{
 				
 				else if (obj instanceof GameStartMessage)
 				{
-					String gameName = ((GameStartMessage)obj).getGameName();
-					GameView gameView = new GameView();
-					GameModel gameModel = new GameModel(gameName, this, gameView);
-					GameController gameController = new GameController(gameView, gameModel);
-					runningGames.add(gameModel);
+					LobbyModel thisModel = this;
+					Platform.runLater(new Runnable(){
+						public void run()
+						{
+							String gameName = ((GameStartMessage)obj).getGameName();
+							GameView gameView = new GameView();
+							GameModel gameModel = new GameModel(gameName, thisModel, gameView);
+							GameController gameController = new GameController(gameView, gameModel);
+							runningGames.add(gameModel);
+						}
+					});
+
 				}
 				else if(obj instanceof InGameMessage)
 				{
@@ -143,7 +150,12 @@ public class LobbyModel implements Runnable{
 					{
 						if (gm.getGameName().equals(gameName))
 						{
-							gm.processMessage(msg);
+							Platform.runLater(new Runnable(){
+								public void run()
+								{
+									gm.processMessage(msg);
+								}
+							});
 							break;
 						}
 					}
