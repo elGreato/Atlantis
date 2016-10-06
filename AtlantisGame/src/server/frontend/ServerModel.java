@@ -114,7 +114,7 @@ public class ServerModel implements Runnable{
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Unexpected error");
 			alert.setContentText("An unexpected error occured when trying to create the database. Try to restart the application or the system.");
-			alert.showAndWait();;
+			alert.showAndWait();
 		}
 		
 	}
