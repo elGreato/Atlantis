@@ -40,7 +40,7 @@ public class MainAli extends Application {
 			p2.addCard(card);
 		}
 		
-	MainBoard gp = new MainBoard(100);
+	MainBoard gp = new MainBoard(70);
 
 		BorderPane root = new BorderPane();
 		BorderPane.setAlignment(gp, Pos.CENTER);
