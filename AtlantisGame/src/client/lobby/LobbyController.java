@@ -17,6 +17,9 @@ public class LobbyController {
 			public void handle(ActionEvent arg0) {
 				
 				model.createGame();
+				view.createGameNametxt.setText("");
+				view.createGamePasswordtxt.setText("");
+				view.createNumPlayerscbx.setValue(2);
 			}
 			
 		});
@@ -27,6 +30,7 @@ public class LobbyController {
 			public void handle(ActionEvent arg0) {
 				
 				model.joinGame();
+				view.joinPassword.setText("");
 			}
 			
 		});
@@ -50,6 +54,7 @@ public class LobbyController {
 				public void handle(ActionEvent e)
 				{
 					model.sendChatMessage();
+					view.chatField.setText("");
 				}
 			});
 		

@@ -20,6 +20,7 @@ import messageObjects.GameStartMessage;
 import messageObjects.InGameMessage;
 import messageObjects.LobbyChatMessage;
 import messageObjects.ServerInfoMessage;
+import messageObjects.UserInfoMessage;
 import server.backend.UserInfo;
 
 public class LobbyModel implements Runnable{
@@ -30,15 +31,15 @@ public class LobbyModel implements Runnable{
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
 	
-	private UserInfo user;
+	private UserInfoDataModel userInfo;
 	
 	private ArrayList<GameModel> runningGames;
 	
-	public LobbyModel(LobbyView view, ObjectOutputStream oos, ObjectInputStream ois) {
+	public LobbyModel(LobbyView view, UserInfoMessage userInfo, ObjectOutputStream oos, ObjectInputStream ois) {
 		this.view = view;
 		this.oos = oos;
 		this.ois = ois;
-		
+		this.userInfo = new UserInfoDataModel(userInfo);
 		runningGames = new ArrayList<GameModel>();
 
 	}
@@ -211,7 +212,7 @@ public class LobbyModel implements Runnable{
 	}
 
 	public synchronized void sendChatMessage() {
-		LobbyChatMessage chatMessage = new LobbyChatMessage(view.chatField.getText());
+		LobbyChatMessage chatMessage = new LobbyChatMessage(userInfo.getUsername(), view.chatField.getText());
 		try {
 			oos.writeObject(chatMessage);
 		} catch (IOException e) {

@@ -61,7 +61,7 @@ public class LoginModel {
 				
 				UserInfoMessage nowLoggedInAs = (UserInfoMessage)reply;
 				LobbyView lobbyView = new LobbyView();
-				LobbyModel lobbyModel = new LobbyModel(lobbyView, oos, ois);
+				LobbyModel lobbyModel = new LobbyModel(lobbyView, nowLoggedInAs, oos, ois);
 				LobbyController lobbyController = new LobbyController(lobbyView, lobbyModel);
 				lobbyView.start();
 				lobbyModel.startListener();
@@ -106,7 +106,7 @@ public class LoginModel {
 				
 				
 				LobbyView lobbyView = new LobbyView();
-				LobbyModel lobbyModel = new LobbyModel(lobbyView, oos, ois);
+				LobbyModel lobbyModel = new LobbyModel(lobbyView, nowLoggedInAs, oos, ois);
 				LobbyController lobbyController = new LobbyController(lobbyView, lobbyModel);
 				lobbyView.start();
 				lobbyModel.startListener();
