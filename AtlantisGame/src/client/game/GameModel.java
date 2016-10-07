@@ -7,7 +7,7 @@ public class GameModel {
 	
 	private String gameName;
 	private GameView view;
-	//send messages to server through method msgOut.sendInGameMessage()
+	//send messages to server through method msgOut.sendMessage()
 	private LobbyModel msgOut;
 	
 	public String getGameName() {

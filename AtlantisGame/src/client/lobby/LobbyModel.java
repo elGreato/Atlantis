@@ -19,6 +19,7 @@ import messageObjects.GameListItemList;
 import messageObjects.GameStartMessage;
 import messageObjects.InGameMessage;
 import messageObjects.LobbyChatMessage;
+import messageObjects.Message;
 import messageObjects.ServerInfoMessage;
 import messageObjects.UserInfoMessage;
 import server.backend.UserInfo;
@@ -183,18 +184,12 @@ public class LobbyModel implements Runnable{
 		
 	}
 
-	public synchronized void createGame() {
+	public void createGame() {
 		CreateGameMessage createGameMsg = new CreateGameMessage(view.createGameNametxt.getText(), view.createGamePasswordtxt.getText(), view.createNumPlayerscbx.getValue());
-		try {
-			oos.writeObject(createGameMsg);
-			System.out.println("new game sent to server");
-		} catch (IOException e) {
-			connectionLost();
-
-		}
+		sendMessage(createGameMsg);
 	}
 
-	public synchronized void joinGame() {
+	public void joinGame() {
 	
 		GameListItemDataModel gameToJoin = view.gameList.getSelectionModel().getSelectedItem();
 		
@@ -202,25 +197,17 @@ public class LobbyModel implements Runnable{
 		{
 			System.out.println(gameToJoin.getGameName());
 			GameJoinMessage joinGamemsg = new GameJoinMessage(gameToJoin.getGameName(), view.joinPassword.getText());
-			try {
-				oos.writeObject(joinGamemsg);
-			} catch (IOException e) {
-				connectionLost();
-			}
+			sendMessage(joinGamemsg);
 		}
 		
 	}
 
-	public synchronized void sendChatMessage() {
+	public void sendChatMessage() {
 		LobbyChatMessage chatMessage = new LobbyChatMessage(userInfo.getUsername(), view.chatField.getText());
-		try {
-			oos.writeObject(chatMessage);
-		} catch (IOException e) {
-			connectionLost();
-		}
+		sendMessage(chatMessage);
 	}
 
-	public synchronized void sendInGameMessage(InGameMessage msg)
+	public synchronized void sendMessage(Message msg)
 	{
 		try {
 			oos.writeObject(msg);
