@@ -13,6 +13,7 @@ import messageObjects.ServerInfoMessage;
 import messageObjects.GameJoinMessage;
 import messageObjects.GameStartMessage;
 import messageObjects.InGameMessage;
+import messageObjects.LobbyChatMessage;
 import messageObjects.LoginMessage;
 import messageObjects.Message;
 import messageObjects.UserInfoMessage;
@@ -181,6 +182,11 @@ public class User implements Runnable{
 					oos.writeObject(new ServerInfoMessage(answer));
 					System.out.println("Answer sent");
 				
+				}
+				else if(receivedMessage instanceof LobbyChatMessage)
+				{
+					LobbyChatMessage chatMessage = (LobbyChatMessage)receivedMessage;
+					lobby.processChatMessage(chatMessage);
 				}
 				
 				

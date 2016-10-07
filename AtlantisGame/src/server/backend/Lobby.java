@@ -9,6 +9,7 @@ import messageObjects.CreateGameMessage;
 import messageObjects.GameJoinMessage;
 import messageObjects.GameListItem;
 import messageObjects.GameListItemList;
+import messageObjects.LobbyChatMessage;
 
 public class Lobby {
 	private ArrayList<User> onlineUsers;
@@ -233,5 +234,13 @@ public class Lobby {
 	public void lastDbUpdate()
 	{
 		databaseAccess.lastUpdate();
+	}
+
+
+	public synchronized void processChatMessage(LobbyChatMessage chatMessage) {
+		for(User u : onlineUsers)
+		{
+			u.sendMessage(chatMessage);
+		}
 	}
 }

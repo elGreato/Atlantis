@@ -53,9 +53,6 @@ public class LobbyModel implements Runnable{
 	
 	@Override
 	public void run() {
-		
-		
-		
 		boolean connected = true;
 		while(connected)
 		{
@@ -164,6 +161,11 @@ public class LobbyModel implements Runnable{
 						}
 					}
 				}
+				else if(obj instanceof LobbyChatMessage)
+				{
+					LobbyChatMessage chatMessage = (LobbyChatMessage)obj;
+					view.chatHistory.appendText(chatMessage.getAuthor() + " : " + chatMessage.getMessage() + "\n");
+				}
 				
 			} catch (ClassNotFoundException e) {
 				
@@ -195,7 +197,6 @@ public class LobbyModel implements Runnable{
 		
 		if(!gameToJoin.equals(null))
 		{
-			System.out.println(gameToJoin.getGameName());
 			GameJoinMessage joinGamemsg = new GameJoinMessage(gameToJoin.getGameName(), view.joinPassword.getText());
 			sendMessage(joinGamemsg);
 		}

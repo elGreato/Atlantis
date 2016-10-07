@@ -12,7 +12,9 @@ public class LobbyChatMessage extends LobbyMessage implements Serializable {
 		this.author = author;
 		this.message = message;
 	}
-	
+	public String getAuthor()	{
+		return author;
+	}
 	public String getMessage() {
 		return message;
 	}
