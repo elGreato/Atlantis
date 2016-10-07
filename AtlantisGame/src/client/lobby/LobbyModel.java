@@ -98,11 +98,13 @@ public class LobbyModel implements Runnable{
 						GameListItemDataModel g = gameListIt.next();
 						if(g.getGameName().equals(updatedGame.getGameName()))
 						{
-							if(view.gameList.getSelectionModel().getSelectedItem().equals(g))
+							if(view.gameList.getSelectionModel().getSelectedItem() != null && view.gameList.getSelectionModel().getSelectedItem().equals(g))
 							{
+								view.gameList.getSelectionModel().clearSelection();
 								isSelected = true;
 							}
 							gameListIt.remove();
+							System.out.println("Detected existing instance in List");
 						}
 					}
 					if(updatedGame.getRegisteredPlayers()<updatedGame.getMaxPlayers())
