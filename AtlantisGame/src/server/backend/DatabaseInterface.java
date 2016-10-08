@@ -105,7 +105,13 @@ public class DatabaseInterface implements Runnable {
 			newUsers.add(addUser);
 		}
 	}
-	
+	public void updateUserOnDatabase(UserInfo updateUser)
+	{
+		synchronized(userUpdates)
+		{
+			userUpdates.add(updateUser);
+		}
+	}
 	
 	//Wait till other thread has finished updating the database. Then, update database for the last time before closing server.
 	public void lastUpdate()

@@ -7,8 +7,14 @@ public class UserInfo {
 	private int gamesPlayed;
 	private int gamesWon;
 	private int gamesLost;
+	private int points;
 	
 	
+	public int getPoints() {
+		return points;
+	}
+
+
 	//Constructor
 	public UserInfo(String username, String password, int gamesPlayed, int gamesWon, int gamesLost) {
 		
@@ -17,21 +23,30 @@ public class UserInfo {
 		this.gamesPlayed = gamesPlayed;
 		this.gamesWon = gamesWon;
 		this.gamesLost = gamesLost;
+		calculatePoints();
 	}
-	
-	
+	//Calculate points for leaderbord
+	private void calculatePoints() {
+		int gamesTie = gamesPlayed-gamesWon-gamesLost;
+		points = 3 * gamesWon + 1 * gamesTie - 3 * gamesLost;
+	}
+
+
 	//Update game stats
 	public void gameWon(){
 		gamesPlayed += 1;
 		gamesWon += 1;
+		calculatePoints();
 	}
 	public void gameLost(){
 		gamesPlayed += 1;
 		gamesLost += 1;
+		calculatePoints();
 	}
 	public void gameTie()
 	{
 		gamesPlayed += 1;
+		calculatePoints();
 	}
 	
 	

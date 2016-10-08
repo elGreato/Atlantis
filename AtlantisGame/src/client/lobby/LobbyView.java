@@ -155,8 +155,8 @@ public class LobbyView {
 		chatContent = new GridPane();
 		chatContent.add(chatHistory, 0, 0, 2, 1);
 		chatHistory.setEditable(false);
-		chatContent.add(chatField, 0, 1);
 		chatContent.add(chatButton, 1, 1);
+		chatContent.add(chatField, 0, 1);
 		chatSection = new TitledPane("Chat", chatContent);
 		
 		title = new Label("ATLANTIS LOBBY");

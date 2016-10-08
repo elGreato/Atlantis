@@ -243,4 +243,22 @@ public class Lobby {
 			u.sendMessage(chatMessage);
 		}
 	}
+	public synchronized void addWin(User user)
+	{
+		user.getUserInfo().gameWon();
+		databaseAccess.updateUserOnDatabase(user.getUserInfo());
+		//ADD send to users
+	}
+	public synchronized void addLoss(User user)
+	{
+		user.getUserInfo().gameLost();
+		databaseAccess.updateUserOnDatabase(user.getUserInfo());
+		//ADD send to users
+	}
+	public synchronized void addTie(User user)
+	{
+		user.getUserInfo().gameTie();
+		databaseAccess.updateUserOnDatabase(user.getUserInfo());
+		//ADD send to users
+	}
 }
