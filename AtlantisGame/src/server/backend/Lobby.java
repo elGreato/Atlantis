@@ -22,6 +22,7 @@ public class Lobby {
 	private Connection dbAccessCon;
 	private DatabaseInterface databaseAccess;
 	
+	private final int leaderboardSize = 10;
 	
 	//Constructor
 	public Lobby(Connection dbAccessCon)
@@ -217,7 +218,7 @@ public class Lobby {
 	}
 	private synchronized void sendLeaderboard(User user) {
 		ArrayList<UserInfoMessage> leaderboard = new ArrayList<UserInfoMessage>();
-		for(int i = 0; i < 10; i++)
+		for(int i = 0; i < leaderboardSize; i++)
 		{
 			UserInfo ui = userInfoAllUsers.get(i);
 			leaderboard.add(new UserInfoMessage(ui,getPosition(ui)));
@@ -293,14 +294,14 @@ public class Lobby {
 	//Updates leaderboard and sends messages to users that need a update on their leaderboard
 	private synchronized void updateLeaderBoard(User user) {
 		// TODO Auto-generated method stub
-		int positionBefore = userInfoAllUsers.indexOf(user.getUserInfo());
+		int listPositionBefore = userInfoAllUsers.indexOf(user.getUserInfo());
 		Collections.sort(userInfoAllUsers);
-		int positionAfter = userInfoAllUsers.indexOf(user.getUserInfo());
+		int listPositionAfter = userInfoAllUsers.indexOf(user.getUserInfo());
 		
 		//Inform other users about change in leaderboard if they are affected
-		if(positionBefore < positionAfter)
+		if(listPositionBefore < listPositionAfter)
 		{
-			for(int i = positionBefore; i < positionAfter; i++)
+			for(int i = listPositionBefore; i < listPositionAfter; i++)
 			{
 				for(User u : onlineUsers)
 				{
@@ -310,10 +311,17 @@ public class Lobby {
 					}
 				}
 			}
+			if(listPositionBefore < leaderboardSize)
+			{
+				for(User u : onlineUsers)
+				{
+					sendLeaderboard(u);
+				}
+			}
 		}
-		else if(positionBefore > positionAfter)
+		else if(listPositionBefore > listPositionAfter)
 		{
-			for(int i = positionBefore; i > positionAfter; i--)
+			for(int i = listPositionBefore; i > listPositionAfter; i--)
 			{
 				for(User u : onlineUsers)
 				{
@@ -321,6 +329,13 @@ public class Lobby {
 					{
 						u.sendMessage(new UserInfoMessage(u.getUserInfo(),i+1));
 					}
+				}
+			}
+			if(listPositionAfter < leaderboardSize)
+			{
+				for(User u : onlineUsers)
+				{
+					sendLeaderboard(u);
 				}
 			}
 		}
@@ -331,7 +346,14 @@ public class Lobby {
 
 	//returns position in leaderboard of a user
 	public int getPosition(UserInfo userInfo) {
-		
-		return (userInfoAllUsers.indexOf(userInfo) + 1);
+		for(int i = 0; i < userInfoAllUsers.indexOf(userInfo); i++)
+		{
+			if (userInfoAllUsers.get(i).compareTo(userInfo) == 0)
+			{
+				return i + 1;
+			}
+			
+		}
+		return userInfoAllUsers.indexOf(userInfo)+1;
 	}
 }
