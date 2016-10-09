@@ -200,7 +200,8 @@ public class LobbyView {
 		
 		gamesCol.getColumns().addAll(gamesPlayedCol,gamesWonCol,gamesTieCol,gamesLostCol);
 		userList.getColumns().addAll(positionCol,usernameCol,gamesCol,pointsCol);
-		
+		userList.setItems(userData);
+
 		leaderboardContent = new GridPane();
 		leaderboardContent.add(userList, 0, 0);
 		leaderboardSection = new TitledPane("Leaderboard",leaderboardContent);

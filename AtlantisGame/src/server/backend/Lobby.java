@@ -11,6 +11,7 @@ import messageObjects.GameJoinMessage;
 import messageObjects.GameListItem;
 import messageObjects.GameListItemList;
 import messageObjects.LobbyChatMessage;
+import messageObjects.UserInfoListMessage;
 import messageObjects.UserInfoMessage;
 
 public class Lobby {
@@ -194,7 +195,7 @@ public class Lobby {
 
 	//After informing the user about the successful login, all the lobby data including games has to be sent to the user. After that the user is added to the group that gets automatic updates called onlineUsers
 	public synchronized void sendWholeLobby(User user) {
-		System.out.println("Try to send lobby");
+
 		ArrayList<GameListItem> allGamesInLobby = new ArrayList<GameListItem>(); 
 		for(Game game: waitingGames)
 		{
@@ -208,11 +209,27 @@ public class Lobby {
 		}
 		GameListItemList listOfGames = new GameListItemList(allGamesInLobby);
 		user.sendMessage(listOfGames);
+		sendLeaderboard(user);
 		onlineUsers.add(user);
 		
 		
 		
 	}
+	private synchronized void sendLeaderboard(User user) {
+		ArrayList<UserInfoMessage> leaderboard = new ArrayList<UserInfoMessage>();
+		for(int i = 0; i < 10; i++)
+		{
+			UserInfo ui = userInfoAllUsers.get(i);
+			leaderboard.add(new UserInfoMessage(ui,getPosition(ui)));
+			System.out.println(ui.getUsername());
+		}
+		user.sendMessage(new UserInfoListMessage(leaderboard));
+		System.out.println("I was sending the leaderboard");
+		
+		
+	}
+
+
 	//Informs logged in users about changes in lobby
 	public synchronized void updateLobby(Game game)
 	{
@@ -289,7 +306,7 @@ public class Lobby {
 				{
 					if(userInfoAllUsers.get(i).equals(u.getUserInfo()))
 					{
-						u.sendMessage(new UserInfoMessage(u.getUserInfo(),i+1));
+						u.sendMessage(new UserInfoMessage(u.getUserInfo(),getPosition(u.getUserInfo())));
 					}
 				}
 			}

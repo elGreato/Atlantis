@@ -8,18 +8,23 @@ public class UserInfoDataModel {
 	private SimpleStringProperty username;
 	private SimpleIntegerProperty gamesPlayed;
 	private SimpleIntegerProperty gamesWon;
+	private SimpleIntegerProperty gamesTie;
 	private SimpleIntegerProperty gamesLost;
 	private SimpleIntegerProperty points;
 	private SimpleIntegerProperty position;
+
+
 	
 	public UserInfoDataModel(UserInfoMessage msg)
 	{
 		this.username = new SimpleStringProperty(msg.getUsername());
 		this.gamesPlayed = new SimpleIntegerProperty(msg.getGamesPlayed());
 		this.gamesWon = new SimpleIntegerProperty(msg.getGamesWon());
+		this.gamesTie = new SimpleIntegerProperty(msg.getGamesTie());
 		this.gamesLost = new SimpleIntegerProperty(msg.getGamesLost());
 		this.points = new SimpleIntegerProperty(msg.getPoints());
 		this.position = new SimpleIntegerProperty(msg.getPosition());
+		
 	}
 
 	public String getUsername() {
@@ -45,7 +50,13 @@ public class UserInfoDataModel {
 	public void setGamesWon(Integer gamesWon) {
 		this.gamesWon.set(gamesWon);;
 	}
+	public Integer getGamesTie() {
+		return gamesTie.get();
+	}
 
+	public void setGamesTie(Integer gamesTie) {
+		this.gamesTie.set(gamesTie);;
+	}
 	public Integer getGamesLost() {
 		return gamesLost.get();
 	}

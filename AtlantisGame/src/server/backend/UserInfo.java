@@ -73,10 +73,10 @@ public class UserInfo implements Comparable<UserInfo>{
 		return gamesLost;
 	}
 
-
+	//Reverse sort (to get elements with highest points in the beginning of a list)
 	@Override
 	public int compareTo(UserInfo ui2) {
-		return((Integer)points).compareTo((Integer)ui2.getPoints());
+		return -((Integer)points).compareTo((Integer)ui2.getPoints());
 	}
 
 	

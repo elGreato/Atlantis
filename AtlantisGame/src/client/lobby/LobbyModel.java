@@ -21,6 +21,7 @@ import messageObjects.InGameMessage;
 import messageObjects.LobbyChatMessage;
 import messageObjects.Message;
 import messageObjects.ServerInfoMessage;
+import messageObjects.UserInfoListMessage;
 import messageObjects.UserInfoMessage;
 import server.backend.UserInfo;
 
@@ -167,6 +168,16 @@ public class LobbyModel implements Runnable{
 					view.chatHistory.appendText(chatMessage.getAuthor() + " : " + chatMessage.getMessage() + "\n");
 				}
 				
+				else if(obj instanceof UserInfoListMessage)
+				{
+					UserInfoListMessage leaderboard = (UserInfoListMessage)obj;
+					//view.userData.clear();
+					for(UserInfoMessage uim : leaderboard.getLeaderboard())
+					{
+						view.userData.add(new UserInfoDataModel(uim));
+						System.out.println(uim.getUsername());
+					}
+				}
 			} catch (ClassNotFoundException e) {
 				
 				e.printStackTrace();

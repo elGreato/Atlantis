@@ -2,6 +2,7 @@ package messageObjects;
 
 import java.io.Serializable;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import server.backend.UserInfo;
 
 public class UserInfoMessage extends UserMessage implements Serializable {
@@ -29,7 +30,10 @@ public class UserInfoMessage extends UserMessage implements Serializable {
 	public int getGamesWon() {
 		return gamesWon;
 	}
-
+	public int getGamesTie()
+	{
+		return (gamesPlayed - gamesWon - gamesLost);
+	}
 
 	public int getGamesLost() {
 		return gamesLost;
@@ -42,6 +46,7 @@ public class UserInfoMessage extends UserMessage implements Serializable {
 	public int getPosition() {
 		return position;
 	}
+	
 	
 
 
