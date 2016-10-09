@@ -32,11 +32,15 @@ public class LobbyView {
 	private TitledPane createGameSection;
 	private TitledPane joinGameSection;
 	private TitledPane chatSection;
+	private TitledPane leaderboardSection;
 	private GridPane joinGameSectionContent;
 	private GridPane createGameControls;
 	private GridPane chatContent;
+	private GridPane leaderboardContent;
+	
 	
 	private Label title;
+	protected ObservableList<GameListItemDataModel> gameData;
 	protected TableView<GameListItemDataModel> gameList;
 	protected TableColumn<GameListItemDataModel, String> gameNameCol;
 	protected TableColumn<GameListItemDataModel, String> gamePassCol;
@@ -58,33 +62,37 @@ public class LobbyView {
 	protected TextArea chatHistory;
 	protected TextField chatField;
 	protected Button chatButton;
+
 	
-	private TableView leaderBoard;
-	
-	protected ObservableList<GameListItemDataModel> gameData;
-	
+	protected ObservableList<UserInfoDataModel> userData;
+	protected TableView<UserInfoDataModel> userList;
+	protected TableColumn<UserInfoDataModel, Integer> positionCol;
+	protected TableColumn<UserInfoDataModel, String> usernameCol;
+	protected TableColumn<UserInfoDataModel, Integer> gamesCol;
+	protected TableColumn<UserInfoDataModel, Integer> gamesPlayedCol;
+	protected TableColumn<UserInfoDataModel, Integer> gamesWonCol;
+	protected TableColumn<UserInfoDataModel, Integer> gamesTieCol;
+	protected TableColumn<UserInfoDataModel, Integer> gamesLostCol;
+	protected TableColumn<UserInfoDataModel, Integer> pointsCol;
 	
 	public LobbyView()
 	{
-		gameData = FXCollections.observableArrayList();
-		System.out.println("Initialized gameList");
-		
 		root = new GridPane();
-
 		
-		
+		//Init table for games
+		gameData = FXCollections.observableArrayList();
 		gameList = new TableView<GameListItemDataModel>();
 		gameList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		//Columns for table
-		gameNameCol = new TableColumn("Name");
+		gameNameCol = new TableColumn<GameListItemDataModel,String>("Name");
 		gameNameCol.setResizable(false);
-		gamePassCol = new TableColumn("Password");
+		gamePassCol = new TableColumn<GameListItemDataModel,String>("Password");
 		gamePassCol.setResizable(false);
-		playersCol = new TableColumn("Players");
+		playersCol = new TableColumn<GameListItemDataModel, Integer>("Players");
 		playersCol.setResizable(false);
-		playersRegCol = new TableColumn("Reg.");
+		playersRegCol = new TableColumn<GameListItemDataModel, Integer>("Reg.");
 		playersRegCol.setResizable(false);
-		playersMaxCol = new TableColumn("Max.");
+		playersMaxCol = new TableColumn<GameListItemDataModel, Integer>("Max.");
 		playersMaxCol.setResizable(false);
 		
 		//Connect table content to variables
@@ -159,13 +167,51 @@ public class LobbyView {
 		chatContent.add(chatField, 0, 1);
 		chatSection = new TitledPane("Chat", chatContent);
 		
+		//Init table for users
+		userData = FXCollections.observableArrayList();
+		userList = new TableView<UserInfoDataModel>();
+		userList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+		//Columns for table
+		positionCol = new TableColumn<UserInfoDataModel, Integer>("Position");
+		positionCol.setResizable(false);
+		usernameCol = new TableColumn<UserInfoDataModel, String>("Username");
+		usernameCol.setResizable(false);
+		gamesCol = new TableColumn<UserInfoDataModel, Integer>("Game Stats.");
+		gamesCol.setResizable(false);
+		gamesPlayedCol = new TableColumn<UserInfoDataModel, Integer>("Played");
+		gamesPlayedCol.setResizable(false);
+		gamesWonCol = new TableColumn<UserInfoDataModel, Integer>("Won");
+		gamesWonCol.setResizable(false);
+		gamesTieCol = new TableColumn<UserInfoDataModel, Integer>("Tie");
+		gamesTieCol.setResizable(false);
+		gamesLostCol = new TableColumn<UserInfoDataModel, Integer>("Lost");
+		gamesLostCol.setResizable(false);
+		pointsCol = new TableColumn<UserInfoDataModel, Integer>("Points");
+		pointsCol.setResizable(false);
+		
+		positionCol.setCellValueFactory(new PropertyValueFactory<UserInfoDataModel, Integer>("position"));
+		usernameCol.setCellValueFactory(new PropertyValueFactory<UserInfoDataModel, String>("username"));
+		gamesCol.setCellValueFactory(new PropertyValueFactory<UserInfoDataModel, Integer>("games"));
+		gamesPlayedCol.setCellValueFactory(new PropertyValueFactory<UserInfoDataModel, Integer>("gamesPlayed"));
+		gamesWonCol.setCellValueFactory(new PropertyValueFactory<UserInfoDataModel, Integer>("gamesWon"));
+		gamesTieCol.setCellValueFactory(new PropertyValueFactory<UserInfoDataModel, Integer>("gamesTie"));
+		gamesLostCol.setCellValueFactory(new PropertyValueFactory<UserInfoDataModel, Integer>("gamesLost"));
+		pointsCol.setCellValueFactory(new PropertyValueFactory<UserInfoDataModel, Integer>("points"));
+		
+		gamesCol.getColumns().addAll(gamesPlayedCol,gamesWonCol,gamesTieCol,gamesLostCol);
+		userList.getColumns().addAll(positionCol,usernameCol,gamesCol,pointsCol);
+		
+		leaderboardContent = new GridPane();
+		leaderboardContent.add(userList, 0, 0);
+		leaderboardSection = new TitledPane("Leaderboard",leaderboardContent);
+		leaderboardSection.setMaxHeight(Double.MAX_VALUE);
 		title = new Label("ATLANTIS LOBBY");
 		
 		root.add(title,0,0,3,1);
-		root.add(joinGameSection,0,1);
-		root.add(createGameSection, 0, 2);
-		root.add(chatSection, 1, 2);
-		
+		root.add(joinGameSection,0,1,1,2);
+		root.add(createGameSection, 0, 3);
+		root.add(chatSection, 1, 3);
+		root.add(leaderboardSection, 3, 2,1,2);
 		createGameSection.setMaxHeight(Double.MAX_VALUE);
 		scene = new Scene(root);
 		stage = new Stage();
