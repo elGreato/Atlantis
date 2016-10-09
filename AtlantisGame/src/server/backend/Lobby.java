@@ -2,6 +2,7 @@ package server.backend;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 import gameObjects.Game;
@@ -10,6 +11,7 @@ import messageObjects.GameJoinMessage;
 import messageObjects.GameListItem;
 import messageObjects.GameListItemList;
 import messageObjects.LobbyChatMessage;
+import messageObjects.UserInfoMessage;
 
 public class Lobby {
 	private ArrayList<User> onlineUsers;
@@ -28,7 +30,7 @@ public class Lobby {
 		databaseAccess = new DatabaseInterface(dbAccessCon);
 		
 		userInfoAllUsers = databaseAccess.getUsers();
-		
+		Collections.sort(userInfoAllUsers);
 		onlineUsers = new ArrayList<User>();
 		
 		waitingGames = new ArrayList<Game>();
@@ -243,22 +245,49 @@ public class Lobby {
 			u.sendMessage(chatMessage);
 		}
 	}
+	
+	//Method that should be invoked after the user has won a game
 	public synchronized void addWin(User user)
 	{
 		user.getUserInfo().gameWon();
 		databaseAccess.updateUserOnDatabase(user.getUserInfo());
-		//ADD send to users
+		updateLeaderBoard(user);
+
 	}
+
+	//Method that should be invoked after the user has lost a game
 	public synchronized void addLoss(User user)
 	{
 		user.getUserInfo().gameLost();
 		databaseAccess.updateUserOnDatabase(user.getUserInfo());
-		//ADD send to users
+		updateLeaderBoard(user);
 	}
+	
+	//Method that should be invoked after the user has had a tie in a game
 	public synchronized void addTie(User user)
 	{
 		user.getUserInfo().gameTie();
 		databaseAccess.updateUserOnDatabase(user.getUserInfo());
-		//ADD send to users
+		updateLeaderBoard(user);
+	}
+	
+	//Updates leaderboard and sends messages to users that need a update on their leaderboard
+	private synchronized void updateLeaderBoard(User user) {
+		// TODO Auto-generated method stub
+		int positionBefore = userInfoAllUsers.indexOf(user.getUserInfo());
+		Collections.sort(userInfoAllUsers);
+		int positionAfter = userInfoAllUsers.indexOf(user.getUserInfo());
+		if(positionBefore == positionAfter)
+		{
+			user.sendMessage(new UserInfoMessage(user.getUserInfo()));
+		}
+		else if(positionBefore < positionAfter)
+		{
+			
+		}
+		else
+		{
+			
+		}
 	}
 }

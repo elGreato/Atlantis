@@ -1,6 +1,8 @@
 package server.backend;
 
-public class UserInfo {
+import java.util.Comparator;
+
+public class UserInfo implements Comparable<UserInfo>{
 
 	private String username;
 	private String password;
@@ -70,4 +72,12 @@ public class UserInfo {
 	public int getGamesLost() {
 		return gamesLost;
 	}
+
+
+	@Override
+	public int compareTo(UserInfo ui2) {
+		return((Integer)points).compareTo((Integer)ui2.getPoints());
+	}
+
+	
 }
