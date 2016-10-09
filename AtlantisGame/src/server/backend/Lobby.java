@@ -55,7 +55,9 @@ public class Lobby {
 		if(userNameAvailable)
 		{
 			userInfoAllUsers.add(newUser);
+			Collections.sort(userInfoAllUsers);
 			databaseAccess.addNewUserToDatabase(newUser);
+			
 			return newUser;
 		}
 		else
@@ -277,17 +279,42 @@ public class Lobby {
 		int positionBefore = userInfoAllUsers.indexOf(user.getUserInfo());
 		Collections.sort(userInfoAllUsers);
 		int positionAfter = userInfoAllUsers.indexOf(user.getUserInfo());
-		if(positionBefore == positionAfter)
+		
+		//Inform other users about change in leaderboard if they are affected
+		if(positionBefore < positionAfter)
 		{
-			user.sendMessage(new UserInfoMessage(user.getUserInfo()));
+			for(int i = positionBefore; i < positionAfter; i++)
+			{
+				for(User u : onlineUsers)
+				{
+					if(userInfoAllUsers.get(i).equals(u.getUserInfo()))
+					{
+						u.sendMessage(new UserInfoMessage(u.getUserInfo(),i+1));
+					}
+				}
+			}
 		}
-		else if(positionBefore < positionAfter)
+		else if(positionBefore > positionAfter)
 		{
-			
+			for(int i = positionBefore; i > positionAfter; i--)
+			{
+				for(User u : onlineUsers)
+				{
+					if(userInfoAllUsers.get(i).equals(u.getUserInfo()))
+					{
+						u.sendMessage(new UserInfoMessage(u.getUserInfo(),i+1));
+					}
+				}
+			}
 		}
-		else
-		{
-			
-		}
+		
+		//Inform the user that has caused the update about change in leaderboard and stats
+		user.sendMessage(new UserInfoMessage(user.getUserInfo(), getPosition(user.getUserInfo())));
+	}
+
+	//returns position in leaderboard of a user
+	public int getPosition(UserInfo userInfo) {
+		
+		return (userInfoAllUsers.indexOf(userInfo) + 1);
 	}
 }

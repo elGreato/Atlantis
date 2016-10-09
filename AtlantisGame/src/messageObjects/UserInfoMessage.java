@@ -9,20 +9,24 @@ public class UserInfoMessage extends UserMessage implements Serializable {
 	private int gamesPlayed;
 	private int gamesWon;
 	private int gamesLost;
+	private int points;
+	private int position;
 	
 	
-	public UserInfoMessage(String username, int gamesPlayed, int gamesWon, int gamesLost) {
+	public UserInfoMessage(String username, int gamesPlayed, int gamesWon, int gamesLost, int position) {
 		super(username);
 		this.gamesPlayed = gamesPlayed;
 		this.gamesWon = gamesWon;
 		this.gamesLost = gamesLost;
+		this.position = position;
 	}
 	
-	public UserInfoMessage(UserInfo userInfo) {
+	public UserInfoMessage(UserInfo userInfo, int position) {
 		super(userInfo.getUsername());
 		this.gamesPlayed = userInfo.getGamesPlayed();
 		this.gamesWon = userInfo.getGamesWon();
 		this.gamesLost = userInfo.getGamesLost();
+		this.position = position;
 	}
 
 	public int getGamesPlayed() {
