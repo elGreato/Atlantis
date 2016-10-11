@@ -7,11 +7,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
@@ -21,8 +23,17 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -271,22 +282,37 @@ public class LobbyView {
 		}
 		
 		userInfoSection = new TitledPane("Your stats",userInfoContent);
+		userInfoSection.setCollapsible(false);
 		
 		title = new Label("Journey of Atlantis");
 		title.setFont(Font.font("Brush Script MT",FontWeight.BOLD, 70));
 		title.setTextFill(Color.DARKBLUE);
-		root.add(title, 0, 0, 4, 1);
+		
 		root.add(joinGameSection, 0, 1, 1, 2);
 		root.add(createGameSection, 0, 3);
 		root.add(chatSection, 1, 3);
 		root.add(userInfoSection, 3, 1);
 		root.add(leaderboardSection, 3, 2, 1, 2);
+		for(Node n : root.getChildren())
+		{
+			n.setOpacity(0.8);
+			
+		}
+		
+		root.add(title, 0, 0, 4, 1);
 		root.setHalignment(title, HPos.CENTER);
+		//BackgroundSize backgroundSize = new BackgroundSize(root.getWidth(),root.getHeight(), true, true, true, true);
+		//BackgroundImage myBI= new BackgroundImage(new Image("http://orig08.deviantart.net/6097/f/2012/225/0/4/sunrise_in_pegasus_by_euderion-d5axeak.jpg"),
+		        //BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
+		//root.setBackground(new Background(myBI));
+		//root.setBackground(new Background(new BackgroundFill(Color.AZURE,CornerRadii.EMPTY,Insets.EMPTY)));
 		createGameSection.setMaxHeight(Double.MAX_VALUE);
 		scene = new Scene(root);
 		stage = new Stage();
 		stage.setTitle("Atlantis");
 		stage.setScene(scene);
+		stage.setResizable(false);
+		stage.sizeToScene();
 	}
 
 	public void start() {

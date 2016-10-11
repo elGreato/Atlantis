@@ -34,6 +34,7 @@ public class ServerView {
 		
 		serverState = new TitledPane();
 		serverState.setText("Server");
+		serverState.setCollapsible(false);
 		
 		serverPane = new GridPane();
 		serverlbl = new Label("Start server (Connect to database first): ");
@@ -45,6 +46,7 @@ public class ServerView {
 		
 		dbState = new TitledPane();
 		dbState.setText("Database");
+		dbState.setCollapsible(false);
 		
 		dbPane = new GridPane();
 		dblbl = new Label("Enter database credentials: ");
