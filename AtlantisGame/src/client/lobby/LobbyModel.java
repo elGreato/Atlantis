@@ -171,11 +171,10 @@ public class LobbyModel implements Runnable{
 				else if(obj instanceof UserInfoListMessage)
 				{
 					UserInfoListMessage leaderboard = (UserInfoListMessage)obj;
-					//view.userData.clear();
+					view.userData.clear();
 					for(UserInfoMessage uim : leaderboard.getLeaderboard())
 					{
 						view.userData.add(new UserInfoDataModel(uim));
-						System.out.println(uim.getUsername());
 					}
 				}
 			} catch (ClassNotFoundException e) {

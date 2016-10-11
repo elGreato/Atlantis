@@ -37,6 +37,7 @@ public class Lobby {
 		
 		waitingGames = new ArrayList<Game>();
 		runningGames = new ArrayList<Game>();
+
 	}
 	
 	
@@ -311,13 +312,6 @@ public class Lobby {
 					}
 				}
 			}
-			if(listPositionBefore < leaderboardSize)
-			{
-				for(User u : onlineUsers)
-				{
-					sendLeaderboard(u);
-				}
-			}
 		}
 		else if(listPositionBefore > listPositionAfter)
 		{
@@ -327,19 +321,19 @@ public class Lobby {
 				{
 					if(userInfoAllUsers.get(i).equals(u.getUserInfo()))
 					{
-						u.sendMessage(new UserInfoMessage(u.getUserInfo(),i+1));
+						u.sendMessage(new UserInfoMessage(u.getUserInfo(),getPosition(u.getUserInfo())));
 					}
 				}
 			}
-			if(listPositionAfter < leaderboardSize)
+
+		}
+		if(listPositionAfter < leaderboardSize || listPositionBefore < leaderboardSize)
+		{
+			for(User u : onlineUsers)
 			{
-				for(User u : onlineUsers)
-				{
-					sendLeaderboard(u);
-				}
+				sendLeaderboard(u);
 			}
 		}
-		
 		//Inform the user that has caused the update about change in leaderboard and stats
 		user.sendMessage(new UserInfoMessage(user.getUserInfo(), getPosition(user.getUserInfo())));
 	}
