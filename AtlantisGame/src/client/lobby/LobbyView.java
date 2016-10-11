@@ -166,6 +166,7 @@ public class LobbyView {
 		joinGameSectionContent.add(joinButton,2,1);
 		joinGameSection = new TitledPane("Join game", joinGameSectionContent);
 		joinGameSection.setCollapsible(false);
+		joinGameSection.setMaxHeight(Double.MAX_VALUE);
 		
 		
 		createGameControls = new GridPane();
@@ -188,6 +189,7 @@ public class LobbyView {
 		createGameControls.add(createButton, 1, 3);
 		createGameSection = new TitledPane("Create game",createGameControls);
 		createGameSection.setCollapsible(false);
+		createGameSection.setMaxHeight(Double.MAX_VALUE);
 		
 		chatHistory = new TextArea();
 		chatField = new TextField();
@@ -291,22 +293,23 @@ public class LobbyView {
 		root.add(joinGameSection, 0, 1, 1, 2);
 		root.add(createGameSection, 0, 3);
 		root.add(chatSection, 1, 3);
-		root.add(userInfoSection, 3, 1);
-		root.add(leaderboardSection, 3, 2, 1, 2);
+		root.add(userInfoSection, 1, 1);
+		root.add(leaderboardSection, 1, 2, 1, 1);
 		for(Node n : root.getChildren())
 		{
-			n.setOpacity(0.8);
+			n.setOpacity(0.95);
 			
 		}
 		
 		root.add(title, 0, 0, 4, 1);
 		root.setHalignment(title, HPos.CENTER);
-		//BackgroundSize backgroundSize = new BackgroundSize(root.getWidth(),root.getHeight(), true, true, true, true);
-		//BackgroundImage myBI= new BackgroundImage(new Image("http://orig08.deviantart.net/6097/f/2012/225/0/4/sunrise_in_pegasus_by_euderion-d5axeak.jpg"),
-		        //BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
-		//root.setBackground(new Background(myBI));
+		BackgroundSize backgroundSize = new BackgroundSize(root.getWidth(),root.getHeight(), true, true, true, true);
+		BackgroundImage myBI= new BackgroundImage(new Image("http://orig08.deviantart.net/6097/f/2012/225/0/4/sunrise_in_pegasus_by_euderion-d5axeak.jpg"),
+		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
+		root.setBackground(new Background(myBI));
 		//root.setBackground(new Background(new BackgroundFill(Color.AZURE,CornerRadii.EMPTY,Insets.EMPTY)));
-		createGameSection.setMaxHeight(Double.MAX_VALUE);
+		
+		
 		scene = new Scene(root);
 		stage = new Stage();
 		stage.setTitle("Atlantis");
