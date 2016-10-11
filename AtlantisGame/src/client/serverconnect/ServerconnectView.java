@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 public class ServerconnectView {
 	protected Stage stage;
-	private Scene scene;
+	protected Scene scene;
 	private VBox root;
 	private HBox controls;
 	private Label descriptionlbl;

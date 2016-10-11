@@ -2,6 +2,7 @@ package client.serverconnect;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.input.KeyEvent;
 
 public class ServerconnectController {
 	
@@ -18,6 +19,15 @@ public class ServerconnectController {
 			{
 				model.setUpConnection(view.iptxt.getText());
 			}
+		});
+		view.scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
+
+			@Override
+			public void handle(KeyEvent event) {
+				view.okButton.fire();
+				
+			}
+			
 		});
 		
 	}

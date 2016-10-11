@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 public class LobbyController {
 	private LobbyView view;
@@ -75,6 +77,44 @@ public class LobbyController {
 					view.chatField.setText("");
 				}
 			});
+		view.joinGameSection.setOnKeyPressed(new EventHandler<KeyEvent>(){
+
+			@Override
+			public void handle(KeyEvent k) {
+				if(k.getCode().equals(KeyCode.ENTER))
+				{
+					view.joinButton.fire();
+				}
+				
+			}
+			
+		});
+		view.createGameSection.setOnKeyPressed(new EventHandler<KeyEvent>(){
+
+			@Override
+			public void handle(KeyEvent k) {
+				if(k.getCode().equals(KeyCode.ENTER))
+				{
+					view.createButton.fire();
+				}
+				
+			}
+			
+		});
+		view.chatSection.setOnKeyPressed(new EventHandler<KeyEvent>(){
+
+			@Override
+			public void handle(KeyEvent k) {
+				if(k.getCode().equals(KeyCode.ENTER))
+				{
+					view.chatButton.fire();
+				}
+				
+			}
+			
+		});
+		
+		
 		
 	
 	}

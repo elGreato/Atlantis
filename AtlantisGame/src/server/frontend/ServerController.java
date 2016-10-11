@@ -7,6 +7,8 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.WindowEvent;
 
@@ -62,25 +64,30 @@ public class ServerController {
 			}
 		});
 		
-		//Cosmetic stuff
-		view.serverState.setOnMouseClicked(new EventHandler<MouseEvent>(){
+		view.serverState.setOnKeyPressed(new EventHandler<KeyEvent>(){
 
 			@Override
-			public void handle(MouseEvent arg0) {
-				view.serverState.setExpanded(true);
+			public void handle(KeyEvent k) {
+				if(k.getCode().equals(KeyCode.ENTER)){
+					view.serverstartbtn.fire();
+				}
 				
 			}
 			
 		});
-		view.dbState.setOnMouseClicked(new EventHandler<MouseEvent>(){
+		view.dbState.setOnKeyPressed(new EventHandler<KeyEvent>(){
 
 			@Override
-			public void handle(MouseEvent arg0) {
-				view.dbState.setExpanded(true);
+			public void handle(KeyEvent k) {
+				if(k.getCode().equals(KeyCode.ENTER))
+				{
+					view.dbconnectbtn.fire();
+				}
 				
 			}
 			
 		});
+		
 			
 		
 		

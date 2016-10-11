@@ -46,11 +46,11 @@ public class LobbyView {
 	private Scene scene;
 	
 	private GridPane root;
-	private TitledPane createGameSection;
-	private TitledPane joinGameSection;
-	private TitledPane chatSection;
-	private TitledPane userInfoSection;
-	private TitledPane leaderboardSection;
+	protected TitledPane createGameSection;
+	protected TitledPane joinGameSection;
+	protected TitledPane chatSection;
+	protected TitledPane userInfoSection;
+	protected TitledPane leaderboardSection;
 	private GridPane joinGameSectionContent;
 	private GridPane createGameControls;
 	private GridPane chatContent;

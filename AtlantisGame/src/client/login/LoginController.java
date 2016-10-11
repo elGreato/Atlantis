@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
@@ -128,6 +129,31 @@ public class LoginController {
 		    	
 		    }
 		});
+		view.createPane.setOnKeyPressed(new EventHandler<KeyEvent>(){
+
+			@Override
+			public void handle(KeyEvent k) {
+				if(k.getCode().equals(KeyCode.ENTER))
+				{
+					view.createButton.fire();
+				}
+				
+			}
+			
+		});
+		view.loginPane.setOnKeyPressed(new EventHandler<KeyEvent>(){
+
+			@Override
+			public void handle(KeyEvent k) {
+				if(k.getCode().equals(KeyCode.ENTER))
+				{
+					view.loginButton.fire();
+				}
+				
+			}
+			
+		});
+		
 	}
 	
 	
