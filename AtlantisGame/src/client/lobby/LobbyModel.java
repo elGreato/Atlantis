@@ -10,8 +10,11 @@ import client.game.GameController;
 import client.game.GameModel;
 import client.game.GameView;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.util.converter.NumberStringConverter;
 import messageObjects.CreateGameMessage;
 import messageObjects.GameJoinMessage;
 import messageObjects.GameListItem;
@@ -42,6 +45,15 @@ public class LobbyModel implements Runnable{
 		this.oos = oos;
 		this.ois = ois;
 		this.userInfo = new UserInfoDataModel(userInfo);
+		
+		view.userInfoName.textProperty().bind(new SimpleStringProperty(userInfo.getUsername()));
+		view.userInfoPosition.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getPosition()).toString()));
+		view.userInfoPoints.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getPoints()).toString()));
+		view.userInfoGamesPlayed.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getGamesPlayed()).toString()));
+		view.userInfoGamesWon.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getGamesWon()).toString()));
+		view.userInfoGamesTie.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getGamesTie()).toString()));
+		view.userInfoGamesLost.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getGamesLost()).toString()));
+		
 		runningGames = new ArrayList<GameModel>();
 
 	}
@@ -176,6 +188,12 @@ public class LobbyModel implements Runnable{
 					{
 						view.userData.add(new UserInfoDataModel(uim));
 					}
+				}
+				else if(obj instanceof UserInfoMessage)	
+				{
+					System.out.println("UserInfoArrived");
+					UserInfoMessage thisUserStats = (UserInfoMessage)obj;
+					userInfo.setUsername(thisUserStats.getUsername());
 				}
 			} catch (ClassNotFoundException e) {
 				

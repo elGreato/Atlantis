@@ -6,6 +6,9 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -21,6 +24,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import messageObjects.GameListItem;
 
@@ -32,12 +38,13 @@ public class LobbyView {
 	private TitledPane createGameSection;
 	private TitledPane joinGameSection;
 	private TitledPane chatSection;
+	private TitledPane userInfoSection;
 	private TitledPane leaderboardSection;
 	private GridPane joinGameSectionContent;
 	private GridPane createGameControls;
 	private GridPane chatContent;
+	private GridPane userInfoContent;
 	private GridPane leaderboardContent;
-	
 	
 	private Label title;
 	protected ObservableList<GameListItemDataModel> gameData;
@@ -63,7 +70,6 @@ public class LobbyView {
 	protected TextField chatField;
 	protected Button chatButton;
 
-	
 	protected ObservableList<UserInfoDataModel> userData;
 	protected TableView<UserInfoDataModel> userList;
 	protected TableColumn<UserInfoDataModel, Integer> positionCol;
@@ -74,6 +80,21 @@ public class LobbyView {
 	protected TableColumn<UserInfoDataModel, Integer> gamesTieCol;
 	protected TableColumn<UserInfoDataModel, Integer> gamesLostCol;
 	protected TableColumn<UserInfoDataModel, Integer> pointsCol;
+	
+	private Label userInfoNameDescription;
+	protected Label userInfoName;
+	private Label userInfoPositionDescription;
+	protected Label userInfoPosition;
+	private Label userInfoPointsDescription;
+	protected Label userInfoPoints;
+	private Label userInfoGamesPlayedDescription;
+	protected Label userInfoGamesPlayed;
+	private Label userInfoGamesWonDescription;
+	protected Label userInfoGamesWon;
+	private Label userInfoGamesTieDescription;
+	protected Label userInfoGamesTie;
+	private Label userInfoGamesLostDescription;
+	protected Label userInfoGamesLost;
 	
 	public LobbyView()
 	{
@@ -133,7 +154,7 @@ public class LobbyView {
 		joinGameSectionContent.add(joinPassword,1,1);
 		joinGameSectionContent.add(joinButton,2,1);
 		joinGameSection = new TitledPane("Join game", joinGameSectionContent);
-		joinGameSection.setExpanded(true);
+		joinGameSection.setCollapsible(false);
 		
 		
 		createGameControls = new GridPane();
@@ -155,7 +176,7 @@ public class LobbyView {
 		createGameControls.add(createNumPlayerscbx, 1, 2);
 		createGameControls.add(createButton, 1, 3);
 		createGameSection = new TitledPane("Create game",createGameControls);
-		createGameSection.setExpanded(true);
+		createGameSection.setCollapsible(false);
 		
 		chatHistory = new TextArea();
 		chatField = new TextField();
@@ -166,6 +187,7 @@ public class LobbyView {
 		chatContent.add(chatButton, 1, 1);
 		chatContent.add(chatField, 0, 1);
 		chatSection = new TitledPane("Chat", chatContent);
+		chatSection.setCollapsible(false);
 		
 		//Init table for users
 		userData = FXCollections.observableArrayList();
@@ -207,17 +229,63 @@ public class LobbyView {
 		leaderboardContent = new GridPane();
 		leaderboardContent.add(userList, 0, 0);
 		leaderboardSection = new TitledPane("Leaderboard",leaderboardContent);
+		leaderboardSection.setCollapsible(false);
 		leaderboardSection.setMaxHeight(Double.MAX_VALUE);
-		title = new Label("ATLANTIS LOBBY");
 		
-		root.add(title,0,0,3,1);
-		root.add(joinGameSection,0,1,1,2);
+		userInfoNameDescription = new Label("Username: ");
+		userInfoPositionDescription = new Label("Position: ");
+		userInfoPointsDescription = new Label("Points: ");
+		userInfoGamesPlayedDescription = new Label("Games played: ");
+		userInfoGamesWonDescription = new Label("Games won: ");
+		userInfoGamesTieDescription = new Label("Games tie: ");
+		userInfoGamesLostDescription = new Label("Games lost: ");
+
+		userInfoName = new Label();
+		userInfoName.setFont(Font.font("Brush Script MT", FontWeight.BOLD, 50));
+		userInfoPosition = new Label();
+		userInfoPoints = new Label();
+		userInfoGamesPlayed = new Label();
+		userInfoGamesWon = new Label();
+		userInfoGamesTie = new Label();
+		userInfoGamesLost = new Label();
+		
+		userInfoContent = new GridPane();
+		userInfoContent.add(userInfoNameDescription, 0, 0);
+		userInfoContent.add(userInfoPositionDescription, 0, 1);
+		userInfoContent.add(userInfoPointsDescription, 0, 2);
+		userInfoContent.add(userInfoGamesPlayedDescription, 0, 3);
+		userInfoContent.add(userInfoGamesWonDescription, 0, 4);
+		userInfoContent.add(userInfoGamesTieDescription, 0, 5);
+		userInfoContent.add(userInfoGamesLostDescription, 0, 6);
+		userInfoContent.add(userInfoName, 1, 0,2,1);
+		userInfoContent.add(userInfoPosition, 1, 1);
+		userInfoContent.add(userInfoPoints, 1, 2);
+		userInfoContent.add(userInfoGamesPlayed, 1, 3);
+		userInfoContent.add(userInfoGamesWon, 1, 4);
+		userInfoContent.add(userInfoGamesTie, 1, 5);
+		userInfoContent.add(userInfoGamesLost, 1, 6);
+		
+		for(Node n: userInfoContent.getChildren())
+		{
+			userInfoContent.setHalignment(n, HPos.RIGHT);
+		}
+		
+		userInfoSection = new TitledPane("Your stats",userInfoContent);
+		
+		title = new Label("Journey of Atlantis");
+		title.setFont(Font.font("Brush Script MT",FontWeight.BOLD, 70));
+		title.setTextFill(Color.DARKBLUE);
+		root.add(title, 0, 0, 4, 1);
+		root.add(joinGameSection, 0, 1, 1, 2);
 		root.add(createGameSection, 0, 3);
 		root.add(chatSection, 1, 3);
-		root.add(leaderboardSection, 3, 2,1,2);
+		root.add(userInfoSection, 3, 1);
+		root.add(leaderboardSection, 3, 2, 1, 2);
+		root.setHalignment(title, HPos.CENTER);
 		createGameSection.setMaxHeight(Double.MAX_VALUE);
 		scene = new Scene(root);
 		stage = new Stage();
+		stage.setTitle("Atlantis");
 		stage.setScene(scene);
 	}
 

@@ -78,5 +78,5 @@ public class UserInfoDataModel {
 	public Integer getPosition() {
 		return position.get();
 	}
-
+	
 }

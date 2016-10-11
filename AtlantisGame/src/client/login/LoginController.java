@@ -21,32 +21,29 @@ public class LoginController {
 		this.model = model;
 		
 		//Some cosmetic stuff
-		view.createPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent e)
+		view.createPane.expandedProperty().addListener((observable, oldValue, newValue) ->
+		{
+			if(oldValue)
 			{
-				if(view.createPane.isExpanded())
-				{
-					view.loginPane.setExpanded(false);
-				}
-				else
-				{
-					view.createPane.setExpanded(true);
-				}
+				view.loginPane.setExpanded(true);
+				
+			}
+			else
+			{
+				view.loginPane.setExpanded(false);
 			}
 		});
 		
 		//More cosmetic stuff
-		view.loginPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			public void handle(MouseEvent e)
+		view.loginPane.expandedProperty().addListener((observable, oldValue, newValue)->
+		{
+			if(oldValue)
 			{
-				if(view.loginPane.isExpanded())
-				{
-					view.createPane.setExpanded(false);
-				}
-				else
-				{
-					view.loginPane.setExpanded(true);
-				}
+				view.createPane.setExpanded(true);
+			}
+			else
+			{
+				view.createPane.setExpanded(false);
 			}
 		});
 		
