@@ -2,6 +2,8 @@ package client.lobby;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class LobbyController {
 	private LobbyView view;
@@ -15,11 +17,27 @@ public class LobbyController {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				
-				model.createGame();
-				view.createGameNametxt.setText("");
-				view.createGamePasswordtxt.setText("");
-				view.createNumPlayerscbx.setValue(2);
+				if(view.createGameNametxt.getText().equals(""))
+				{
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("No game name entered");
+					alert.setContentText("Please enter a game name");
+					alert.showAndWait();
+				}
+				else if(view.createGameNametxt.getText().contains(" "))
+				{
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Illegal game name");
+					alert.setContentText("Please enter a game name that does not contain any spaces");
+					alert.showAndWait();
+				}
+				else
+				{
+					model.createGame();
+					view.createGameNametxt.setText("");
+					view.createGamePasswordtxt.setText("");
+					view.createNumPlayerscbx.setValue(2);
+				}
 			}
 			
 		});

@@ -121,7 +121,7 @@ public class LobbyView {
 		gameList.setPrefWidth(gameNameCol.getWidth() + gamePassCol.getWidth() + playersCol.getWidth()+2);
 		gameList.autosize();
 		gameList.setItems(gameData);
-		
+		gameList.setPlaceholder(new Label("No open games existing at the moment.\nCreate your own below!"));
 		
 		
 		joinButton = new Button("Join game");
@@ -201,7 +201,9 @@ public class LobbyView {
 		gamesCol.getColumns().addAll(gamesPlayedCol,gamesWonCol,gamesTieCol,gamesLostCol);
 		userList.getColumns().addAll(positionCol,usernameCol,gamesCol,pointsCol);
 		userList.setItems(userData);
-
+		userList.setFixedCellSize(25);
+		userList.setPrefHeight(userList.getFixedCellSize()*12);
+		
 		leaderboardContent = new GridPane();
 		leaderboardContent.add(userList, 0, 0);
 		leaderboardSection = new TitledPane("Leaderboard",leaderboardContent);

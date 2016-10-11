@@ -63,10 +63,24 @@ public class LoginController {
 		view.createButton.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e)
 			{
-				if(view.createpasswordtxt.getText().length() < 5)
+				if(view.createusernametxt.getText().equals(""))
 				{
 					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Password information");
+					alert.setTitle("No username entered");
+					alert.setContentText("Please enter your desired username");
+					alert.showAndWait();
+				}
+				else if(view.createusernametxt.getText().contains(" "))
+				{
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Illegal username");
+					alert.setContentText("Please enter a username that does not contain any spaces");
+					alert.showAndWait();
+				}
+				else if(view.createpasswordtxt.getText().length() < 5)
+				{
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Illegal information");
 					alert.setContentText("Please enter a password that has between 5 and 15 letters.");
 					alert.showAndWait();
 				}
