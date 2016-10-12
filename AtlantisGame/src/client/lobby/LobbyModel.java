@@ -70,16 +70,26 @@ public class LobbyModel implements Runnable{
 		while(connected)
 		{
 			try {
-				System.out.println("Ready to read");
 				Object obj = ois.readObject();
-				System.out.println("Read an object");
 				if(obj instanceof InGameMessage)
 				{
-					
+					InGameMessage msg = (InGameMessage)obj;
+					String gameName = msg.getGameName();
+					Platform.runLater(new Runnable(){
+					public void run(){
+						for(GameModel gm : runningGames)
+						{
+							if (gm.getGameName().equals(gameName))
+							{
+							gm.processMessage(msg);
+							break;
+							}
+						}
+					}
+					});
 				}
 				else if(obj instanceof ServerInfoMessage)
 				{
-					System.out.println("Recieved info from server");
 					ServerInfoMessage serverInfoMessage = (ServerInfoMessage)obj;
 					Platform.runLater(new Runnable()
 					{
@@ -98,7 +108,6 @@ public class LobbyModel implements Runnable{
 				}
 				else if(obj instanceof GameListItem)
 				{
-					System.out.println("Recieved update from games from server");
 					GameListItemDataModel updatedGame = new GameListItemDataModel((GameListItem)obj);
 					System.out.println(updatedGame.getRegisteredPlayers());
 					
@@ -116,7 +125,6 @@ public class LobbyModel implements Runnable{
 								isSelected = true;
 							}
 							gameListIt.remove();
-							System.out.println("Detected existing instance in List");
 						}
 					}
 					if(updatedGame.getRegisteredPlayers()<updatedGame.getMaxPlayers())
@@ -131,7 +139,6 @@ public class LobbyModel implements Runnable{
 				}
 				else if(obj instanceof GameListItemList)
 				{
-					System.out.println("I'm receiving a gameList");
 					GameListItemList glil = (GameListItemList)obj;
 					view.gameData.clear();
 					for(GameListItem g : glil.getGames())
@@ -156,24 +163,7 @@ public class LobbyModel implements Runnable{
 					});
 
 				}
-				else if(obj instanceof InGameMessage)
-				{
-					InGameMessage msg = (InGameMessage)obj;
-					String gameName = msg.getGameName();
-					for(GameModel gm : runningGames)
-					{
-						if (gm.getGameName().equals(gameName))
-						{
-							Platform.runLater(new Runnable(){
-								public void run()
-								{
-									gm.processMessage(msg);
-								}
-							});
-							break;
-						}
-					}
-				}
+				
 				else if(obj instanceof LobbyChatMessage)
 				{
 					LobbyChatMessage chatMessage = (LobbyChatMessage)obj;
@@ -191,7 +181,6 @@ public class LobbyModel implements Runnable{
 				}
 				else if(obj instanceof UserInfoMessage)	
 				{
-					System.out.println("UserInfoArrived");
 					UserInfoMessage thisUserStats = (UserInfoMessage)obj;
 					userInfo.setUsername(thisUserStats.getUsername());
 				}
@@ -209,6 +198,9 @@ public class LobbyModel implements Runnable{
 						connectionLost();
 					}
 				});
+			} catch(Exception e)
+			{
+				e.printStackTrace();
 			}
 		}
 		

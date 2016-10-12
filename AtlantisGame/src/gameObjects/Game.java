@@ -58,6 +58,7 @@ public class Game {
 		{
 			u.initiateGameStart(this);
 		}
+		
 	}
 	
 	//Here messages from clients arrive
