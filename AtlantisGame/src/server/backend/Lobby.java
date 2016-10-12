@@ -109,7 +109,7 @@ public class Lobby {
 		}
 		if(nameAvailable)
 		{
-			Game newGame = new Game(gameName,password, maxPlayers, user);
+			Game newGame = new Game(gameName,password, maxPlayers, user, this);
 			waitingGames.add(newGame);
 			updateLobby(newGame);
 			

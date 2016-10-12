@@ -3,6 +3,7 @@ package gameObjects;
 import java.util.ArrayList;
 
 import messageObjects.InGameMessage;
+import server.backend.Lobby;
 import server.backend.User;
 
 public class Game {
@@ -12,15 +13,17 @@ public class Game {
 	//send Message trough sendMessage method of User, get player name stats etc through userInfo field of User
 	private ArrayList<User> users; 
 	private int maxPlayers;
-	
+	//Invoke lobby.addWin, lobby.addLoss & lobby.addTie methods on users at the end of the game
+	private Lobby lobby;
 	//Constructor (doesn't start game)
-	public Game(String name, String password, int maxPlayers, User creator) {
+	public Game(String name, String password, int maxPlayers, User creator, Lobby lobby) {
 		
 		this.name = name;
 		this.password = password;
 		this.maxPlayers = maxPlayers;
 		users = new ArrayList<User>();
 		users.add(creator);
+		this.lobby = lobby;
 	}
 	
 	//Getters I need

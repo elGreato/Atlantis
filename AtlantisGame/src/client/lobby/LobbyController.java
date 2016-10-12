@@ -48,8 +48,17 @@ public class LobbyController {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				
-				model.joinGame();
+				if(view.gameList.getSelectionModel().getSelectedItem() !=null)
+				{
+					model.joinGame();
+				}
+				else
+				{
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("No game selected");
+					alert.setContentText("Please select a game first.");
+					alert.showAndWait();
+				}
 				view.joinPassword.setText("");
 			}
 			
