@@ -219,7 +219,16 @@ public class Lobby {
 	}
 	private synchronized void sendLeaderboard(User user) {
 		ArrayList<UserInfoMessage> leaderboard = new ArrayList<UserInfoMessage>();
-		for(int i = 0; i < leaderboardSize; i++)
+		int leaderboardEntries = 0;
+		if(userInfoAllUsers.size()< leaderboardSize)
+		{
+			leaderboardEntries = userInfoAllUsers.size();
+		}
+		else
+		{
+			leaderboardEntries = leaderboardSize;
+		}
+		for(int i = 0; i < leaderboardEntries; i++)
 		{
 			UserInfo ui = userInfoAllUsers.get(i);
 			leaderboard.add(new UserInfoMessage(ui,getPosition(ui)));

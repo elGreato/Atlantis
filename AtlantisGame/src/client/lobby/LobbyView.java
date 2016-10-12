@@ -38,6 +38,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import messageObjects.GameListItem;
 
@@ -316,11 +317,23 @@ public class LobbyView {
 		stage.setScene(scene);
 		stage.setResizable(false);
 		stage.sizeToScene();
+		
 	}
 
 	public void start() {
 		// TODO Auto-generated method stub
 		stage.show();
+		double rootHeight = root.getHeight();
+		double scaling = 1.0d;
+		if(rootHeight > 0.95*Screen.getPrimary().getVisualBounds().getHeight())
+		{
+			scaling = 0.95*Screen.getPrimary().getVisualBounds().getHeight()/rootHeight;
+			System.out.println("primary: " + 0.8*Screen.getPrimary().getVisualBounds().getHeight() + "rootHeight: " + rootHeight);
+			System.out.println("Scaling: "+ scaling);
+			stage.setHeight(scaling * stage.getHeight());
+			
+		}
+
 		
 	}
 	
