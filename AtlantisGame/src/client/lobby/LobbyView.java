@@ -194,10 +194,13 @@ public class LobbyView {
 		
 		chatHistory = new TextArea();
 		chatField = new TextField();
+		chatField.setMaxWidth(Double.MAX_VALUE);
 		chatButton = new Button("Send");
 		chatContent = new GridPane();
 		chatContent.add(chatHistory, 0, 0, 2, 1);
 		chatHistory.setEditable(false);
+		chatHistory.setMaxWidth(Double.MAX_VALUE);
+		chatHistory.wrapTextProperty().set(true);;
 		chatContent.add(chatButton, 1, 1);
 		chatContent.add(chatField, 0, 1);
 		chatSection = new TitledPane("Chat", chatContent);
@@ -296,16 +299,17 @@ public class LobbyView {
 		root.add(chatSection, 1, 3);
 		root.add(userInfoSection, 1, 1);
 		root.add(leaderboardSection, 1, 2, 1, 1);
+		//changes transparency of all the nodes in root
 		for(Node n : root.getChildren())
 		{
-			n.setOpacity(0.95);
+			n.setOpacity(0.85);
 			
 		}
 		
 		root.add(title, 0, 0, 4, 1);
 		root.setHalignment(title, HPos.CENTER);
 		BackgroundSize backgroundSize = new BackgroundSize(root.getWidth(),root.getHeight(), true, true, true, true);
-		BackgroundImage myBI= new BackgroundImage(new Image("http://orig08.deviantart.net/6097/f/2012/225/0/4/sunrise_in_pegasus_by_euderion-d5axeak.jpg"),
+		BackgroundImage myBI= new BackgroundImage(new Image(getClass().getResourceAsStream("images4lobby/lobbyBackground.png")),
 		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
 		root.setBackground(new Background(myBI));
 		//root.setBackground(new Background(new BackgroundFill(Color.AZURE,CornerRadii.EMPTY,Insets.EMPTY)));
@@ -323,6 +327,9 @@ public class LobbyView {
 	public void start() {
 		// TODO Auto-generated method stub
 		stage.show();
+		chatHistory.setPrefWidth(chatContent.getWidth());
+		chatField.setPrefWidth(0.9*chatContent.getWidth());
+		chatButton.setPrefWidth(0.1*chatContent.getWidth());
 		double rootHeight = root.getHeight();
 		double scaling = 1.0d;
 		if(rootHeight > 0.95*Screen.getPrimary().getVisualBounds().getHeight())
