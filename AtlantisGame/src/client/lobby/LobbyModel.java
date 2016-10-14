@@ -246,5 +246,8 @@ public class LobbyModel implements Runnable{
 		
 	}
 
-	
+	public void endGame(GameModel game)
+	{
+		runningGames.remove(game);
+	}
 }
