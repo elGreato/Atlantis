@@ -194,8 +194,7 @@ public class User implements Runnable{
 				
 				e.printStackTrace();
 			} catch (IOException e) {
-				loggedIn = false;
-				connected = false;
+				logoutUser();
 				e.printStackTrace();
 			}
 		}
@@ -207,8 +206,7 @@ public class User implements Runnable{
 		try {
 			oos.writeObject(m);
 		} catch (IOException e) {
-			loggedIn = false;
-			connected = false;
+			logoutUser();
 		}
 		
 	}
@@ -220,8 +218,18 @@ public class User implements Runnable{
 			oos.writeObject(new GameStartMessage(game.getName()));
 		} catch (IOException e) {
 			e.printStackTrace();
-			loggedIn = false;
-			connected = false;
+			logoutUser();
 		}
+	}
+	private synchronized void logoutUser()
+	{
+		loggedIn = false;
+		connected = false;
+		lobby.logoutFromOnlineUsers(this);
+	}
+
+	protected void endGame(Game game) {
+		runningGames.remove(game);
+		
 	}
 }

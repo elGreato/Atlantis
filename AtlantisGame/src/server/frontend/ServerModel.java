@@ -48,6 +48,7 @@ public class ServerModel implements Runnable{
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", username, password);
 			view.dbconnectbtn.setDisable(true);
 			view.dbconnectbtn.setText("Connected...");
+			testDatabase();
 			
 		} catch (SQLException e) {
 			
@@ -58,7 +59,7 @@ public class ServerModel implements Runnable{
 			
 		}
 		
-		testDatabase();
+		
 
 	}
 	

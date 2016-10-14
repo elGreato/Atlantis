@@ -359,4 +359,19 @@ public class Lobby {
 		}
 		return userInfoAllUsers.indexOf(userInfo)+1;
 	}
+
+
+	protected void logoutFromOnlineUsers(User user) {
+		onlineUsers.remove(user);
+		
+	}
+	public void endGame(Game game)
+	{
+		for(User u : game.getUsers())
+		{
+			u.endGame(game);
+		}
+		runningGames.remove(game);
+		
+	}
 }
