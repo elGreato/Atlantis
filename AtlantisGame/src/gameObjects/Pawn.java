@@ -8,6 +8,21 @@ public class Pawn {
 	
 	private Player owner;
 	
+	public Pawn(Player player){
+		owner=player;
+		pawnColor=owner.getColor();
+	}
+
+	public ColorChoice getPawnColor() {
+		return pawnColor;
+	}
+
+	
+
+	public Player getOwner() {
+		return owner;
+	}
+
 	
 	
 	

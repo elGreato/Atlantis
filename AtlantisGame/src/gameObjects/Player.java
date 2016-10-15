@@ -1,6 +1,7 @@
 package gameObjects;
 import java.util.Random;
 
+import gameObjects.Card.ColorChoice;
 /*
  * @author Ali Habbabeh
  */
@@ -30,6 +31,8 @@ public class Player extends VBox{
 	
 	private Pawn pawn;
 	
+	private ColorChoice color;
+	
 	
 	public Player(String name){
 		//the player extends vbox 
@@ -51,7 +54,7 @@ public class Player extends VBox{
 		
 		//set the picture
 		int numberOfPicturesAvailable=4;
-		String[] paths= new String[numberOfPicturesAvailable]; //the idea of using array to save paths was inspired by a stackoverflow commentor http://stackoverflow.com/questions/21428050/load-random-image-from-a-directory-using-javafx
+		String[] paths= new String[numberOfPicturesAvailable]; 
 		paths[0]="images4players/player1.png";
 		paths[1]="images4players/player2.png";
 		paths[2]="images4players/player3.png";
@@ -70,7 +73,8 @@ public class Player extends VBox{
 		
 		// create 3 pawns for each player
 		for (int i=0; i>3;i++){
-			Pawn pawn = new Pawn();
+			Pawn pawn = new Pawn(this);
+		
 		}
 		
 		this.getChildren().add(lblName);
@@ -78,6 +82,7 @@ public class Player extends VBox{
 		this.getChildren().add(lblPlayerImage);
 		this.getChildren().add(hboxCards);
 	}	
+	
 	//this method is from the first semester as well
 	 public void addCard(Card card) {
 	        // Add card to the hand
@@ -89,5 +94,55 @@ public class Player extends VBox{
 	        // Get the label from the HBox, and update it
 	        Label cardLabel = (Label) hboxCards.getChildren().get(index);
 	        cardLabel.setGraphic(card.colorChoice.addImage());
-	    }						
+	    }	
+	 
+	 
+	 public Label getLblName() {
+			return lblName;
+		}
+		public void setLblName(Label lblName) {
+			this.lblName = lblName;
+		}
+		public int getVictoryPoints() {
+			return victoryPoints;
+		}
+		public void setVictoryPoints(int victoryPoints) {
+			this.victoryPoints = victoryPoints;
+		}
+		public Label getVpHolder() {
+			return vpHolder;
+		}
+		public void setVpHolder(Label vpHolder) {
+			this.vpHolder = vpHolder;
+		}
+		public Label getLblPlayerImage() {
+			return lblPlayerImage;
+		}
+		public void setLblPlayerImage(Label lblPlayerImage) {
+			this.lblPlayerImage = lblPlayerImage;
+		}
+		public PlayerHand getPlayerHand() {
+			return playerHand;
+		}
+		public void setPlayerHand(PlayerHand playerHand) {
+			this.playerHand = playerHand;
+		}
+		public int getNumberOfCards() {
+			return numberOfCards;
+		}
+		public void setNumberOfCards(int numberOfCards) {
+			this.numberOfCards = numberOfCards;
+		}
+		public Pawn getPawn() {
+			return pawn;
+		}
+		public void setPawn(Pawn pawn) {
+			this.pawn = pawn;
+		}
+		public ColorChoice getColor() {
+			return color;
+		}
+		public void setColor(ColorChoice color) {
+			this.color = color;
+		}
 }
