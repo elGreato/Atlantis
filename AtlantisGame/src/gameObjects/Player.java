@@ -106,8 +106,15 @@ public class Player extends VBox{
 		public int getVictoryPoints() {
 			return victoryPoints;
 		}
-		public void setVictoryPoints(int victoryPoints) {
-			this.victoryPoints = victoryPoints;
+		public int countVictoryPoints(Player player) {
+			int result=0;
+			result+=player.playerHand.getCards().size();
+			result+= player.playerHand.getTreasures().get // get each tile in treasuers and take its vallue
+			
+			
+			return numberOfCards;
+			
+			
 		}
 		public Label getVpHolder() {
 			return vpHolder;

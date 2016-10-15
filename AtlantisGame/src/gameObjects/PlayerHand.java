@@ -8,12 +8,21 @@ public class PlayerHand {
 	private int handSize=5;
 	private String playerName; 
 	private ArrayList<Card> cards = new ArrayList<>(); 
+	private ArrayList<LandTile> treasures= new ArrayList<>();
 	
 	
 	public PlayerHand(String name){
 	 playerName=name;
 	}
 	
+	public ArrayList<LandTile> getTreasures() {
+		return treasures;
+	}
+
+	public void addTreasure(LandTile treasure) {
+		treasures.add(treasure);
+	}
+
 	public String getPlayerName() {
      return playerName;
 	}
@@ -29,7 +38,7 @@ public class PlayerHand {
 		this.handSize = handsize;
 	}
 	public void addCard(Card card) {
-     if (cards.size() < handSize) cards.add(card);
+	cards.add(card);
 	}
  
 	public void clear() {
