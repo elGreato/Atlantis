@@ -50,5 +50,6 @@ public class MainAli extends Application {
 		root.setBottom(p2);
 		primaryStage.setScene(new Scene(root, 900, 950));
 		primaryStage.show();
+		System.out.println(p1.countVictoryPoints());
 	}
 }

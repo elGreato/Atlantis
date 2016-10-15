@@ -18,6 +18,14 @@ public class PlayerHand {
 	public ArrayList<LandTile> getTreasures() {
 		return treasures;
 	}
+	
+	public int getTreasuresValue(ArrayList<LandTile> list){
+		int result=0;
+		for (LandTile tile: list)
+		result+=	tile.getLandValue();
+		
+		return result;
+	}
 
 	public void addTreasure(LandTile treasure) {
 		treasures.add(treasure);
