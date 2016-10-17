@@ -1,13 +1,13 @@
 package gameObjects;
 
-import gameObjects.Card.ColorChoice;
+import gameObjects.ColorChoice;
 
 public class LandTile extends Tile {
 	private Pawn pawnOnTile;
 	private ColorChoice landTileColor;
 	private int landValue;
 	
-	public LandTile(final int tileId, ColorChoice color, int value) {
+	public LandTile( int tileId, ColorChoice color, int value) {
 		super(tileId);
 		landTileColor=color;
 		landValue=value;

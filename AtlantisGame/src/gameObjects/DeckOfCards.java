@@ -28,7 +28,7 @@ public class DeckOfCards {
 		// Add all 105 cards
 		for (int i=0; i<15; i++) {
 			
-			for (Card.ColorChoice c: Card.ColorChoice.values()) //used nested loop to multiply # of colors with #of cards	
+			for (ColorChoice c: ColorChoice.values()) //used nested loop to multiply # of colors with #of cards	
                 cards.add(new Card(c));
         }
 		

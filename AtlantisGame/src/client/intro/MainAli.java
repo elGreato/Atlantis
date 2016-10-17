@@ -6,6 +6,8 @@ import java.util.Iterator;
 
 import gameObjects.Card;
 import gameObjects.DeckOfCards;
+import gameObjects.DeckOfLandTiles;
+import gameObjects.LandTile;
 import gameObjects.MainBoard;
 import gameObjects.Player;
 import gameObjects.WaterTile;
@@ -51,5 +53,13 @@ public class MainAli extends Application {
 		primaryStage.setScene(new Scene(root, 900, 950));
 		primaryStage.show();
 		System.out.println(p1.countVictoryPoints());
+		DeckOfLandTiles dland= new DeckOfLandTiles();
+		System.out.println(dland.getNumberOfLandTiles());
+		int kk=1;
+		for (int i=0; i< dland.getNumberOfLandTiles();i++){
+			
+			System.out.println("Treasure Nymber "+kk+" and id "+dland.getTileDetails(dland, i).getId()+" "+dland.getTileDetails(dland, i).getLandTileColor().toString()+" Value "+dland.getTileDetails(dland, i).getLandValue());
+			kk++;
+		}
 	}
 }

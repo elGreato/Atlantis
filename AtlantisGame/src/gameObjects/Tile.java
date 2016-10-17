@@ -5,7 +5,7 @@ import javafx.scene.layout.StackPane;
 public abstract class Tile extends StackPane {
 	// protected to prevent mutation (create multiple instances of the same object )
 	//which i read that it's good for garbage collection
-	protected  int tileId;
+	private  int tileId;
 	
 	private Pawn pawn;
 	

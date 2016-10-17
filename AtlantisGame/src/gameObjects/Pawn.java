@@ -1,6 +1,6 @@
 package gameObjects;
 
-import gameObjects.Card.ColorChoice;
+import gameObjects.ColorChoice;
 
 
 public class Pawn {

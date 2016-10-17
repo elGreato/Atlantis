@@ -1,7 +1,7 @@
 package gameObjects;
 import java.util.Random;
 
-import gameObjects.Card.ColorChoice;
+import gameObjects.ColorChoice;
 /*
  * @author Ali Habbabeh
  */
