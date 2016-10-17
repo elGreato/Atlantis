@@ -50,7 +50,7 @@ public class DeckOfLandTiles {
 	}
 
 	public int getNumberOfLandTiles() {
-		return deckOfTiles.size(); 
+		return deckOfTiles.size();
 	}
 
 	public LandTile dealTile() {
