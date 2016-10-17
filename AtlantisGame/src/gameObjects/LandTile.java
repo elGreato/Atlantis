@@ -3,6 +3,7 @@ package gameObjects;
 import gameObjects.ColorChoice;
 
 public class LandTile extends Tile {
+	
 	private Pawn pawnOnTile;
 	private ColorChoice landTileColor;
 	private int landValue;

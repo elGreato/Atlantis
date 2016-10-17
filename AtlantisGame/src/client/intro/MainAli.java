@@ -39,7 +39,7 @@ public class MainAli extends Application {
 			p1.addCard(card);
 
 			card = deck.deal();
-			p2.addCard(card);
+			p2.addCard(card); 
 		}
 		
 	MainBoard gp = new MainBoard(70);
@@ -58,7 +58,8 @@ public class MainAli extends Application {
 		int kk=1;
 		for (int i=0; i< dland.getNumberOfLandTiles();i++){
 			
-			System.out.println("Treasure Nymber "+kk+" and id "+dland.getTileDetails(dland, i).getId()+" "+dland.getTileDetails(dland, i).getLandTileColor().toString()+" Value "+dland.getTileDetails(dland, i).getLandValue());
+			System.out.println("Treasure Nymber "+kk+" and id "+dland.getTileDetails(i).getTileId()
+					+" "+dland.getTileDetails(i).getLandTileColor().toString()+" Value "+ dland.getTileDetails(i).getLandValue());
 			kk++;
 		}
 	}
