@@ -1,19 +1,14 @@
 package gameObjects;
 
-import java.util.HashMap;
-import java.util.Map;
 
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
+import java.util.Iterator;
+
 import javafx.scene.layout.GridPane;
 // remember to check MVC slides for girdpane resizing
 public class MainBoard extends GridPane {
 	private final int numberOfTiles;
-	
+	int maxColIndex ;
+	int maxRowIndex;
 	/*
 	 * public Map<Integer, WaterTile> initialBoard = createBaseBoard();
 	 * 
@@ -23,9 +18,7 @@ public class MainBoard extends GridPane {
 	 */
 
 	public MainBoard(int numberOfTiles){
-		Image im = new Image(getClass().getResourceAsStream("images4Tiles/water.jpg")); 
-		this.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
-				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+		
 		
 		this.numberOfTiles=numberOfTiles;
 			//this is part of view for later
@@ -33,19 +26,62 @@ public class MainBoard extends GridPane {
 		this.setVgap(3);
 		
 		// distribute water tiles as a base board
-		for (int i = 0; i < Math.sqrt(numberOfTiles); i++) {
+		for (int i = 0; i < (Math.sqrt(numberOfTiles)*2); i++) {
 			for (int k=0; k<Math.sqrt(numberOfTiles); k++){
-			this.add(new WaterTile(i),i,k);
-
+			this.add(new WaterTile(i,i,k),i,k);
+			maxColIndex =(int) (Math.sqrt(numberOfTiles)*2);
+			maxRowIndex =(int) (Math.sqrt(numberOfTiles));
 			}
 		}
+		
+		// put the Pawns
+
+		
+		
 		// put the Atlantis Tile
-		this.add(new AtlantisTile(0), 0, 0,2,2);
+		this.add(new AtlantisTile(0,0,0), 0, 0,2,2);
 		
-		//put the mainland Tile
-		this.add(new MainLand(999), 7, 7,2,2); 
+		//put the mainland Tile, -1 is cuz we span on two 
+		this.add(new MainLand(999,7,7), maxColIndex-1, maxRowIndex-1,2,2); 
 		
 		
+		// put the landTiles
+		DeckOfLandTiles deckA = new DeckOfLandTiles();
+		DeckOfLandTiles deckB = new DeckOfLandTiles();
+		Iterator<LandTile> it = deckA.getDeckOfTiles().iterator();
+		Iterator<LandTile> it2 = deckB.getDeckOfTiles().iterator();
+		int co=2; int ro=1;
+		 
+		   
+		while (it.hasNext()){
+			LandTile tile = it.next();
+			this.add(tile, co, ro);
+			tile.setCol(co);
+			tile.setRow(ro);
+			co++;
+			it.remove();
+			if (co==maxColIndex+1) {
+				this.add(it.next(), maxColIndex, ro+1);
+				co=0;
+				ro+=2;
+				}
+			
+			
+		}
+
+		while(it2.hasNext()){
+			LandTile tile = it2.next();
+			this.add(tile, co, ro);
+			tile.setCol(co);
+			tile.setRow(ro);
+			co++;
+			it2.remove();
+			if (co==maxColIndex+1) {
+				this.add(it2.next(), maxColIndex, ro+1);
+				co=0;
+				ro+=2;
+				}
+		}
 		
 		
 	}

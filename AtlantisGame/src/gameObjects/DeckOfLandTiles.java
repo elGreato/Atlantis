@@ -25,7 +25,7 @@ public class DeckOfLandTiles {
 				for (int i = 1; i < 8; i++) {										
 				deckOfTiles.add(new LandTile(k, c, i));
 				k++;
-				System.out.println("k is "+ k);
+			
 			}
 		}
 		// the rules says that there are a value removed from each color 

@@ -12,10 +12,14 @@ import javafx.scene.layout.BackgroundSize;
 public class MainLand extends Tile{
 	
 	private int mainLandid;
-	private Map<Integer, Pawn> finalPawns ;
+	private int col;
+	private int row;
 	
-	public MainLand(int id){
-		super(id);
+	public MainLand(int id, int co, int ro){
+		super(id,co,ro);
+		mainLandid=id;
+		col=co;
+		row=ro;
 		
 		Image im = new Image(getClass().getResourceAsStream("images4Tiles/mainLand.jpg")); 
 		this.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,

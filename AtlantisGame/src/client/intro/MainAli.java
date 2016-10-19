@@ -9,6 +9,7 @@ import gameObjects.DeckOfCards;
 import gameObjects.DeckOfLandTiles;
 import gameObjects.LandTile;
 import gameObjects.MainBoard;
+import gameObjects.Pawn;
 import gameObjects.Player;
 import gameObjects.WaterTile;
 import javafx.application.Application;
@@ -30,36 +31,39 @@ public class MainAli extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Atlantis");
 
-		Player p1 = new Player("Ali");
+	//	Player p1 = new Player("Ali");
 		Player p2 = new Player("Kevin");
+		//Pawn pa1 = new Pawn(p1);
+		
 		DeckOfCards deck = new DeckOfCards();
 		deck.shuffle();
 		for (int i = 0; i < 5; i++) {
 			Card card = deck.deal();// this returns the card object
-			p1.addCard(card);
+		//	p1.addCard(card);
 
 			card = deck.deal();
 			p2.addCard(card); 
 		}
 		
-	MainBoard gp = new MainBoard(70);
-
+	MainBoard gp = new MainBoard(99);
+	
+	//System.out.println(pa1.getOwner().getPlayerName());
 		BorderPane root = new BorderPane();
 		BorderPane.setAlignment(gp, Pos.CENTER);
 		 root.setCenter(gp);
-		root.setTop(p1);
+	//	root.setTop(p1);
 		
 		root.setBottom(p2);
-		primaryStage.setScene(new Scene(root, 900, 950));
+		primaryStage.setScene(new Scene(root));
 		primaryStage.show();
-		System.out.println(p1.countVictoryPoints());
+		
 		DeckOfLandTiles dland= new DeckOfLandTiles();
-		System.out.println(dland.getNumberOfLandTiles());
+
 		int kk=1;
 		for (int i=0; i< dland.getNumberOfLandTiles();i++){
 			
 			System.out.println("Treasure Nymber "+kk+" and id "+dland.getTileDetails(i).getTileId()
-					+" "+dland.getTileDetails(i).getLandTileColor().toString()+" Value "+ dland.getTileDetails(i).getLandValue());
+					+" "+dland.getTileDetails(i).getColor().toString()+" Value "+ dland.getTileDetails(i).getLandValue());
 			kk++;
 		}
 	}

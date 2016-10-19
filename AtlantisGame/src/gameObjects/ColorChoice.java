@@ -2,8 +2,12 @@ package gameObjects;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
-public enum ColorChoice { blue,red,gray,yellow,green,purple,brown;
+/*
+ * I know this might look stupid to create a color clas while there exist a color class
+ * however, this will help us in creating the dick using limited values, 7 in this case. Moreover, 
+ * this allow us to replace normal colors with images of cooler colors
+ */
+public enum ColorChoice{ blue,red,gray,yellow,green,purple,brown;
 	 
 	public ImageView addImage(){
 	

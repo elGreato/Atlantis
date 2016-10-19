@@ -81,6 +81,7 @@ public class Player extends VBox{
 		this.getChildren().add(vpHolder);    
 		this.getChildren().add(lblPlayerImage);
 		this.getChildren().add(hboxCards);
+		
 	}	
 	
 	//this method is from the first semester as well
@@ -97,8 +98,8 @@ public class Player extends VBox{
 	    }	
 	 
 	 
-	 public Label getLblName() {
-			return lblName;
+	 public String getPlayerName() {
+			return lblName.getText();
 		}
 		public void setLblName(Label lblName) {
 			this.lblName = lblName;

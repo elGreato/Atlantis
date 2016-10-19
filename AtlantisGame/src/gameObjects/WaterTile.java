@@ -19,19 +19,24 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class WaterTile extends Tile {
-	Rectangle water = new Rectangle(75, 75);
+	Rectangle water = new Rectangle(65, 65);
 	int waterId;
+	int col;
+	int row;
 
-	public WaterTile(final int tileId) {
-		super(tileId);
+	public WaterTile( int tileId, int co, int ro) {
+		super(tileId,co,ro);
 		waterId=tileId;
-
+		col=co;
+		row=ro;
 		water.setFill(Color.TRANSPARENT);
 		water.setStroke(Color.BLACK);
 		
 		this.getChildren().add(water);
 
-	 
+		Image im = new Image(getClass().getResourceAsStream("images4Tiles/water.jpg")); 
+		this.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
+				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
 //	@Override
 	
