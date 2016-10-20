@@ -25,5 +25,6 @@ public class GameModel {
 	//Here messages from server arrive
 	public void processMessage(InGameMessage msgIn)
 	{
+		
 	}
 }

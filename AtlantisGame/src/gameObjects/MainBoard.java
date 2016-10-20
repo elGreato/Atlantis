@@ -45,14 +45,16 @@ public class MainBoard extends GridPane {
 		this.add(new MainLand(999,7,7), maxColIndex-1, maxRowIndex-1,2,2); 
 		
 		
-		// put the landTiles
+		// Distribute  the landTiles
 		DeckOfLandTiles deckA = new DeckOfLandTiles();
 		DeckOfLandTiles deckB = new DeckOfLandTiles();
 		Iterator<LandTile> it = deckA.getDeckOfTiles().iterator();
-		Iterator<LandTile> it2 = deckB.getDeckOfTiles().iterator();
+		
+		// we start with index 2 since the Atlantis booked the index 0 and span to four cells
 		int co=2; int ro=1;
-		 
-		   
+		//these two booleans are to add the extra tile between every other row 
+		   boolean reachedMaxIndex=false;
+		   boolean reachedFirstCol=false;
 		while (it.hasNext()){
 			LandTile tile = it.next();
 			this.add(tile, co, ro);
@@ -61,26 +63,36 @@ public class MainBoard extends GridPane {
 			co++;
 			it.remove();
 			if (co==maxColIndex+1) {
-				this.add(it.next(), maxColIndex, ro+1);
+				if (reachedMaxIndex==false){
+				this.add(it.next(), maxColIndex, ro+1);System.out.println("how many times");reachedMaxIndex=true;}
 				co=0;
 				ro+=2;
 				}
-			
+			if(co==0){
+				if (reachedFirstCol==false){
+					this.add(it.next(), 0, ro+1);System.out.println("yo yo"); reachedFirstCol=true;}
+			}
 			
 		}
-
-		while(it2.hasNext()){
-			LandTile tile = it2.next();
+		it=deckB.getDeckOfTiles().iterator();
+		while(it.hasNext()){
+			LandTile tile = it.next();
 			this.add(tile, co, ro);
 			tile.setCol(co);
 			tile.setRow(ro);
 			co++;
-			it2.remove();
+			it.remove();
 			if (co==maxColIndex+1) {
-				this.add(it2.next(), maxColIndex, ro+1);
+				while (reachedMaxIndex==true){
+					this.add(it.next(), maxColIndex, ro+1);System.out.println("how many "); reachedMaxIndex=false;}
 				co=0;
 				ro+=2;
 				}
+			if(co==0){
+				if (reachedFirstCol==true){
+					this.add(it.next(), 0, ro+1);System.out.println("yo yo"); reachedFirstCol=false;}
+			}
+		
 		}
 		
 		

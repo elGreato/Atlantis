@@ -6,7 +6,9 @@ package gameObjects;
 
 import gameObjects.ColorChoice;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 public class LandTile extends Tile {
 	
@@ -24,8 +26,33 @@ public class LandTile extends Tile {
 	rec = new Rectangle();
 	rec.setWidth(62.00f);
 	rec.setHeight(62.00f);
-	rec.setFill(Color.ORANGE);
+	rec.setFill(setTileColor(this));
+	
+	
+	Text txtValue = new Text();
+	txtValue.setText(String.valueOf(landValue)+"\n"+landTileColor.toString());
 	getChildren().add(rec);
+	getChildren().add(txtValue);
+	
+	}
+	private Paint setTileColor(LandTile landTile) {
+		
+			if (landTile.getColor().toString().equalsIgnoreCase("blue")) 
+				return (Color.BLUE);
+			else if (landTile.getColor().toString().equalsIgnoreCase("red")) 
+				return (Color.RED);
+			else if (landTile.getColor().toString().equalsIgnoreCase("gray")) 
+				return(Color.GRAY);
+			else if (landTile.getColor().toString().equalsIgnoreCase("yello")) 
+				return(Color.YELLOW);
+			else if (landTile.getColor().toString().equalsIgnoreCase("green")) 
+				return(Color.GREEN);
+			else if (landTile.getColor().toString().equalsIgnoreCase("purple")) 
+				return(Color.PURPLE);
+			else if (landTile.getColor().toString().equalsIgnoreCase("brown")) 
+				return(Color.BROWN);
+			return Color.ORANGE;
+
 	
 	}
 	public LandTile( int tileId,int co, int ro, ColorChoice color, int value) {

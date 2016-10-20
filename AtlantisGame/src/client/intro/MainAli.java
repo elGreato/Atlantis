@@ -45,7 +45,7 @@ public class MainAli extends Application {
 			p2.addCard(card); 
 		}
 		
-	MainBoard gp = new MainBoard(99);
+	MainBoard gp = new MainBoard(83);
 	
 	//System.out.println(pa1.getOwner().getPlayerName());
 		BorderPane root = new BorderPane();
