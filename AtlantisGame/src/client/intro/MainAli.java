@@ -54,8 +54,9 @@ public class MainAli extends Application {
 	//	root.setTop(p1);
 		
 		root.setBottom(p2);
-		primaryStage.setScene(new Scene(root));
+		primaryStage.setScene(new Scene(root,3840,2160));
 		primaryStage.show();
+		
 		
 		DeckOfLandTiles dland= new DeckOfLandTiles();
 
