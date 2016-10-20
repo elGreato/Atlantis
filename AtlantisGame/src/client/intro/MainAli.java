@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 
 import gameObjects.Card;
+import gameObjects.ColorChoice;
 import gameObjects.DeckOfCards;
 import gameObjects.DeckOfLandTiles;
 import gameObjects.LandTile;
@@ -33,7 +34,11 @@ public class MainAli extends Application {
 
 	//	Player p1 = new Player("Ali");
 		Player p2 = new Player("Kevin");
-		//Pawn pa1 = new Pawn(p1);
+		p2.setColor(ColorChoice.green);
+		Pawn pa1 = new Pawn(p2);
+		Pawn pa2 = new Pawn(p2);
+		Pawn pa3 = new Pawn(p2);
+		
 		
 		DeckOfCards deck = new DeckOfCards();
 		deck.shuffle();
@@ -46,7 +51,13 @@ public class MainAli extends Application {
 		}
 		
 	MainBoard gp = new MainBoard(83);
+	//for (int i=0; i<3;i++)
+	gp.add(pa1,0, 0);
+	pa1.setAlignment(Pos.BOTTOM_CENTER);
 	
+	gp.add(pa2, 0, 0);
+	gp.add(pa3, 0, 0);
+	pa3.setAlignment(Pos.TOP_CENTER);
 	//System.out.println(pa1.getOwner().getPlayerName());
 		BorderPane root = new BorderPane();
 		BorderPane.setAlignment(gp, Pos.CENTER);
