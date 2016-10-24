@@ -4,13 +4,15 @@ package gameObjects;
 
 
 
+import java.io.Serializable;
+
 import gameObjects.ColorChoice;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-public class LandTile extends Tile {
+public class LandTile extends Tile implements Serializable  {
 	
 	private Pawn pawnOnTile;
 	private ColorChoice landTileColor;

@@ -1,5 +1,7 @@
 package gameObjects;
 
+import java.io.Serializable;
+
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -18,7 +20,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class WaterTile extends Tile {
+public class WaterTile extends Tile implements Serializable  {
 	Rectangle water = new Rectangle(65, 65);
 	int waterId;
 	int col;

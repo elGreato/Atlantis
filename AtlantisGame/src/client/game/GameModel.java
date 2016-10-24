@@ -1,7 +1,9 @@
 package client.game;
 
 import client.lobby.LobbyModel;
+import javafx.scene.layout.GridPane;
 import messageObjects.InGameMessage;
+import messageObjects.ServerViewMessage;
 
 public class GameModel {
 	
@@ -33,6 +35,11 @@ public class GameModel {
 	//Here messages from server arrive
 	public void processMessage(InGameMessage msgIn)
 	{
-		
+		if (msgIn instanceof ServerViewMessage){
+			Object pg = msgIn;
+			GridPane gg = (GridPane) pg;
+			view.setRoot(gg);
+			System.out.println("process Message method");
+		}
 	}
 }

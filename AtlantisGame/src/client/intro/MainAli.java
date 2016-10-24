@@ -32,7 +32,7 @@ public class MainAli extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Atlantis");
 
-	//	Player p1 = new Player("Ali");
+
 		Player p2 = new Player("Kevin");
 		p2.setColor(ColorChoice.green);
 		Pawn pa1 = new Pawn(p2);
@@ -40,7 +40,7 @@ public class MainAli extends Application {
 		Pawn pa3 = new Pawn(p2);
 		
 		
-		DeckOfCards deck = new DeckOfCards();
+	/*	DeckOfCards deck = new DeckOfCards();
 		deck.shuffle();
 		for (int i = 0; i < 5; i++) {
 			Card card = deck.deal();// this returns the card object
@@ -48,11 +48,11 @@ public class MainAli extends Application {
 
 			card = deck.deal();
 			p2.addCard(card); 
-		}
+		}*/
 		
-	MainBoard gp = new MainBoard(120);
+	MainBoard root = new MainBoard(120);
 	//for (int i=0; i<3;i++)
-	gp.add(pa1,0, 0);
+	/*gp.add(pa1,0, 0);
 	pa1.setAlignment(Pos.BOTTOM_CENTER);
 	
 	gp.add(pa2, 0, 0);
@@ -64,7 +64,7 @@ public class MainAli extends Application {
 		 root.setCenter(gp);
 	//	root.setTop(p1);
 		
-		root.setBottom(p2);
+		root.setBottom(p2);*/
 		primaryStage.setScene(new Scene(root));
 		primaryStage.setFullScreen(false);
 		primaryStage.show();

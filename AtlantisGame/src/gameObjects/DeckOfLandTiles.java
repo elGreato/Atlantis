@@ -1,10 +1,11 @@
 package gameObjects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class DeckOfLandTiles {
+public class DeckOfLandTiles implements Serializable {
 
 	private ArrayList<LandTile> deckOfTiles = new ArrayList<>();
 	// i put K as class variable for it not to reset with the loop

@@ -1,8 +1,10 @@
 package gameObjects;
 
+import java.io.Serializable;
+
 import javafx.scene.layout.StackPane;
 
-public abstract class Tile extends StackPane {
+public abstract class Tile extends StackPane implements Serializable {
 	// protected to prevent mutation (create multiple instances of the same object )
 	//which i read that it's good for garbage collection
 	private  int tileId;
