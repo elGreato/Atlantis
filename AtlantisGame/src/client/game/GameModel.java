@@ -20,6 +20,14 @@ public class GameModel {
 		msgOut = lobbyModel;
 		this.view = gameView;
 		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 	
 	//Here messages from server arrive
