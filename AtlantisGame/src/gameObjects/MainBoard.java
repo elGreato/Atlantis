@@ -26,10 +26,10 @@ public class MainBoard extends GridPane {
 		this.setVgap(3);
 		
 		// distribute water tiles as a base board
-		for (int i = 0; i < (Math.sqrt(numberOfTiles)*2); i++) {
+		for (int i = 0; i < (Math.sqrt(numberOfTiles)*1.5); i++) {
 			for (int k=0; k<Math.sqrt(numberOfTiles); k++){
 			this.add(new WaterTile(i,i,k),i,k);
-			maxColIndex =(int) (Math.sqrt(numberOfTiles)*2);
+			maxColIndex =(int) (Math.sqrt(numberOfTiles)*1.5);
 			maxRowIndex =(int) (Math.sqrt(numberOfTiles));
 			}
 		}
@@ -42,7 +42,7 @@ public class MainBoard extends GridPane {
 		this.add(new AtlantisTile(0,0,0), 0, 0,2,2);
 		
 		//put the mainland Tile, -1 is cuz we span on two 
-		this.add(new MainLand(999,7,7), maxColIndex-1, maxRowIndex-1,2,2); 
+		this.add(new MainLand(999,7,7), maxColIndex-2, maxRowIndex-1,3,2); 
 		
 		
 		// Distribute  the landTiles

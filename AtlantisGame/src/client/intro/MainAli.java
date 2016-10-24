@@ -50,7 +50,7 @@ public class MainAli extends Application {
 			p2.addCard(card); 
 		}
 		
-	MainBoard gp = new MainBoard(83);
+	MainBoard gp = new MainBoard(120);
 	//for (int i=0; i<3;i++)
 	gp.add(pa1,0, 0);
 	pa1.setAlignment(Pos.BOTTOM_CENTER);
@@ -66,7 +66,7 @@ public class MainAli extends Application {
 		
 		root.setBottom(p2);
 		primaryStage.setScene(new Scene(root));
-		primaryStage.setFullScreen(true);
+		primaryStage.setFullScreen(false);
 		primaryStage.show();
 		
 		
