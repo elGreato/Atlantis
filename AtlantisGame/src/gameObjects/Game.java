@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import messageObjects.InGameMessage;
 import messageObjects.ServerViewMessage;
+import messageObjects.WaterTileMessage;
 import server.backend.Lobby;
 import server.backend.User;
 
@@ -59,11 +60,12 @@ public class Game {
 		{
 			u.initiateGameStart(this);
 		}
-		// send the same view/board to all the players
+		// send waterTiles to all the players
 		int numberOfPlayers= getNumOfRegisteredPlayers();
-		ServerViewMessage view= new ServerViewMessage(this.getName());
+		// create object to carry 3 int for water proberties 
+		ArrayList<WaterTileMessage> watertiles= new ArrayList<>();
 		for (int i=0; i<numberOfPlayers; i++){
-		users.get(i).sendMessage(view);
+		users.get(i).sendMessage(watertiles);
 	
 		}
 		

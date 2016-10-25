@@ -50,7 +50,7 @@ public class MainAli extends Application {
 			p2.addCard(card); 
 		}*/
 		
-	MainBoard root = new MainBoard(120);
+	MainBoard root = new MainBoard();
 	//for (int i=0; i<3;i++)
 	/*gp.add(pa1,0, 0);
 	pa1.setAlignment(Pos.BOTTOM_CENTER);

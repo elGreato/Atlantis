@@ -1,5 +1,7 @@
 package gameObjects;
 
+import java.io.Serializable;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 /*
@@ -7,7 +9,7 @@ import javafx.scene.image.ImageView;
  * however, this will help us in creating the dick using limited values, 7 in this case. Moreover, 
  * this allow us to replace normal colors with images of cooler colors
  */
-public enum ColorChoice{ blue,red,gray,yellow,green,purple,brown;
+public enum ColorChoice implements Serializable{ blue,red,gray,yellow,green,purple,brown;
 	 
 	public ImageView addImage(){
 	

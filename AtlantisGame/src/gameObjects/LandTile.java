@@ -12,14 +12,14 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-public class LandTile extends Tile implements Serializable  {
+public class LandTile extends Tile  {
 	
 	private Pawn pawnOnTile;
 	private ColorChoice landTileColor;
 	private int landValue;
 	private int col;
 	private int row;
-	private Rectangle rec;
+	private transient Rectangle rec;
 	
 	public LandTile(int tileId,ColorChoice color, int value ){
 		super(tileId);

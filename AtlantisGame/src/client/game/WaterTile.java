@@ -1,10 +1,9 @@
-package gameObjects;
+package client.game;
 
 import java.io.Serializable;
 
 import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
+
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -12,11 +11,6 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -55,7 +49,28 @@ public class WaterTile extends Tile  {
 	public int getWaterId() {
 		return waterId;
 	}
+	public void setWaterId(int id){
+		waterId=id;
+	}
 	
+	public Rectangle getWater() {
+		return water;
+	}
+	public void setWater(Rectangle water) {
+		this.water = water;
+	}
+	public int getCol() {
+		return col;
+	}
+	public void setCol(int col) {
+		this.col = col;
+	}
+	public int getRow() {
+		return row;
+	}
+	public void setRow(int row) {
+		this.row = row;
+	}
 	//}
 	public boolean hasPawn() {
 		return false;

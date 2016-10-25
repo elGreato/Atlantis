@@ -7,7 +7,7 @@ import java.util.Iterator;
 import javafx.scene.layout.GridPane;
 // remember to check MVC slides for girdpane resizing
 public class MainBoard extends GridPane implements Serializable{
-	private final int numberOfTiles;
+	private final int numberOfTiles=120;
 	int maxColIndex ;
 	int maxRowIndex;
 	DeckOfLandTiles deckA;
@@ -16,10 +16,8 @@ public class MainBoard extends GridPane implements Serializable{
 	
 	
 
-	public MainBoard(int numberOfTiles){
+	public MainBoard(){
 		
-		
-		this.numberOfTiles=numberOfTiles;
 			//this is part of view for later
 		this.setHgap(3);
 		this.setVgap(3);
@@ -28,11 +26,12 @@ public class MainBoard extends GridPane implements Serializable{
 		for (int i = 0; i < (Math.sqrt(numberOfTiles)*1.5); i++) {
 			for (int k=0; k<Math.sqrt(numberOfTiles); k++){
 			this.add(new WaterTile(i,i,k),i,k);
-			maxColIndex =(int) (Math.sqrt(numberOfTiles)*1.5);
-			maxRowIndex =(int) (Math.sqrt(numberOfTiles));
+			
 			}
+			
 		}
-		
+		maxColIndex =(int) (Math.sqrt(numberOfTiles)*1.5);
+		maxRowIndex =(int) (Math.sqrt(numberOfTiles));
 		// put the Pawns
 
 		
