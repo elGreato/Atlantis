@@ -2,6 +2,7 @@ package gameObjects;
 
 import java.io.Serializable;
 
+
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -21,7 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class WaterTile extends Tile  {
-	Rectangle water = new Rectangle(65, 65);
+	transient Rectangle  water = new Rectangle(65, 65);
 	int waterId;
 	int col;
 	int row;
@@ -36,7 +37,7 @@ public class WaterTile extends Tile  {
 		
 		this.getChildren().add(water);
 
-		Image im = new Image(getClass().getResourceAsStream("images4Tiles/water.jpg")); 
+		final Image im = new Image(getClass().getResourceAsStream("images4Tiles/water.jpg")); 
 		this.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
 				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 

@@ -1,6 +1,6 @@
 package client.game;
 
-import java.io.Serializable;
+
 
 import javafx.event.EventHandler;
 
@@ -14,13 +14,13 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class WaterTile extends Tile  {
+public class WaterTileClient extends Tile  {
 	Rectangle water = new Rectangle(65, 65);
 	int waterId;
 	int col;
 	int row;
 
-	public WaterTile( int tileId, int co, int ro) {
+	public WaterTileClient( int tileId, int co, int ro) {
 		super(tileId,co,ro);
 		waterId=tileId;
 		col=co;
@@ -34,7 +34,7 @@ public class WaterTile extends Tile  {
 		this.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
 				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
-//	@Override
+
 	
 //	public void dosmthin() {
 		this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {

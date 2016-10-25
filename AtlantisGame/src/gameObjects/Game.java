@@ -3,7 +3,7 @@ package gameObjects;
 import java.util.ArrayList;
 
 import messageObjects.InGameMessage;
-import messageObjects.ServerViewMessage;
+
 import messageObjects.WaterTileMessage;
 import server.backend.Lobby;
 import server.backend.User;
@@ -17,6 +17,13 @@ public class Game {
 	private int maxPlayers;
 	//Invoke lobby.addWin, lobby.addLoss & lobby.addTie methods on users at the end of the game
 	private Lobby lobby;
+	// waterTiles number
+	private final int numberOfWaterTiles=120;
+	
+	
+	
+	
+	
 	//Constructor (doesn't start game)
 	public Game(String name, String password, int maxPlayers, User creator, Lobby lobby) {
 		
@@ -62,13 +69,13 @@ public class Game {
 		}
 		// send waterTiles to all the players 
 		int numberOfPlayers= getNumOfRegisteredPlayers();
-		// create object to carry 3 int for water proberties 
-		ArrayList<WaterTileMessage> watertiles= new ArrayList<>();
-		for (int i=0; i<numberOfPlayers; i++){
-		users.get(i).sendMessage(watertiles);
+		
+		
+		/*for (int i=0; i<numberOfPlayers; i++){
+		users.get(i).sendMessage(new WaterTileMessage(getName()));
 	
 		}
-		
+		*/
 		
 	}
 	

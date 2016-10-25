@@ -3,7 +3,7 @@ package client.game;
 import client.lobby.LobbyModel;
 import javafx.scene.layout.GridPane;
 import messageObjects.InGameMessage;
-import messageObjects.ServerViewMessage;
+
 import messageObjects.WaterTileMessage;
 
 public class GameModel {
@@ -36,10 +36,10 @@ public class GameModel {
 	//Here messages from server arrive
 	public void processMessage(InGameMessage msgIn)
 	{
-		if (msgIn instanceof WaterTileMessage){
+		/*if (msgIn instanceof WaterTileMessage){
 			
-			view.setWater();
+			view.setWater((WaterTileMessage)msgIn);
 			System.out.println("process Message method");
-		}
+		}*/
 	}
 }
