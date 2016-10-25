@@ -1,6 +1,10 @@
 package client.game;
 
+
+import gameObjects.AtlantisTile;
+import gameObjects.DeckOfLandTiles;
 import gameObjects.MainLand;
+import gameObjects.WaterTile;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -12,8 +16,8 @@ public class GameView {
 	private final int numberOfTiles=120;
 	int maxColIndex ;
 	int maxRowIndex;
-	DeckOfLandTilesClient deckA;
-	DeckOfLandTilesClient deckB; 
+	DeckOfLandTiles deckA;
+	DeckOfLandTiles deckB; 
 	
 	public GameView()
 	{
@@ -21,7 +25,7 @@ public class GameView {
 		// distribute water tiles as a base board
 		for (int i = 0; i < (Math.sqrt(numberOfTiles)*1.5); i++) {
 			for (int k=0; k<Math.sqrt(numberOfTiles); k++){
-			root.add(new WaterTileClient(i,i,k),i,k);
+			root.add(new WaterTile(i,i,k),i,k);
 			
 			}
 			
@@ -33,7 +37,7 @@ public class GameView {
 		root.add(new MainLand(999,7,7), maxColIndex-2, maxRowIndex-1,3,2); 
 		
 		//the Atlantis
-		root.add(new AtlantisTileClient(0,0,0), 0,0,2,2); 
+		root.add(new AtlantisTile(0,0,0), 0,0,2,2); 
 		
 		
 		
