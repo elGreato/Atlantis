@@ -60,7 +60,7 @@ public class Game {
 		{
 			u.initiateGameStart(this);
 		}
-		// send waterTiles to all the players
+		// send waterTiles to all the players 
 		int numberOfPlayers= getNumOfRegisteredPlayers();
 		// create object to carry 3 int for water proberties 
 		ArrayList<WaterTileMessage> watertiles= new ArrayList<>();
