@@ -7,13 +7,13 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 
-public class Pawn extends StackPane {
+public class PawnClient extends StackPane {
 	private ColorChoice pawnColor;
 	private int location;
-	private Player owner;
+	private PlayerClient owner;
 	Circle cir ;
 	
-	public Pawn(Player player){
+	public PawnClient(PlayerClient player){
 		super();
 		owner=player;
 		pawnColor=player.getColor();
@@ -26,7 +26,7 @@ public class Pawn extends StackPane {
 		
 	}
 
-	private Color setPawnColor(Player c ) {
+	private Color setPawnColor(PlayerClient c ) {
 		if (c.getColor().toString().equalsIgnoreCase("blue")) 
 			return (Color.BLUE);
 		else if (c.getColor().toString().equalsIgnoreCase("red")) 
@@ -53,7 +53,7 @@ public class Pawn extends StackPane {
 
 	
 
-	public Player getOwner() {
+	public PlayerClient getOwner() {
 		return owner;
 	}
 

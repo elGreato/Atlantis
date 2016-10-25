@@ -4,22 +4,22 @@ import java.io.Serializable;
 
 import javafx.scene.layout.StackPane;
 
-public abstract class Tile extends StackPane implements Serializable {
+public abstract class TileClient extends StackPane implements Serializable {
 	// protected to prevent mutation (create multiple instances of the same object )
 	//which i read that it's good for garbage collection
 	private  int tileId;
 	private int col;
 	private int row;
-	private Pawn pawn;
+	private PawnClient pawn;
 	
 	//constructor
-	public Tile(int tileId){
+	public TileClient(int tileId){
 		super();
 		this.tileId=tileId;
 		
 	}
 	// another constructor with locatin 
-	public Tile(int tileId, int col, int row){
+	public TileClient(int tileId, int col, int row){
 		super();
 		this.tileId=tileId;
 		this.col=col;
@@ -37,11 +37,11 @@ public abstract class Tile extends StackPane implements Serializable {
 		return pawn !=null;
 	}
 	
-	public Pawn getPawn(){
+	public PawnClient getPawn(){
 		return pawn;
 	}
 	
-	public void setPawn(Pawn pawn){
+	public void setPawn(PawnClient pawn){
 		this.pawn=pawn;
 	}
 	public int getCol() {

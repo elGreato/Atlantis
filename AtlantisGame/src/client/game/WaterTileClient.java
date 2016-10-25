@@ -14,7 +14,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class WaterTileClient extends Tile  {
+public class WaterTileClient extends TileClient  {
 	Rectangle water = new Rectangle(65, 65);
 	int waterId;
 	int col;
