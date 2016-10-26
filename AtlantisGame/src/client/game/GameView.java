@@ -50,7 +50,7 @@ public class GameView {
 		stage.show();
 	}
 
-	public void distributeLandTiles(ArrayList<LandTile> deckA) {
+	public void distributeLandTiles(ArrayList<LandTile> deckA,ArrayList<LandTile> deckB) {
 		Iterator<LandTile> it = deckA.iterator();
 		// we start with index 2 since the Atlantis booked the index 0 and span
 		// to four cells
@@ -71,8 +71,11 @@ public class GameView {
 			it.remove();
 			if (co == maxColIndex + 1) {
 				if (reachedMaxIndex == false) {
-					root.add(it.next(), maxColIndex, ro + 1);
-					System.out.println("how many times");
+					LandTile temp2= it.next();
+					LandTile temp3=new LandTile(temp2.getTileId(),temp2.getColor(),temp2.getLandValue());
+					root.add(temp3, maxColIndex, ro + 1);
+					temp3.setCol(maxColIndex);
+					temp3.setRow(ro);
 					reachedMaxIndex = true;
 				}
 				co = 0;
@@ -80,13 +83,53 @@ public class GameView {
 			}
 			if (co == 0) {
 				if (reachedFirstCol == false) {
-					root.add(it.next(), 0, ro + 1);
-					System.out.println("yo yo");
+					LandTile temp2= it.next();
+					LandTile temp3=new LandTile(temp2.getTileId(),temp2.getColor(),temp2.getLandValue());
+					root.add(temp3, 0, ro + 1);
+					temp3.setCol(0);
+					temp3.setRow(ro);
 					reachedFirstCol = true;
 				}
 			}
 
 		}
+		 it = deckB.iterator();
+		while (it.hasNext()) {
+			LandTile temp = it.next();
+			LandTile tile =new LandTile(temp.getTileId(),temp.getColor(),temp.getLandValue());
+			
+			root.add(tile, co, ro);
+			tile.setCol(co);
+			tile.setRow(ro);
+			tile.setTxtValue(new Text(String.valueOf(tile.getLandValue())));
+			co++;
+			it.remove();
+			if (co == maxColIndex + 1) {
+				if (reachedMaxIndex == true) {
+					LandTile temp2= it.next();
+					LandTile temp3=new LandTile(temp2.getTileId(),temp2.getColor(),temp2.getLandValue());
+					
+					root.add(temp3, maxColIndex, ro + 1);
+					temp3.setCol(maxColIndex);
+					temp3.setRow(ro);
+					reachedMaxIndex = false;
+				}
+				co = 0;
+				ro += 2;
+			}
+			if (co == 0) {
+				if (reachedFirstCol == true) {
+					LandTile temp2= it.next();
+					LandTile temp3=new LandTile(temp2.getTileId(),temp2.getColor(),temp2.getLandValue());
+					root.add(temp3, 0, ro + 1);
+					temp3.setCol(0);
+					temp3.setRow(ro);
+					reachedFirstCol = false;
+				}
+			}
+
+		}
+		
 
 		
 	}

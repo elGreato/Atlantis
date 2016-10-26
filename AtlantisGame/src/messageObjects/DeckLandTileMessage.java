@@ -11,20 +11,26 @@ import gameObjects.LandTile;
 
 public class DeckLandTileMessage extends InGameMessage implements Serializable {
 	String gameName;
-	ArrayList<LandTile> array;
-	public DeckLandTileMessage(String gameName, ArrayList<LandTile> array) {
+	ArrayList<LandTile> arrayA;
+	ArrayList<LandTile> arrayB;
+	public DeckLandTileMessage(String gameName, ArrayList<LandTile> arrayA, ArrayList<LandTile> arrayB) {
 		super(gameName);
 		this.gameName = gameName;
-		this.array=array;
-
+		this.arrayA=arrayA;
+		this.arrayB=arrayB;
 	}
-	public ArrayList<LandTile> getArray() {
-		return array;
+	public ArrayList<LandTile> getArrayA() {
+		return arrayA;
 	}
-	public void setArray(ArrayList<LandTile> array) {
-		this.array = array;
+	public void setArrayA(ArrayList<LandTile> arrayA) {
+		this.arrayA = arrayA;
 	}
-
+	public ArrayList<LandTile> getArrayB() {
+		return arrayB;
+	}
+	public void setArrayB(ArrayList<LandTile> arrayB) {
+		this.arrayB= arrayB;
+	}
 	
 	
 	

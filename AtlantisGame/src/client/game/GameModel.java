@@ -47,7 +47,7 @@ public class GameModel {
 		if(msgIn instanceof DeckLandTileMessage){
 			System.out.println("DeckLandTileMessage RECEIVED!!!");
 			
-			view.distributeLandTiles(((DeckLandTileMessage)msgIn).getArray());
+			view.distributeLandTiles(((DeckLandTileMessage)msgIn).getArrayA(),((DeckLandTileMessage)msgIn).getArrayB() );
 			
 		}
 		

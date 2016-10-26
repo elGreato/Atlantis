@@ -72,9 +72,10 @@ public class Game {
 		int numberOfPlayers= getNumOfRegisteredPlayers();
 		
 		DeckOfLandTiles deckA= new DeckOfLandTiles();
+		DeckOfLandTiles deckB= new DeckOfLandTiles();
 		for (int i=0; i<numberOfPlayers; i++){
-		users.get(i).sendMessage(new DeckLandTileMessage(getName(), deckA.getDeckOfTiles()));
-	
+		users.get(i).sendMessage(new DeckLandTileMessage(getName(), deckA.getDeckOfTiles(),deckB.getDeckOfTiles()));
+		
 		}
 		
 		
