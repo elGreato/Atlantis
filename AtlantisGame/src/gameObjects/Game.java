@@ -71,9 +71,9 @@ public class Game {
 		// send waterTiles to all the players 
 		int numberOfPlayers= getNumOfRegisteredPlayers();
 		
-		
+		DeckOfLandTiles deckA= new DeckOfLandTiles();
 		for (int i=0; i<numberOfPlayers; i++){
-		users.get(i).sendMessage(new DeckLandTileMessage(getName()));
+		users.get(i).sendMessage(new DeckLandTileMessage(getName(), deckA.getDeckOfTiles()));
 	
 		}
 		

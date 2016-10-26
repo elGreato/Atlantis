@@ -1,5 +1,6 @@
 package client.game;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import gameObjects.AtlantisTile;
@@ -9,6 +10,7 @@ import gameObjects.MainLand;
 import gameObjects.WaterTile;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GameView {
@@ -48,8 +50,8 @@ public class GameView {
 		stage.show();
 	}
 
-	public void distributeLandTiles(DeckOfLandTiles deckA) {
-		Iterator<LandTile> it = deckA.getDeckOfTiles().iterator();
+	public void distributeLandTiles(ArrayList<LandTile> deckA) {
+		Iterator<LandTile> it = deckA.iterator();
 		// we start with index 2 since the Atlantis booked the index 0 and span
 		// to four cells
 		int co = 2;
@@ -58,10 +60,13 @@ public class GameView {
 		boolean reachedMaxIndex = false;
 		boolean reachedFirstCol = false;
 		while (it.hasNext()) {
-			LandTile tile = it.next();
+			LandTile temp = it.next();
+			LandTile tile =new LandTile(temp.getTileId(),temp.getColor(),temp.getLandValue());
+			
 			root.add(tile, co, ro);
 			tile.setCol(co);
 			tile.setRow(ro);
+			tile.setTxtValue(new Text(String.valueOf(tile.getLandValue())));
 			co++;
 			it.remove();
 			if (co == maxColIndex + 1) {

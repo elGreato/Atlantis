@@ -46,9 +46,8 @@ public class GameModel {
 		
 		if(msgIn instanceof DeckLandTileMessage){
 			System.out.println("DeckLandTileMessage RECEIVED!!!");
-			DeckOfLandTiles deckA = new DeckOfLandTiles();
-			((DeckLandTileMessage) msgIn).shuffleTiles(deckA);
-			view.distributeLandTiles(deckA);
+			
+			view.distributeLandTiles(((DeckLandTileMessage)msgIn).getArray());
 			
 		}
 		

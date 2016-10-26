@@ -31,7 +31,9 @@ public abstract class Tile extends StackPane implements Serializable {
 		return tileId;
 	}
 
-
+	public void setTileId(int id){
+		tileId=id;
+	}
 
 	public boolean hasPawn(){
 		return pawn !=null;

@@ -15,11 +15,12 @@ import javafx.scene.text.Text;
 public class LandTile extends Tile  {
 	
 	private Pawn pawnOnTile;
-	private ColorChoice landTileColor;
+	private  ColorChoice landTileColor;
 	private int landValue;
 	private int col;
 	private int row;
 	private transient Rectangle rec;
+	private transient Text txtValue;
 	
 	public LandTile(int tileId,ColorChoice color, int value ){
 		super(tileId);
@@ -31,11 +32,17 @@ public class LandTile extends Tile  {
 	rec.setFill(setTileColor(this));
 	
 	
-	Text txtValue = new Text();
+	 txtValue = new Text();
 	txtValue.setText(String.valueOf(landValue)+"\n"+landTileColor.toString());
 	getChildren().add(rec);
 	getChildren().add(txtValue);
 	
+	}
+	public Text getTxtValue() {
+		return txtValue;
+	}
+	public void setTxtValue(Text txtValue) {
+		this.txtValue = txtValue;
 	}
 	private Paint setTileColor(LandTile landTile) {
 		
