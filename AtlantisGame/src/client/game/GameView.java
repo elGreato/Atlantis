@@ -7,26 +7,30 @@ import gameObjects.AtlantisTile;
 import gameObjects.DeckOfLandTiles;
 import gameObjects.LandTile;
 import gameObjects.MainLand;
+import gameObjects.Player;
 import gameObjects.WaterTile;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import messageObjects.PlayerMessage;
 
 public class GameView {
-	GridPane root = new GridPane();
+	BorderPane root = new BorderPane();
+	GridPane mainBoard = new GridPane();
 	Scene scene;
 	Stage stage;
 	private final int numberOfTiles = 120;
 	int maxColIndex;
 	int maxRowIndex;
-	
-	public GameView() {
 
+	public GameView() {
+		root.setCenter(mainBoard);
 		// distribute water tiles as a base board
 		for (int i = 0; i < (Math.sqrt(numberOfTiles) * 1.5); i++) {
 			for (int k = 0; k < Math.sqrt(numberOfTiles); k++) {
-				root.add(new WaterTile(i, i, k), i, k);
+				mainBoard.add(new WaterTile(i, i, k), i, k);
 
 			}
 
@@ -35,22 +39,22 @@ public class GameView {
 		maxColIndex = (int) (Math.sqrt(numberOfTiles) * 1.5);
 		maxRowIndex = (int) (Math.sqrt(numberOfTiles));
 		// Mainland
-		root.add(new MainLand(999, 7, 7), maxColIndex - 2, maxRowIndex - 1, 3, 2);
+		mainBoard.add(new MainLand(999, 7, 7), maxColIndex - 2, maxRowIndex - 1, 3, 2);
 
 		// the Atlantis
-		root.add(new AtlantisTile(0, 0, 0), 0, 0, 2, 2);
+		mainBoard.add(new AtlantisTile(0, 0, 0), 0, 0, 2, 2);
 
 		// add the landTiles
-	
+
 		stage = new Stage();
-		root.setVgap(3);
-		root.setHgap(3);
+		mainBoard.setVgap(3);
+		mainBoard.setHgap(3);
 		scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
 	}
 
-	public void distributeLandTiles(ArrayList<LandTile> deckA,ArrayList<LandTile> deckB) {
+	public void distributeLandTiles(ArrayList<LandTile> deckA, ArrayList<LandTile> deckB) {
 		Iterator<LandTile> it = deckA.iterator();
 		// we start with index 2 since the Atlantis booked the index 0 and span
 		// to four cells
@@ -61,9 +65,9 @@ public class GameView {
 		boolean reachedFirstCol = false;
 		while (it.hasNext()) {
 			LandTile temp = it.next();
-			LandTile tile =new LandTile(temp.getTileId(),temp.getColor(),temp.getLandValue());
-			
-			root.add(tile, co, ro);
+			LandTile tile = new LandTile(temp.getTileId(), temp.getColor(), temp.getLandValue());
+
+			mainBoard.add(tile, co, ro);
 			tile.setCol(co);
 			tile.setRow(ro);
 			tile.setTxtValue(new Text(String.valueOf(tile.getLandValue())));
@@ -71,9 +75,9 @@ public class GameView {
 			it.remove();
 			if (co == maxColIndex + 1) {
 				if (reachedMaxIndex == false) {
-					LandTile temp2= it.next();
-					LandTile temp3=new LandTile(temp2.getTileId(),temp2.getColor(),temp2.getLandValue());
-					root.add(temp3, maxColIndex, ro + 1);
+					LandTile temp2 = it.next();
+					LandTile temp3 = new LandTile(temp2.getTileId(), temp2.getColor(), temp2.getLandValue());
+					mainBoard.add(temp3, maxColIndex, ro + 1);
 					temp3.setCol(maxColIndex);
 					temp3.setRow(ro);
 					reachedMaxIndex = true;
@@ -83,9 +87,9 @@ public class GameView {
 			}
 			if (co == 0) {
 				if (reachedFirstCol == false) {
-					LandTile temp2= it.next();
-					LandTile temp3=new LandTile(temp2.getTileId(),temp2.getColor(),temp2.getLandValue());
-					root.add(temp3, 0, ro + 1);
+					LandTile temp2 = it.next();
+					LandTile temp3 = new LandTile(temp2.getTileId(), temp2.getColor(), temp2.getLandValue());
+					mainBoard.add(temp3, 0, ro + 1);
 					temp3.setCol(0);
 					temp3.setRow(ro);
 					reachedFirstCol = true;
@@ -93,12 +97,12 @@ public class GameView {
 			}
 
 		}
-		 it = deckB.iterator();
+		it = deckB.iterator();
 		while (it.hasNext()) {
 			LandTile temp = it.next();
-			LandTile tile =new LandTile(temp.getTileId(),temp.getColor(),temp.getLandValue());
-			
-			root.add(tile, co, ro);
+			LandTile tile = new LandTile(temp.getTileId(), temp.getColor(), temp.getLandValue());
+
+			mainBoard.add(tile, co, ro);
 			tile.setCol(co);
 			tile.setRow(ro);
 			tile.setTxtValue(new Text(String.valueOf(tile.getLandValue())));
@@ -106,10 +110,10 @@ public class GameView {
 			it.remove();
 			if (co == maxColIndex + 1) {
 				if (reachedMaxIndex == true) {
-					LandTile temp2= it.next();
-					LandTile temp3=new LandTile(temp2.getTileId(),temp2.getColor(),temp2.getLandValue());
-					
-					root.add(temp3, maxColIndex, ro + 1);
+					LandTile temp2 = it.next();
+					LandTile temp3 = new LandTile(temp2.getTileId(), temp2.getColor(), temp2.getLandValue());
+
+					mainBoard.add(temp3, maxColIndex, ro + 1);
 					temp3.setCol(maxColIndex);
 					temp3.setRow(ro);
 					reachedMaxIndex = false;
@@ -119,9 +123,9 @@ public class GameView {
 			}
 			if (co == 0) {
 				if (reachedFirstCol == true) {
-					LandTile temp2= it.next();
-					LandTile temp3=new LandTile(temp2.getTileId(),temp2.getColor(),temp2.getLandValue());
-					root.add(temp3, 0, ro + 1);
+					LandTile temp2 = it.next();
+					LandTile temp3 = new LandTile(temp2.getTileId(), temp2.getColor(), temp2.getLandValue());
+					mainBoard.add(temp3, 0, ro + 1);
 					temp3.setCol(0);
 					temp3.setRow(ro);
 					reachedFirstCol = false;
@@ -129,8 +133,12 @@ public class GameView {
 			}
 
 		}
-		
 
+	}
+
+	public void showPlayer(PlayerMessage msgIn) {
+		Player player = new Player(msgIn.getPlayer().getPlayerName());
+		root.setBottom(player);
 		
 	}
 

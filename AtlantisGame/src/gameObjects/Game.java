@@ -1,10 +1,10 @@
 package gameObjects;
-
+// This class is part of the Gamer Server, should be moved from this package
 import java.util.ArrayList;
 
 import messageObjects.DeckLandTileMessage;
 import messageObjects.InGameMessage;
-
+import messageObjects.PlayerMessage;
 import messageObjects.WaterTileMessage;
 import server.backend.Lobby;
 import server.backend.User;
@@ -77,6 +77,12 @@ public class Game {
 		users.get(i).sendMessage(new DeckLandTileMessage(getName(), deckA.getDeckOfTiles(),deckB.getDeckOfTiles()));
 		
 		}
+		// send hbox Player for each player
+		for(int i=0; i<numberOfPlayers; i++){
+		users.get(i).sendMessage(new PlayerMessage(getName(), new Player(users.get(i).getUserInfo().getUsername())));
+		
+		}
+		
 		
 		
 	}

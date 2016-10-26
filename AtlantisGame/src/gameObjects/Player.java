@@ -15,19 +15,19 @@ import javafx.scene.layout.VBox;
 
 
 public class Player extends VBox{
-	private Label lblName= new Label();
+	private transient Label lblName= new Label();
 	
 	private int victoryPoints;
 	
-	private Label vpHolder =  new Label();  //label to hold int value
+	private transient Label vpHolder =  new Label();  //label to hold int value
 	
-	private Label lblPlayerImage= new Label();
+	private transient Label lblPlayerImage= new Label();
 	
-	private HBox hboxCards= new HBox();
+	private transient HBox hboxCards= new HBox();
 	
-	private PlayerHand playerHand;
+	private  PlayerHand playerHand;
 	
-	private int numberOfCards=5;
+	private int numberOfMaxCards=10;
 	
 	private Pawn pawn;
 	
@@ -42,7 +42,7 @@ public class Player extends VBox{
 		playerHand = new PlayerHand(name);
 		
 		// empty Labels for cards
-		for (int i=0; i<numberOfCards; i++){
+		for (int i=0; i<numberOfMaxCards; i++){
 		Label lblCard = new Label(" ");
 		// set class ID for css later
 		lblCard.getStylesheets().add("card");	
@@ -52,7 +52,7 @@ public class Player extends VBox{
 		//set the name
 		lblName.setText(name);
 		
-		//set the picture
+	/*	//set the picture
 		int numberOfPicturesAvailable=4;
 		String[] paths= new String[numberOfPicturesAvailable]; 
 		paths[0]="images4players/player1.png";
@@ -62,7 +62,7 @@ public class Player extends VBox{
 		Random r= new Random();
 		int index =  (r.nextInt(paths.length));
 		Image image = new Image(getClass().getResourceAsStream(paths[index]));
-		lblPlayerImage.setGraphic(new ImageView(image));
+		lblPlayerImage.setGraphic(new ImageView(image));*/
 
 		
 		//set CSS ID for player
@@ -112,11 +112,7 @@ public class Player extends VBox{
 			int result=0;
 			result+=this.playerHand.getCards().size();
 			result+= this.playerHand.getTreasuresValue(this.playerHand.getTreasures());
-			
-			
 			return result;
-			
-			
 		}
 		public Label getVpHolder() {
 			return vpHolder;
@@ -136,11 +132,11 @@ public class Player extends VBox{
 		public void setPlayerHand(PlayerHand playerHand) {
 			this.playerHand = playerHand;
 		}
-		public int getNumberOfCards() {
-			return numberOfCards;
+		public int getNumberOfMAxCards() {
+			return numberOfMaxCards;
 		}
-		public void setNumberOfCards(int numberOfCards) {
-			this.numberOfCards = numberOfCards;
+		public void setNumberOfMaxCards(int numberOfCards) {
+			this.numberOfMaxCards = numberOfCards;
 		}
 		public Pawn getPawn() {
 			return pawn;

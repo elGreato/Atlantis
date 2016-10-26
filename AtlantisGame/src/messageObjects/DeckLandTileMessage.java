@@ -30,29 +30,6 @@ public class DeckLandTileMessage extends InGameMessage implements Serializable {
 	}
 	public void setArrayB(ArrayList<LandTile> arrayB) {
 		this.arrayB= arrayB;
-	}
-	
-	
-	
-	
-	
-	
-//	private class DeckLandTileProperties {
+	}	
 
-//		public DeckLandTileProperties(){
-			
-//		}
-/*		public ArrayList<LandTile> shuffleTiles (DeckOfLandTiles d){
-			Random r = new Random();
-			for (int i=0; i<7;i++){
-				int f=	r.nextInt(6);
-				d.getDeckOfTiles().remove(i+6*f);	
-			}
-			 Collections.shuffle(d.getDeckOfTiles());
-			
-			System.out.println("WE SHUFFULED!!!");
-			return d.getDeckOfTiles();
-			
-		}*/
-//	}
 }

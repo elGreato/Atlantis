@@ -11,7 +11,7 @@ public class Pawn extends StackPane {
 	private ColorChoice pawnColor;
 	private int location;
 	private Player owner;
-	Circle cir ;
+	private transient Circle cir ;
 	
 	public Pawn(Player player){
 		super();

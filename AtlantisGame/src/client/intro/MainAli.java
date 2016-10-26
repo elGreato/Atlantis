@@ -40,7 +40,7 @@ public class MainAli extends Application {
 		Pawn pa3 = new Pawn(p2);
 		
 		
-	/*	DeckOfCards deck = new DeckOfCards();
+		DeckOfCards deck = new DeckOfCards();
 		deck.shuffle();
 		for (int i = 0; i < 5; i++) {
 			Card card = deck.deal();// this returns the card object
@@ -48,9 +48,9 @@ public class MainAli extends Application {
 
 			card = deck.deal();
 			p2.addCard(card); 
-		}*/
-		
-	MainBoard root = new MainBoard();
+		}
+		BorderPane root = new BorderPane();	
+	MainBoard main = new MainBoard();
 	//for (int i=0; i<3;i++)
 	/*gp.add(pa1,0, 0);
 	pa1.setAlignment(Pos.BOTTOM_CENTER);
@@ -59,12 +59,13 @@ public class MainAli extends Application {
 	gp.add(pa3, 0, 0);
 	pa3.setAlignment(Pos.TOP_CENTER);
 	//System.out.println(pa1.getOwner().getPlayerName());
-		BorderPane root = new BorderPane();
+		
 		BorderPane.setAlignment(gp, Pos.CENTER);
 		 root.setCenter(gp);
-	//	root.setTop(p1);
+	//	root.setTop(p1);*/
 		
-		root.setBottom(p2);*/
+		root.setBottom(p2);
+		root.setCenter(main);
 		primaryStage.setScene(new Scene(root));
 		primaryStage.setFullScreen(false);
 		primaryStage.show();
