@@ -32,13 +32,13 @@ public class DeckOfLandTiles implements Serializable {
 		// the rules says that there are a value removed from each color 
 			// since the tiles are not shuffled yet we can just remove one card from each color
 		
-		for (int i=0; i<7;i++){
+		/*for (int i=0; i<7;i++){
 			int f=	r.nextInt(6);
 			deckOfTiles.remove(i+6*f);	
-		}
+		}*/
 		
 		// now since we added them on a row we shuffle them
-		Collections.shuffle(deckOfTiles);
+	//	Collections.shuffle(deckOfTiles);
 	}
 
 	public int getNumberOfLandTiles() {

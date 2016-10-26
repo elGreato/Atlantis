@@ -2,6 +2,7 @@ package gameObjects;
 
 import java.util.ArrayList;
 
+import messageObjects.DeckLandTileMessage;
 import messageObjects.InGameMessage;
 
 import messageObjects.WaterTileMessage;
@@ -71,11 +72,11 @@ public class Game {
 		int numberOfPlayers= getNumOfRegisteredPlayers();
 		
 		
-		/*for (int i=0; i<numberOfPlayers; i++){
-		users.get(i).sendMessage(new WaterTileMessage(getName()));
+		for (int i=0; i<numberOfPlayers; i++){
+		users.get(i).sendMessage(new DeckLandTileMessage(getName()));
 	
 		}
-		*/
+		
 		
 	}
 	

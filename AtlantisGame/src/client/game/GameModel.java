@@ -1,7 +1,9 @@
 package client.game;
 
 import client.lobby.LobbyModel;
+import gameObjects.DeckOfLandTiles;
 import javafx.scene.layout.GridPane;
+import messageObjects.DeckLandTileMessage;
 import messageObjects.InGameMessage;
 
 import messageObjects.WaterTileMessage;
@@ -41,5 +43,17 @@ public class GameModel {
 			view.setWater((WaterTileMessage)msgIn);
 			System.out.println("process Message method");
 		}*/
+		
+		if(msgIn instanceof DeckLandTileMessage){
+			System.out.println("DeckLandTileMessage RECEIVED!!!");
+			DeckOfLandTiles deckA = new DeckOfLandTiles();
+			((DeckLandTileMessage) msgIn).shuffleTiles(deckA);
+			view.distributeLandTiles(deckA);
+			
+		}
+		
+		
+		
+		
 	}
 }
