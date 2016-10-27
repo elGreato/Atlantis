@@ -2,6 +2,7 @@ package client.game;
 
 import client.lobby.LobbyModel;
 import gameObjects.DeckOfLandTiles;
+import gameObjects.Player;
 import javafx.scene.layout.GridPane;
 import messageObjects.DeckLandTileMessage;
 import messageObjects.InGameMessage;
@@ -38,7 +39,10 @@ public class GameModel {
 		}
 		if (msgIn instanceof PlayerMessage){
 			System.out.println("A player Recieved");
-			view.showPlayer((PlayerMessage) msgIn);
+			
+			Player player = new Player(((PlayerMessage)msgIn).getPlayer().getPlayerName());
+			player.setPlayerName(((PlayerMessage) msgIn).getPlayer().getPlayerName());
+			view.showPlayer(player);
 			
 		}
 

@@ -136,8 +136,9 @@ public class GameView {
 
 	}
 
-	public void showPlayer(PlayerMessage msgIn) {
-		Player player = new Player(msgIn.getPlayer().getPlayerName());
+	public void showPlayer(Player player) {
+		
+		player.getLblName().setText(player.getPlayerName());
 		root.setBottom(player);
 		
 	}

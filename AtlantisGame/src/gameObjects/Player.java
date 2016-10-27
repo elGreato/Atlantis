@@ -1,4 +1,5 @@
 package gameObjects;
+import java.io.Serializable;
 import java.util.Random;
 
 import gameObjects.ColorChoice;
@@ -14,10 +15,12 @@ import javafx.scene.layout.VBox;
 
 
 
-public class Player extends VBox{
+public class Player extends VBox implements Serializable{
 	private transient Label lblName= new Label();
 	
-	private int victoryPoints;
+	private String name;
+	
+	private int victoryPoints=0;
 	
 	private transient Label vpHolder =  new Label();  //label to hold int value
 	
@@ -25,34 +28,36 @@ public class Player extends VBox{
 	
 	private transient HBox hboxCards= new HBox();
 	
-	private  PlayerHand playerHand;
+	private   PlayerHand playerHand;
 	
 	private int numberOfMaxCards=10;
 	
 	private Pawn pawn;
 	
-	private ColorChoice color;
+	private transient ColorChoice color;
+	
+	private transient Label lblCard ;
 	
 	
 	public Player(String name){
 		//the player extends vbox 
 		super();  
-		
+		this.name=name;
 		//create the player hand
 		playerHand = new PlayerHand(name);
 		
 		// empty Labels for cards
 		for (int i=0; i<numberOfMaxCards; i++){
-		Label lblCard = new Label(" ");
+		lblCard = new Label(" ");
 		// set class ID for css later
 		lblCard.getStylesheets().add("card");	
 		hboxCards.getChildren().add(lblCard);
 		}
 		
 		//set the name
-		lblName.setText(name);
+	//	lblName.setText(name);
 		
-	/*	//set the picture
+		//set the picture
 		int numberOfPicturesAvailable=4;
 		String[] paths= new String[numberOfPicturesAvailable]; 
 		paths[0]="images4players/player1.png";
@@ -62,7 +67,7 @@ public class Player extends VBox{
 		Random r= new Random();
 		int index =  (r.nextInt(paths.length));
 		Image image = new Image(getClass().getResourceAsStream(paths[index]));
-		lblPlayerImage.setGraphic(new ImageView(image));*/
+		lblPlayerImage.setGraphic(new ImageView(image));
 
 		
 		//set CSS ID for player
@@ -98,12 +103,19 @@ public class Player extends VBox{
 	    }	
 	 
 	 
-	 public String getPlayerName() {
-			return lblName.getText();
+	 	public int getNumberOfMaxCards() {
+		return numberOfMaxCards;
+	 	}	
+
+	 	public void setVictoryPoints(int victoryPoints) {
+		this.victoryPoints = victoryPoints;
+	 	}
+
+
+		public Label getLblName(){
+			return this.lblName;
 		}
-		public void setLblName(Label lblName) {
-			this.lblName = lblName;
-		}
+
 		public int getVictoryPoints() {
 			return victoryPoints;
 		}
@@ -120,6 +132,14 @@ public class Player extends VBox{
 		public void setVpHolder(Label vpHolder) {
 			this.vpHolder = vpHolder;
 		}
+		public String getPlayerName() {
+			return name;
+		}
+
+		public void setPlayerName(String name) {
+			this.name = name;
+		}
+
 		public Label getLblPlayerImage() {
 			return lblPlayerImage;
 		}

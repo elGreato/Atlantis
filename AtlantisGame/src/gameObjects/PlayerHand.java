@@ -1,9 +1,10 @@
 package gameObjects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 //Ali
-public class PlayerHand {
+public class PlayerHand implements Serializable {
 	
 	private int handSize=5;
 	private String playerName; 
