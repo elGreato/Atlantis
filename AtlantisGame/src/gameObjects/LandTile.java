@@ -27,8 +27,8 @@ public class LandTile extends Tile  {
 	landTileColor=color;
 	landValue=value;
 	rec = new Rectangle();
-	rec.setWidth(62.00f);
-	rec.setHeight(62.00f);
+	rec.setWidth(48.00f);
+	rec.setHeight(48.00f);
 	rec.setFill(setTileColor(this));
 	
 	
