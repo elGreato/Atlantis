@@ -140,22 +140,12 @@ public class GameView {
 	}
 
 	public void showPlayer(Player player) {
-		
+
 		player.getLblName().setText(player.getPlayerName());
+		player.getVpHolder().setText(String.valueOf(player.getVictoryPoints()));
 		root.setBottom(player);
 		stage.sizeToScene();
-       
-		
+
 	}
 
-
-	/*
-	 * public void setWater(WaterTileMessage msgIn) {
-	 * 
-	 * 
-	 * scene = new Scene(root); System.out.println("set root done ");
-	 * stage.show();
-	 * 
-	 * }
-	 */
 }

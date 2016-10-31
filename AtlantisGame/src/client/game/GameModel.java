@@ -31,7 +31,7 @@ public class GameModel {
 
 	// Here messages from server arrive
 	public void processMessage(InGameMessage msgIn) {
-	
+
 		if (msgIn instanceof DeckLandTileMessage) {
 			System.out.println("DeckLandTileMessage RECEIVED!!!");
 
@@ -39,30 +39,22 @@ public class GameModel {
 					((DeckLandTileMessage) msgIn).getArrayB());
 
 		}
-		if (msgIn instanceof PlayerMessage){
+		if (msgIn instanceof PlayerMessage) {
 			System.out.println("A player Recieved");
-			
-			Player player = new Player(((PlayerMessage)msgIn).getPlayer().getPlayerName());
-			player.setPlayerName(((PlayerMessage) msgIn).getPlayer().getPlayerName());		
-			
-			
-			 // Determine which label this is (index from 0 to 4)
-	      /*  int index = player.getPlayerHand().getNumCards() - 1;
-	        
-	         Get the label from the HBox, and update it
-	        Label cardLabel = (Label) player.getHboxCards().getChildren().get(index);*/
-			
-			
-	        for (int i=0;i<player.getPlayerHand().getNumCards();i++){
-	       ( (Label)(player.getHboxCards().getChildren().get(i))).setGraphic((player.getPlayerHand().getCards().get(i)).colorChoice.addImage());;
-	  
-	        }
-			
+
+			Player player = new Player(((PlayerMessage) msgIn).getPlayer().getPlayerName());
+			player.setPlayerName(((PlayerMessage) msgIn).getPlayer().getPlayerName());
+
+			player.setVictoryPoints(((PlayerMessage) msgIn).getInitialVictoryPoints());
+
+			for (int i = 0; i < (((PlayerMessage) msgIn).getCards().size()); i++) {
+				((Label) (player.getHboxCards().getChildren().get(i)))
+						.setGraphic((((PlayerMessage) msgIn).getCards().get(i)).colorChoice.addImage());
+
+			}
+
 			view.showPlayer(player);
-			
-			
-			
-			
+
 		}
 
 	}

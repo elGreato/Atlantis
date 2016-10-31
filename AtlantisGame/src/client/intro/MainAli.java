@@ -17,6 +17,7 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -41,7 +42,7 @@ public class MainAli extends Application {
 		
 		
 		DeckOfCards deck = new DeckOfCards();
-		deck.shuffle();
+	
 		for (int i = 0; i < 5; i++) {
 			Card card = deck.deal();// this returns the card object
 		//	p1.addCard(card);
@@ -49,8 +50,10 @@ public class MainAli extends Application {
 		//	card = deck.deal();
 			p2.addCard(card); 
 		}
+	//	p2.setVictoryPoints(p2.countVictoryPoints());
 		BorderPane root = new BorderPane();	
 	MainBoard main = new MainBoard();
+	root.setLeft(new Label(String.valueOf(p2.countVictoryPoints())));
 	//for (int i=0; i<3;i++)
 	/*gp.add(pa1,0, 0);
 	pa1.setAlignment(Pos.BOTTOM_CENTER);
@@ -63,7 +66,8 @@ public class MainAli extends Application {
 		BorderPane.setAlignment(gp, Pos.CENTER);
 		 root.setCenter(gp);
 	//	root.setTop(p1);*/
-		
+		p2.setVictoryPoints(14);
+		p2.getVpHolder().setText(String.valueOf(p2.countVictoryPoints()));
 		root.setBottom(p2);
 		root.setCenter(main);
 		primaryStage.setScene(new Scene(root));
