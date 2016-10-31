@@ -22,7 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class WaterTile extends Tile  {
-	transient Rectangle  water = new Rectangle(65, 65);
+	transient Rectangle  water = new Rectangle(50, 50);
 	int waterId;
 	int col;
 	int row;
