@@ -1,27 +1,29 @@
 package messageObjects;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
+import gameObjects.Card;
 import gameObjects.DeckOfCards;
 import gameObjects.Player;
 
 public class PlayerMessage extends InGameMessage implements Serializable {
 
 	private Player player;
-	private DeckOfCards cards;
+	private ArrayList<Card> cards;
 	int indexOfPlayer;
-	public PlayerMessage(String gameName, Player player, DeckOfCards cards, int indexOfPlayer) {
+	public PlayerMessage(String gameName, Player player, ArrayList<Card> cards, int indexOfPlayer) {
 		super(gameName);
 		this.cards= cards;
 		this.player = player;
 		this.indexOfPlayer=indexOfPlayer;
 	}
 	
-	public DeckOfCards getCards() {
+	public ArrayList<Card> getCards() {
 		return cards;
 	}
 
-	public void setCards(DeckOfCards cards) {
+	public void setCards(ArrayList<Card> cards) {
 		this.cards = cards;
 	}
 

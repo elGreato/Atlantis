@@ -43,23 +43,21 @@ public class GameModel {
 			System.out.println("A player Recieved");
 			
 			Player player = new Player(((PlayerMessage)msgIn).getPlayer().getPlayerName());
-			player.setPlayerName(((PlayerMessage) msgIn).getPlayer().getPlayerName());
-			
-			// distribute cards to each player according to whom entered the game first 
-			// first player 4 cards, second 5, ... so on
-			int numberOfCards = 4+(((PlayerMessage)msgIn).getIndexOfPlayer());
-			for (int i=0; i<numberOfCards;i++){
-			Card card= ((PlayerMessage)msgIn).getCards().deal();
-			player.addCard(card);
+			player.setPlayerName(((PlayerMessage) msgIn).getPlayer().getPlayerName());		
 			
 			
 			 // Determine which label this is (index from 0 to 4)
-	        int index = player.getPlayerHand().getNumCards() - 1;
+	      /*  int index = player.getPlayerHand().getNumCards() - 1;
 	        
-	        // Get the label from the HBox, and update it
-	        Label cardLabel = (Label) player.getHboxCards().getChildren().get(index);
-	        cardLabel.setGraphic(card.colorChoice.addImage());
-			}
+	         Get the label from the HBox, and update it
+	        Label cardLabel = (Label) player.getHboxCards().getChildren().get(index);*/
+			
+			
+	        for (int i=0;i<player.getPlayerHand().getNumCards();i++){
+	       ( (Label)(player.getHboxCards().getChildren().get(i))).setGraphic((player.getPlayerHand().getCards().get(i)).colorChoice.addImage());;
+	  
+	        }
+			
 			view.showPlayer(player);
 			
 			

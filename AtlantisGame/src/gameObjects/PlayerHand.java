@@ -6,7 +6,7 @@ import java.util.ArrayList;
 //Ali
 public class PlayerHand implements Serializable {
 	
-	private int handSize;
+
 	private String playerName; 
 	private ArrayList<Card> cards = new ArrayList<>(); 
 	private ArrayList<LandTile> treasures= new ArrayList<>();
@@ -40,12 +40,7 @@ public class PlayerHand implements Serializable {
      return cards;
 	}
 	
-	public int getHandSize(){
-		return handSize;
-	}
-	public void setHandSize(int handsize){
-		this.handSize = handsize;
-	}
+
 	public void addCard(Card card) {
 	cards.add(card);
 	}

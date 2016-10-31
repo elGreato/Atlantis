@@ -80,8 +80,11 @@ public class Game {
 		
 		}
 		// send hbox Player for each player
+		//give each player an arraylist and delete it from cards here 
 		for(int i=0; i<numberOfPlayers; i++){
-		users.get(i).sendMessage(new PlayerMessage(getName(), new Player(users.get(i).getUserInfo().getUsername()),cards, i));
+			Player player = new Player(users.get(i).getUserInfo().getUsername());
+		users.get(i).sendMessage(new PlayerMessage(getName(), player,cardsForPlayers(i,player), i));
+		
 		
 		}
 		
@@ -89,6 +92,36 @@ public class Game {
 		
 	}
 	
+	private ArrayList<Card> cardsForPlayers( int playerIndex, Player player) {
+		ArrayList<Card> result=new ArrayList<>();
+		if (playerIndex==0) {
+			for (int i=0;i<4;i++){
+				Card card = cards.deal();
+			result.add(card);
+			player.getPlayerHand().addCard(card);}
+		}
+		else if (playerIndex==1) {
+			for (int i=0;i<5;i++){
+				Card card = cards.deal();
+				result.add(card);
+				player.getPlayerHand().addCard(card);}
+		}
+		else if (playerIndex==2) {
+			for (int i=0;i<6;i++){
+				Card card = cards.deal();
+			result.add(card);
+			player.getPlayerHand().addCard(card);}
+		}
+		else if (playerIndex==3) {
+			for (int i=0;i<7;i++){
+				Card card = cards.deal();
+				result.add(card);
+				player.getPlayerHand().addCard(card);}
+		}
+		
+		return result;
+	}
+
 	//Here messages from clients arrive
 	public synchronized void processMessage(InGameMessage igm) {
 		
