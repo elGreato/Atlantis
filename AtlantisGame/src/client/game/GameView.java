@@ -142,7 +142,7 @@ public class GameView {
 	public void showPlayer(Player player) {
 
 		player.getLblName().setText(player.getPlayerName());
-		player.getVpHolder().setText(String.valueOf(player.getVictoryPoints()));
+		player.getVpHolder().setText("Your Victory Points: "+String.valueOf(player.getVictoryPoints()));
 		root.setBottom(player);
 		stage.sizeToScene();
 
