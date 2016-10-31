@@ -21,8 +21,9 @@ public class Game {
 	// waterTiles number
 	private final int numberOfWaterTiles=120;
 	
-	
-	
+	private DeckOfCards cards ;
+	private DeckOfLandTiles deckA;
+	private DeckOfLandTiles deckB;
 	
 	
 	//Constructor (doesn't start game)
@@ -71,9 +72,9 @@ public class Game {
 		// send waterTiles to all the players 
 		int numberOfPlayers= getNumOfRegisteredPlayers();
 		
-		DeckOfLandTiles deckA= new DeckOfLandTiles();
-		DeckOfLandTiles deckB= new DeckOfLandTiles();
-		DeckOfCards cards = new DeckOfCards();
+		 deckA= new DeckOfLandTiles();
+		 deckB= new DeckOfLandTiles();
+		 cards = new DeckOfCards();
 		for (int i=0; i<numberOfPlayers; i++){
 		users.get(i).sendMessage(new DeckLandTileMessage(getName(), deckA.getDeckOfTiles(),deckB.getDeckOfTiles()));
 		
