@@ -143,7 +143,7 @@ public class GameView {
 		
 		player.getLblName().setText(player.getPlayerName());
 		root.setBottom(player);
-		
+		stage.sizeToScene();
        
 		
 	}
