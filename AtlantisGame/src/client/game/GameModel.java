@@ -1,9 +1,11 @@
 package client.game;
 
 import client.lobby.LobbyModel;
+import gameObjects.Card;
 import gameObjects.DeckOfLandTiles;
 import gameObjects.Player;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.Label;
+
 import messageObjects.DeckLandTileMessage;
 import messageObjects.InGameMessage;
 import messageObjects.PlayerMessage;
@@ -42,7 +44,26 @@ public class GameModel {
 			
 			Player player = new Player(((PlayerMessage)msgIn).getPlayer().getPlayerName());
 			player.setPlayerName(((PlayerMessage) msgIn).getPlayer().getPlayerName());
+			
+			// distribute cards to each player according to whom entered the game first 
+			// first player 4 cards, second 5, ... so on
+			int numberOfCards = 4+(((PlayerMessage)msgIn).getIndexOfPlayer());
+			for (int i=0; i<numberOfCards;i++){
+			Card card= ((PlayerMessage)msgIn).getCards().deal();
+			player.addCard(card);
+			
+			
+			 // Determine which label this is (index from 0 to 4)
+	        int index = player.getPlayerHand().getNumCards() - 1;
+	        
+	        // Get the label from the HBox, and update it
+	        Label cardLabel = (Label) player.getHboxCards().getChildren().get(index);
+	        cardLabel.setGraphic(card.colorChoice.addImage());
+			}
 			view.showPlayer(player);
+			
+			
+			
 			
 		}
 

@@ -73,13 +73,14 @@ public class Game {
 		
 		DeckOfLandTiles deckA= new DeckOfLandTiles();
 		DeckOfLandTiles deckB= new DeckOfLandTiles();
+		DeckOfCards cards = new DeckOfCards();
 		for (int i=0; i<numberOfPlayers; i++){
 		users.get(i).sendMessage(new DeckLandTileMessage(getName(), deckA.getDeckOfTiles(),deckB.getDeckOfTiles()));
 		
 		}
 		// send hbox Player for each player
 		for(int i=0; i<numberOfPlayers; i++){
-		users.get(i).sendMessage(new PlayerMessage(getName(), new Player(users.get(i).getUserInfo().getUsername())));
+		users.get(i).sendMessage(new PlayerMessage(getName(), new Player(users.get(i).getUserInfo().getUsername()),cards, i));
 		
 		}
 		

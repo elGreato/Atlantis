@@ -46,7 +46,7 @@ public class MainAli extends Application {
 			Card card = deck.deal();// this returns the card object
 		//	p1.addCard(card);
 
-			card = deck.deal();
+		//	card = deck.deal();
 			p2.addCard(card); 
 		}
 		BorderPane root = new BorderPane();	

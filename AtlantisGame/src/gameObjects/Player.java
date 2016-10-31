@@ -53,10 +53,7 @@ public class Player extends VBox implements Serializable{
 		lblCard.getStylesheets().add("card");	
 		hboxCards.getChildren().add(lblCard);
 		}
-		
-		//set the name
-	//	lblName.setText(name);
-		
+	
 		//set the picture
 		int numberOfPicturesAvailable=4;
 		String[] paths= new String[numberOfPicturesAvailable]; 
@@ -94,12 +91,7 @@ public class Player extends VBox implements Serializable{
 	        // Add card to the hand
 	        playerHand.addCard(card);
 	        
-	        // Determine which label this is (index from 0 to 4)
-	        int index = playerHand.getNumCards() - 1;
-	        
-	        // Get the label from the HBox, and update it
-	        Label cardLabel = (Label) hboxCards.getChildren().get(index);
-	        cardLabel.setGraphic(card.colorChoice.addImage());
+	
 	    }	
 	 
 	 
@@ -170,4 +162,13 @@ public class Player extends VBox implements Serializable{
 		public void setColor(ColorChoice color) {
 			this.color = color;
 		}
+
+		public HBox getHboxCards() {
+			return hboxCards;
+		}
+
+		public void setHboxCards(HBox hboxCards) {
+			this.hboxCards = hboxCards;
+		}
+		
 }

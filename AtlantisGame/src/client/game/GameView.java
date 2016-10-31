@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import gameObjects.AtlantisTile;
+import gameObjects.Card;
 import gameObjects.DeckOfLandTiles;
 import gameObjects.LandTile;
 import gameObjects.MainLand;
 import gameObjects.Player;
+import gameObjects.PlayerHand;
 import gameObjects.WaterTile;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
@@ -141,7 +144,10 @@ public class GameView {
 		player.getLblName().setText(player.getPlayerName());
 		root.setBottom(player);
 		
+       
+		
 	}
+
 
 	/*
 	 * public void setWater(WaterTileMessage msgIn) {

@@ -1,5 +1,6 @@
 package gameObjects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import java.util.Collections;
@@ -8,7 +9,7 @@ import java.util.Collections;
 /*
  * @author Ali Habbabeh
  */
-public class DeckOfCards {
+public class DeckOfCards implements Serializable{
 	
 	private ArrayList<Card> cards= new ArrayList<>();
 	
