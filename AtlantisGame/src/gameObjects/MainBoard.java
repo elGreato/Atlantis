@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 // remember to check MVC slides for girdpane resizing
 public class MainBoard extends GridPane implements Serializable{
 	private final int numberOfTiles=120;
@@ -14,7 +15,8 @@ public class MainBoard extends GridPane implements Serializable{
 	DeckOfLandTiles deckB; 
 	
 	
-	
+	private static final double WINDOW_WIDTH = 600 ;
+    private static final double WINDOW_HEIGHT = 400 ;
 
 	public MainBoard(){
 		
@@ -92,7 +94,7 @@ public class MainBoard extends GridPane implements Serializable{
 			}
 		
 		}
-		
+		this.setPrefSize(WINDOW_HEIGHT, Region.USE_COMPUTED_SIZE);
 		
 	}
 }

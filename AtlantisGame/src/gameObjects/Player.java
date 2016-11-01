@@ -14,11 +14,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class Player extends VBox implements Serializable {
+public class Player extends HBox implements Serializable {
 	private transient Label lblName = new Label();
 
 	private String name;
-
+	
+	private transient VBox playerInfo= new VBox();
+	
+	
 	private int victoryPoints = 0;
 
 	private transient Label vpHolder = new Label(); // label to hold int value
@@ -36,6 +39,10 @@ public class Player extends VBox implements Serializable {
 	private transient ColorChoice color;
 
 	private transient Label lblCard;
+	
+	private transient HBox hbOpponents=new HBox();
+	
+
 
 	public Player(String name) {
 		// the player extends vbox
@@ -76,10 +83,12 @@ public class Player extends VBox implements Serializable {
 
 		}
 
-		this.getChildren().add(lblName);
-		this.getChildren().add(vpHolder);
-		this.getChildren().add(lblPlayerImage);
-		this.getChildren().add(hboxCards);
+		playerInfo.getChildren().add(lblName);
+		playerInfo.getChildren().add(vpHolder);
+		playerInfo.getChildren().add(lblPlayerImage);
+		playerInfo.getChildren().add(hboxCards);
+		
+		this.getChildren().add(playerInfo);
 
 	}
 
@@ -175,6 +184,14 @@ public class Player extends VBox implements Serializable {
 
 	public void setHboxCards(HBox hboxCards) {
 		this.hboxCards = hboxCards;
+	}
+
+	public HBox getHbOpponents() {
+		return hbOpponents;
+	}
+
+	public void setHbOpponents(HBox hbOpponents) {
+		this.hbOpponents = hbOpponents;
 	}
 
 }

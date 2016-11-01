@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import messageObjects.DeckLandTileMessage;
 import messageObjects.InGameMessage;
+import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
 import messageObjects.WaterTileMessage;
 import server.backend.Lobby;
@@ -27,6 +28,7 @@ public class Game {
 	private DeckOfCards cards;
 	private DeckOfLandTiles deckA;
 	private DeckOfLandTiles deckB;
+	private ArrayList<Player> players = new ArrayList<>();
 
 	// Constructor (doesn't start game)
 	public Game(String name, String password, int maxPlayers, User creator, Lobby lobby) {
@@ -85,15 +87,21 @@ public class Game {
 
 		}
 		// send hbox Player for each player
-		// give each player an arraylist and delete it from cards here
+
 		for (int i = 0; i < numberOfPlayers; i++) {
 			Player player = new Player(users.get(i).getUserInfo().getUsername());
-			
-			users.get(i).sendMessage(new PlayerMessage(getName(), player, cardsForPlayers(i, player), player.countVictoryPoints(),i));
-			
 
+			users.get(i).sendMessage(
+					new PlayerMessage(getName(), player, cardsForPlayers(i, player), player.countVictoryPoints(), i));
+			players.add(player);
+			System.out.println("it is " + players.size() + " number of players in server");
 		}
 
+		for (int i = 0; i < numberOfPlayers; i++) {
+
+			users.get(i).sendMessage(new OpponentMessage(getName(), players));
+
+		}
 	}
 
 	private ArrayList<Card> cardsForPlayers(int playerIndex, Player player) {

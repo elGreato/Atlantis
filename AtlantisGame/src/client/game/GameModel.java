@@ -1,5 +1,7 @@
 package client.game;
 
+import java.util.ArrayList;
+
 import client.lobby.LobbyModel;
 import gameObjects.Card;
 import gameObjects.DeckOfLandTiles;
@@ -8,6 +10,7 @@ import javafx.scene.control.Label;
 
 import messageObjects.DeckLandTileMessage;
 import messageObjects.InGameMessage;
+import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
 import messageObjects.WaterTileMessage;
 
@@ -17,6 +20,7 @@ public class GameModel {
 	private GameView view;
 	// send messages to server through method msgOut.sendMessage()
 	private LobbyModel msgOut;
+	private ArrayList<Player> players = new ArrayList<>();
 
 	public String getGameName() {
 		return gameName;
@@ -52,8 +56,23 @@ public class GameModel {
 						.setGraphic((((PlayerMessage) msgIn).getCards().get(i)).colorChoice.addImage());
 
 			}
-
+			players.add(player);
 			view.showPlayer(player);
+
+		}
+
+		if (msgIn instanceof OpponentMessage) {
+			System.out.println("Opponent message received");
+
+			for (Player p : players) {
+				for (int i = 0; i < ((OpponentMessage) msgIn).getOpponents().size(); i++) {
+					if (!p.getPlayerName().equalsIgnoreCase((((OpponentMessage) msgIn).getOpponents().get(i).getPlayerName())))
+					view.setOpponent(p, ((OpponentMessage) msgIn).getOpponents().get(i));
+				}
+
+				System.out.println("now we finished givving opponents");
+
+			}
 
 		}
 

@@ -13,13 +13,14 @@ public class PlayerMessage extends InGameMessage implements Serializable {
 	private ArrayList<Card> cards;
 	private int indexOfPlayer;
 	private int initialVictoryPoints;
+
 	public PlayerMessage(String gameName, Player player, ArrayList<Card> cards,int initialVictoryPoints, int indexOfPlayer) {
 		super(gameName);
 		this.cards= cards;
 		this.player = player;
 		this.indexOfPlayer=indexOfPlayer;
 		this.initialVictoryPoints=initialVictoryPoints;
-		
+
 	}
 	
 	public ArrayList<Card> getCards() {
@@ -54,5 +55,7 @@ public class PlayerMessage extends InGameMessage implements Serializable {
 	public void setInitialVictoryPoints(int initialVictoryPoints) {
 		this.initialVictoryPoints = initialVictoryPoints;
 	}
+
+
 
 }

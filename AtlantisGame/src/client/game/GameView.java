@@ -3,6 +3,8 @@ package client.game;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.sun.java.swing.plaf.windows.resources.windows_zh_TW;
+
 import gameObjects.AtlantisTile;
 import gameObjects.Card;
 import gameObjects.DeckOfLandTiles;
@@ -12,22 +14,40 @@ import gameObjects.Player;
 import gameObjects.PlayerHand;
 import gameObjects.WaterTile;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import messageObjects.PlayerMessage;
 
 public class GameView {
 	BorderPane root = new BorderPane();
+	HBox hbPlayersInfo = new HBox();
 	GridPane mainBoard = new GridPane();
 	Scene scene;
 	Stage stage;
 	private final int numberOfTiles = 120;
 	int maxColIndex;
 	int maxRowIndex;
+	
+	// the main game controls
+	Button btnPlayCard = new Button("Play a Selected Card");
+	Button btnPayWithCard = new Button("Pay with a Card");
+	Button btnPayWithTreasure = new Button("Pay with a treasure");
+	
+	//Labels for main game controls
+	Label lblGameBtns= new Label("Action Buttons");
+	
+	//Vbox to hold buttons
 
+	VBox vbMainControls = new VBox();
+	
+	
 	public GameView() {
 		root.setCenter(mainBoard);
 		// distribute water tiles as a base board
@@ -46,8 +66,14 @@ public class GameView {
 
 		// the Atlantis
 		mainBoard.add(new AtlantisTile(0, 0, 0), 0, 0, 2, 2);
-
-		// add the landTiles
+		//add Buttons
+		vbMainControls.getChildren().addAll(lblGameBtns,btnPlayCard,btnPayWithCard,btnPayWithTreasure);
+		//add players info
+		root.setBottom(hbPlayersInfo);
+		root.setRight(vbMainControls);
+		
+		// make mainboard scalable
+		mainBoard.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
 
 		stage = new Stage();
 		mainBoard.setVgap(3);
@@ -143,9 +169,23 @@ public class GameView {
 
 		player.getLblName().setText(player.getPlayerName());
 		player.getVpHolder().setText("Your Victory Points: "+String.valueOf(player.getVictoryPoints()));
-		root.setBottom(player);
+		hbPlayersInfo.getChildren().add(player);
 		stage.sizeToScene();
 
+	}
+
+	public void setOpponent(Player player, Player opponent) {
+		 VBox vbOpponentInfo= new VBox();
+		  Label lblopponentName= new Label();
+		  Label lblopponentCardCount=new Label();
+		  lblopponentName.setText(opponent.getPlayerName());
+		  lblopponentCardCount.setText("This enemy has "+String.valueOf(opponent.getPlayerHand().getNumCards())+" cards\t");
+		  vbOpponentInfo.getChildren().add(lblopponentName);
+		  vbOpponentInfo.getChildren().add(lblopponentCardCount);
+		  hbPlayersInfo.getChildren().add(vbOpponentInfo);
+		  
+		  
+		
 	}
 
 }
