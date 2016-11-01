@@ -1,6 +1,7 @@
 package gameObjects;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Random;
 
 import gameObjects.ColorChoice;
@@ -19,7 +20,7 @@ public class Player extends HBox implements Serializable {
 
 	private String name;
 	
-	private transient VBox playerInfo= new VBox();
+	private transient VBox vbPlayerInfo= new VBox();
 	
 	
 	private int victoryPoints = 0;
@@ -34,7 +35,7 @@ public class Player extends HBox implements Serializable {
 
 	private int numberOfMaxCards = 10;
 
-	private Pawn pawn;
+	private ArrayList<Pawn> pawns;
 
 	private transient ColorChoice color;
 
@@ -83,12 +84,12 @@ public class Player extends HBox implements Serializable {
 
 		}
 
-		playerInfo.getChildren().add(lblName);
-		playerInfo.getChildren().add(vpHolder);
-		playerInfo.getChildren().add(lblPlayerImage);
-		playerInfo.getChildren().add(hboxCards);
+		vbPlayerInfo.getChildren().add(lblName);
+		vbPlayerInfo.getChildren().add(vpHolder);
+		vbPlayerInfo.getChildren().add(lblPlayerImage);
+		vbPlayerInfo.getChildren().add(hboxCards);
 		
-		this.getChildren().add(playerInfo);
+		this.getChildren().add(vbPlayerInfo);
 
 	}
 
@@ -162,12 +163,13 @@ public class Player extends HBox implements Serializable {
 		this.numberOfMaxCards = numberOfCards;
 	}
 
-	public Pawn getPawn() {
-		return pawn;
+	
+	public ArrayList<Pawn> getPawns() {
+		return pawns;
 	}
 
-	public void setPawn(Pawn pawn) {
-		this.pawn = pawn;
+	public void setPawns(ArrayList<Pawn> pawns) {
+		this.pawns = pawns;
 	}
 
 	public ColorChoice getColor() {

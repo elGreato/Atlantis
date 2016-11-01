@@ -54,18 +54,7 @@ public class MainAli extends Application {
 		BorderPane root = new BorderPane();	
 	MainBoard main = new MainBoard();
 	root.setLeft(new Label(String.valueOf(p2.countVictoryPoints())));
-	//for (int i=0; i<3;i++)
-	/*gp.add(pa1,0, 0);
-	pa1.setAlignment(Pos.BOTTOM_CENTER);
-	
-	gp.add(pa2, 0, 0);
-	gp.add(pa3, 0, 0);
-	pa3.setAlignment(Pos.TOP_CENTER);
-	//System.out.println(pa1.getOwner().getPlayerName());
-		
-		BorderPane.setAlignment(gp, Pos.CENTER);
-		 root.setCenter(gp);
-	//	root.setTop(p1);*/
+
 		p2.setVictoryPoints(14);
 		p2.getVpHolder().setText(String.valueOf(p2.countVictoryPoints()));
 		root.setBottom(p2);
@@ -85,4 +74,5 @@ public class MainAli extends Application {
 			kk++;
 		}
 	}
+	
 }

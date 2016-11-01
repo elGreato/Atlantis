@@ -1,18 +1,13 @@
 package client.game;
 
 import java.util.ArrayList;
-
 import client.lobby.LobbyModel;
-import gameObjects.Card;
-import gameObjects.DeckOfLandTiles;
 import gameObjects.Player;
 import javafx.scene.control.Label;
-
 import messageObjects.DeckLandTileMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
-import messageObjects.WaterTileMessage;
 
 public class GameModel {
 
@@ -35,17 +30,14 @@ public class GameModel {
 
 	// Here messages from server arrive
 	public void processMessage(InGameMessage msgIn) {
-
+		// first we receive the main board stuff
 		if (msgIn instanceof DeckLandTileMessage) {
-			System.out.println("DeckLandTileMessage RECEIVED!!!");
-
 			view.distributeLandTiles(((DeckLandTileMessage) msgIn).getArrayA(),
 					((DeckLandTileMessage) msgIn).getArrayB());
 
 		}
+		// now the players
 		if (msgIn instanceof PlayerMessage) {
-			System.out.println("A player Recieved");
-
 			Player player = new Player(((PlayerMessage) msgIn).getPlayer().getPlayerName());
 			player.setPlayerName(((PlayerMessage) msgIn).getPlayer().getPlayerName());
 
@@ -60,21 +52,21 @@ public class GameModel {
 			view.showPlayer(player);
 
 		}
-
+		// here we assign each player his enemies
 		if (msgIn instanceof OpponentMessage) {
 			System.out.println("Opponent message received");
 
 			for (Player p : players) {
 				for (int i = 0; i < ((OpponentMessage) msgIn).getOpponents().size(); i++) {
-					if (!p.getPlayerName().equalsIgnoreCase((((OpponentMessage) msgIn).getOpponents().get(i).getPlayerName())))
-					view.setOpponent(p, ((OpponentMessage) msgIn).getOpponents().get(i));
+					if (!p.getPlayerName()
+							.equalsIgnoreCase((((OpponentMessage) msgIn).getOpponents().get(i).getPlayerName())))
+						view.setOpponent(p, ((OpponentMessage) msgIn).getOpponents().get(i));
 				}
-
-				System.out.println("now we finished givving opponents");
 
 			}
 
 		}
+		
 
 	}
 }

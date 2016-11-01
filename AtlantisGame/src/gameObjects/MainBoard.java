@@ -1,13 +1,18 @@
 package gameObjects;
 
 
+import java.awt.Stroke;
 import java.io.Serializable;
 import java.util.Iterator;
 
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
+import javafx.scene.shape.StrokeLineCap;
 // remember to check MVC slides for girdpane resizing
-public class MainBoard extends GridPane implements Serializable{
+public class MainBoard extends GridPane implements Serializable, EventHandler<MouseEvent>{
 	private final int numberOfTiles=120;
 	int maxColIndex ;
 	int maxRowIndex;
@@ -57,6 +62,7 @@ public class MainBoard extends GridPane implements Serializable{
 		   boolean reachedFirstCol=false;
 		while (it.hasNext()){
 			LandTile tile = it.next();
+
 			this.add(tile, co, ro);
 			tile.setCol(co);
 			tile.setRow(ro);
@@ -77,6 +83,7 @@ public class MainBoard extends GridPane implements Serializable{
 		it=deckB.getDeckOfTiles().iterator();
 		while(it.hasNext()){
 			LandTile tile = it.next();
+			tile.setOnMouseClicked(e-> handle(e));
 			this.add(tile, co, ro);
 			tile.setCol(co);
 			tile.setRow(ro);
@@ -94,7 +101,26 @@ public class MainBoard extends GridPane implements Serializable{
 			}
 		
 		}
-		this.setPrefSize(WINDOW_HEIGHT, Region.USE_COMPUTED_SIZE);
+		
+		
+	}
+
+	@Override
+	public void handle(MouseEvent e) {
+		for (Node node: this.getChildren()){
+			if (node instanceof LandTile){
+				if( node.getBoundsInParent().contains(e.getSceneX(),  e.getSceneY())) {
+                    System.out.println( "Node: " + node + " at " + GridPane.getRowIndex( node) + "/" + GridPane.getColumnIndex( node));
+
+			int i=(int)  GridPane.getColumnIndex( node);
+			int k= (int) GridPane.getRowIndex( node);
+			this.getChildren().remove(7,7);
+			/*for (LandTile t: deckB.getDeckOfTiles()){
+				if (t.getCol()==i&&t.getRow()==k)
+				this.getChildren().remove(0)	;*/
+			//deckB.getDeckOfTiles().remove(t.getTileId());
+				}
+			}}
 		
 	}
 }
