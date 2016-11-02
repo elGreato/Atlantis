@@ -18,15 +18,19 @@ public class ServerconnectController {
 			@Override
 			public void handle(ActionEvent e)
 			{
-				model.setUpConnection(view.iptxt.getText());
+				view.autoConnectButton.setDisable(true);
+				view.manualConnectButton.setDisable(true);
+				model.setUpManualConnection(view.iptxt.getText());
+				
 			}
 		});
 		view.autoConnectButton.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent e)
 			{
-				model.scanLAN();
 				view.autoConnectButton.setDisable(true);
+				view.manualConnectButton.setDisable(true);
+				model.scanLAN();
 			}
 		});
 		view.manualConnect.setOnKeyPressed(new EventHandler<KeyEvent>(){
@@ -47,7 +51,31 @@ public class ServerconnectController {
 			}
 			
 		});
+		view.manualConnect.expandedProperty().addListener((observable, oldValue, newValue) ->
+		{
+			if(oldValue)
+			{
+				view.autoConnect.setExpanded(true);
+				
+			}
+			else
+			{
+				view.autoConnect.setExpanded(false);
+			}
+		});
 		
+		//More cosmetic stuff
+		view.autoConnect.expandedProperty().addListener((observable, oldValue, newValue)->
+		{
+			if(oldValue)
+			{
+				view.manualConnect.setExpanded(true);
+			}
+			else
+			{
+				view.manualConnect.setExpanded(false);
+			}
+		});
 		
 	}
 	

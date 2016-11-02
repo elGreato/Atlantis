@@ -38,6 +38,7 @@ public class ServerconnectView {
 		
 		manualControls = new GridPane();
 		manualConnect = new TitledPane("Connect manually", manualControls);
+		manualConnect.setExpanded(false);
 		manualDescriptionlbl = new Label("Enter the IP adress of the server below:");
 		iptxt = new TextField("127.0.0.1");
 		manualConnectButton = new Button("Ok");

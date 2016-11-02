@@ -30,7 +30,7 @@ public class ServerconnectModel implements Runnable{
 	}
 	
 	//sets up connection to server
-	protected void setUpConnection(String text)
+	protected void setUpManualConnection(String text)
 	{
 		
 		try{
@@ -43,6 +43,8 @@ public class ServerconnectModel implements Runnable{
 			alert.setHeaderText("Connection error");
 			alert.setContentText("IP adress wrong. Could not connect to server.");
 			alert.showAndWait();
+			view.autoConnectButton.setDisable(false);
+			view.manualConnectButton.setDisable(false);
 		}
 	}
 
@@ -111,6 +113,7 @@ public class ServerconnectModel implements Runnable{
 					alert.setContentText("No running server on network detected. Please try to enter the IP manually.");
 					alert.showAndWait();
 					view.autoConnectButton.setDisable(false);
+					view.manualConnectButton.setDisable(false);
 				}); 
 			}
 		}
