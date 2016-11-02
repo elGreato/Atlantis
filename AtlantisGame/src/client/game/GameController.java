@@ -1,5 +1,8 @@
 package client.game;
 
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
+
 public class GameController {
 
 	private GameView view;
@@ -7,6 +10,15 @@ public class GameController {
 	public GameController(GameView gameView, GameModel gameModel) {
 		this.view = gameView;
 		this.model = gameModel;
+		for (StackPane s: view.getBase()){
+		s.setOnMouseClicked(e-> handleBase(e));
+		
 	}
+	
 
+}
+	private void handleBase(MouseEvent e) {
+		((StackPane) e.getSource()).getChildren().remove(1);
+	
+	}
 }
