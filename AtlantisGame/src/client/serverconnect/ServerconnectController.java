@@ -26,6 +26,7 @@ public class ServerconnectController {
 			public void handle(ActionEvent e)
 			{
 				model.scanLAN();
+				view.autoConnectButton.setDisable(true);
 			}
 		});
 		view.manualConnect.setOnKeyPressed(new EventHandler<KeyEvent>(){

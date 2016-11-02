@@ -3,7 +3,9 @@ package client.serverconnect;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import client.login.LoginController;
 import client.login.LoginModel;
@@ -57,7 +59,18 @@ public class ServerconnectModel implements Runnable{
 		// TODO Auto-generated method stub
 		ipEnding = 0;
 		negativeTests = 0;
-		subnetAdress = "192.168.1.";
+		InetAddress localHost;
+		try {
+			localHost = InetAddress.getLocalHost();
+			subnetAdress = (localHost.getHostAddress()).substring(0, 10);
+			System.out.println("Found it " +subnetAdress);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			subnetAdress = "192.168.1.";
+		}
+		
+		
 		hasFoundIP = false;
 		for(int i = 0; i<255;i++)
 		{
@@ -97,6 +110,7 @@ public class ServerconnectModel implements Runnable{
 					alert.setTitle("Could not find server");
 					alert.setContentText("No running server on network detected. Please try to enter the IP manually.");
 					alert.showAndWait();
+					view.autoConnectButton.setDisable(false);
 				}); 
 			}
 		}
