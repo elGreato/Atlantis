@@ -120,7 +120,7 @@ public class ServerconnectModel implements Runnable{
 	}
 
 
-	private boolean processHasFoundServer() {
+	private synchronized boolean processHasFoundServer() {
 		if(hasFoundIP)
 		{
 			return false;
