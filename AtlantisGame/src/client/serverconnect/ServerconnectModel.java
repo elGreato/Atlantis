@@ -8,15 +8,19 @@ import java.net.Socket;
 import client.login.LoginController;
 import client.login.LoginModel;
 import client.login.LoginView;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 public class ServerconnectModel implements Runnable{
 	
 	private ServerconnectView view;
-	private Socket socket;
-	private String subnetMask;
+	
+	private String subnetAdress;
 	private int ipEnding;
+	private int negativeTests;
+	private boolean hasFoundIP;
+	
 	public ServerconnectModel(ServerconnectView view)
 	{
 		this.view = view;
@@ -28,15 +32,8 @@ public class ServerconnectModel implements Runnable{
 	{
 		
 		try{
-			socket = new Socket(text, 61452);
-
-			
-			LoginView loginView = new LoginView();
-			LoginModel loginModel = new LoginModel(socket, loginView);
-			LoginController loginController = new LoginController(loginView, loginModel);
-			loginView.start();
-			view.close();
-			
+			Socket socket = new Socket(text, 61452);
+			showLogin(socket);
 		}
 		catch(IOException e)
 		{
@@ -47,15 +44,91 @@ public class ServerconnectModel implements Runnable{
 		}
 	}
 
+	private void showLogin(Socket socket) {
+		// TODO Auto-generated method stub
+		LoginView loginView = new LoginView();
+		LoginModel loginModel = new LoginModel(socket, loginView);
+		LoginController loginController = new LoginController(loginView, loginModel);
+		loginView.start();
+		view.close();
+	}
+
 	public void scanLAN() {
 		// TODO Auto-generated method stub
 		ipEnding = 0;
-		subnetMask = NetworkInterface.
+		negativeTests = 0;
+		subnetAdress = "192.168.1.";
+		hasFoundIP = false;
+		for(int i = 0; i<255;i++)
+		{
+			Thread t = new Thread(this);
+			t.start();
+		}
+		
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		String testableIP = subnetAdress + takeIP();
+		System.out.println(testableIP);
 		
+		try
+		{
+			Socket testSocket = new Socket(testableIP,61452);
+			if(processHasFoundServer())
+			{
+				Platform.runLater(() ->
+				{
+					showLogin(testSocket);
+				});
+				
+			}
+			System.out.println("No catch" + testableIP);
+		}
+		catch(IOException e)
+		{
+			addNegativeTest();
+			
+			if(getNegativeTests() == 255)
+			{
+				Platform.runLater(()->
+				{
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Could not find server");
+					alert.setContentText("No running server on network detected. Please try to enter the IP manually.");
+					alert.showAndWait();
+				}); 
+			}
+		}
+	}
+
+
+	private boolean processHasFoundServer() {
+		if(hasFoundIP)
+		{
+			return false;
+		}
+		else
+		{
+			hasFoundIP = true;
+			return true;
+		}
+		
+	}
+
+	private synchronized int getNegativeTests() {
+		// TODO Auto-generated method stub
+		return negativeTests;
+	}
+
+	private synchronized void addNegativeTest() {
+		negativeTests+=1;
+		
+	}
+
+	public synchronized int takeIP()
+	{
+		ipEnding+=1;
+		return ipEnding;
 	}
 }
