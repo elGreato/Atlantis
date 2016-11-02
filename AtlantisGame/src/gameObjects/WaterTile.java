@@ -23,13 +23,16 @@ import javafx.scene.shape.Rectangle;
 
 public class WaterTile extends Tile  {
 	transient Rectangle  water = new Rectangle(50, 50);
-	int waterId;
+
 	int col;
 	int row;
+	
+	public WaterTile(int tileId){
+		super(tileId);
+	}
 
 	public WaterTile( int tileId, int co, int ro) {
 		super(tileId,co,ro);
-		waterId=tileId;
 		col=co;
 		row=ro;
 		water.setFill(Color.TRANSPARENT);
@@ -44,19 +47,23 @@ public class WaterTile extends Tile  {
 //	@Override
 	
 //	public void dosmthin() {
-		this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-
+		WaterTile wt = this;
+		this.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+		
 			@Override
 			public void handle(MouseEvent e) {
 				water.setStroke(Color.ORANGE);
 				System.out.println(((WaterTile)e.getSource()).getTileId());
+				
+					int i = ((WaterTile) e.getSource()).getCol();
+					int k = ((WaterTile) e.getSource()).getRow();
+					wt.getChildren().remove(1);
+				
+				
 				e.consume(); 
 			}
 
 		});}
-	public int getWaterId() {
-		return waterId;
-	}
 	
 	//}
 	public boolean hasPawn() {
@@ -65,6 +72,22 @@ public class WaterTile extends Tile  {
 	}
 	public void addStack(LandTile tile){
 		this.getChildren().add(tile);
+	}
+
+	public int getCol() {
+		return col;
+	}
+
+	public void setCol(int col) {
+		this.col = col;
+	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public void setRow(int row) {
+		this.row = row;
 	}
 
 }
