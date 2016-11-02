@@ -37,14 +37,12 @@ public class MainBoard extends GridPane implements Serializable {
 		// distribute water tiles as a base board
 		for (int i = 0; i < 17; i++) {
 			for (int k = 0; k < 11; k++) {
-				StackPane stack = new StackPane();
-				
-				base.add(stack);
-				
+				StackPane stack = new StackPane();			
 				WaterTile water = new WaterTile(10*i+k);
 				stack.getChildren().add(water);
 				water.setCol(i);
 				water.setRow(k);
+				base.add(stack);
 				this.add(stack, i, k);
 
 			}
