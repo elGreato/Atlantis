@@ -14,20 +14,67 @@ public class ServerconnectController {
 		this.view = view;
 		this.model = model;
 		
-		view.okButton.setOnAction(new EventHandler<ActionEvent>(){
+		view.manualConnectButton.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
 			public void handle(ActionEvent e)
 			{
-				model.setUpConnection(view.iptxt.getText());
+				view.autoConnectButton.setDisable(true);
+				view.manualConnectButton.setDisable(true);
+				model.setUpManualConnection(view.iptxt.getText());
+				
 			}
 		});
-		view.scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
+		view.autoConnectButton.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent e)
+			{
+				view.autoConnectButton.setDisable(true);
+				view.manualConnectButton.setDisable(true);
+				model.scanLAN();
+			}
+		});
+		view.manualConnect.setOnKeyPressed(new EventHandler<KeyEvent>(){
 
 			@Override
 			public void handle(KeyEvent event) {
-				view.okButton.fire();
+				view.manualConnectButton.fire();
 				
 			}
 			
+		});
+		view.autoConnect.setOnKeyPressed(new EventHandler<KeyEvent>(){
+
+			@Override
+			public void handle(KeyEvent event) {
+				view.autoConnectButton.fire();
+				
+			}
+			
+		});
+		view.manualConnect.expandedProperty().addListener((observable, oldValue, newValue) ->
+		{
+			if(oldValue)
+			{
+				view.autoConnect.setExpanded(true);
+				
+			}
+			else
+			{
+				view.autoConnect.setExpanded(false);
+			}
+		});
+		
+		//More cosmetic stuff
+		view.autoConnect.expandedProperty().addListener((observable, oldValue, newValue)->
+		{
+			if(oldValue)
+			{
+				view.manualConnect.setExpanded(true);
+			}
+			else
+			{
+				view.manualConnect.setExpanded(false);
+			}
 		});
 		
 	}
