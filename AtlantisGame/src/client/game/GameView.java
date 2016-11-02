@@ -148,7 +148,7 @@ public class GameView {
 			reachedMaxIndex = true;
 			co = 0;
 			ro += 2;
-
+ 
 		}
 		else if (ro == 9 && co != 15) {
 			mainBoard.add(stack, co, ro);
