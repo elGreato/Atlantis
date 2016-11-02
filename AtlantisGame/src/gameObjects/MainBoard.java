@@ -38,17 +38,21 @@ public class MainBoard extends GridPane implements Serializable {
 		// distribute water tiles as a base board
 		for (int i = 0; i < 17; i++) {
 			for (int k = 0; k < 11; k++) {
-				StackPane stack = new StackPane();			
+				StackPane stack = new StackPane();
 				WaterTile water = new WaterTile(10*i+k);
+				water.setCol(k);
+				water.setRow(i);
 				stack.getChildren().add(water);
-				water.setCol(i);
-				water.setRow(k);
 				base.add(stack);
+				stack.setOnMouseClicked( e-> handle(e));
 				this.add(stack, i, k);
 
 			}
 
 		}
+	
+	
+
 		maxColIndex = (int) (Math.sqrt(numberOfTiles) * 1.5);
 		maxRowIndex = (int) (Math.sqrt(numberOfTiles));
 		// put the Pawns
@@ -82,7 +86,7 @@ public class MainBoard extends GridPane implements Serializable {
 			it.remove();
 			if (co == maxColIndex + 1) {
 				if (reachedMaxIndex == false) {
-					this.add(it.next(), maxColIndex, ro + 1);
+					((((StackPane) getNodebyIndex(maxColIndex, ro + 1, this)).getChildren())).add(it.next());
 					System.out.println("how many times");
 					reachedMaxIndex = true;
 				}
@@ -119,7 +123,7 @@ public class MainBoard extends GridPane implements Serializable {
 			}
 			if (co == 0) {
 				if (reachedFirstCol == true) {
-					this.add(it.next(), 0, ro + 1);
+					((((StackPane) getNodebyIndex(0, ro + 1, this)).getChildren())).add(it.next());
 					reachedFirstCol = false;
 				}
 			}
@@ -129,6 +133,13 @@ public class MainBoard extends GridPane implements Serializable {
 	}
 
 	
+
+	private void handle(MouseEvent e) {
+		((StackPane) e.getSource()).getChildren().remove(1);
+		
+	}
+
+
 
 	public Node getNodebyIndex(int col, int row, GridPane grid) {
 		Node result = null;
@@ -143,4 +154,18 @@ public class MainBoard extends GridPane implements Serializable {
 		return result;
 
 	}
+/*
+	@Override
+	public void handle(MouseEvent e) {
+		water.setStroke(Color.ORANGE);
+		System.out.println(((WaterTile) e.getSource()).getTileId());
+
+		int i = ((WaterTile) e.getSource()).getCol();
+		int k = ((WaterTile) e.getSource()).getRow();
+		wt.getChildren().remove(1);
+
+		e.consume();
+	}
+*/
+
 }
