@@ -49,6 +49,7 @@ public class WaterTile extends Tile  {
 			@Override
 			public void handle(MouseEvent e) {
 				water.setStroke(Color.ORANGE);
+				System.out.println(((WaterTile)e.getSource()).getTileId());
 				e.consume(); 
 			}
 
@@ -61,6 +62,9 @@ public class WaterTile extends Tile  {
 	public boolean hasPawn() {
 		return false;
 
+	}
+	public void addStack(LandTile tile){
+		this.getChildren().add(tile);
 	}
 
 }

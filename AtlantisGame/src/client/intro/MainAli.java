@@ -65,14 +65,8 @@ public class MainAli extends Application {
 		
 		
 		DeckOfLandTiles dland= new DeckOfLandTiles();
-
-		int kk=1;
-		for (int i=0; i< dland.getNumberOfLandTiles();i++){
-			
-			System.out.println("Treasure Nymber "+kk+" and id "+dland.getTileDetails(i).getTileId()
-					+" "+dland.getTileDetails(i).getColor().toString()+" Value "+ dland.getTileDetails(i).getLandValue());
-			kk++;
-		}
+		
+	
 	}
 	
 }

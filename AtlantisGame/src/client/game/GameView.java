@@ -53,7 +53,7 @@ public class GameView {
 		// distribute water tiles as a base board
 		for (int i = 0; i < (Math.sqrt(numberOfTiles) * 1.5); i++) {
 			for (int k = 0; k < Math.sqrt(numberOfTiles); k++) {
-				mainBoard.add(new WaterTile(i, i, k), i, k);
+				mainBoard.add(new WaterTile(10*i+k, i, k), i, k);
 
 			}
 
