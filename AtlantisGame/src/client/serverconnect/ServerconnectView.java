@@ -9,10 +9,15 @@ public class ServerconnectView {
 	protected Stage stage;
 	protected Scene scene;
 	private VBox root;
-	private HBox controls;
-	private Label descriptionlbl;
+	protected TitledPane autoConnect;
+	private VBox autoControls;
+	private Label autoDescriptionlbl;
+	protected Button autoConnectButton;
+	protected TitledPane manualConnect;
+	private GridPane manualControls;
+	private Label manualDescriptionlbl;
 	protected TextField iptxt;
-	protected Button okButton; 
+	protected Button manualConnectButton; 
 	
 	
 	
@@ -24,14 +29,23 @@ public class ServerconnectView {
 		
 		root = new VBox();
 		
-		descriptionlbl = new Label("Please enter the IP adress of the server!");
-		controls = new HBox();
+		autoDescriptionlbl = new Label("Scan LAN for active servers:");
+		autoConnectButton = new Button("Start");
+		autoControls = new VBox();
+		autoControls.getChildren().addAll(autoDescriptionlbl, autoConnectButton);
+		autoConnect = new TitledPane("Connect automatically", autoControls);
 		
+		
+		manualControls = new GridPane();
+		manualConnect = new TitledPane("Connect manually", manualControls);
+		manualDescriptionlbl = new Label("Enter the IP adress of the server below:");
 		iptxt = new TextField("127.0.0.1");
-		okButton = new Button("Ok");
+		manualConnectButton = new Button("Ok");
+		manualControls.add(manualDescriptionlbl,0,0,2,1);
+		manualControls.add(iptxt,0,1);
+		manualControls.add(manualConnectButton,1,1);
 		
-		controls.getChildren().addAll(iptxt, okButton);
-		root.getChildren().addAll(descriptionlbl, controls);
+		root.getChildren().addAll(autoConnect, manualConnect);
 		
 		scene = new Scene(root);
 		

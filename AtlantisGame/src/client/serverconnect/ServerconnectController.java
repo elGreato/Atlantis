@@ -14,21 +14,39 @@ public class ServerconnectController {
 		this.view = view;
 		this.model = model;
 		
-		view.okButton.setOnAction(new EventHandler<ActionEvent>(){
+		view.manualConnectButton.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
 			public void handle(ActionEvent e)
 			{
 				model.setUpConnection(view.iptxt.getText());
 			}
 		});
-		view.scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
+		view.autoConnectButton.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent e)
+			{
+				model.scanLAN();
+			}
+		});
+		view.manualConnect.setOnKeyPressed(new EventHandler<KeyEvent>(){
 
 			@Override
 			public void handle(KeyEvent event) {
-				view.okButton.fire();
+				view.manualConnectButton.fire();
 				
 			}
 			
 		});
+		view.autoConnect.setOnKeyPressed(new EventHandler<KeyEvent>(){
+
+			@Override
+			public void handle(KeyEvent event) {
+				view.autoConnectButton.fire();
+				
+			}
+			
+		});
+		
 		
 	}
 	

@@ -11,11 +11,12 @@ import client.login.LoginView;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-public class ServerconnectModel {
+public class ServerconnectModel implements Runnable{
 	
 	private ServerconnectView view;
 	private Socket socket;
-	
+	private String subnetMask;
+	private int ipEnding;
 	public ServerconnectModel(ServerconnectView view)
 	{
 		this.view = view;
@@ -44,5 +45,17 @@ public class ServerconnectModel {
 			alert.setContentText("IP adress wrong. Could not connect to server.");
 			alert.showAndWait();
 		}
+	}
+
+	public void scanLAN() {
+		// TODO Auto-generated method stub
+		ipEnding = 0;
+		subnetMask = NetworkInterface.
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 }
