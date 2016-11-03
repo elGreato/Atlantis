@@ -19,7 +19,7 @@ public class GameModel {
 	private ClientLobbyInterface msgOut;
 	private ArrayList<Player> players = new ArrayList<>();
 
-	public String getGameName() {
+	public String getGameName() { 
 		return gameName;
 	}
 
