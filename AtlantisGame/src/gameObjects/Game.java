@@ -29,7 +29,7 @@ public class Game implements GameInterface{
 	private DeckOfLandTiles deckA;
 	private DeckOfLandTiles deckB;
 	private ArrayList<Player> players = new ArrayList<>();
-	private ArrayList<Pawn> pawns;
+
 
 	// Constructor (doesn't start game)
 	public Game(String name, String password, int maxPlayers, User creator, Lobby lobby) {
@@ -82,14 +82,14 @@ public class Game implements GameInterface{
 		deckA = new DeckOfLandTiles();
 		deckB = new DeckOfLandTiles();
 		cards = new DeckOfCards();
-		pawns=new ArrayList<>();
-		
+	
+/*		
 		for (int i =0; i<numberOfPlayers;i++){
 			for (int k=0; k<3; k++){
 			Pawn pawn = new Pawn(players.get(i),k);
 			pawn.setPawnColor(players.get(i).getColor());
 			}
-		}
+		}*/
 		
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i)
@@ -100,22 +100,23 @@ public class Game implements GameInterface{
 
 		for (int i = 0; i < numberOfPlayers; i++) {
 			Player player = new Player(users.get(i).getUserInfo().getUsername());
-
+			giveColorToPlayer(player,i);
 			users.get(i).sendMessage(
 					new PlayerMessage(getName(), player, cardsForPlayers(i, player), player.countVictoryPoints(), i));
 			players.add(player);
 			System.out.println("it is " + players.size() + " number of players in server");
 		}
+	
 
 		for (int i = 0; i < numberOfPlayers; i++) {
 
 			users.get(i).sendMessage(new OpponentMessage(getName(), players));
 
 		}
-		for (int i=0; i<numberOfPlayers;i++){
-			users.get(i).sendMessage(new PawnMessage(getName(), new ArrayList<Pawn>()));
-		}
+		
 	}
+
+
 
 	private ArrayList<Card> cardsForPlayers(int playerIndex, Player player) {
 		ArrayList<Card> result = new ArrayList<>();
@@ -158,6 +159,18 @@ public class Game implements GameInterface{
 	public synchronized void processMessage(InGameMessage igm) {
 
 	}
+	public  void giveColorToPlayer(Player player, int index) {
+			if (index == 0)
+				player.setColor(ColorChoice.blue);
+			else if(index==1)
+				player.setColor(ColorChoice.red);
+			else if(index==2)
+				player.setColor(ColorChoice.green);
+			else if(index==3)
+				player.setColor(ColorChoice.purple);
+	
+			
+		}
 
 }
 

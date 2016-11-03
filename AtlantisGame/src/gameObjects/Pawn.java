@@ -1,5 +1,7 @@
 package gameObjects;
 
+import java.io.Serializable;
+
 import gameObjects.ColorChoice;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -7,16 +9,18 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 
-public class Pawn extends StackPane {
+public class Pawn extends StackPane implements Serializable{
+
 	private ColorChoice pawnColor;
 	private int location;
 	private Player owner;
+	private int pawnId;
 	
 	
-	public Pawn(Player player){
+	public Pawn(Player player, int pawnId){
 		super();
 		owner=player;
-		pawnColor=player.getColor();
+		this.pawnId=pawnId;
 	/*
 		cir = new Circle();
 		cir.setRadius(10.0f);
@@ -26,7 +30,7 @@ public class Pawn extends StackPane {
 		
 	}
 
-	private Color setPawnColor(Player c ) {
+	public static Paint FillColor(Player c ) {
 		if (c.getColor().toString().equalsIgnoreCase("blue")) 
 			return (Color.BLUE);
 		else if (c.getColor().toString().equalsIgnoreCase("red")) 
@@ -57,6 +61,18 @@ public class Pawn extends StackPane {
 
 	public Player getOwner() {
 		return owner;
+	}
+
+	public int getPawnId() {
+		return pawnId;
+	}
+
+	public void setPawnId(int pawnId) {
+		this.pawnId = pawnId;
+	}
+
+	public void setOwner(Player owner) {
+		this.owner = owner;
 	}
 
 	public int getLocation() {

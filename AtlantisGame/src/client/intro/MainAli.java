@@ -36,9 +36,9 @@ public class MainAli extends Application {
 
 		Player p2 = new Player("Kevin");
 		p2.setColor(ColorChoice.green);
-		Pawn pa1 = new Pawn(p2);
-		Pawn pa2 = new Pawn(p2);
-		Pawn pa3 = new Pawn(p2);
+		Pawn pa1 = new Pawn(p2,0);
+		Pawn pa2 = new Pawn(p2,1);
+		Pawn pa3 = new Pawn(p2,2);
 		
 		
 		DeckOfCards deck = new DeckOfCards();

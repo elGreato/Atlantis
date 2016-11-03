@@ -35,9 +35,9 @@ public class Player extends HBox implements Serializable {
 
 	private int numberOfMaxCards = 10;
 
-	private ArrayList<Pawn> pawns;
+	private ArrayList<Pawn> pawns= new ArrayList<>();
 
-	private transient ColorChoice color;
+	private  ColorChoice color;
 
 	private transient Label lblCard;
 	
@@ -80,8 +80,10 @@ public class Player extends HBox implements Serializable {
 
 		// create 3 pawns for each player
 		for (int i = 0; i > 3; i++) {
-			Pawn pawn = new Pawn(this);
-
+			Pawn pawn = new Pawn(this,i);
+			pawn.setOwner(this);
+			pawns.add(pawn);
+			
 		}
 
 		vbPlayerInfo.getChildren().add(lblName);

@@ -10,6 +10,7 @@ import gameObjects.AtlantisTile;
 
 import gameObjects.LandTile;
 import gameObjects.MainLand;
+import gameObjects.Pawn;
 import gameObjects.Player;
 
 import gameObjects.WaterTile;
@@ -24,6 +25,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -51,7 +54,15 @@ public class GameView {
 
 	// Vbox to hold buttons
 	VBox vbMainControls = new VBox();
-
+	
+	// Atlantis and main land
+	StackPane stackAtlantis = new StackPane();
+	StackPane stackMainLand = new StackPane();
+	// index for pawns on Atlantis
+	int y=5;
+	int x=5;
+	
+	
 	public GameView() {
 		root.setCenter(mainBoard);
 		mainBoard.setGridLinesVisible(false);
@@ -80,12 +91,12 @@ public class GameView {
 		}
 
 		// Mainland
-		StackPane stackMainLand = new StackPane();
+
 		stackMainLand.getChildren().add(new MainLand(999, 0, 8));
 		mainBoard.add(stackMainLand, 0, 7, 2, 2);
 
 		// the Atlantis
-		StackPane stackAtlantis = new StackPane();
+		
 		stackAtlantis.getChildren().add(new AtlantisTile(0, 0, 0));
 		mainBoard.add(stackAtlantis, 0, 0, 2, 2);
 
@@ -146,7 +157,7 @@ public class GameView {
 			Rectangle rec = new Rectangle();
 			rec.setWidth(48.00f);
 			rec.setHeight(48.00f);
-			rec.setFill(LandTile.setTileColor(tile));
+			rec.setFill(LandTile.getFillColor(tile));
 			tile.getChildren().addAll(rec,new Text(String.valueOf(deckA.get(i).getLandValue())+"\n"+tile.getColor().toString()));
 			base.get(i).getChildren().add(tile);
 		}
@@ -156,7 +167,7 @@ public class GameView {
 			Rectangle rec = new Rectangle();
 			rec.setWidth(48.00f);
 			rec.setHeight(48.00f);
-			rec.setFill(LandTile.setTileColor(tile));
+			rec.setFill(LandTile.getFillColor(tile));
 			tile.getChildren().addAll(rec,new Text(String.valueOf(deckA.get(i+16).getLandValue())+"\n"+tile.getColor().toString()));
 			base.get(i).getChildren().add(tile);
 		}
@@ -169,7 +180,7 @@ public class GameView {
 			Rectangle rec = new Rectangle();
 			rec.setWidth(48.00f);
 			rec.setHeight(48.00f);
-			rec.setFill(LandTile.setTileColor(tile));
+			rec.setFill(LandTile.getFillColor(tile));
 			tile.getChildren().addAll(rec,new Text(String.valueOf(deckB.get(i-27).getLandValue())+"\n"+tile.getColor().toString()));
 			base.get(i).getChildren().add(tile);
 		}
@@ -179,7 +190,7 @@ public class GameView {
 			Rectangle rec = new Rectangle();
 			rec.setWidth(48.00f);
 			rec.setHeight(48.00f);
-			rec.setFill(LandTile.setTileColor(tile));
+			rec.setFill(LandTile.getFillColor(tile));
 			tile.getChildren().addAll(rec,new Text(String.valueOf(deckB.get(i-2).getLandValue())+"\n"+tile.getColor().toString()));
 			base.get(i).getChildren().add(tile);
 		}
@@ -194,6 +205,15 @@ public class GameView {
 		player.getLblName().setText(player.getPlayerName());
 		player.getVpHolder().setText("Your Victory Points: " + String.valueOf(player.getVictoryPoints()));
 		hbPlayersInfo.getChildren().add(player);
+		
+		for (Pawn p: player.getPawns()){
+			Circle c = new Circle(x,y,10.0f);
+			c.setFill(/*Pawn.FillColor(player)*/Color.RED);
+			p.getChildren().add(c);
+		stackAtlantis.getChildren().add(p);
+		y+=5;
+		}
+		x+=10;
 		stage.sizeToScene();
 
 	}

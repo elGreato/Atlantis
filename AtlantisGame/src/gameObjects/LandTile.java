@@ -27,7 +27,7 @@ public class LandTile extends Tile  {
 
 	}
 	
-	public  static Paint setTileColor(LandTile landTile) {
+	public  static Paint getFillColor(LandTile landTile) {
 		
 			if (landTile.getColor().toString().equalsIgnoreCase("blue")) 
 				return (Color.BLUE);
