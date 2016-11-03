@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import gameObjects.Game;
+import gameObjects.GameInterface;
 import messageObjects.CreateGameMessage;
 import messageObjects.CreateUserMessage;
 import messageObjects.ServerInfoMessage;
@@ -25,13 +25,13 @@ public class User implements Runnable{
 	private boolean loggedIn;
 	private boolean connected;
 	
-	private Lobby lobby;
+	private LobbyInterface lobbyInterface;
 	
 	private Socket client;
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
 	
-	private ArrayList<Game> runningGames;
+	private ArrayList<GameInterface> runningGames;
 	
 	//Required Getters/Setters
 	public UserInfo getUserInfo() {
@@ -39,10 +39,10 @@ public class User implements Runnable{
 	}
 	
 	//Get information about objects from server
-	public User(Socket client, Lobby lobby)
+	public User(Socket client, LobbyInterface lobbyInterface)
 	{
 		this.client = client;
-		this.lobby = lobby;
+		this.lobbyInterface = lobbyInterface;
 	}
 	
 	
@@ -105,13 +105,13 @@ public class User implements Runnable{
 	private void createUser(Object loginOrCreate) throws IOException{
 		
 		CreateUserMessage createMessage = (CreateUserMessage)loginOrCreate;
-		userInfo = lobby.createNewUser(createMessage.getUsername(), createMessage.getPassword(), this);
+		userInfo = lobbyInterface.createNewUser(createMessage.getUsername(), createMessage.getPassword(), this);
 		if(userInfo != null)
 		{
 			//inform user about successful create and login, send user information at the same time
-			UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo, lobby.getPosition(userInfo));
+			UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo, lobbyInterface.getPosition(userInfo));
 			oos.writeObject(nowLoggedInAs);
-			lobby.sendWholeLobby(this);
+			lobbyInterface.sendWholeLobby(this);
 			loggedIn = true;
 		}
 		else
@@ -127,14 +127,14 @@ public class User implements Runnable{
 	private void loginUser(Object loginOrCreate) throws IOException {
 		
 		LoginMessage loginMessage = (LoginMessage)loginOrCreate;
-		userInfo = lobby.loginUser(loginMessage.getUsername(), loginMessage.getPassword(), this);
+		userInfo = lobbyInterface.loginUser(loginMessage.getUsername(), loginMessage.getPassword(), this);
 		
 		if(userInfo != null)
 		{
 			//inform user about successful login, send user information at the same time
-			UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo, lobby.getPosition(userInfo));
+			UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo, lobbyInterface.getPosition(userInfo));
 			oos.writeObject(nowLoggedInAs);
-			lobby.sendWholeLobby(this);
+			lobbyInterface.sendWholeLobby(this);
 			loggedIn = true;
 		}
 		else
@@ -149,7 +149,7 @@ public class User implements Runnable{
 	//Loop for receiving messages from the lobby and from the games that the user currently plays
 	private void processLobbyAndGameActivity() {
 
-		runningGames = new ArrayList<Game>();
+		runningGames = new ArrayList<GameInterface>();
 		
 		while(loggedIn && connected)
 		{
@@ -158,7 +158,7 @@ public class User implements Runnable{
 				if(receivedMessage instanceof InGameMessage)
 				{
 					InGameMessage igm = (InGameMessage)receivedMessage;
-					for(Game g : runningGames)
+					for(GameInterface g : runningGames)
 					{
 						if(igm.getGameName().equals(g.getName()))
 						{
@@ -170,14 +170,14 @@ public class User implements Runnable{
 				else if(receivedMessage instanceof GameJoinMessage)
 				{
 					GameJoinMessage gjm = (GameJoinMessage)receivedMessage;
-					String answer = lobby.joinGame(this, gjm);
+					String answer = lobbyInterface.joinGame(this, gjm);
 					oos.writeObject(new ServerInfoMessage(answer));
 				}
 				else if(receivedMessage instanceof CreateGameMessage)
 				{
 					System.out.println("create game message received");
 					CreateGameMessage cgm = (CreateGameMessage)receivedMessage;
-					String answer = lobby.createGame(this, cgm);
+					String answer = lobbyInterface.createGame(this, cgm);
 					System.out.println("Create game message processed");
 					oos.writeObject(new ServerInfoMessage(answer));
 					System.out.println("Answer sent");
@@ -186,7 +186,7 @@ public class User implements Runnable{
 				else if(receivedMessage instanceof LobbyChatMessage)
 				{
 					LobbyChatMessage chatMessage = (LobbyChatMessage)receivedMessage;
-					lobby.processChatMessage(chatMessage);
+					lobbyInterface.processChatMessage(chatMessage);
 				}
 				
 				
@@ -211,7 +211,7 @@ public class User implements Runnable{
 		
 	}
 	
-	public synchronized void initiateGameStart(Game game)
+	public synchronized void initiateGameStart(GameInterface game)
 	{
 		runningGames.add(game);
 		try {
@@ -225,10 +225,10 @@ public class User implements Runnable{
 	{
 		loggedIn = false;
 		connected = false;
-		lobby.logoutFromOnlineUsers(this);
+		lobbyInterface.logoutFromOnlineUsers(this);
 	}
 
-	protected void endGame(Game game) {
+	protected void endGame(GameInterface game) {
 		runningGames.remove(game);
 		
 	}

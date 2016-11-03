@@ -1,6 +1,8 @@
 package client.game;
 
 import java.util.ArrayList;
+
+import client.lobby.ClientLobbyInterface;
 import client.lobby.LobbyModel;
 import gameObjects.Player;
 import javafx.scene.control.Label;
@@ -14,7 +16,7 @@ public class GameModel {
 	private String gameName;
 	private GameView view;
 	// send messages to server through method msgOut.sendMessage()
-	private LobbyModel msgOut;
+	private ClientLobbyInterface msgOut;
 	private ArrayList<Player> players = new ArrayList<>();
 
 	public String getGameName() {

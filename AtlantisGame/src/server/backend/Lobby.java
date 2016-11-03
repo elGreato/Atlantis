@@ -14,7 +14,7 @@ import messageObjects.LobbyChatMessage;
 import messageObjects.UserInfoListMessage;
 import messageObjects.UserInfoMessage;
 
-public class Lobby {
+public class Lobby implements LobbyInterface{
 	private ArrayList<User> onlineUsers;
 	private ArrayList<UserInfo> userInfoAllUsers;
 	private ArrayList<Game> waitingGames;
@@ -42,6 +42,7 @@ public class Lobby {
 	
 	
 	//checks if username already exists and creates new user if it doesn't. If create user successful user will be informed and logged in.
+	@Override
 	public synchronized UserInfo createNewUser(String username, String password, User user)
 	{
 		
@@ -71,6 +72,7 @@ public class Lobby {
 	}
 
 	//Checks validity of entered passwords from login requests
+	@Override
 	public synchronized UserInfo loginUser(String username, String password, User user) {
 		for(UserInfo ui: userInfoAllUsers)
 		{
@@ -85,6 +87,7 @@ public class Lobby {
 	}
 	
 	//Creates new game from user input
+	@Override
 	public synchronized String createGame(User user, CreateGameMessage createMsg)
 	{
 		String serverAnswer = new String("");
@@ -124,6 +127,7 @@ public class Lobby {
 	}
 	
 	//Makes user join a game if preconditions are met
+	@Override
 	public synchronized String joinGame(User user, GameJoinMessage joinMsg)
 	{
 		String serverAnswer = new String("");
@@ -196,6 +200,7 @@ public class Lobby {
 	
 
 	//After informing the user about the successful login, all the lobby data including games has to be sent to the user. After that the user is added to the group that gets automatic updates called onlineUsers
+	@Override
 	public synchronized void sendWholeLobby(User user) {
 
 		ArrayList<GameListItem> allGamesInLobby = new ArrayList<GameListItem>(); 
@@ -268,7 +273,7 @@ public class Lobby {
 		databaseAccess.lastUpdate();
 	}
 
-
+	@Override
 	public synchronized void processChatMessage(LobbyChatMessage chatMessage) {
 		for(User u : onlineUsers)
 		{
@@ -277,6 +282,7 @@ public class Lobby {
 	}
 	
 	//Method that should be invoked after the user has won a game
+	@Override
 	public synchronized void addWin(User user)
 	{
 		user.getUserInfo().gameWon();
@@ -286,6 +292,7 @@ public class Lobby {
 	}
 
 	//Method that should be invoked after the user has lost a game
+	@Override
 	public synchronized void addLoss(User user)
 	{
 		user.getUserInfo().gameLost();
@@ -294,6 +301,7 @@ public class Lobby {
 	}
 	
 	//Method that should be invoked after the user has had a tie in a game
+	@Override
 	public synchronized void addTie(User user)
 	{
 		user.getUserInfo().gameTie();
@@ -348,6 +356,7 @@ public class Lobby {
 	}
 
 	//returns position in leaderboard of a user
+	@Override
 	public int getPosition(UserInfo userInfo) {
 		for(int i = 0; i < userInfoAllUsers.indexOf(userInfo); i++)
 		{
@@ -360,11 +369,12 @@ public class Lobby {
 		return userInfoAllUsers.indexOf(userInfo)+1;
 	}
 
-
-	protected void logoutFromOnlineUsers(User user) {
+	@Override
+	public void logoutFromOnlineUsers(User user) {
 		onlineUsers.remove(user);
 		
 	}
+	@Override
 	public void endGame(Game game)
 	{
 		for(User u : game.getUsers())

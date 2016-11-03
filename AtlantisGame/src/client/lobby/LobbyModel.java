@@ -28,7 +28,7 @@ import messageObjects.UserInfoListMessage;
 import messageObjects.UserInfoMessage;
 import server.backend.UserInfo;
 
-public class LobbyModel implements Runnable{
+public class LobbyModel implements Runnable, ClientLobbyInterface{
 
 	Thread listener;
 	private LobbyView view;
@@ -222,12 +222,12 @@ public class LobbyModel implements Runnable{
 		}
 		
 	}
-
+	
 	public void sendChatMessage() {
 		LobbyChatMessage chatMessage = new LobbyChatMessage(userInfo.getUsername(), view.chatField.getText());
 		sendMessage(chatMessage);
 	}
-
+	@Override
 	public synchronized void sendMessage(Message msg)
 	{
 		try {
@@ -249,5 +249,18 @@ public class LobbyModel implements Runnable{
 	public void endGame(GameModel game)
 	{
 		runningGames.remove(game);
+	}
+
+
+	@Override
+	public void endGame(String gameName) {
+		for(GameModel m: runningGames)
+		{
+			if(m.getGameName().equals(gameName))
+			{
+				runningGames.remove(m);
+			}
+		}
+		
 	}
 }

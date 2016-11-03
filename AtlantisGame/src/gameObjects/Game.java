@@ -11,7 +11,7 @@ import messageObjects.WaterTileMessage;
 import server.backend.Lobby;
 import server.backend.User;
 
-public class Game {
+public class Game implements GameInterface{
 
 	private String name;
 	private String password;
