@@ -1,30 +1,33 @@
 package client.game;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
-import com.sun.java.swing.plaf.windows.resources.windows_zh_TW;
+
+
 
 import gameObjects.AtlantisTile;
-import gameObjects.Card;
-import gameObjects.DeckOfLandTiles;
+
+
 import gameObjects.LandTile;
 import gameObjects.MainLand;
 import gameObjects.Player;
-import gameObjects.PlayerHand;
+
 import gameObjects.WaterTile;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
+
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import messageObjects.PlayerMessage;
+
 
 public class GameView {
 	BorderPane root = new BorderPane();
@@ -32,7 +35,7 @@ public class GameView {
 	GridPane mainBoard = new GridPane();
 	Scene scene;
 	Stage stage;
-	private final int numberOfTiles = 120;
+
 	int maxColIndex;
 	int maxRowIndex;
 	// base for other stacks
@@ -47,27 +50,28 @@ public class GameView {
 	Label lblGameBtns = new Label("Action Buttons");
 
 	// Vbox to hold buttons
-
 	VBox vbMainControls = new VBox();
 
 	public GameView() {
 		root.setCenter(mainBoard);
-		mainBoard.setGridLinesVisible(true);
+		mainBoard.setGridLinesVisible(false);
+
 		// set Max indexes
-		maxColIndex = 17;// (int) (Math.sqrt(numberOfTiles) * 1.5);
-		maxRowIndex = 10;// (int) (Math.sqrt(numberOfTiles));
-		// distribute water tiles as a base board
-		/*
-		 * for (int i = 0; i < (Math.sqrt(numberOfTiles) * 1.5); i++) { for (int
-		 * k = 0; k < Math.sqrt(numberOfTiles); k++) {
-		 * 
-		 * StackPane stack = new StackPane(); WaterTile water = new WaterTile(10
-		 * * i + k); water.setCol(k); water.setRow(i);
-		 * stack.getChildren().add(water); base.add(stack); addStack(stack);
-		 * 
-		 * }
-		 */
-		for (int i = 1; i < 47; i++) {
+		maxColIndex = 14;
+		maxRowIndex = 10;
+
+		// col and row constraints for the gridpane
+		for (int i = 0; i < 10; i++) {
+			RowConstraints con = new RowConstraints();
+			con.setPrefHeight(50);
+			mainBoard.getRowConstraints().add(con);
+			ColumnConstraints colcon = new ColumnConstraints();
+			colcon.setPrefWidth(50);
+			mainBoard.getColumnConstraints().add(colcon);
+		}
+
+		// stacks to hold water panes
+		for (int i = 1; i < 54; i++) {
 			StackPane stack = new StackPane();
 			WaterTile water = new WaterTile(i);
 			stack.getChildren().add(water);
@@ -76,18 +80,20 @@ public class GameView {
 		}
 
 		// Mainland
-		mainBoard.add(new MainLand(999, 7, 7), 15, 9);
+		StackPane stackMainLand = new StackPane();
+		stackMainLand.getChildren().add(new MainLand(999, 0, 8));
+		mainBoard.add(stackMainLand, 0, 7, 2, 2);
 
 		// the Atlantis
-		mainBoard.add(new AtlantisTile(0, 0, 0), 0, 0);
+		StackPane stackAtlantis = new StackPane();
+		stackAtlantis.getChildren().add(new AtlantisTile(0, 0, 0));
+		mainBoard.add(stackAtlantis, 0, 0, 2, 2);
+
 		// add Buttons
 		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnPayWithCard, btnPayWithTreasure);
 		// add players info
 		root.setBottom(hbPlayersInfo);
 		root.setRight(vbMainControls);
-
-		// make mainboard scalable
-		mainBoard.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
 
 		stage = new Stage();
 		mainBoard.setVgap(3);
@@ -101,119 +107,88 @@ public class GameView {
 	int co = 2;
 	int ro = 1;
 
+	// add stacks to the gridpane
 	private void addStack(StackPane stack) {
 
-		boolean reachedMaxIndex = false;
-		boolean reachedFirstCol = true;
-
-		if (ro == 1 && co != 15) {
+		if (((ro == 1) || (ro == 5) || (ro == 9)) && co != maxColIndex) {
 			mainBoard.add(stack, co, ro);
 			co++;
-		} else if (co == 15&&ro==1) {
+		} else if (co == maxColIndex && ((ro == 1) || (ro == 5) || (ro == 9))) {
 
-			mainBoard.add(stack, 14, ro + 1);
-			reachedMaxIndex = true;
-			co = 0;
+			mainBoard.add(stack, maxColIndex - 1, ro + 1);
+
 			ro += 2;
-
+			co -= 1;
 		}
 
-		else if (ro == 3 && co != 15) {
+		else if (((ro == 3) || (ro == 7) || (ro == 11)) && co <= maxColIndex && co != 0) {
 
 			mainBoard.add(stack, co, ro);
-			co++;
+			co--;
 
-		} else if (co == 15&&ro==3) {
-			mainBoard.add(stack, 0, ro + 1);
-			co = 0;
+		} else if (co == 0 && ((ro == 3) || (ro == 7) || (ro == 11))) {
+			mainBoard.add(stack, 1, ro + 1);
+
 			ro += 2;
-		}
-		else	if (ro == 5 && co != 15) {
-			mainBoard.add(stack, co, ro);
-			co++;
-		} else if (co == 15 && ro==5) {
-
-			mainBoard.add(stack, 14, ro + 1);
-			reachedMaxIndex = true;
-			co = 0;
-			ro += 2;
-
-		}
-		else if (ro == 7 && co != 15) {
-			mainBoard.add(stack, co, ro);
-			co++;
-		} else if (co == 15&&ro==7) {
-
-			mainBoard.add(stack, 14, ro + 1);
-			reachedMaxIndex = true;
-			co = 0;
-			ro += 2;
- 
-		}
-		else if (ro == 9 && co != 15) {
-			mainBoard.add(stack, co, ro);
-			co++;
-		} else if (co == 15&&ro==9) {
-
-			mainBoard.add(stack, 14, ro + 1);
-			reachedMaxIndex = true;
-			co = 0;
-			ro += 2; 
-
+			co += 1;
 		}
 
 	}
 
-	/*
-	 * public void distributeLandTiles(ArrayList<LandTile> deckA,
-	 * ArrayList<LandTile> deckB) { Iterator<LandTile> it = deckA.iterator(); //
-	 * we start with index 2 since the Atlantis booked the index 0 and span //
-	 * to four cells int co = 2; int ro = 1;
-	 * 
-	 * // these two booleans are to add the extra tile between every other row
-	 * boolean reachedMaxIndex = false; boolean reachedFirstCol = false; while
-	 * (it.hasNext()) { LandTile temp = it.next(); LandTile tile = new
-	 * LandTile(temp.getTileId(), temp.getColor(), temp.getLandValue());
-	 * 
-	 * base.get(co).getChildren().add(tile);
-	 * 
-	 * tile.setCol(co); tile.setRow(ro); tile.setTxtValue(new
-	 * Text(String.valueOf(tile.getLandValue()))); co++; it.remove(); if (co ==
-	 * maxColIndex + 1) { if (reachedMaxIndex == false) { LandTile temp2 =
-	 * it.next(); LandTile temp3 = new LandTile(temp2.getTileId(),
-	 * temp2.getColor(), temp2.getLandValue());
-	 * base.get(co).getChildren().add(temp3); temp3.setCol(maxColIndex);
-	 * temp3.setRow(ro); reachedMaxIndex = true;
-	 * 
-	 * } co = 0; ro += 2; } if (co == 0) { if (reachedFirstCol == false) {
-	 * LandTile temp2 = it.next(); LandTile temp3 = new
-	 * LandTile(temp2.getTileId(), temp2.getColor(), temp2.getLandValue());
-	 * base.get(ro + 1).getChildren().add(temp3); temp3.setCol(0);
-	 * temp3.setRow(ro); reachedFirstCol = true; } }
-	 * 
-	 * } it = deckB.iterator(); while (it.hasNext()) { LandTile temp =
-	 * it.next(); LandTile tile = new LandTile(temp.getTileId(),
-	 * temp.getColor(), temp.getLandValue());
-	 * 
-	 * base.get(co * 10 + ro).getChildren().add(tile); tile.setCol(co);
-	 * tile.setRow(ro); tile.setTxtValue(new
-	 * Text(String.valueOf(tile.getLandValue()))); co++; it.remove(); if (co ==
-	 * maxColIndex + 1) { if (reachedMaxIndex == true) { LandTile temp2 =
-	 * it.next(); LandTile temp3 = new LandTile(temp2.getTileId(),
-	 * temp2.getColor(), temp2.getLandValue());
-	 * 
-	 * base.get(10 * maxColIndex + (ro + 1)).getChildren().add(temp3);
-	 * temp3.setCol(maxColIndex); temp3.setRow(ro); reachedMaxIndex = false; }
-	 * co = 0; ro += 2; } if (co == 0) { if (reachedFirstCol == true) { LandTile
-	 * temp2 = it.next(); LandTile temp3 = new LandTile(temp2.getTileId(),
-	 * temp2.getColor(), temp2.getLandValue()); base.get(ro +
-	 * 1).getChildren().add(temp3); temp3.setCol(0); temp3.setRow(ro);
-	 * reachedFirstCol = false; } }
-	 * 
-	 * }
-	 * 
-	 * }
-	 */
+	public void distributeLandTiles(ArrayList<LandTile> deckA, ArrayList<LandTile> deckB) {
+		// Distribution of Land Tiles
+		
+		// DeckA, according to the rules the first 10 stacks are single and then they are double, 
+		
+		for (int i=0; i<26; i++){
+			LandTile tile =deckA.get(i);
+			tile.setLandTileColor(deckA.get(i).getColor());
+			Rectangle rec = new Rectangle();
+			rec.setWidth(48.00f);
+			rec.setHeight(48.00f);
+			rec.setFill(LandTile.setTileColor(tile));
+			tile.getChildren().addAll(rec,new Text(String.valueOf(deckA.get(i).getLandValue())+"\n"+tile.getColor().toString()));
+			base.get(i).getChildren().add(tile);
+		}
+		for (int i=11; i<21;i++){
+			LandTile tile =deckA.get(i+16);
+			tile.setLandTileColor(deckA.get(i+16).getColor());
+			Rectangle rec = new Rectangle();
+			rec.setWidth(48.00f);
+			rec.setHeight(48.00f);
+			rec.setFill(LandTile.setTileColor(tile));
+			tile.getChildren().addAll(rec,new Text(String.valueOf(deckA.get(i+16).getLandValue())+"\n"+tile.getColor().toString()));
+			base.get(i).getChildren().add(tile);
+		}
+	
+		// DeckB
+		
+		for (int i=27; i<53; i++){
+			LandTile tile =deckB.get(i-27);
+			tile.setLandTileColor(deckB.get(i-27).getColor());
+			Rectangle rec = new Rectangle();
+			rec.setWidth(48.00f);
+			rec.setHeight(48.00f);
+			rec.setFill(LandTile.setTileColor(tile));
+			tile.getChildren().addAll(rec,new Text(String.valueOf(deckB.get(i-27).getLandValue())+"\n"+tile.getColor().toString()));
+			base.get(i).getChildren().add(tile);
+		}
+		for (int i=28; i<38;i++){
+			LandTile tile =deckB.get(i-2);
+			tile.setLandTileColor(deckB.get(i-2).getColor());
+			Rectangle rec = new Rectangle();
+			rec.setWidth(48.00f);
+			rec.setHeight(48.00f);
+			rec.setFill(LandTile.setTileColor(tile));
+			tile.getChildren().addAll(rec,new Text(String.valueOf(deckB.get(i-2).getLandValue())+"\n"+tile.getColor().toString()));
+			base.get(i).getChildren().add(tile);
+		}
+		
+		
+		
+
+	}
+
 	public void showPlayer(Player player) {
 
 		player.getLblName().setText(player.getPlayerName());

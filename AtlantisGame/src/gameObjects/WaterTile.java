@@ -38,14 +38,8 @@ public class WaterTile extends Tile {
 		this.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
 				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
-		// @Override
-
-		// public void dosmthin() {
-		WaterTile wt = this;
-		
 	}
 
-	// }
 	public boolean hasPawn() {
 		return false;
 

@@ -32,8 +32,8 @@ public class GameModel {
 	public void processMessage(InGameMessage msgIn) {
 		// first we receive the main board stuff
 		if (msgIn instanceof DeckLandTileMessage) {
-		//	view.distributeLandTiles(((DeckLandTileMessage) msgIn).getArrayA(),
-		//			((DeckLandTileMessage) msgIn).getArrayB());
+			view.distributeLandTiles(((DeckLandTileMessage) msgIn).getArrayA(),
+					((DeckLandTileMessage) msgIn).getArrayB());
 
 		}
 		// now the players

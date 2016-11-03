@@ -18,7 +18,7 @@ public class GameController {
 
 }
 	private void handleBase(MouseEvent e) {
-		((StackPane) e.getSource()).getChildren().remove(1);
+		((StackPane) e.getSource()).getChildren().remove(((StackPane) e.getSource()).getChildren().size()-1);
 	
 	}
 }

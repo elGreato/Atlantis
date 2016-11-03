@@ -19,32 +19,15 @@ public class LandTile extends Tile  {
 	private int landValue;
 	private int col;
 	private int row;
-	private transient Rectangle rec;
-	private transient Text txtValue;
-	
+
 	public LandTile(int tileId,ColorChoice color, int value ){
 		super(tileId);
 	landTileColor=color;
 	landValue=value;
-	rec = new Rectangle();
-	rec.setWidth(48.00f);
-	rec.setHeight(48.00f);
-	rec.setFill(setTileColor(this));
-	
-	
-	 txtValue = new Text();
-	txtValue.setText(String.valueOf(landValue)+"\n"+landTileColor.toString());
-	getChildren().add(rec);
-	getChildren().add(txtValue);
-	
+
 	}
-	public Text getTxtValue() {
-		return txtValue;
-	}
-	public void setTxtValue(Text txtValue) {
-		this.txtValue = txtValue;
-	}
-	private Paint setTileColor(LandTile landTile) {
+	
+	public  static Paint setTileColor(LandTile landTile) {
 		
 			if (landTile.getColor().toString().equalsIgnoreCase("blue")) 
 				return (Color.BLUE);
@@ -99,6 +82,6 @@ public class LandTile extends Tile  {
 	public Pawn getPawn(){
 		return pawnOnTile;
 	}
-	
+		
 	
 }
