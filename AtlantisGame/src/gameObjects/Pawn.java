@@ -11,18 +11,18 @@ public class Pawn extends StackPane {
 	private ColorChoice pawnColor;
 	private int location;
 	private Player owner;
-	private transient Circle cir ;
+	
 	
 	public Pawn(Player player){
 		super();
 		owner=player;
 		pawnColor=player.getColor();
-	
+	/*
 		cir = new Circle();
 		cir.setRadius(10.0f);
 		cir.setFill(setPawnColor(owner));
 		
-		getChildren().add(cir);
+		getChildren().add(cir);*/
 		
 	}
 
@@ -51,7 +51,9 @@ public class Pawn extends StackPane {
 		return pawnColor;
 	}
 
-	
+	public void setPawnColor(ColorChoice pawnColor) {
+		this.pawnColor = pawnColor;
+	}
 
 	public Player getOwner() {
 		return owner;

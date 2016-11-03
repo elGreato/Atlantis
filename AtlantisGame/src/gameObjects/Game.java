@@ -29,6 +29,7 @@ public class Game implements GameInterface{
 	private DeckOfLandTiles deckA;
 	private DeckOfLandTiles deckB;
 	private ArrayList<Player> players = new ArrayList<>();
+	private ArrayList<Pawn> pawns;
 
 	// Constructor (doesn't start game)
 	public Game(String name, String password, int maxPlayers, User creator, Lobby lobby) {
@@ -81,6 +82,15 @@ public class Game implements GameInterface{
 		deckA = new DeckOfLandTiles();
 		deckB = new DeckOfLandTiles();
 		cards = new DeckOfCards();
+		pawns=new ArrayList<>();
+		
+		for (int i =0; i<numberOfPlayers;i++){
+			for (int k=0; k<3; k++){
+			Pawn pawn = new Pawn(players.get(i),k);
+			pawn.setPawnColor(players.get(i).getColor());
+			}
+		}
+		
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i)
 					.sendMessage(new DeckLandTileMessage(getName(), deckA.getDeckOfTiles(), deckB.getDeckOfTiles()));
@@ -101,6 +111,9 @@ public class Game implements GameInterface{
 
 			users.get(i).sendMessage(new OpponentMessage(getName(), players));
 
+		}
+		for (int i=0; i<numberOfPlayers;i++){
+			users.get(i).sendMessage(new PawnMessage(getName(), new ArrayList<Pawn>()));
 		}
 	}
 
@@ -147,3 +160,4 @@ public class Game implements GameInterface{
 	}
 
 }
+
