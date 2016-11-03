@@ -12,7 +12,7 @@ public class GameController {
 		this.model = gameModel;
 		for (StackPane s: view.getBase()){
 		s.setOnMouseClicked(e-> handleBase(e));
-		
+		 
 	}
 	
 
