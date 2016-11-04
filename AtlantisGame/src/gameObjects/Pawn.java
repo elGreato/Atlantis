@@ -11,14 +11,14 @@ import javafx.scene.shape.Circle;
 
 public class Pawn extends StackPane implements Serializable{
 
-	private ColorChoice pawnColor;
+	private  ColorChoice pawnColor;
 	private int location;
-	private Player owner;
+	private String owner;
 	private int pawnId;
 	
 	
-	public Pawn(Player player, int pawnId){
-		super();
+	public Pawn(String player, int pawnId){
+		
 		owner=player;
 		this.pawnId=pawnId;
 	/*
@@ -59,7 +59,7 @@ public class Pawn extends StackPane implements Serializable{
 		this.pawnColor = pawnColor;
 	}
 
-	public Player getOwner() {
+	public String getOwner() {
 		return owner;
 	}
 
@@ -71,7 +71,7 @@ public class Pawn extends StackPane implements Serializable{
 		this.pawnId = pawnId;
 	}
 
-	public void setOwner(Player owner) {
+	public void setOwner(String owner) {
 		this.owner = owner;
 	}
 

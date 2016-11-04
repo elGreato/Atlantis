@@ -102,9 +102,10 @@ public class Game implements GameInterface{
 			Player player = new Player(users.get(i).getUserInfo().getUsername());
 			giveColorToPlayer(player,i);
 			users.get(i).sendMessage(
-					new PlayerMessage(getName(), player, cardsForPlayers(i, player), player.countVictoryPoints(), i));
+					new PlayerMessage(getName(), player, cardsForPlayers(i, player), i));
 			players.add(player);
 			System.out.println("it is " + players.size() + " number of players in server");
+			System.out.println(player.getColor().toString());
 		}
 	
 

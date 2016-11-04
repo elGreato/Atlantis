@@ -40,13 +40,10 @@ public class GameModel {
 		}
 		// now the players
 		if (msgIn instanceof PlayerMessage) {
-			Player player = new Player(((PlayerMessage) msgIn).getPlayer().getPlayerName());
-			player.setPlayerName(((PlayerMessage) msgIn).getPlayer().getPlayerName());
-
-			player.setVictoryPoints(((PlayerMessage) msgIn).getInitialVictoryPoints());
-
+			Player player = (((PlayerMessage) msgIn).getPlayer());
+			
 			for (int i = 0; i < (((PlayerMessage) msgIn).getCards().size()); i++) {
-				((Label) (player.getHboxCards().getChildren().get(i)))
+				((Label) (view.getHboxCards().getChildren().get(i)))
 						.setGraphic((((PlayerMessage) msgIn).getCards().get(i)).colorChoice.addImage());
 
 			}
