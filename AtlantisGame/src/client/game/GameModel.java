@@ -6,6 +6,7 @@ import client.lobby.ClientLobbyInterface;
 import client.lobby.LobbyModel;
 import gameObjects.Player;
 import javafx.scene.control.Label;
+import messageObjects.AtlantisMainLandMessage;
 import messageObjects.DeckLandTileMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
@@ -36,6 +37,12 @@ public class GameModel {
 		if (msgIn instanceof DeckLandTileMessage) {
 			view.distributeLandTiles(((DeckLandTileMessage) msgIn).getArrayA(),
 					((DeckLandTileMessage) msgIn).getArrayB());
+
+		}
+		// the atlantis and the main land
+		if (msgIn instanceof AtlantisMainLandMessage) {
+			view.placeAtlantisMainLand(((AtlantisMainLandMessage) msgIn).getAtlantis(),
+					((AtlantisMainLandMessage) msgIn).getMainland());
 
 		}
 		// now the players

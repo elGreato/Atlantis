@@ -15,18 +15,12 @@ public class Pawn extends StackPane implements Serializable{
 	private int location;
 	private String owner;
 	private int pawnId;
-	
+	private transient Circle circle;
 	
 	public Pawn(String player, int pawnId){
 		
 		owner=player;
 		this.pawnId=pawnId;
-	/*
-		cir = new Circle();
-		cir.setRadius(10.0f);
-		cir.setFill(setPawnColor(owner));
-		
-		getChildren().add(cir);*/
 		
 	}
 
@@ -81,6 +75,14 @@ public class Pawn extends StackPane implements Serializable{
 
 	public void setLocation(int location) {
 		this.location = location;
+	}
+
+	public Circle getCircle() {
+		return circle;
+	}
+
+	public void setCircle(Circle circle) {
+		this.circle = circle;
 	}
 
 	

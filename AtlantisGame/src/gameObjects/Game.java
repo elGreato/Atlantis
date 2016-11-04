@@ -3,6 +3,7 @@ package gameObjects;
 // This class is part of the Gamer Server, should be moved from this package
 import java.util.ArrayList;
 
+import messageObjects.AtlantisMainLandMessage;
 import messageObjects.DeckLandTileMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
@@ -29,6 +30,8 @@ public class Game implements GameInterface{
 	private DeckOfLandTiles deckA;
 	private DeckOfLandTiles deckB;
 	private ArrayList<Player> players = new ArrayList<>();
+	private AtlantisTile atlantis= new AtlantisTile();
+	private MainLand mainland=new MainLand();
 
 
 	// Constructor (doesn't start game)
@@ -83,17 +86,16 @@ public class Game implements GameInterface{
 		deckB = new DeckOfLandTiles();
 		cards = new DeckOfCards();
 	
-/*		
-		for (int i =0; i<numberOfPlayers;i++){
-			for (int k=0; k<3; k++){
-			Pawn pawn = new Pawn(players.get(i),k);
-			pawn.setPawnColor(players.get(i).getColor());
-			}
-		}*/
-		
+
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i)
 					.sendMessage(new DeckLandTileMessage(getName(), deckA.getDeckOfTiles(), deckB.getDeckOfTiles()));
+
+		}
+		// send the atlantis and main land
+		for (int i = 0; i < numberOfPlayers; i++) {
+			users.get(i)
+					.sendMessage(new AtlantisMainLandMessage(getName(), atlantis, mainland));
 
 		}
 		// send hbox Player for each player
@@ -101,6 +103,7 @@ public class Game implements GameInterface{
 		for (int i = 0; i < numberOfPlayers; i++) {
 			Player player = new Player(users.get(i).getUserInfo().getUsername());
 			giveColorToPlayer(player,i);
+			player.setPlayerIndex(i);
 			users.get(i).sendMessage(
 					new PlayerMessage(getName(), player, cardsForPlayers(i, player), i));
 			players.add(player);

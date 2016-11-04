@@ -11,7 +11,7 @@ import gameObjects.ColorChoice;
 
 public class Player implements Serializable {
 
-	private String name;
+	private String name; 
 
 	private int victoryPoints = 0;
 
@@ -20,6 +20,8 @@ public class Player implements Serializable {
 	private ArrayList<Pawn> pawns = new ArrayList<>();
 
 	private ColorChoice color;
+	
+	private int playerIndex;
 
 	public Player(String name) {
 		// the player extends vbox
@@ -91,6 +93,14 @@ public class Player implements Serializable {
 
 	public void setColor(ColorChoice color) {
 		this.color = color;
+	}
+
+	public int getPlayerIndex() {
+		return playerIndex;
+	}
+
+	public void setPlayerIndex(int playerIndex) {
+		this.playerIndex = playerIndex;
 	}
 
 }

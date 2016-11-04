@@ -4,23 +4,28 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import gameObjects.AtlantisTile;
-
 import gameObjects.LandTile;
 import gameObjects.MainLand;
 import gameObjects.Pawn;
 import gameObjects.Player;
-
 import gameObjects.WaterTile;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-
+import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -31,54 +36,56 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GameView {
-	BorderPane root = new BorderPane();
-	GridPane mainBoard = new GridPane();
+	private BorderPane root = new BorderPane();
+	private GridPane mainBoard = new GridPane();
 
 	// base for other stacks
 	ArrayList<StackPane> base = new ArrayList<>();
 
 	// fx stuff
-	Scene scene;
-	Stage stage;
+	public Scene scene;
+	public Stage stage;
 
 	// the main game controls
-	Button btnPlayCard = new Button("Play a Selected Card");
-	Button btnPayWithCard = new Button("Pay with a Card");
-	Button btnPayWithTreasure = new Button("Pay with a treasure");
+	private Button btnPlayCard = new Button("Play a Selected Card");
+	private Button btnPayWithCard = new Button("Pay with a Card");
+	private Button btnPayWithTreasure = new Button("Pay with a treasure");
 
 	// Labels for main game controls
-	Label lblGameBtns = new Label("Action Buttons");
+	private Label lblGameBtns = new Label("Action Buttons");
 
 	// Vbox to hold buttons
-	VBox vbMainControls = new VBox();
+	private VBox vbMainControls = new VBox();
 
-	// Atlantis and main land
-	StackPane stackAtlantis = new StackPane();
-	StackPane stackMainLand = new StackPane();
+	// Atlantis and mainland Holders
+	private StackPane stackAtlantis = new StackPane();
+	private StackPane stackMainLand = new StackPane();
 
 	// Player View
 
 	private HBox hbPlayersInfo = new HBox();
 	private HBox hbOpponents = new HBox();
 	private HBox hboxCards = new HBox();
+	private HBox hbPawnHolder = new HBox();
+	private HBox hbOpponentPawnHolder = new HBox();
 
-	// VBox to hold  players information
+	private MainLand mainland;
+	private AtlantisTile atlantis;
+
+	// VBox to hold players information+ VBox to hold individual players
 	private VBox vbPlayerInfo = new VBox();
-	// VBox to hold individual players
 	private VBox vbPlayer = new VBox();
 
 	private Label lblName = new Label();
-
 	private Label vpHolder = new Label();
 	private Label lblPlayerImage = new Label();
-
 	private Label lblCard;
 
 	private int numberOfMaxCards = 10;
 
 	// index for pawns on Atlantis
-	int y = 5;
-	int x = 5;
+	private int y = 0;
+	private int x = 5;
 
 	int maxColIndex;
 	int maxRowIndex;
@@ -110,16 +117,6 @@ public class GameView {
 			addStack(stack);
 		}
 
-		// Mainland
-
-		stackMainLand.getChildren().add(new MainLand(999, 0, 8));
-		mainBoard.add(stackMainLand, 0, 7, 2, 2);
-
-		// the Atlantis
-
-		stackAtlantis.getChildren().add(new AtlantisTile(0, 0, 0));
-		mainBoard.add(stackAtlantis, 0, 0, 2, 2);
-
 		// add Buttons
 		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnPayWithCard, btnPayWithTreasure);
 		// add players view stuff
@@ -132,7 +129,7 @@ public class GameView {
 			hboxCards.getChildren().add(lblCard);
 
 		}
-		// set the picture
+		// set a random picture for each player
 		int numberOfPicturesAvailable = 4;
 		String[] paths = new String[numberOfPicturesAvailable];
 		paths[0] = "images4players/player1.png";
@@ -149,9 +146,9 @@ public class GameView {
 		vbPlayerInfo.getChildren().add(lblPlayerImage);
 		vbPlayerInfo.getChildren().add(hboxCards);
 		vbPlayer.getChildren().add(vbPlayerInfo);
-		
-		hbPlayersInfo.getChildren().add(vbPlayer);
-		
+
+		hbPlayersInfo.getChildren().addAll(vbPlayer, hbOpponents);
+
 		root.setBottom(hbPlayersInfo);
 		root.setRight(vbMainControls);
 
@@ -163,11 +160,12 @@ public class GameView {
 		stage.show();
 	}
 
-	// those are index for stackpane
+	// those are index for base Children
+	// we start with column two for the Atlantis node
 	int co = 2;
 	int ro = 1;
 
-	// add stacks to the gridpane
+	// add stacks to the mainBoard
 	private void addStack(StackPane stack) {
 
 		if (((ro == 1) || (ro == 5) || (ro == 9)) && co != maxColIndex) {
@@ -179,9 +177,7 @@ public class GameView {
 
 			ro += 2;
 			co -= 1;
-		}
-
-		else if (((ro == 3) || (ro == 7) || (ro == 11)) && co <= maxColIndex && co != 0) {
+		} else if (((ro == 3) || (ro == 7) || (ro == 11)) && co <= maxColIndex && co != 0) {
 
 			mainBoard.add(stack, co, ro);
 			co--;
@@ -254,19 +250,25 @@ public class GameView {
 	public void showPlayer(Player player) {
 
 		lblName.setText(player.getPlayerName());
-		Label lblColor = new Label(player.getColor().toString());
-		vbPlayer.getChildren().add(lblColor);
+		Rectangle recColor = new Rectangle();
+		recColor.setHeight(10);
+		recColor.setWidth(150);
+		recColor.setFill(Pawn.FillColor(player));
+		vbPlayer.getChildren().add(recColor);
 		vpHolder.setText("Your Victory Points: " + String.valueOf(player.getVictoryPoints()));
 
 		for (Pawn p : player.getPawns()) {
-			Circle c = new Circle(x, y, 10.0f);
-			System.out.println(player.getColor().toString() + "IN GAME VIEWWWWWWW");
+			Circle c = new Circle();
+			c.setRadius(10);
+			p.setCircle(c);
+			System.out.println("players pawns: " + player.getPawns().size());
 			c.setFill(Pawn.FillColor(player));
 			p.getChildren().add(c);
-			stackAtlantis.getChildren().add(p);
-			y += 5;
+
+			hbPawnHolder.getChildren().add(p);
+
 		}
-		x += 10;
+		atlantis.getChildren().add(hbPawnHolder);
 		stage.sizeToScene();
 
 	}
@@ -278,10 +280,22 @@ public class GameView {
 		lblopponentName.setText(opponent.getPlayerName());
 		lblopponentCardCount
 				.setText("This enemy has " + String.valueOf(opponent.getPlayerHand().getNumCards()) + " cards\t");
-		vbOpponentInfo.getChildren().add(lblopponentName);
-		vbOpponentInfo.getChildren().add(lblopponentCardCount);
-		hbPlayersInfo.getChildren().add(vbOpponentInfo);
+		
+		Rectangle recColor = new Rectangle();
+		recColor.setHeight(10);
+		recColor.setWidth(150);
+		recColor.setFill(Pawn.FillColor(opponent));
+		vbOpponentInfo.getChildren().addAll(lblopponentName,lblopponentCardCount,recColor);
+		hbOpponents.getChildren().add(vbOpponentInfo);
 
+		for (Pawn p : opponent.getPawns()) {
+
+			Circle c = new Circle();
+			c.setRadius(10);
+			c.setFill(Pawn.FillColor(opponent));
+			hbOpponentPawnHolder.getChildren().add(c);
+		}
+		atlantis.getChildren().add(hbOpponentPawnHolder);
 	}
 
 	public ArrayList<StackPane> getBase() {
@@ -298,6 +312,28 @@ public class GameView {
 
 	public void setHboxCards(HBox hboxCards) {
 		this.hboxCards = hboxCards;
+	}
+
+	public void placeAtlantisMainLand(AtlantisTile atlantis, MainLand mainland) {
+
+		this.atlantis = atlantis;
+		this.mainland = mainland;
+
+		// the Atlantis
+
+		stackAtlantis.getChildren().add(atlantis);
+		mainBoard.add(stackAtlantis, 0, 0, 2, 2);
+		Image img = new Image(getClass().getResourceAsStream("images4Tiles/atlantisTileImage.jpg"));
+		atlantis.setBackground(new Background(new BackgroundImage(img, BackgroundRepeat.NO_REPEAT,
+				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+
+		// Mainland
+		stackMainLand.getChildren().add(mainland);
+		mainBoard.add(stackMainLand, 0, 7, 2, 2);
+		Image im = new Image(getClass().getResourceAsStream("images4Tiles/mainLand.jpg"));
+		mainland.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
+				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+
 	}
 
 }

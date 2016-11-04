@@ -1,0 +1,538 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (malloc) failed to allocate 766896 bytes for Chunk::new
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   In 32 bit mode, the process size limit was hit
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Use 64 bit Java on a 64 bit OS
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (allocation.cpp:390), pid=4084, tid=0x0000000000004bf0
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0_102-b14) (build 1.8.0_102-b14)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.102-b14 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000000001dff9800):  JavaThread "C2 CompilerThread2" daemon [_thread_in_native, id=19440, stack(0x000000001f7e0000,0x000000001f8e0000)]
+
+Stack: [0x000000001f7e0000,0x000000001f8e0000]
+[error occurred during error reporting (printing stack bounds), id 0xc0000005]
+
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+
+
+Current CompileTask:
+C2:   5310 2702   !   4       javafx.scene.CssStyleHelper::transitionToState (1075 bytes)
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x000000002030a000 JavaThread "Thread-259" [_thread_in_native, id=19380, stack(0x000000003b360000,0x000000003b460000)]
+  0x000000002030a800 JavaThread "Thread-258" [_thread_in_native, id=21144, stack(0x0000000037d00000,0x0000000037e00000)]
+  0x000000002030b800 JavaThread "Thread-256" [_thread_in_native, id=21168, stack(0x0000000037b00000,0x0000000037c00000)]
+  0x0000000020301800 JavaThread "Thread-255" [_thread_in_native, id=21164, stack(0x0000000037a00000,0x0000000037b00000)]
+  0x0000000020308800 JavaThread "Thread-254" [_thread_in_native, id=20004, stack(0x0000000037900000,0x0000000037a00000)]
+  0x0000000020303000 JavaThread "Thread-253" [_thread_in_native, id=21136, stack(0x0000000037800000,0x0000000037900000)]
+  0x0000000020306000 JavaThread "Thread-252" [_thread_in_native, id=21116, stack(0x0000000037700000,0x0000000037800000)]
+  0x0000000020307000 JavaThread "Thread-251" [_thread_in_native, id=21128, stack(0x0000000037600000,0x0000000037700000)]
+  0x0000000020301000 JavaThread "Thread-250" [_thread_in_native, id=21124, stack(0x0000000037500000,0x0000000037600000)]
+  0x0000000020302800 JavaThread "Thread-249" [_thread_in_native, id=21028, stack(0x0000000037400000,0x0000000037500000)]
+  0x0000000020307800 JavaThread "Thread-248" [_thread_in_native, id=21108, stack(0x0000000037300000,0x0000000037400000)]
+  0x0000000020304000 JavaThread "Thread-247" [_thread_in_native, id=21104, stack(0x0000000037200000,0x0000000037300000)]
+  0x0000000020305800 JavaThread "Thread-246" [_thread_in_native, id=21092, stack(0x0000000037100000,0x0000000037200000)]
+  0x0000000020304800 JavaThread "Thread-245" [_thread_in_native, id=21088, stack(0x0000000037000000,0x0000000037100000)]
+  0x0000000020300000 JavaThread "Thread-244" [_thread_in_native, id=21084, stack(0x0000000036f00000,0x0000000037000000)]
+  0x00000000202f8800 JavaThread "Thread-243" [_thread_in_native, id=21080, stack(0x0000000036e00000,0x0000000036f00000)]
+  0x00000000202ff800 JavaThread "Thread-242" [_thread_in_native, id=20968, stack(0x0000000036d00000,0x0000000036e00000)]
+  0x00000000202f8000 JavaThread "Thread-241" [_thread_in_native, id=2508, stack(0x0000000036c00000,0x0000000036d00000)]
+  0x00000000202fe800 JavaThread "Thread-240" [_thread_in_native, id=21016, stack(0x0000000036b00000,0x0000000036c00000)]
+  0x00000000202f9800 JavaThread "Thread-239" [_thread_in_native, id=21076, stack(0x0000000036a00000,0x0000000036b00000)]
+  0x00000000202fe000 JavaThread "Thread-238" [_thread_in_native, id=20784, stack(0x0000000036900000,0x0000000036a00000)]
+  0x00000000202f6800 JavaThread "Thread-237" [_thread_in_native, id=21068, stack(0x0000000036800000,0x0000000036900000)]
+  0x00000000202fd000 JavaThread "Thread-236" [_thread_in_native, id=21064, stack(0x0000000036700000,0x0000000036800000)]
+  0x00000000202f5800 JavaThread "Thread-235" [_thread_in_native, id=21060, stack(0x0000000036600000,0x0000000036700000)]
+  0x00000000202fb800 JavaThread "Thread-234" [_thread_in_native, id=20772, stack(0x0000000036500000,0x0000000036600000)]
+  0x00000000202fb000 JavaThread "Thread-233" [_thread_in_native, id=264, stack(0x0000000036400000,0x0000000036500000)]
+  0x00000000202fc800 JavaThread "Thread-232" [_thread_in_native, id=12832, stack(0x0000000036300000,0x0000000036400000)]
+  0x00000000202f5000 JavaThread "Thread-231" [_thread_in_native, id=17488, stack(0x0000000036200000,0x0000000036300000)]
+  0x00000000202f7000 JavaThread "Thread-230" [_thread_in_native, id=21048, stack(0x0000000036100000,0x0000000036200000)]
+  0x00000000202fa000 JavaThread "Thread-229" [_thread_in_native, id=21052, stack(0x0000000036000000,0x0000000036100000)]
+  0x00000000202f4000 JavaThread "Thread-228" [_thread_in_native, id=20892, stack(0x0000000035f00000,0x0000000036000000)]
+  0x00000000202bd800 JavaThread "Thread-227" [_thread_in_native, id=6940, stack(0x0000000035e00000,0x0000000035f00000)]
+  0x00000000202bc800 JavaThread "Thread-226" [_thread_in_native, id=20856, stack(0x0000000035d00000,0x0000000035e00000)]
+  0x00000000202b6000 JavaThread "Thread-225" [_thread_in_native, id=21044, stack(0x0000000035c00000,0x0000000035d00000)]
+  0x00000000202b6800 JavaThread "Thread-223" [_thread_in_native, id=21036, stack(0x0000000035a00000,0x0000000035b00000)]
+  0x00000000202b4800 JavaThread "Thread-222" [_thread_in_native, id=21024, stack(0x0000000035900000,0x0000000035a00000)]
+  0x00000000202bb000 JavaThread "Thread-221" [_thread_in_native, id=21020, stack(0x0000000035800000,0x0000000035900000)]
+  0x00000000202b3800 JavaThread "Thread-220" [_thread_in_native, id=21008, stack(0x0000000035700000,0x0000000035800000)]
+  0x00000000202b9800 JavaThread "Thread-219" [_thread_in_native, id=20260, stack(0x0000000035600000,0x0000000035700000)]
+  0x00000000202ba800 JavaThread "Thread-218" [_thread_in_native, id=20908, stack(0x0000000035240000,0x0000000035340000)]
+  0x00000000202b2000 JavaThread "Thread-217" [_thread_in_native, id=20880, stack(0x0000000035140000,0x0000000035240000)]
+  0x00000000202b9000 JavaThread "Thread-216" [_thread_in_native, id=20876, stack(0x0000000035040000,0x0000000035140000)]
+  0x00000000202b3000 JavaThread "Thread-215" [_thread_in_native, id=20868, stack(0x0000000034f40000,0x0000000035040000)]
+  0x00000000202b1800 JavaThread "Thread-214" [_thread_in_native, id=20864, stack(0x0000000034e40000,0x0000000034f40000)]
+  0x00000000202b8000 JavaThread "Thread-213" [_thread_in_native, id=21012, stack(0x0000000034d40000,0x0000000034e40000)]
+  0x00000000202b7800 JavaThread "Thread-212" [_thread_in_native, id=20976, stack(0x0000000034c40000,0x0000000034d40000)]
+  0x00000000202b5000 JavaThread "Thread-211" [_thread_in_native, id=9380, stack(0x0000000034b40000,0x0000000034c40000)]
+  0x00000000202aa000 JavaThread "Thread-210" [_thread_in_native, id=21004, stack(0x0000000034a40000,0x0000000034b40000)]
+  0x00000000202ad000 JavaThread "Thread-208" [_thread_in_native, id=20964, stack(0x0000000034840000,0x0000000034940000)]
+  0x00000000202b0800 JavaThread "Thread-207" [_thread_in_native, id=20956, stack(0x0000000034740000,0x0000000034840000)]
+  0x00000000202b0000 JavaThread "Thread-206" [_thread_in_native, id=392, stack(0x0000000034640000,0x0000000034740000)]
+  0x00000000202a8800 JavaThread "Thread-205" [_thread_in_native, id=20952, stack(0x0000000034540000,0x0000000034640000)]
+  0x00000000202ad800 JavaThread "Thread-204" [_thread_in_native, id=18392, stack(0x0000000034440000,0x0000000034540000)]
+  0x00000000202af000 JavaThread "Thread-203" [_thread_in_native, id=13884, stack(0x0000000034340000,0x0000000034440000)]
+  0x00000000202a9000 JavaThread "Thread-202" [_thread_in_native, id=20980, stack(0x0000000034240000,0x0000000034340000)]
+  0x00000000202ac000 JavaThread "Thread-201" [_thread_in_native, id=20984, stack(0x0000000034140000,0x0000000034240000)]
+  0x00000000202ae800 JavaThread "Thread-200" [_thread_in_native, id=20988, stack(0x0000000034040000,0x0000000034140000)]
+  0x00000000202ab800 JavaThread "Thread-199" [_thread_in_native, id=20992, stack(0x0000000033f40000,0x0000000034040000)]
+  0x00000000202a1000 JavaThread "Thread-198" [_thread_in_native, id=21000, stack(0x0000000033e40000,0x0000000033f40000)]
+  0x00000000202a7800 JavaThread "Thread-197" [_thread_in_native, id=20996, stack(0x0000000033d40000,0x0000000033e40000)]
+  0x00000000202a0000 JavaThread "Thread-196" [_thread_in_native, id=14864, stack(0x0000000033c40000,0x0000000033d40000)]
+  0x00000000202a7000 JavaThread "Thread-195" [_thread_in_native, id=20832, stack(0x0000000033b40000,0x0000000033c40000)]
+  0x000000002029f800 JavaThread "Thread-194" [_thread_in_native, id=20948, stack(0x0000000033a40000,0x0000000033b40000)]
+  0x00000000202a6000 JavaThread "Thread-193" [_thread_in_native, id=20936, stack(0x0000000033940000,0x0000000033a40000)]
+  0x00000000202a1800 JavaThread "Thread-192" [_thread_in_native, id=20932, stack(0x0000000033840000,0x0000000033940000)]
+  0x00000000202a2800 JavaThread "Thread-191" [_thread_in_native, id=20928, stack(0x0000000033740000,0x0000000033840000)]
+  0x000000002029e800 JavaThread "Thread-190" [_thread_in_native, id=20924, stack(0x0000000033640000,0x0000000033740000)]
+  0x00000000202a4800 JavaThread "Thread-189" [_thread_in_native, id=20920, stack(0x0000000033540000,0x0000000033640000)]
+  0x00000000202a5800 JavaThread "Thread-188" [_thread_in_native, id=18532, stack(0x0000000033440000,0x0000000033540000)]
+  0x00000000202a4000 JavaThread "Thread-187" [_thread_in_native, id=20916, stack(0x0000000033340000,0x0000000033440000)]
+  0x00000000202a3000 JavaThread "Thread-186" [_thread_in_native, id=19328, stack(0x0000000033240000,0x0000000033340000)]
+  0x0000000020280800 JavaThread "Thread-185" [_thread_in_native, id=20900, stack(0x0000000033140000,0x0000000033240000)]
+  0x0000000020280000 JavaThread "Thread-184" [_thread_in_native, id=19964, stack(0x0000000033040000,0x0000000033140000)]
+  0x0000000020281800 JavaThread "Thread-183" [_thread_in_native, id=20904, stack(0x0000000032f40000,0x0000000033040000)]
+  0x000000002027e800 JavaThread "Thread-182" [_thread_in_native, id=20896, stack(0x0000000032e40000,0x0000000032f40000)]
+  0x000000002027f000 JavaThread "Thread-181" [_thread_in_native, id=20872, stack(0x0000000032d40000,0x0000000032e40000)]
+  0x0000000020283000 JavaThread "Thread-180" [_thread_in_native, id=20860, stack(0x0000000032c40000,0x0000000032d40000)]
+  0x000000002027c800 JavaThread "Thread-179" [_thread_in_native, id=18384, stack(0x0000000032b40000,0x0000000032c40000)]
+  0x0000000020283800 JavaThread "Thread-178" [_thread_in_native, id=20852, stack(0x0000000032a40000,0x0000000032b40000)]
+  0x000000002027d800 JavaThread "Thread-177" [_thread_in_native, id=20840, stack(0x0000000032940000,0x0000000032a40000)]
+  0x0000000020282000 JavaThread "Thread-176" [_thread_in_native, id=20752, stack(0x0000000032840000,0x0000000032940000)]
+  0x0000000020275000 JavaThread "Thread-175" [_thread_in_native, id=14388, stack(0x0000000032740000,0x0000000032840000)]
+  0x000000002027c000 JavaThread "Thread-174" [_thread_in_native, id=2828, stack(0x0000000032640000,0x0000000032740000)]
+  0x0000000020274800 JavaThread "Thread-173" [_thread_in_native, id=5012, stack(0x0000000032540000,0x0000000032640000)]
+  0x000000002027b000 JavaThread "Thread-172" [_thread_in_native, id=19776, stack(0x0000000032440000,0x0000000032540000)]
+  0x000000002027a800 JavaThread "Thread-171" [_thread_in_native, id=20844, stack(0x0000000032340000,0x0000000032440000)]
+  0x0000000020279000 JavaThread "Thread-170" [_thread_in_native, id=13796, stack(0x0000000032240000,0x0000000032340000)]
+  0x0000000020278000 JavaThread "Thread-169" [_thread_in_native, id=14748, stack(0x0000000032140000,0x0000000032240000)]
+  0x0000000020279800 JavaThread "Thread-168" [_thread_in_native, id=19892, stack(0x0000000032040000,0x0000000032140000)]
+  0x0000000020276800 JavaThread "Thread-167" [_thread_in_native, id=19436, stack(0x0000000031f40000,0x0000000032040000)]
+  0x0000000020277800 JavaThread "Thread-166" [_thread_in_native, id=20488, stack(0x0000000031e40000,0x0000000031f40000)]
+  0x0000000020276000 JavaThread "Thread-165" [_thread_in_native, id=10732, stack(0x0000000031d40000,0x0000000031e40000)]
+  0x0000000020239800 JavaThread "Thread-164" [_thread_in_native, id=17880, stack(0x0000000031c40000,0x0000000031d40000)]
+  0x0000000020239000 JavaThread "Thread-163" [_thread_in_native, id=19852, stack(0x0000000031b40000,0x0000000031c40000)]
+  0x0000000020238000 JavaThread "Thread-162" [_thread_in_native, id=20204, stack(0x0000000031a40000,0x0000000031b40000)]
+  0x0000000020237800 JavaThread "Thread-161" [_thread_in_native, id=18528, stack(0x0000000031940000,0x0000000031a40000)]
+  0x0000000020236800 JavaThread "Thread-160" [_thread_in_native, id=18112, stack(0x0000000031840000,0x0000000031940000)]
+  0x000000002023a800 JavaThread "Thread-159" [_thread_in_native, id=20668, stack(0x0000000031740000,0x0000000031840000)]
+  0x000000002022f000 JavaThread "Thread-158" [_thread_in_native, id=20536, stack(0x0000000031640000,0x0000000031740000)]
+  0x0000000020236000 JavaThread "Thread-157" [_thread_in_native, id=16636, stack(0x0000000031540000,0x0000000031640000)]
+  0x0000000020235000 JavaThread "Thread-156" [_thread_in_native, id=20176, stack(0x0000000031440000,0x0000000031540000)]
+  0x000000002022e800 JavaThread "Thread-155" [_thread_in_native, id=12588, stack(0x0000000031340000,0x0000000031440000)]
+  0x000000002022d800 JavaThread "Thread-154" [_thread_in_native, id=20680, stack(0x0000000031240000,0x0000000031340000)]
+  0x0000000020234800 JavaThread "Thread-153" [_thread_in_native, id=12740, stack(0x0000000031140000,0x0000000031240000)]
+  0x0000000020233800 JavaThread "Thread-152" [_thread_in_native, id=20696, stack(0x0000000031040000,0x0000000031140000)]
+  0x000000002022c000 JavaThread "Thread-151" [_thread_in_native, id=18148, stack(0x0000000030f40000,0x0000000031040000)]
+  0x0000000020230000 JavaThread "Thread-150" [_thread_in_native, id=20672, stack(0x0000000030e40000,0x0000000030f40000)]
+  0x0000000020233000 JavaThread "Thread-149" [_thread_in_native, id=20652, stack(0x0000000030d40000,0x0000000030e40000)]
+  0x000000002022b800 JavaThread "Thread-148" [_thread_in_native, id=20256, stack(0x0000000030c40000,0x0000000030d40000)]
+  0x0000000020232000 JavaThread "Thread-147" [_thread_in_native, id=18564, stack(0x0000000030b40000,0x0000000030c40000)]
+  0x0000000020231800 JavaThread "Thread-146" [_thread_in_native, id=20644, stack(0x0000000030a40000,0x0000000030b40000)]
+  0x0000000020230800 JavaThread "Thread-145" [_thread_in_native, id=18188, stack(0x0000000030940000,0x0000000030a40000)]
+  0x000000002022d000 JavaThread "Thread-144" [_thread_in_native, id=20664, stack(0x0000000030840000,0x0000000030940000)]
+  0x0000000020213000 JavaThread "Thread-143" [_thread_in_native, id=20624, stack(0x0000000030740000,0x0000000030840000)]
+  0x0000000020214800 JavaThread "Thread-142" [_thread_in_native, id=20616, stack(0x0000000030640000,0x0000000030740000)]
+  0x0000000020210800 JavaThread "Thread-141" [_thread_in_native, id=20692, stack(0x0000000030540000,0x0000000030640000)]
+  0x0000000020212800 JavaThread "Thread-140" [_thread_in_native, id=20596, stack(0x0000000030440000,0x0000000030540000)]
+  0x0000000020214000 JavaThread "Thread-139" [_thread_in_native, id=19976, stack(0x0000000030340000,0x0000000030440000)]
+  0x0000000020211800 JavaThread "Thread-138" [_thread_in_native, id=20628, stack(0x0000000030240000,0x0000000030340000)]
+  0x0000000020209000 JavaThread "Thread-137" [_thread_in_native, id=20648, stack(0x0000000030140000,0x0000000030240000)]
+  0x0000000020210000 JavaThread "Thread-136" [_thread_in_native, id=20620, stack(0x0000000030040000,0x0000000030140000)]
+  0x0000000020208800 JavaThread "Thread-135" [_thread_in_native, id=20532, stack(0x000000002ff40000,0x0000000030040000)]
+  0x000000002020e800 JavaThread "Thread-134" [_thread_in_native, id=20612, stack(0x000000002fe40000,0x000000002ff40000)]
+  0x000000002020b800 JavaThread "Thread-133" [_thread_in_native, id=16860, stack(0x000000002fd40000,0x000000002fe40000)]
+  0x000000002020a800 JavaThread "Thread-132" [_thread_in_native, id=19868, stack(0x000000002fc40000,0x000000002fd40000)]
+  0x000000002020f000 JavaThread "Thread-131" [_thread_in_native, id=20516, stack(0x000000002fb40000,0x000000002fc40000)]
+  0x000000002020d800 JavaThread "Thread-130" [_thread_in_native, id=20560, stack(0x000000002fa40000,0x000000002fb40000)]
+  0x0000000020206000 JavaThread "Thread-129" [_thread_in_native, id=18088, stack(0x000000002f940000,0x000000002fa40000)]
+  0x0000000020207800 JavaThread "Thread-128" [_thread_in_native, id=20492, stack(0x000000002f840000,0x000000002f940000)]
+  0x000000002020d000 JavaThread "Thread-127" [_thread_in_native, id=20592, stack(0x000000002f740000,0x000000002f840000)]
+  0x0000000020205800 JavaThread "Thread-126" [_thread_in_native, id=12000, stack(0x000000002f640000,0x000000002f740000)]
+  0x0000000020207000 JavaThread "Thread-125" [_thread_in_native, id=7600, stack(0x000000002f540000,0x000000002f640000)]
+  0x000000002020c000 JavaThread "Thread-124" [_thread_in_native, id=20580, stack(0x000000002f440000,0x000000002f540000)]
+  0x000000002020a000 JavaThread "Thread-123" [_thread_in_native, id=20588, stack(0x000000002f340000,0x000000002f440000)]
+  0x00000000201dc800 JavaThread "Thread-122" [_thread_in_native, id=20604, stack(0x000000002f240000,0x000000002f340000)]
+  0x00000000201d5000 JavaThread "Thread-121" [_thread_in_native, id=20568, stack(0x000000002f140000,0x000000002f240000)]
+  0x00000000201da800 JavaThread "Thread-120" [_thread_in_native, id=20528, stack(0x000000002f040000,0x000000002f140000)]
+  0x00000000201d8000 JavaThread "Thread-119" [_thread_in_native, id=9652, stack(0x000000002ef40000,0x000000002f040000)]
+  0x00000000201d9000 JavaThread "Thread-118" [_thread_in_native, id=20608, stack(0x000000002ee40000,0x000000002ef40000)]
+  0x00000000201dc000 JavaThread "Thread-117" [_thread_in_native, id=20600, stack(0x000000002ed40000,0x000000002ee40000)]
+  0x00000000201d7800 JavaThread "Thread-116" [_thread_in_native, id=20508, stack(0x000000002ec40000,0x000000002ed40000)]
+  0x00000000201d6800 JavaThread "Thread-115" [_thread_in_native, id=6224, stack(0x000000002eb40000,0x000000002ec40000)]
+  0x00000000201d9800 JavaThread "Thread-114" [_thread_in_native, id=20564, stack(0x000000002ea40000,0x000000002eb40000)]
+  0x00000000201d6000 JavaThread "Thread-113" [_thread_in_native, id=20576, stack(0x000000002e940000,0x000000002ea40000)]
+  0x00000000201db000 JavaThread "Thread-112" [_thread_in_native, id=20572, stack(0x000000002e840000,0x000000002e940000)]
+  0x00000000201cd800 JavaThread "Thread-111" [_thread_in_native, id=11872, stack(0x000000002e740000,0x000000002e840000)]
+  0x00000000201d4800 JavaThread "Thread-110" [_thread_in_native, id=3028, stack(0x000000002e640000,0x000000002e740000)]
+  0x00000000201d0800 JavaThread "Thread-109" [_thread_in_native, id=20092, stack(0x000000002e540000,0x000000002e640000)]
+  0x00000000201d3800 JavaThread "Thread-108" [_thread_in_native, id=17956, stack(0x000000002e440000,0x000000002e540000)]
+  0x00000000201d2000 JavaThread "Thread-107" [_thread_in_native, id=17432, stack(0x000000002e340000,0x000000002e440000)]
+  0x00000000201d1800 JavaThread "Thread-106" [_thread_in_native, id=20504, stack(0x000000002e240000,0x000000002e340000)]
+  0x00000000201d0000 JavaThread "Thread-105" [_thread_in_native, id=7488, stack(0x000000002e140000,0x000000002e240000)]
+  0x00000000201d3000 JavaThread "Thread-104" [_thread_in_native, id=7416, stack(0x000000002e040000,0x000000002e140000)]
+  0x00000000201ce800 JavaThread "Thread-103" [_thread_in_native, id=20524, stack(0x000000002df40000,0x000000002e040000)]
+  0x00000000201cf000 JavaThread "Thread-102" [_thread_in_native, id=20552, stack(0x000000002de40000,0x000000002df40000)]
+  0x00000000201af000 JavaThread "Thread-101" [_thread_in_native, id=20484, stack(0x000000002dd40000,0x000000002de40000)]
+  0x00000000201ad800 JavaThread "Thread-100" [_thread_in_native, id=19724, stack(0x000000002dc40000,0x000000002dd40000)]
+  0x00000000201ac800 JavaThread "Thread-99" [_thread_in_native, id=20512, stack(0x000000002db40000,0x000000002dc40000)]
+  0x00000000201ab000 JavaThread "Thread-98" [_thread_in_native, id=20544, stack(0x000000002da40000,0x000000002db40000)]
+  0x00000000201ae000 JavaThread "Thread-97" [_thread_in_native, id=11888, stack(0x000000002d940000,0x000000002da40000)]
+  0x00000000201aa800 JavaThread "Thread-96" [_thread_in_native, id=20500, stack(0x000000002d840000,0x000000002d940000)]
+  0x00000000201b0800 JavaThread "Thread-95" [_thread_in_native, id=19972, stack(0x000000002d740000,0x000000002d840000)]
+  0x00000000201af800 JavaThread "Thread-94" [_thread_in_native, id=19904, stack(0x000000002d640000,0x000000002d740000)]
+  0x00000000201ac000 JavaThread "Thread-93" [_thread_in_native, id=20520, stack(0x000000002d540000,0x000000002d640000)]
+  0x00000000201a3000 JavaThread "Thread-92" [_thread_in_native, id=13280, stack(0x000000002d440000,0x000000002d540000)]
+  0x00000000201a9800 JavaThread "Thread-91" [_thread_in_native, id=17372, stack(0x000000002d340000,0x000000002d440000)]
+  0x00000000201a2000 JavaThread "Thread-90" [_thread_in_native, id=8504, stack(0x000000002d240000,0x000000002d340000)]
+  0x00000000201a9000 JavaThread "Thread-89" [_thread_in_native, id=17584, stack(0x000000002d140000,0x000000002d240000)]
+  0x00000000201a7800 JavaThread "Thread-88" [_thread_in_native, id=10576, stack(0x000000002d040000,0x000000002d140000)]
+  0x00000000201a6800 JavaThread "Thread-87" [_thread_in_native, id=3864, stack(0x000000002cf40000,0x000000002d040000)]
+  0x00000000201a8000 JavaThread "Thread-86" [_thread_in_native, id=12928, stack(0x000000002ce40000,0x000000002cf40000)]
+  0x00000000201a6000 JavaThread "Thread-85" [_thread_in_native, id=18800, stack(0x000000002cd40000,0x000000002ce40000)]
+  0x00000000201a5000 JavaThread "Thread-84" [_thread_in_native, id=5272, stack(0x000000002cc40000,0x000000002cd40000)]
+  0x00000000201a3800 JavaThread "Thread-83" [_thread_in_native, id=17900, stack(0x000000002cb40000,0x000000002cc40000)]
+  0x00000000201a4800 JavaThread "Thread-82" [_thread_in_native, id=19320, stack(0x000000002ca40000,0x000000002cb40000)]
+  0x00000000201a1000 JavaThread "Thread-81" [_thread_in_native, id=16956, stack(0x000000002c940000,0x000000002ca40000)]
+  0x0000000020172800 JavaThread "Thread-80" [_thread_in_native, id=9996, stack(0x000000002c840000,0x000000002c940000)]
+  0x0000000020172000 JavaThread "Thread-79" [_thread_in_native, id=17784, stack(0x000000002c740000,0x000000002c840000)]
+  0x0000000020173800 JavaThread "Thread-78" [_thread_in_native, id=9428, stack(0x000000002c640000,0x000000002c740000)]
+  0x0000000020171000 JavaThread "Thread-77" [_thread_in_native, id=4252, stack(0x000000002c540000,0x000000002c640000)]
+  0x000000002016e000 JavaThread "Thread-76" [_thread_in_native, id=8376, stack(0x000000002c440000,0x000000002c540000)]
+  0x0000000020169800 JavaThread "Thread-75" [_thread_in_native, id=15264, stack(0x000000002c340000,0x000000002c440000)]
+  0x000000002016d800 JavaThread "Thread-74" [_thread_in_native, id=11928, stack(0x000000002c240000,0x000000002c340000)]
+  0x0000000020170800 JavaThread "Thread-73" [_thread_in_native, id=18364, stack(0x000000002c140000,0x000000002c240000)]
+  0x0000000020169000 JavaThread "Thread-72" [_thread_in_native, id=20584, stack(0x000000002c040000,0x000000002c140000)]
+  0x000000002016f000 JavaThread "Thread-71" [_thread_in_native, id=1388, stack(0x000000002bf40000,0x000000002c040000)]
+  0x000000002016f800 JavaThread "Thread-70" [_thread_in_native, id=13960, stack(0x000000002be40000,0x000000002bf40000)]
+  0x000000002016c800 JavaThread "Thread-69" [_thread_in_native, id=18476, stack(0x000000002bd40000,0x000000002be40000)]
+  0x000000002016c000 JavaThread "Thread-68" [_thread_in_native, id=5788, stack(0x000000002bc40000,0x000000002bd40000)]
+  0x000000002016b000 JavaThread "Thread-67" [_thread_in_native, id=14612, stack(0x000000002bb40000,0x000000002bc40000)]
+  0x000000002016a800 JavaThread "Thread-66" [_thread_in_native, id=10300, stack(0x000000002ba40000,0x000000002bb40000)]
+  0x0000000020165000 JavaThread "Thread-65" [_thread_in_native, id=20548, stack(0x000000002b940000,0x000000002ba40000)]
+  0x0000000020168000 JavaThread "Thread-64" [_thread_in_native, id=6784, stack(0x000000002b840000,0x000000002b940000)]
+  0x0000000020167800 JavaThread "Thread-63" [_thread_in_native, id=19796, stack(0x000000002b740000,0x000000002b840000)]
+  0x0000000020166800 JavaThread "Thread-62" [_thread_in_native, id=16844, stack(0x000000002b640000,0x000000002b740000)]
+  0x0000000020166000 JavaThread "Thread-61" [_thread_in_native, id=18260, stack(0x000000002b540000,0x000000002b640000)]
+  0x0000000020164800 JavaThread "Thread-60" [_thread_in_native, id=8196, stack(0x000000002b440000,0x000000002b540000)]
+  0x0000000020137000 JavaThread "Thread-59" [_thread_in_native, id=8612, stack(0x000000002b340000,0x000000002b440000)]
+  0x0000000020138800 JavaThread "Thread-58" [_thread_in_native, id=4196, stack(0x000000002b240000,0x000000002b340000)]
+  0x000000002013c800 JavaThread "Thread-57" [_thread_in_native, id=17832, stack(0x000000002b140000,0x000000002b240000)]
+  0x000000002013b000 JavaThread "Thread-56" [_thread_in_native, id=8220, stack(0x000000002b040000,0x000000002b140000)]
+  0x000000002013a000 JavaThread "Thread-55" [_thread_in_native, id=5368, stack(0x000000002af40000,0x000000002b040000)]
+  0x0000000020135000 JavaThread "Thread-54" [_thread_in_native, id=3112, stack(0x000000002ae40000,0x000000002af40000)]
+  0x0000000020138000 JavaThread "Thread-53" [_thread_in_native, id=9592, stack(0x000000002ad40000,0x000000002ae40000)]
+  0x0000000020139800 JavaThread "Thread-52" [_thread_in_native, id=7800, stack(0x000000002ac40000,0x000000002ad40000)]
+  0x0000000020135800 JavaThread "Thread-51" [_thread_in_native, id=15320, stack(0x000000002ab40000,0x000000002ac40000)]
+  0x000000002013b800 JavaThread "Thread-50" [_thread_in_native, id=16448, stack(0x000000002aa40000,0x000000002ab40000)]
+  0x0000000020136800 JavaThread "Thread-49" [_thread_in_native, id=11336, stack(0x000000002a940000,0x000000002aa40000)]
+  0x000000002012d800 JavaThread "Thread-48" [_thread_in_native, id=12072, stack(0x000000002a840000,0x000000002a940000)]
+  0x0000000020134000 JavaThread "Thread-47" [_thread_in_native, id=1148, stack(0x000000002a740000,0x000000002a840000)]
+  0x0000000020132000 JavaThread "Thread-46" [_thread_in_native, id=7944, stack(0x000000002a640000,0x000000002a740000)]
+  0x000000002012e000 JavaThread "Thread-45" [_thread_in_native, id=11880, stack(0x000000002a540000,0x000000002a640000)]
+  0x0000000020132800 JavaThread "Thread-44" [_thread_in_native, id=17932, stack(0x000000002a440000,0x000000002a540000)]
+  0x0000000020131000 JavaThread "Thread-43" [_thread_in_native, id=8628, stack(0x000000002a340000,0x000000002a440000)]
+  0x0000000020130800 JavaThread "Thread-42" [_thread_in_native, id=16516, stack(0x000000002a240000,0x000000002a340000)]
+  0x000000002012f000 JavaThread "Thread-41" [_thread_in_native, id=19948, stack(0x000000002a140000,0x000000002a240000)]
+  0x0000000020133800 JavaThread "Thread-40" [_thread_in_native, id=7516, stack(0x000000002a040000,0x000000002a140000)]
+  0x000000002012f800 JavaThread "Thread-39" [_thread_in_native, id=1648, stack(0x0000000029f40000,0x000000002a040000)]
+  0x00000000200d9000 JavaThread "Thread-38" [_thread_in_native, id=6488, stack(0x0000000029e40000,0x0000000029f40000)]
+  0x00000000200dd800 JavaThread "Thread-37" [_thread_in_native, id=14452, stack(0x0000000029d40000,0x0000000029e40000)]
+  0x00000000200dc800 JavaThread "Thread-36" [_thread_in_native, id=5240, stack(0x0000000029c40000,0x0000000029d40000)]
+  0x00000000200db000 JavaThread "Thread-35" [_thread_in_native, id=5444, stack(0x0000000029b40000,0x0000000029c40000)]
+  0x00000000200dc000 JavaThread "Thread-34" [_thread_in_native, id=5628, stack(0x0000000029a40000,0x0000000029b40000)]
+  0x00000000200d9800 JavaThread "Thread-33" [_thread_in_native, id=1064, stack(0x0000000029940000,0x0000000029a40000)]
+  0x00000000200da800 JavaThread "Thread-32" [_thread_in_native, id=7932, stack(0x0000000029840000,0x0000000029940000)]
+  0x00000000200d2000 JavaThread "Thread-31" [_thread_in_native, id=10912, stack(0x0000000029740000,0x0000000029840000)]
+  0x00000000200d8000 JavaThread "Thread-30" [_thread_in_native, id=756, stack(0x0000000029640000,0x0000000029740000)]
+  0x00000000200d6800 JavaThread "Thread-29" [_thread_in_native, id=18760, stack(0x0000000029540000,0x0000000029640000)]
+  0x00000000200d6000 JavaThread "Thread-28" [_thread_in_native, id=16216, stack(0x0000000029440000,0x0000000029540000)]
+  0x00000000200d7800 JavaThread "Thread-27" [_thread_in_native, id=12896, stack(0x0000000029340000,0x0000000029440000)]
+  0x00000000200ce800 JavaThread "Thread-26" [_thread_in_native, id=16640, stack(0x0000000029240000,0x0000000029340000)]
+  0x00000000200d3000 JavaThread "Thread-25" [_thread_in_native, id=7376, stack(0x0000000029140000,0x0000000029240000)]
+  0x00000000200d0800 JavaThread "Thread-24" [_thread_in_native, id=15600, stack(0x0000000029040000,0x0000000029140000)]
+  0x00000000200d3800 JavaThread "Thread-23" [_thread_in_native, id=3832, stack(0x0000000028f40000,0x0000000029040000)]
+  0x00000000200d1800 JavaThread "Thread-22" [_thread_in_native, id=14232, stack(0x0000000028e40000,0x0000000028f40000)]
+  0x00000000200d0000 JavaThread "Thread-21" [_thread_in_native, id=8176, stack(0x0000000028d40000,0x0000000028e40000)]
+  0x00000000200d5000 JavaThread "Thread-20" [_thread_in_native, id=4564, stack(0x0000000028c40000,0x0000000028d40000)]
+  0x00000000200cf000 JavaThread "Thread-19" [_thread_in_native, id=16652, stack(0x0000000028b40000,0x0000000028c40000)]
+  0x00000000200d4800 JavaThread "Thread-18" [_thread_in_native, id=19692, stack(0x0000000028a40000,0x0000000028b40000)]
+  0x00000000200bd000 JavaThread "Thread-17" [_thread_in_native, id=13020, stack(0x0000000028940000,0x0000000028a40000)]
+  0x00000000200bc000 JavaThread "Thread-16" [_thread_in_native, id=17532, stack(0x0000000028840000,0x0000000028940000)]
+  0x00000000200bb800 JavaThread "Thread-15" [_thread_in_native, id=1068, stack(0x0000000028740000,0x0000000028840000)]
+  0x00000000200c0000 JavaThread "Thread-14" [_thread_in_native, id=18252, stack(0x0000000028640000,0x0000000028740000)]
+  0x00000000200bf000 JavaThread "Thread-13" [_thread_in_native, id=20380, stack(0x0000000028540000,0x0000000028640000)]
+  0x00000000200c0800 JavaThread "Thread-12" [_thread_in_native, id=1576, stack(0x0000000028440000,0x0000000028540000)]
+  0x00000000200ba800 JavaThread "Thread-11" [_thread_in_native, id=20252, stack(0x0000000028340000,0x0000000028440000)]
+  0x00000000200c1800 JavaThread "Thread-10" [_thread_in_native, id=17908, stack(0x0000000028240000,0x0000000028340000)]
+  0x00000000200be800 JavaThread "Thread-9" [_thread_in_native, id=10824, stack(0x0000000028140000,0x0000000028240000)]
+  0x00000000200bd800 JavaThread "Thread-8" [_thread_in_native, id=5084, stack(0x0000000027f40000,0x0000000028040000)]
+  0x00000000200b9800 JavaThread "Thread-7" [_thread_in_native, id=20352, stack(0x0000000027e40000,0x0000000027f40000)]
+  0x00000000200b9000 JavaThread "Thread-6" [_thread_in_native, id=8364, stack(0x0000000027d40000,0x0000000027e40000)]
+  0x00000000200b6800 JavaThread "Thread-5" [_thread_in_native, id=16360, stack(0x0000000027c40000,0x0000000027d40000)]
+  0x000000001fe62800 JavaThread "Prism Font Disposer" daemon [_thread_blocked, id=17244, stack(0x00000000259b0000,0x0000000025ab0000)]
+  0x000000001fd74000 JavaThread "Thread-3" daemon [_thread_in_native, id=17980, stack(0x0000000024b10000,0x0000000024c10000)]
+  0x000000001fd02000 JavaThread "JavaFX-Launcher" [_thread_blocked, id=19244, stack(0x0000000024c80000,0x0000000024d80000)]
+  0x000000001fc8f800 JavaThread "JavaFX Application Thread" [_thread_in_native, id=20044, stack(0x00000000207a0000,0x00000000208a0000)]
+  0x000000001fc80000 JavaThread "Thread-1" daemon [_thread_blocked, id=18120, stack(0x00000000206a0000,0x00000000207a0000)]
+  0x000000001fc56000 JavaThread "QuantumRenderer-0" daemon [_thread_blocked, id=20412, stack(0x00000000203e0000,0x00000000204e0000)]
+  0x000000001e075000 JavaThread "Service Thread" daemon [_thread_blocked, id=20444, stack(0x000000001f9e0000,0x000000001fae0000)]
+  0x000000001dffa000 JavaThread "C1 CompilerThread3" daemon [_thread_blocked, id=20140, stack(0x000000001f8e0000,0x000000001f9e0000)]
+=>0x000000001dff9800 JavaThread "C2 CompilerThread2" daemon [_thread_in_native, id=19440, stack(0x000000001f7e0000,0x000000001f8e0000)]
+  0x000000001dff0800 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=16432, stack(0x000000001f6e0000,0x000000001f7e0000)]
+  0x000000001dfed800 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=19668, stack(0x000000001f5e0000,0x000000001f6e0000)]
+  0x000000001dfe6800 JavaThread "Attach Listener" daemon [_thread_blocked, id=18044, stack(0x000000001f4e0000,0x000000001f5e0000)]
+  0x000000001dfe5800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=18272, stack(0x000000001f3e0000,0x000000001f4e0000)]
+  0x000000001df93000 JavaThread "Finalizer" daemon [_thread_blocked, id=20316, stack(0x000000001f1f0000,0x000000001f2f0000)]
+  0x0000000002c99000 JavaThread "Reference Handler" daemon [_thread_blocked, id=20448, stack(0x000000001f0f0000,0x000000001f1f0000)]
+  0x0000000002ba0800 JavaThread "main" [_thread_blocked, id=17888, stack(0x0000000002aa0000,0x0000000002ba0000)]
+
+Other Threads:
+  0x000000001df72800 VMThread [stack: 0x000000001eff0000,0x000000001f0f0000] [id=10004]
+  0x000000001e0d3000 WatcherThread [stack: 0x000000001fae0000,0x000000001fbe0000] [id=15648]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap:
+ PSYoungGen      total 76288K, used 17306K [0x000000076b380000, 0x0000000770880000, 0x00000007c0000000)
+  eden space 65536K, 10% used [0x000000076b380000,0x000000076b9ea8a8,0x000000076f380000)
+  from space 10752K, 99% used [0x000000076fe00000,0x000000077087c060,0x0000000770880000)
+  to   space 10752K, 0% used [0x000000076f380000,0x000000076f380000,0x000000076fe00000)
+ ParOldGen       total 175104K, used 5170K [0x00000006c1a00000, 0x00000006cc500000, 0x000000076b380000)
+  object space 175104K, 2% used [0x00000006c1a00000,0x00000006c1f0c8d0,0x00000006cc500000)
+ Metaspace       used 18332K, capacity 19818K, committed 19968K, reserved 1067008K
+  class space    used 2746K, capacity 3014K, committed 3072K, reserved 1048576K
+
+Card table byte_map: [0x0000000012060000,0x0000000012860000] byte_map_base: 0x000000000ea53000
+
+Marking Bits: (ParMarkBitMap*) 0x00000000694da6c0
+ Begin Bits: [0x00000000137b0000, 0x0000000017748000)
+ End Bits:   [0x0000000017748000, 0x000000001b6e0000)
+
+Polling page: 0x00000000007e0000
+
+CodeCache: size=245760Kb used=8484Kb max_used=8487Kb free=237275Kb
+ bounds [0x0000000002ca0000, 0x0000000003500000, 0x0000000011ca0000]
+ total_blobs=3493 nmethods=2827 adapters=576
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 5.299 Thread 0x000000001dffa000 2826       3       com.sun.prism.impl.BaseResourcePool$WeakLinkedList::getResource (11 bytes)
+Event: 5.299 Thread 0x000000001dffa000 nmethod 2826 0x00000000034e99d0 code [0x00000000034e9b40, 0x00000000034e9e30]
+Event: 5.299 Thread 0x000000001dff0800 nmethod 2817 0x00000000034ecf90 code [0x00000000034ed0e0, 0x00000000034ed538]
+Event: 5.299 Thread 0x000000001dff0800 2825       4       java.util.WeakHashMap$HashIterator::hasNext (95 bytes)
+Event: 5.300 Thread 0x000000001dffa000 2827       3       java.util.ArrayDeque::isEmpty (17 bytes)
+Event: 5.300 Thread 0x000000001dffa000 nmethod 2827 0x00000000034ec710 code [0x00000000034ec860, 0x00000000034eca10]
+Event: 5.300 Thread 0x000000001dfed800 nmethod 2823 0x00000000034eaf90 code [0x00000000034eb120, 0x00000000034eb5b8]
+Event: 5.302 Thread 0x000000001dff0800 nmethod 2825 0x00000000034eca90 code [0x00000000034ecbe0, 0x00000000034ecdd8]
+Event: 5.308 Thread 0x000000001dffa000 2828       3       javafx.scene.Node::buildEventDispatchChain (100 bytes)
+Event: 5.309 Thread 0x000000001dffa000 nmethod 2828 0x00000000034ee2d0 code [0x00000000034ee580, 0x00000000034efd48]
+
+GC Heap History (4 events):
+Event: 1.490 GC heap before
+{Heap before GC invocations=1 (full 0):
+ PSYoungGen      total 76288K, used 65536K [0x000000076b380000, 0x0000000770880000, 0x00000007c0000000)
+  eden space 65536K, 100% used [0x000000076b380000,0x000000076f380000,0x000000076f380000)
+  from space 10752K, 0% used [0x000000076fe00000,0x000000076fe00000,0x0000000770880000)
+  to   space 10752K, 0% used [0x000000076f380000,0x000000076f380000,0x000000076fe00000)
+ ParOldGen       total 175104K, used 0K [0x00000006c1a00000, 0x00000006cc500000, 0x000000076b380000)
+  object space 175104K, 0% used [0x00000006c1a00000,0x00000006c1a00000,0x00000006cc500000)
+ Metaspace       used 14294K, capacity 14996K, committed 15232K, reserved 1062912K
+  class space    used 2164K, capacity 2317K, committed 2432K, reserved 1048576K
+Event: 1.494 GC heap after
+Heap after GC invocations=1 (full 0):
+ PSYoungGen      total 76288K, used 8962K [0x000000076b380000, 0x0000000770880000, 0x00000007c0000000)
+  eden space 65536K, 0% used [0x000000076b380000,0x000000076b380000,0x000000076f380000)
+  from space 10752K, 83% used [0x000000076f380000,0x000000076fc40ae0,0x000000076fe00000)
+  to   space 10752K, 0% used [0x000000076fe00000,0x000000076fe00000,0x0000000770880000)
+ ParOldGen       total 175104K, used 16K [0x00000006c1a00000, 0x00000006cc500000, 0x000000076b380000)
+  object space 175104K, 0% used [0x00000006c1a00000,0x00000006c1a04000,0x00000006cc500000)
+ Metaspace       used 14294K, capacity 14996K, committed 15232K, reserved 1062912K
+  class space    used 2164K, capacity 2317K, committed 2432K, reserved 1048576K
+}
+Event: 5.230 GC heap before
+{Heap before GC invocations=2 (full 0):
+ PSYoungGen      total 76288K, used 74498K [0x000000076b380000, 0x0000000770880000, 0x00000007c0000000)
+  eden space 65536K, 100% used [0x000000076b380000,0x000000076f380000,0x000000076f380000)
+  from space 10752K, 83% used [0x000000076f380000,0x000000076fc40ae0,0x000000076fe00000)
+  to   space 10752K, 0% used [0x000000076fe00000,0x000000076fe00000,0x0000000770880000)
+ ParOldGen       total 175104K, used 16K [0x00000006c1a00000, 0x00000006cc500000, 0x000000076b380000)
+  object space 175104K, 0% used [0x00000006c1a00000,0x00000006c1a04000,0x00000006cc500000)
+ Metaspace       used 18205K, capacity 19684K, committed 19968K, reserved 1067008K
+  class space    used 2746K, capacity 3013K, committed 3072K, reserved 1048576K
+Event: 5.236 GC heap after
+Heap after GC invocations=2 (full 0):
+ PSYoungGen      total 76288K, used 10736K [0x000000076b380000, 0x0000000770880000, 0x00000007c0000000)
+  eden space 65536K, 0% used [0x000000076b380000,0x000000076b380000,0x000000076f380000)
+  from space 10752K, 99% used [0x000000076fe00000,0x000000077087c060,0x0000000770880000)
+  to   space 10752K, 0% used [0x000000076f380000,0x000000076f380000,0x000000076fe00000)
+ ParOldGen       total 175104K, used 5170K [0x00000006c1a00000, 0x00000006cc500000, 0x000000076b380000)
+  object space 175104K, 2% used [0x00000006c1a00000,0x00000006c1f0c8d0,0x00000006cc500000)
+ Metaspace       used 18205K, capacity 19684K, committed 19968K, reserved 1067008K
+  class space    used 2746K, capacity 3013K, committed 3072K, reserved 1048576K
+}
+
+Deoptimization events (10 events):
+Event: 5.119 Thread 0x000000001fc8f800 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0x0000000003314b78 method=javafx.beans.property.BooleanPropertyBase.get()Z @ 23
+Event: 5.122 Thread 0x000000001fc8f800 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0x0000000003314b78 method=javafx.beans.property.BooleanPropertyBase.get()Z @ 23
+Event: 5.126 Thread 0x000000001fc8f800 Uncommon trap: reason=array_check action=maybe_recompile pc=0x000000000337fe60 method=com.sun.javafx.css.CompoundSelector.applies(Ljavafx/css/Styleable;[Ljava/util/Set;I)Z @ 128
+Event: 5.126 Thread 0x000000001fc8f800 Uncommon trap: reason=array_check action=maybe_recompile pc=0x000000000337fe60 method=com.sun.javafx.css.CompoundSelector.applies(Ljavafx/css/Styleable;[Ljava/util/Set;I)Z @ 128
+Event: 5.126 Thread 0x000000001fc8f800 Uncommon trap: reason=array_check action=maybe_recompile pc=0x000000000337fe60 method=com.sun.javafx.css.CompoundSelector.applies(Ljavafx/css/Styleable;[Ljava/util/Set;I)Z @ 128
+Event: 5.127 Thread 0x000000001fc8f800 Uncommon trap: reason=array_check action=maybe_recompile pc=0x000000000337fe60 method=com.sun.javafx.css.CompoundSelector.applies(Ljavafx/css/Styleable;[Ljava/util/Set;I)Z @ 128
+Event: 5.203 Thread 0x000000001fc8f800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00000000031e64e8 method=javafx.scene.Node.updateLocalToParentTransform()V @ 11
+Event: 5.203 Thread 0x000000001fc8f800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00000000031e64e8 method=javafx.scene.Node.updateLocalToParentTransform()V @ 11
+Event: 5.203 Thread 0x000000001fc8f800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00000000031e64e8 method=javafx.scene.Node.updateLocalToParentTransform()V @ 11
+Event: 5.203 Thread 0x000000001fc8f800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00000000031e64e8 method=javafx.scene.Node.updateLocalToParentTransform()V @ 11
+
+Internal exceptions (10 events):
+Event: 1.513 Thread 0x000000002030a000 Exception <a 'java/net/ConnectException': connect: Address is invalid on local machine, or port is not valid on remote machine> (0x000000076df1e6c0) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u102\7268\hotspot\src\share\vm\prims\jni.cpp,R•ú€@
+Event: 2.503 Thread 0x000000002005c800 Exception <a 'java/net/ConnectException': Connection refused: connect> (0x000000076c1e98a8) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u102\7268\hotspot\src\share\vm\prims\jni.cpp, line 735]
+Event: 3.767 Thread 0x00000000202bc000 Exception <a 'java/net/ConnectException': Connection refused: connect> (0x000000076dc51610) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u102\7268\hotspot\src\share\vm\prims\jni.cpp, line 735]
+Event: 4.857 Thread 0x000000001fc8f800 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0x000000076e17f830) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u102\7268\hotspot\src\share\vm\prims\jni.cpp, line 1613]
+Event: 4.863 Thread 0x000000001fc8f800 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0x000000076e2f6240) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u102\7268\hotspot\src\share\vm\prims\jni.cpp, line 1613]
+Event: 4.865 Thread 0x000000001fc8f800 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0x000000076e30e2f8) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u102\7268\hotspot\src\share\vm\prims\jni.cpp, line 1613]
+Event: 5.200 Thread 0x000000002030a000 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0x000000076f27b150) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u102\7268\hotspot\src\share\vm\prims\jni.cpp, line 1613]
+Event: 5.201 Thread 0x000000002030a000 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0x000000076f282780) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u102\7268\hotspot\src\share\vm\prims\jni.cpp, line 1613]
+Event: 5.203 Thread 0x000000002030a000 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0x000000076f2988a0) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u102\7268\hotspot\src\share\vm\prims\jni.cpp, line 1613]
+Event: 5.209 Thread 0x000000002030a000 Exception <a 'java/lang/NoSuchMethodError': <clinit>> (0x000000076f2bbf30) thrown at [C:\re\workspace\8-2-build-windows-amd64-cygwin\jdk8u102\7268\hotspot\src\share\vm\prims\jni.cpp, line 1613]
+
+Events (10 events):
+Event: 5.240 Executing VM operation: RevokeBias
+Event: 5.240 Executing VM operation: RevokeBias done
+Event: 5.240 Executing VM operation: RevokeBias
+Event: 5.240 Executing VM operation: RevokeBias done
+Event: 5.240 Executing VM operation: RevokeBias
+Event: 5.240 Executing VM operation: RevokeBias done
+Event: 5.240 Executing VM operation: BulkRevokeBias
+Event: 5.242 Executing VM operation: BulkRevokeBias done
+Event: 5.242 Executing VM operation: RevokeBias
+Event: 5.242 Executing VM operation: RevokeBias done
+
+
+Dynamic libraries:
+0x00007ff6f8370000 - 0x00007ff6f83a7000 	C:\Program Files\Java\jre1.8.0_102\bin\javaw.exe
+0x00007ff900da0000 - 0x00007ff900f71000 	C:\Windows\SYSTEM32\ntdll.dll
+0x00007ff8fe4c0000 - 0x00007ff8fe56b000 	C:\Windows\System32\KERNEL32.DLL
+0x00007ff8fdcd0000 - 0x00007ff8fdeed000 	C:\Windows\System32\KERNELBASE.dll
+0x00007ff900630000 - 0x00007ff9006d2000 	C:\Windows\System32\ADVAPI32.dll
+0x00007ff8fec30000 - 0x00007ff8fecce000 	C:\Windows\System32\msvcrt.dll
+0x00007ff900320000 - 0x00007ff900379000 	C:\Windows\System32\sechost.dll
+0x00007ff8fe330000 - 0x00007ff8fe451000 	C:\Windows\System32\RPCRT4.dll
+0x00007ff900380000 - 0x00007ff9004e5000 	C:\Windows\System32\USER32.dll
+0x00007ff8fdf50000 - 0x00007ff8fdf6e000 	C:\Windows\System32\win32u.dll
+0x00007ff900a90000 - 0x00007ff900ac4000 	C:\Windows\System32\GDI32.dll
+0x00007ff8fd290000 - 0x00007ff8fd412000 	C:\Windows\System32\gdi32full.dll
+0x00007ff8f6ce0000 - 0x00007ff8f6f5a000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.14393.351_none_4213128bc687e6d3\COMCTL32.dll
+0x00007ff900ad0000 - 0x00007ff900d97000 	C:\Windows\System32\combase.dll
+0x00007ff8fdf70000 - 0x00007ff8fe065000 	C:\Windows\System32\ucrtbase.dll
+0x00007ff8fe170000 - 0x00007ff8fe1da000 	C:\Windows\System32\bcryptPrimitives.dll
+0x00007ff9007e0000 - 0x00007ff90080e000 	C:\Windows\System32\IMM32.DLL
+0x0000000068be0000 - 0x0000000068cb1000 	C:\Program Files\Java\jre1.8.0_102\bin\msvcr100.dll
+0x0000000068cc0000 - 0x000000006955a000 	C:\Program Files\Java\jre1.8.0_102\bin\server\jvm.dll
+0x00007ff8fe610000 - 0x00007ff8fe618000 	C:\Windows\System32\PSAPI.DLL
+0x00007ff8ecd50000 - 0x00007ff8ecd59000 	C:\Windows\SYSTEM32\WSOCK32.dll
+0x00007ff8fb020000 - 0x00007ff8fb043000 	C:\Windows\SYSTEM32\WINMM.dll
+0x00007ff8f89a0000 - 0x00007ff8f89aa000 	C:\Windows\SYSTEM32\VERSION.dll
+0x00007ff900a20000 - 0x00007ff900a8a000 	C:\Windows\System32\WS2_32.dll
+0x00000000028a0000 - 0x00000000028cb000 	C:\Windows\SYSTEM32\WINMMBASE.dll
+0x00007ff8fe120000 - 0x00007ff8fe162000 	C:\Windows\System32\cfgmgr32.dll
+0x00000000696a0000 - 0x00000000696af000 	C:\Program Files\Java\jre1.8.0_102\bin\verify.dll
+0x0000000069670000 - 0x0000000069699000 	C:\Program Files\Java\jre1.8.0_102\bin\java.dll
+0x0000000069650000 - 0x0000000069666000 	C:\Program Files\Java\jre1.8.0_102\bin\zip.dll
+0x00007ff8fece0000 - 0x00007ff9001e9000 	C:\Windows\System32\SHELL32.dll
+0x00007ff8fd5f0000 - 0x00007ff8fdcca000 	C:\Windows\System32\windows.storage.dll
+0x00007ff8fd210000 - 0x00007ff8fd25c000 	C:\Windows\System32\powrprof.dll
+0x00007ff8fe620000 - 0x00007ff8fe672000 	C:\Windows\System32\shlwapi.dll
+0x00007ff8fd200000 - 0x00007ff8fd20f000 	C:\Windows\System32\kernel.appcore.dll
+0x00007ff8fe1e0000 - 0x00007ff8fe289000 	C:\Windows\System32\shcore.dll
+0x00007ff8fd260000 - 0x00007ff8fd274000 	C:\Windows\System32\profapi.dll
+0x00007ff8ee980000 - 0x00007ff8eea6f000 	C:\Program Files\Java\jre1.8.0_102\bin\msvcr120.dll
+0x00007ff8f7390000 - 0x00007ff8f7436000 	C:\Program Files\Java\jre1.8.0_102\bin\msvcp120.dll
+0x0000000069580000 - 0x00000000695a2000 	C:\Program Files\Java\jre1.8.0_102\bin\prism_d3d.dll
+0x00007ff8da520000 - 0x00007ff8da6ad000 	C:\Windows\system32\d3d9.dll
+0x00007ff8fac60000 - 0x00007ff8fac86000 	C:\Windows\SYSTEM32\dwmapi.dll
+0x00007ff8fb990000 - 0x00007ff8fba25000 	C:\Windows\system32\uxtheme.dll
+0x00007ff8d35d0000 - 0x00007ff8d450f000 	C:\Windows\SYSTEM32\nvd3dumx.dll
+0x0000000068b90000 - 0x0000000068bd3000 	C:\Program Files\Java\jre1.8.0_102\bin\glass.dll
+0x00007ff9006e0000 - 0x00007ff9007da000 	C:\Windows\System32\COMDLG32.dll
+0x00007ff9004f0000 - 0x00007ff900627000 	C:\Windows\System32\ole32.dll
+0x00007ff900260000 - 0x00007ff90031f000 	C:\Windows\System32\OLEAUT32.dll
+0x00007ff8fe290000 - 0x00007ff8fe32c000 	C:\Windows\System32\msvcp_win.dll
+0x00007ff8feab0000 - 0x00007ff8fec0b000 	C:\Windows\System32\MSCTF.dll
+0x00007ff8f6b80000 - 0x00007ff8f6ce0000 	C:\Program Files (x86)\NVIDIA Corporation\3D Vision\nvSCPAPI64.dll
+0x00007ff8fe680000 - 0x00007ff8feaa9000 	C:\Windows\System32\SETUPAPI.dll
+0x0000000068b70000 - 0x0000000068b84000 	C:\Program Files\Java\jre1.8.0_102\bin\javafx_font.dll
+0x00007ff8e9b30000 - 0x00007ff8e9d99000 	C:\Windows\SYSTEM32\dwrite.dll
+0x00007ff8fe570000 - 0x00007ff8fe60f000 	C:\Windows\System32\clbcatq.dll
+0x00007ff8fa5c0000 - 0x00007ff8fa768000 	C:\Windows\SYSTEM32\WindowsCodecs.dll
+0x00007ff8e46e0000 - 0x00007ff8e4729000 	C:\Windows\system32\dataexchange.dll
+0x00007ff8f90f0000 - 0x00007ff8f93a6000 	C:\Windows\system32\d3d11.dll
+0x00007ff8fb2c0000 - 0x00007ff8fb411000 	C:\Windows\system32\dcomp.dll
+0x00007ff8fc190000 - 0x00007ff8fc22f000 	C:\Windows\system32\dxgi.dll
+0x00007ff8fbc60000 - 0x00007ff8fbd7c000 	C:\Windows\system32\twinapi.appcore.dll
+0x00007ff8fd140000 - 0x00007ff8fd16b000 	C:\Windows\system32\bcrypt.dll
+0x00007ff8f7710000 - 0x00007ff8f7742000 	C:\Program Files\Common Files\Microsoft Shared\Ink\rtscom.dll
+0x0000000068b50000 - 0x0000000068b61000 	C:\Program Files\Java\jre1.8.0_102\bin\prism_common.dll
+0x0000000069630000 - 0x000000006964a000 	C:\Program Files\Java\jre1.8.0_102\bin\net.dll
+0x00007ff8fc950000 - 0x00007ff8fc9ac000 	C:\Windows\system32\mswsock.dll
+0x00007ff8e94c0000 - 0x00007ff8e94d6000 	C:\Windows\system32\napinsp.dll
+0x00007ff8e9450000 - 0x00007ff8e946a000 	C:\Windows\system32\pnrpnsp.dll
+0x00007ff8f8aa0000 - 0x00007ff8f8ab8000 	C:\Windows\system32\NLAapi.dll
+0x00007ff8fc720000 - 0x00007ff8fc7c0000 	C:\Windows\SYSTEM32\DNSAPI.dll
+0x00007ff900250000 - 0x00007ff900258000 	C:\Windows\System32\NSI.dll
+0x00007ff8fc6e0000 - 0x00007ff8fc718000 	C:\Windows\SYSTEM32\IPHLPAPI.DLL
+0x00007ff8e9510000 - 0x00007ff8e951e000 	C:\Windows\System32\winrnr.dll
+0x00007ff8fa590000 - 0x00007ff8fa5a5000 	C:\Windows\System32\wshbth.dll
+0x00007ff8f6360000 - 0x00007ff8f636a000 	C:\Windows\System32\rasadhlp.dll
+0x00007ff8f8d60000 - 0x00007ff8f8dca000 	C:\Windows\System32\fwpuclnt.dll
+
+VM Arguments:
+jvm_args: -Dfile.encoding=Cp1256 
+java_command: client.intro.MainKevin
+java_class_path (initial): E:\studies\my Repo\Atlantis\bin;C:\Users\Area-51\.p2\pool\plugins\org.eclipse.fx.ide.css.jfx8_2.4.0.201605112122.jar;C:\Users\Area-51\Desktop\EclipseJava\workspace\Java2\src\ch\fhnw\telesko\prog2\commons-validator-1.5.0\commons-validator-1.5.0.jar;C:\Users\Area-51\Desktop\EclipseJava\workspace\mysql-connector-java-5.1.39\mysql-connector-java-5.1.39\mysql-connector-java-5.1.39-bin.jar
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=C:/Program Files/Java/jre1.8.0_102/bin/server;C:/Program Files/Java/jre1.8.0_102/bin;C:/Program Files/Java/jre1.8.0_102/lib/amd64;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Users\Area-51\AppData\Local\Microsoft\WindowsApps;e:\studies\Git\cmd;C:\Program Files (x86)\Skype\Phone\;C:\Program Files\MySQL\MySQL Utilities 1.6\;C:\Users\Area-51\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Users\Area-51\Desktop\EclipseJava\eclipse;
+USERNAME=Area-51
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 63 Stepping 2, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 10.0 , 64 bit Build 14393 (10.0.14393.0)
+
+CPU:total 12 (6 cores per cpu, 2 threads per core) family 6 model 63 stepping 2, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2
+
+Memory: 4k page, physical 16668444k(3868408k free), swap 32225176k(4436k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (25.102-b14) for windows-amd64 JRE (1.8.0_102-b14), built on Jun 22 2016 13:15:21 by "java_re" with MS VC++ 10.0 (VS2010)
+
+time: Thu Nov 03 08:42:31 2016
+elapsed time: 5 seconds (0d 0h 0m 5s)
+
