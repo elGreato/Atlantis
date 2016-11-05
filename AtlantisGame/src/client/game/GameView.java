@@ -287,13 +287,17 @@ public class GameView {
 		recColor.setFill(Pawn.FillColor(opponent));
 		vbOpponentInfo.getChildren().addAll(lblopponentName,lblopponentCardCount,recColor);
 		hbOpponents.getChildren().add(vbOpponentInfo);
-
+		
+		
+		// i need to find a way to get the circle of the pawn 
 		for (Pawn p : opponent.getPawns()) {
 
 			Circle c = new Circle();
 			c.setRadius(10);
 			c.setFill(Pawn.FillColor(opponent));
-			hbOpponentPawnHolder.getChildren().add(c);
+			p.setCircle(c);
+			p.getChildren().add(c);
+			hbOpponentPawnHolder.getChildren().add(p);
 		}
 		atlantis.getChildren().add(hbOpponentPawnHolder);
 	}

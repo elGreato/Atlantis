@@ -98,7 +98,7 @@ public class Game implements GameInterface{
 					.sendMessage(new AtlantisMainLandMessage(getName(), atlantis, mainland));
 
 		}
-		// send hbox Player for each player
+		// send  Player for each user
 
 		for (int i = 0; i < numberOfPlayers; i++) {
 			Player player = new Player(users.get(i).getUserInfo().getUsername());
@@ -107,11 +107,9 @@ public class Game implements GameInterface{
 			users.get(i).sendMessage(
 					new PlayerMessage(getName(), player, cardsForPlayers(i, player), i));
 			players.add(player);
-			System.out.println("it is " + players.size() + " number of players in server");
-			System.out.println(player.getColor().toString());
-		}
+			}
 	
-
+		// send the list of players for client to set opponents
 		for (int i = 0; i < numberOfPlayers; i++) {
 
 			users.get(i).sendMessage(new OpponentMessage(getName(), players));

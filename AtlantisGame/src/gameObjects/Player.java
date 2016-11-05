@@ -35,7 +35,7 @@ public class Player implements Serializable {
 			Pawn pawn = new Pawn(name, i);
 
 			pawns.add(pawn);
-			System.out.println("SIZE OF PAWNS" + pawns.size());
+			
 
 		}
 
