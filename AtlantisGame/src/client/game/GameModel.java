@@ -1,13 +1,12 @@
 package client.game;
 
-import java.util.ArrayList;
-
 import client.lobby.ClientLobbyInterface;
 import client.lobby.LobbyModel;
 import gameObjects.Player;
-import javafx.scene.control.Label;
+
 import messageObjects.AtlantisMainLandMessage;
 import messageObjects.DeckLandTileMessage;
+import messageObjects.GameStatusMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
@@ -18,7 +17,7 @@ public class GameModel {
 	private GameView view;
 	// send messages to server through method msgOut.sendMessage()
 	private ClientLobbyInterface msgOut;
-	private ArrayList<Player> players = new ArrayList<>();
+
 	private Player currentPlayer;
 
 	public String getGameName() {
@@ -48,46 +47,44 @@ public class GameModel {
 		}
 		// now the players
 		if (msgIn instanceof PlayerMessage) {
-			Player player = (((PlayerMessage) msgIn).getPlayer());
-			if (((PlayerMessage) msgIn).getPlayer().getPlayerIndex() == 0) {
-				currentPlayer = player;
-				player.setYourTurn(true);
+			currentPlayer = (((PlayerMessage) msgIn).getPlayer());
 
-			}
 			for (int i = 0; i < (((PlayerMessage) msgIn).getCards().size()); i++) {
-				((Label) (view.getHboxCards().getChildren().get(i)))
-						.setGraphic((((PlayerMessage) msgIn).getCards().get(i)).colorChoice.addImage());
+				(view.getHboxCards()).getChildren()
+						.add((((PlayerMessage) msgIn).getCards().get(i)).colorChoice.addImage());
 
 			}
-			players.add(player);
 
-			view.showPlayer(player);
+			view.showPlayer(currentPlayer);
 
 		}
 		// here we assign each player his enemies
 		if (msgIn instanceof OpponentMessage) {
 			System.out.println("Opponent message received");
 
-			for (Player p : players) {
-				for (int i = 0; i < ((OpponentMessage) msgIn).getOpponents().size(); i++) {
-					if (!p.getPlayerName()
-							.equalsIgnoreCase((((OpponentMessage) msgIn).getOpponents().get(i).getPlayerName())))
-						view.setOpponent(p, ((OpponentMessage) msgIn).getOpponents().get(i));
-				}
-
+			for (int i = 0; i < ((OpponentMessage) msgIn).getOpponents().size(); i++) {
+				if (!currentPlayer.getPlayerName()
+						.equalsIgnoreCase((((OpponentMessage) msgIn).getOpponents().get(i).getPlayerName())))
+					view.setOpponent(currentPlayer, ((OpponentMessage) msgIn).getOpponents().get(i));
 			}
 
 		}
-		
-		
+		if (msgIn instanceof GameStatusMessage) {
+			if (((GameStatusMessage) msgIn).isStarted())
+				startTurn(((GameStatusMessage) msgIn).getCurrentPlayer().getPlayerName());
 
-	}
-
-	public void startTurn() {
-		for (Player p : players) {
-			if (!p.getPlayerName().equalsIgnoreCase(currentPlayer.getPlayerName()))
-				p.setYourTurn(false);
 		}
-		
+
 	}
+
+	public void startTurn(String firstPlayer) {
+
+		view.gameStarted();
+		if (currentPlayer.getPlayerName().equalsIgnoreCase(firstPlayer))
+			view.yourTurn();
+		else
+			view.notYourTurn();
+
+	}
+
 }

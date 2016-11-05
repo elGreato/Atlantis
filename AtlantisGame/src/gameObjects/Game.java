@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import messageObjects.AtlantisMainLandMessage;
 import messageObjects.DeckLandTileMessage;
-import messageObjects.GameStatus;
+import messageObjects.GameStatusMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
@@ -103,7 +103,7 @@ public class Game implements GameInterface{
 
 		for (int i = 0; i < numberOfPlayers; i++) {
 			Player player = new Player(users.get(i).getUserInfo().getUsername());
-			giveColorToPlayer(player,i);
+			setPlayerColorAndTurn(player,i);
 			player.setPlayerIndex(i);
 			users.get(i).sendMessage(
 					new PlayerMessage(getName(), player, cardsForPlayers(i, player), i));
@@ -118,8 +118,8 @@ public class Game implements GameInterface{
 		}
 		for (int i = 0; i < numberOfPlayers; i++) {
 			
-			users.get(i).sendMessage(new GameStatus(getName(), true));
-			
+			users.get(i).sendMessage(new GameStatusMessage(getName(), true,players.get(0)));
+
 		}
 		
 	}
@@ -167,16 +167,27 @@ public class Game implements GameInterface{
 	public synchronized void processMessage(InGameMessage igm) {
 
 	}
-	public  void giveColorToPlayer(Player player, int index) {
-			if (index == 0)
-				player.setColor(ColorChoice.blue);
-			else if(index==1)
-				player.setColor(ColorChoice.red);
-			else if(index==2)
-				player.setColor(ColorChoice.green);
-			else if(index==3)
-				player.setColor(ColorChoice.purple);
 	
+	
+	
+	
+	public  void setPlayerColorAndTurn(Player player, int index) {
+			if (index == 0){
+				player.setColor(ColorChoice.blue);
+				player.setYourTurn(true);
+			}
+			else if(index==1){
+				player.setColor(ColorChoice.red);
+				player.setYourTurn(false);
+			}
+			else if(index==2){
+				player.setColor(ColorChoice.green);
+				player.setYourTurn(false);
+			}
+			else if(index==3){
+				player.setColor(ColorChoice.purple);
+				player.setYourTurn(false);
+			}
 			
 		}
 

@@ -4,16 +4,18 @@ import java.io.Serializable;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 /*
  * @author Ali Habbabeh
  */
 
-public class Card implements Serializable {
+public class Card extends Pane implements Serializable {
 
 	private final int cardValue=1;
 	public ColorChoice colorChoice;
+	private boolean isCardSelected = false;
 	
 	public Card(ColorChoice colorChoice){
 		
@@ -27,9 +29,13 @@ public class Card implements Serializable {
 	public int getCardValue(){  // in case we will introduce something like super card this can be changed
 		return 1;
 	}
-	 @Override
-	 // to test in console
-	    public String toString() {
-	        return (this.getColor()).toString();
-	    }
+
+	public boolean isCardSelected() {
+		return isCardSelected;
+	}
+
+	public void setCardSelected(boolean isCardSelected) {
+		this.isCardSelected = isCardSelected;
+	}
+	 
 }

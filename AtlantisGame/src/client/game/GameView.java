@@ -32,13 +32,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GameView {
 	private BorderPane root = new BorderPane();
 	private GridPane mainBoard = new GridPane();
-
+	
 	// base for other stacks
 	ArrayList<StackPane> base = new ArrayList<>();
 
@@ -53,9 +54,11 @@ public class GameView {
 
 	// Labels for main game controls
 	private Label lblGameBtns = new Label("Action Buttons");
-
-	// Vbox to hold buttons
+	private Label lblGameStatus = new Label();
+	private Label lblTurn = new Label();
+	// Vbox to hold buttons and HBox to hold Game status
 	private VBox vbMainControls = new VBox();
+	private VBox vbGameStatus = new VBox();
 
 	// Atlantis and mainland Holders
 	private StackPane stackAtlantis = new StackPane();
@@ -67,7 +70,7 @@ public class GameView {
 	private HBox hbOpponents = new HBox();
 	private HBox hboxCards = new HBox();
 	private HBox hbPawnHolder = new HBox();
-	private HBox hbOpponentPawnHolder = new HBox();
+	
 
 	private MainLand mainland;
 	private AtlantisTile atlantis;
@@ -75,13 +78,12 @@ public class GameView {
 	// VBox to hold players information+ VBox to hold individual players
 	private VBox vbPlayerInfo = new VBox();
 	private VBox vbPlayer = new VBox();
+	
 
 	private Label lblName = new Label();
 	private Label vpHolder = new Label();
 	private Label lblPlayerImage = new Label();
-	private Label lblCard;
 
-	private int numberOfMaxCards = 10;
 
 	// index for pawns on Atlantis
 	private int y = 0;
@@ -122,13 +124,13 @@ public class GameView {
 		// add players view stuff
 
 		// empty Labels for cards
-		for (int i = 0; i < numberOfMaxCards; i++) {
-			lblCard = new Label(" ");
+		/*for (int i = 0; i < numberOfMaxCards; i++) {
+			spCard = new StackPane();
 			// set class ID for css later
-			lblCard.getStylesheets().add("card");
-			hboxCards.getChildren().add(lblCard);
+		
+			hboxCards.getChildren().add(spCard);
 
-		}
+		}*/
 		// set a random picture for each player
 		int numberOfPicturesAvailable = 4;
 		String[] paths = new String[numberOfPicturesAvailable];
@@ -148,9 +150,10 @@ public class GameView {
 		vbPlayer.getChildren().add(vbPlayerInfo);
 
 		hbPlayersInfo.getChildren().addAll(vbPlayer, hbOpponents);
-
+		vbGameStatus.getChildren().addAll(lblGameStatus, lblTurn);
 		root.setBottom(hbPlayersInfo);
 		root.setRight(vbMainControls);
+		root.setTop(vbGameStatus);
 
 		stage = new Stage();
 		mainBoard.setVgap(3);
@@ -288,7 +291,7 @@ public class GameView {
 		vbOpponentInfo.getChildren().addAll(lblopponentName,lblopponentCardCount,recColor);
 		hbOpponents.getChildren().add(vbOpponentInfo);
 		
-		
+		HBox hbOpponentPawnHolder = new HBox();
 		// i need to find a way to get the circle of the pawn 
 		for (Pawn p : opponent.getPawns()) {
 
@@ -297,7 +300,9 @@ public class GameView {
 			c.setFill(Pawn.FillColor(opponent));
 			p.setCircle(c);
 			p.getChildren().add(c);
+			
 			hbOpponentPawnHolder.getChildren().add(p);
+			
 		}
 		atlantis.getChildren().add(hbOpponentPawnHolder);
 	}
@@ -338,6 +343,23 @@ public class GameView {
 		mainland.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
 				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
+	}
+
+	public void gameStarted() {
+		lblGameStatus.setText("The GAME HAS BEGUN");
+		lblGameStatus.setTextFill(Color.web("#ce2323"));
+		lblGameStatus.setFont(new Font("Cambria",32));
+		vbGameStatus.setAlignment(Pos.CENTER);
+		
+	}
+
+	public void yourTurn() {
+		lblTurn.setText("It is YOUR turn");
+		
+	}
+	public void notYourTurn() {
+		lblTurn.setText("It is NOT your turn");
+		
 	}
 
 }
