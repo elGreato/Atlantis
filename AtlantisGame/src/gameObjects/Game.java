@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import messageObjects.AtlantisMainLandMessage;
 import messageObjects.DeckLandTileMessage;
+import messageObjects.GameStatus;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
@@ -114,6 +115,11 @@ public class Game implements GameInterface{
 
 			users.get(i).sendMessage(new OpponentMessage(getName(), players));
 
+		}
+		for (int i = 0; i < numberOfPlayers; i++) {
+			
+			users.get(i).sendMessage(new GameStatus(getName(), true));
+			
 		}
 		
 	}

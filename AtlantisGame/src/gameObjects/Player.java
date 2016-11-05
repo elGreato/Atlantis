@@ -22,6 +22,8 @@ public class Player implements Serializable {
 	private ColorChoice color;
 	
 	private int playerIndex;
+	
+	private boolean yourTurn = false;
 
 	public Player(String name) {
 		// the player extends vbox
@@ -101,6 +103,14 @@ public class Player implements Serializable {
 
 	public void setPlayerIndex(int playerIndex) {
 		this.playerIndex = playerIndex;
+	}
+
+	public boolean isYourTurn() {
+		return yourTurn;
+	}
+
+	public void setYourTurn(boolean yourTurn) {
+		this.yourTurn = yourTurn;
 	}
 
 }

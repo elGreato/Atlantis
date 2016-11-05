@@ -47,9 +47,9 @@ public class GameView {
 	public Stage stage;
 
 	// the main game controls
-	private Button btnPlayCard = new Button("Play a Selected Card");
-	private Button btnPayWithCard = new Button("Pay with a Card");
-	private Button btnPayWithTreasure = new Button("Pay with a treasure");
+	public Button btnPlayCard = new Button("Play a Selected Card");
+	public Button btnPayWithCard = new Button("Pay with a Card");
+	public Button btnPayWithTreasure = new Button("Pay with a treasure");
 
 	// Labels for main game controls
 	private Label lblGameBtns = new Label("Action Buttons");

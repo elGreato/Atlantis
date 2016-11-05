@@ -19,8 +19,9 @@ public class GameModel {
 	// send messages to server through method msgOut.sendMessage()
 	private ClientLobbyInterface msgOut;
 	private ArrayList<Player> players = new ArrayList<>();
+	private Player currentPlayer;
 
-	public String getGameName() { 
+	public String getGameName() {
 		return gameName;
 	}
 
@@ -48,13 +49,18 @@ public class GameModel {
 		// now the players
 		if (msgIn instanceof PlayerMessage) {
 			Player player = (((PlayerMessage) msgIn).getPlayer());
-			
+			if (((PlayerMessage) msgIn).getPlayer().getPlayerIndex() == 0) {
+				currentPlayer = player;
+				player.setYourTurn(true);
+
+			}
 			for (int i = 0; i < (((PlayerMessage) msgIn).getCards().size()); i++) {
 				((Label) (view.getHboxCards().getChildren().get(i)))
 						.setGraphic((((PlayerMessage) msgIn).getCards().get(i)).colorChoice.addImage());
 
 			}
 			players.add(player);
+
 			view.showPlayer(player);
 
 		}
@@ -73,6 +79,15 @@ public class GameModel {
 
 		}
 		
+		
 
+	}
+
+	public void startTurn() {
+		for (Player p : players) {
+			if (!p.getPlayerName().equalsIgnoreCase(currentPlayer.getPlayerName()))
+				p.setYourTurn(false);
+		}
+		
 	}
 }
