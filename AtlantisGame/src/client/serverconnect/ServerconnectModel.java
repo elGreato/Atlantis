@@ -98,6 +98,10 @@ public class ServerconnectModel implements Runnable{
 				});
 				
 			}
+			else
+			{
+				testSocket.close();
+			}
 			System.out.println("No catch" + testableIP);
 		}
 		catch(IOException e)
