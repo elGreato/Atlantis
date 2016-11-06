@@ -167,7 +167,7 @@ public class GameView {
 		scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
-	}
+	} 
 
 	// those are index for base Children
 	// we start with column two for the Atlantis node
