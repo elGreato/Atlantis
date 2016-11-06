@@ -100,7 +100,7 @@ public class ServerconnectModel implements Runnable{
 			}
 			else
 			{
-				testSocket.close();
+				testSocket.close(); 
 			}
 			System.out.println("No catch" + testableIP);
 		}
