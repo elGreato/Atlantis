@@ -13,11 +13,12 @@ public class Pawn extends StackPane implements Serializable{
 
 	private  ColorChoice pawnColor;
 	private int location;
-	private String owner;
+	private Player owner;
 	private int pawnId;
 	private transient Circle circle;
+	private boolean isPawnSelected = false;
 	
-	public Pawn(String player, int pawnId){
+	public Pawn(Player player, int pawnId){
 		
 		owner=player;
 		this.pawnId=pawnId;
@@ -53,7 +54,7 @@ public class Pawn extends StackPane implements Serializable{
 		this.pawnColor = pawnColor;
 	}
 
-	public String getOwner() {
+	public Player getOwner() {
 		return owner;
 	}
 
@@ -65,7 +66,7 @@ public class Pawn extends StackPane implements Serializable{
 		this.pawnId = pawnId;
 	}
 
-	public void setOwner(String owner) {
+	public void setOwner(Player owner) {
 		this.owner = owner;
 	}
 
@@ -83,6 +84,14 @@ public class Pawn extends StackPane implements Serializable{
 
 	public void setCircle(Circle circle) {
 		this.circle = circle;
+	}
+
+	public boolean isPawnSelected() {
+		return isPawnSelected;
+	}
+
+	public void setPawnSelected(boolean isPawnSelected) {
+		this.isPawnSelected = isPawnSelected;
 	}
 
 	

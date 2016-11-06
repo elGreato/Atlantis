@@ -131,6 +131,7 @@ public class Game implements GameInterface{
 		if (playerIndex == 0) {
 			for (int i = 0; i < 4; i++) {
 				Card card = cards.deal();
+				card.setOwner(player);
 				result.add(card);
 				player.getPlayerHand().addCard(card);
 				System.out.println("sent player1 a card");
@@ -139,6 +140,7 @@ public class Game implements GameInterface{
 		} else if (playerIndex == 1) {
 			for (int i = 0; i < 5; i++) {
 				Card card = cards.deal();
+				card.setOwner(player);
 				result.add(card);
 				player.getPlayerHand().addCard(card);
 				System.out.println("sent player2 a card");
@@ -147,6 +149,7 @@ public class Game implements GameInterface{
 		} else if (playerIndex == 2) {
 			for (int i = 0; i < 6; i++) {
 				Card card = cards.deal();
+				card.setOwner(player);
 				result.add(card);
 				player.getPlayerHand().addCard(card);
 				System.out.println("sent player3 a card");
@@ -154,6 +157,7 @@ public class Game implements GameInterface{
 		} else if (playerIndex == 3) {
 			for (int i = 0; i < 7; i++) {
 				Card card = cards.deal();
+				card.setOwner(player);
 				result.add(card);
 				player.getPlayerHand().addCard(card);
 				System.out.println("sent player4 a card");

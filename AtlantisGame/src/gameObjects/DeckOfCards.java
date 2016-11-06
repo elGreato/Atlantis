@@ -30,7 +30,7 @@ public class DeckOfCards implements Serializable{
 		for (int i=0; i<15; i++) {
 			
 			for (ColorChoice c: ColorChoice.values()) //used nested loop to multiply # of colors with #of cards	
-                cards.add(new Card(c));
+                cards.add(new Card(i,c));
         }
 		
 		// now since we added them on a row we shuffle them
