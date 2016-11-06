@@ -13,10 +13,10 @@ public class GameController {
 	public GameController(GameView gameView, GameModel gameModel) {
 		this.view = gameView;
 		this.model = gameModel;
-		for (StackPane s: view.getBase()){
-		s.setOnMouseClicked(e-> handleBase(e));
+	//	for (StackPane s: view.getBase()){
+		//s.setOnMouseClicked(e-> handleBase(e));
 		 
-	}
+	//}
 		view.btnPlayCard.setOnAction(e-> handlePlayCard());
 		view.btnPayWithCard.setOnAction(e-> handlePayWithCard());
 		view.btnPayWithTreasure.setOnAction(e-> handlePayWithTreasure());
@@ -31,7 +31,7 @@ public class GameController {
 		return null;
 	}
 	private void handlePlayCard() {
-		
+		model.tryPlayCard();
 		
 	}
 	private void handleBase(MouseEvent e) {

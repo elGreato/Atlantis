@@ -45,9 +45,6 @@ public class WaterTile extends Tile {
 
 	}
 
-	public void addStack(LandTile tile) {
-		this.getChildren().add(tile);
-	}
 
 	public int getCol() {
 		return col;

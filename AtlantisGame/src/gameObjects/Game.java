@@ -9,7 +9,8 @@ import messageObjects.GameStatusMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
-import messageObjects.WaterTileMessage;
+import messageObjects.TurnMessage;
+
 import server.backend.Lobby;
 import server.backend.User;
 
@@ -33,7 +34,8 @@ public class Game implements GameInterface{
 	private ArrayList<Player> players = new ArrayList<>();
 	private AtlantisTile atlantis= new AtlantisTile();
 	private MainLand mainland=new MainLand();
-
+	
+	private int currentPlayerIndex;
 
 	// Constructor (doesn't start game)
 	public Game(String name, String password, int maxPlayers, User creator, Lobby lobby) {
@@ -105,10 +107,12 @@ public class Game implements GameInterface{
 			Player player = new Player(users.get(i).getUserInfo().getUsername());
 			setPlayerColorAndTurn(player,i);
 			player.setPlayerIndex(i);
+			
 			users.get(i).sendMessage(
 					new PlayerMessage(getName(), player, cardsForPlayers(i, player), i));
 			players.add(player);
 			}
+		currentPlayerIndex=0;
 	
 		// send the list of players for client to set opponents
 		for (int i = 0; i < numberOfPlayers; i++) {
@@ -118,7 +122,7 @@ public class Game implements GameInterface{
 		}
 		for (int i = 0; i < numberOfPlayers; i++) {
 			
-			users.get(i).sendMessage(new GameStatusMessage(getName(), true,players.get(0)));
+			users.get(i).sendMessage(new GameStatusMessage(getName(), true,players.get(currentPlayerIndex)));
 
 		}
 		
@@ -169,12 +173,23 @@ public class Game implements GameInterface{
 
 	// Here messages from clients arrive
 	public synchronized void processMessage(InGameMessage igm) {
-
+		if (igm instanceof GameStatusMessage){
+			System.out.println("Game STATUS MESSAGE RECEUVED FROM CLIENT");
+			new TurnMessage(((GameStatusMessage)igm).getGameName(),checkTurn(((GameStatusMessage)igm).getPlayerIndex()));
+			System.out.println("NOW SEND PLAYERINDEX FOR CLEINT ,, TURN MESSAGE");
+		}
+		
 	}
 	
 	
 	
 	
+	private boolean checkTurn(int playerIndex) {
+		if (playerIndex==currentPlayerIndex)
+		return true;
+		else return false;
+	}
+
 	public  void setPlayerColorAndTurn(Player player, int index) {
 			if (index == 0){
 				player.setColor(ColorChoice.blue);

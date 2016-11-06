@@ -13,6 +13,8 @@ import gameObjects.WaterTile;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -43,7 +45,7 @@ public class GameView {
 	private GridPane mainBoard = new GridPane();
 
 	// base for other stacks
-	ArrayList<StackPane> base = new ArrayList<>();
+	ArrayList<WaterTile> base = new ArrayList<>();
 
 	// fx stuff
 	public Scene scene;
@@ -114,11 +116,10 @@ public class GameView {
 
 		// stacks to hold water panes
 		for (int i = 1; i < 54; i++) {
-			StackPane stack = new StackPane();
+
 			WaterTile water = new WaterTile(i);
-			stack.getChildren().add(water);
-			base.add(stack);
-			addStack(stack);
+			base.add(water);
+			addStack(water);
 		}
 
 		// add Buttons
@@ -167,7 +168,7 @@ public class GameView {
 		scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
-	} 
+	}
 
 	// those are index for base Children
 	// we start with column two for the Atlantis node
@@ -175,24 +176,25 @@ public class GameView {
 	int ro = 1;
 
 	// add stacks to the mainBoard
-	private void addStack(StackPane stack) {
+	private void addStack(WaterTile water) {
 
 		if (((ro == 1) || (ro == 5) || (ro == 9)) && co != maxColIndex) {
-			mainBoard.add(stack, co, ro);
+
+			mainBoard.add(water, co, ro);
 			co++;
 		} else if (co == maxColIndex && ((ro == 1) || (ro == 5) || (ro == 9))) {
 
-			mainBoard.add(stack, maxColIndex - 1, ro + 1);
+			mainBoard.add(water, maxColIndex - 1, ro + 1);
 
 			ro += 2;
 			co -= 1;
 		} else if (((ro == 3) || (ro == 7) || (ro == 11)) && co <= maxColIndex && co != 0) {
 
-			mainBoard.add(stack, co, ro);
+			mainBoard.add(water, co, ro);
 			co--;
 
 		} else if (co == 0 && ((ro == 3) || (ro == 7) || (ro == 11))) {
-			mainBoard.add(stack, 1, ro + 1);
+			mainBoard.add(water, 1, ro + 1);
 
 			ro += 2;
 			co += 1;
@@ -215,7 +217,7 @@ public class GameView {
 			rec.setFill(LandTile.getFillColor(tile));
 			tile.getChildren().addAll(rec,
 					new Text(String.valueOf(deckA.get(i).getLandValue()) + "\n" + tile.getColor().toString()));
-			base.get(i).getChildren().add(tile);
+			(base.get(i).getChildren()).add(tile);
 		}
 		for (int i = 11; i < 21; i++) {
 			LandTile tile = deckA.get(i + 16);
@@ -226,7 +228,7 @@ public class GameView {
 			rec.setFill(LandTile.getFillColor(tile));
 			tile.getChildren().addAll(rec,
 					new Text(String.valueOf(deckA.get(i + 16).getLandValue()) + "\n" + tile.getColor().toString()));
-			base.get(i).getChildren().add(tile);
+			(base.get(i).getChildren()).add(tile);
 		}
 
 		// DeckB
@@ -240,7 +242,7 @@ public class GameView {
 			rec.setFill(LandTile.getFillColor(tile));
 			tile.getChildren().addAll(rec,
 					new Text(String.valueOf(deckB.get(i - 27).getLandValue()) + "\n" + tile.getColor().toString()));
-			base.get(i).getChildren().add(tile);
+			(base.get(i).getChildren()).add(tile);
 		}
 		for (int i = 28; i < 38; i++) {
 			LandTile tile = deckB.get(i - 2);
@@ -251,7 +253,7 @@ public class GameView {
 			rec.setFill(LandTile.getFillColor(tile));
 			tile.getChildren().addAll(rec,
 					new Text(String.valueOf(deckB.get(i - 2).getLandValue()) + "\n" + tile.getColor().toString()));
-			base.get(i).getChildren().add(tile);
+			(base.get(i).getChildren()).add(tile);
 		}
 
 	}
@@ -324,7 +326,6 @@ public class GameView {
 			c.setFill(Pawn.FillColor(opponent));
 			p.setCircle(c);
 			p.getChildren().add(c);
-
 			hbOpponentPawnHolder.getChildren().add(p);
 
 		}
@@ -405,11 +406,11 @@ public class GameView {
 
 	}
 
-	public ArrayList<StackPane> getBase() {
+	public ArrayList<WaterTile> getBase() {
 		return base;
 	}
 
-	public void setBase(ArrayList<StackPane> base) {
+	public void setBase(ArrayList<WaterTile> base) {
 		this.base = base;
 	}
 
@@ -421,4 +422,34 @@ public class GameView {
 		this.hboxCards = hboxCards;
 	}
 
+	public void showNotYourTurnAlert() {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("not your Turn");
+
+		alert.setContentText("Please Wait for your Turn to play");
+		alert.showAndWait();
+
+	}
+
+	public void movePawn(Pawn selectedPawn, LandTile target) {
+		// first we check if it is still on the atlnatis
+		for (int i = 0; i < hbPawnHolder.getChildren().size(); i++) {
+			if (((Pawn) hbPawnHolder.getChildren().get(i)).getPawnId() == selectedPawn.getPawnId())
+				hbPawnHolder.getChildren().remove(i);
+		}
+		for (int i = 0; i < base.size(); i++) {
+			if (((LandTile) base.get(i).getChildren().get(base.get(i).getChildren().size() - 1)).getPawnOnTile()
+					.getPawnId() == (selectedPawn.getPawnId())
+					&& ((LandTile) base.get(i).getChildren().get(base.get(i).getChildren().size() - 1))
+							.getTileId() != target.getTileId()) {
+				((LandTile) base.get(i).getChildren().get(base.get(i).getChildren().size() - 1)).getChildren()
+						.remove(0);
+			}
+
+			if (((LandTile) base.get(i).getChildren().get(base.get(i).getChildren().size() - 1)).getTileId() == target
+					.getTileId()) {
+				((LandTile) base.get(i).getChildren().get(base.get(i).getChildren().size() - 1)).getChildren().add(selectedPawn);
+			}
+		}
+	}
 }
