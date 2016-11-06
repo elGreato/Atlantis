@@ -111,6 +111,7 @@ public class User implements Runnable{
 			//inform user about successful create and login, send user information at the same time
 			UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo, lobbyInterface.getPosition(userInfo));
 			oos.writeObject(nowLoggedInAs);
+			oos.flush();
 			lobbyInterface.sendWholeLobby(this);
 			loggedIn = true;
 		}
@@ -119,6 +120,7 @@ public class User implements Runnable{
 			//inform user about username already taken
 			ServerInfoMessage usernameTaken = new ServerInfoMessage("This username is already taken. Please try another one.");
 			oos.writeObject(usernameTaken);
+			oos.flush();
 		}
 	}
 
@@ -134,6 +136,7 @@ public class User implements Runnable{
 			//inform user about successful login, send user information at the same time
 			UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo, lobbyInterface.getPosition(userInfo));
 			oos.writeObject(nowLoggedInAs);
+			oos.flush();
 			lobbyInterface.sendWholeLobby(this);
 			loggedIn = true;
 		}
@@ -142,6 +145,7 @@ public class User implements Runnable{
 			//inform user about wrong credentials entered
 			ServerInfoMessage wrongEntry = new ServerInfoMessage("The credentials you entered are not correct. Try again!");
 			oos.writeObject(wrongEntry);
+			oos.flush();
 		}
 		
 	}
@@ -172,6 +176,7 @@ public class User implements Runnable{
 					GameJoinMessage gjm = (GameJoinMessage)receivedMessage;
 					String answer = lobbyInterface.joinGame(this, gjm);
 					oos.writeObject(new ServerInfoMessage(answer));
+					oos.flush();
 				}
 				else if(receivedMessage instanceof CreateGameMessage)
 				{
@@ -180,6 +185,7 @@ public class User implements Runnable{
 					String answer = lobbyInterface.createGame(this, cgm);
 					System.out.println("Create game message processed");
 					oos.writeObject(new ServerInfoMessage(answer));
+					oos.flush();
 					System.out.println("Answer sent");
 				
 				}
@@ -205,6 +211,7 @@ public class User implements Runnable{
 	public synchronized void sendMessage(Message m) {
 		try {
 			oos.writeObject(m);
+			oos.flush();
 		} catch (IOException e) {
 			logoutUser();
 		}
@@ -216,6 +223,7 @@ public class User implements Runnable{
 		runningGames.add(game);
 		try {
 			oos.writeObject(new GameStartMessage(game.getName()));
+			oos.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 			logoutUser();

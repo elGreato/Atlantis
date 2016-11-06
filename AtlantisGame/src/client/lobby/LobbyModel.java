@@ -232,6 +232,7 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 	{
 		try {
 			oos.writeObject(msg);
+			oos.flush();
 		} catch (IOException e) {
 			connectionLost();
 		}

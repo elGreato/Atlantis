@@ -46,6 +46,7 @@ public class LoginModel {
 	{
 		try {
 			oos.writeObject(new LoginMessage(view.loginusernametxt.getText(), view.loginpasswordtxt.getText()));
+			oos.flush();
 			Object reply = ois.readObject();
 			if(reply instanceof ServerInfoMessage)
 			{
@@ -83,6 +84,7 @@ public class LoginModel {
 	{
 		try {
 			oos.writeObject(new CreateUserMessage(view.createusernametxt.getText(), view.createpasswordtxt.getText()));
+			oos.flush();
 			
 			Object reply = ois.readObject();
 			
