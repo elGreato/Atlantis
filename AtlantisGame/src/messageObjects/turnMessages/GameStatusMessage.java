@@ -1,8 +1,9 @@
-package messageObjects;
+package messageObjects.turnMessages;
 
 import java.io.Serializable;
 
 import gameObjects.Player;
+import messageObjects.InGameMessage;
 
 public class GameStatusMessage extends InGameMessage implements Serializable {
 

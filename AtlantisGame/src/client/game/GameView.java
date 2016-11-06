@@ -119,7 +119,7 @@ public class GameView {
 
 			WaterTile water = new WaterTile(i);
 			base.add(water);
-			addStack(water);
+			addToMainBoard(water);
 		}
 
 		// add Buttons
@@ -176,7 +176,7 @@ public class GameView {
 	int ro = 1;
 
 	// add stacks to the mainBoard
-	private void addStack(WaterTile water) {
+	private void addToMainBoard(WaterTile water) {
 
 		if (((ro == 1) || (ro == 5) || (ro == 9)) && co != maxColIndex) {
 
@@ -437,19 +437,27 @@ public class GameView {
 			if (((Pawn) hbPawnHolder.getChildren().get(i)).getPawnId() == selectedPawn.getPawnId())
 				hbPawnHolder.getChildren().remove(i);
 		}
+		LandTile tempLand = null;
+		WaterTile tempWater = null;
+
 		for (int i = 0; i < base.size(); i++) {
-			if (((LandTile) base.get(i).getChildren().get(base.get(i).getChildren().size() - 1)).getPawnOnTile()
-					.getPawnId() == (selectedPawn.getPawnId())
-					&& ((LandTile) base.get(i).getChildren().get(base.get(i).getChildren().size() - 1))
-							.getTileId() != target.getTileId()) {
-				((LandTile) base.get(i).getChildren().get(base.get(i).getChildren().size() - 1)).getChildren()
-						.remove(0);
+			tempWater = base.get(i);
+			if (tempWater.getChildren().size()!=0){
+				if (((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1))!=null)
+			tempLand = ((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1));
+			} 
+			if (tempLand!=null&&tempLand.getPawnOnTile() != null) {
+
+				if (tempLand.getPawnOnTile().getPawnId() == (selectedPawn.getPawnId())) {
+					tempLand.setPawnOnTile(null);
+				}
 			}
 
-			if (((LandTile) base.get(i).getChildren().get(base.get(i).getChildren().size() - 1)).getTileId() == target
-					.getTileId()) {
-				((LandTile) base.get(i).getChildren().get(base.get(i).getChildren().size() - 1)).getChildren().add(selectedPawn);
-			}
 		}
+	}
+
+	public void givePlayerTreasure(LandTile landTile) {
+		hbTreasures.getChildren().add(landTile);
+
 	}
 }

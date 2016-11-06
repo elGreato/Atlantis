@@ -5,16 +5,15 @@ import java.util.ArrayList;
 
 import messageObjects.AtlantisMainLandMessage;
 import messageObjects.DeckLandTileMessage;
-import messageObjects.GameStatusMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
-import messageObjects.TurnMessage;
-
+import messageObjects.turnMessages.GameStatusMessage;
+import messageObjects.turnMessages.TurnMessage;
 import server.backend.Lobby;
 import server.backend.User;
 
-public class Game implements GameInterface{
+public class Game implements GameInterface {
 
 	private String name;
 	private String password;
@@ -32,9 +31,9 @@ public class Game implements GameInterface{
 	private DeckOfLandTiles deckA;
 	private DeckOfLandTiles deckB;
 	private ArrayList<Player> players = new ArrayList<>();
-	private AtlantisTile atlantis= new AtlantisTile();
-	private MainLand mainland=new MainLand();
-	
+	private AtlantisTile atlantis = new AtlantisTile();
+	private MainLand mainland = new MainLand();
+
 	private int currentPlayerIndex;
 
 	// Constructor (doesn't start game)
@@ -88,7 +87,6 @@ public class Game implements GameInterface{
 		deckA = new DeckOfLandTiles();
 		deckB = new DeckOfLandTiles();
 		cards = new DeckOfCards();
-	
 
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i)
@@ -97,23 +95,21 @@ public class Game implements GameInterface{
 		}
 		// send the atlantis and main land
 		for (int i = 0; i < numberOfPlayers; i++) {
-			users.get(i)
-					.sendMessage(new AtlantisMainLandMessage(getName(), atlantis, mainland));
+			users.get(i).sendMessage(new AtlantisMainLandMessage(getName(), atlantis, mainland));
 
 		}
-		// send  Player for each user
+		// send Player for each user
 
 		for (int i = 0; i < numberOfPlayers; i++) {
 			Player player = new Player(users.get(i).getUserInfo().getUsername());
-			setPlayerColorAndTurn(player,i);
+			setPlayerColorAndTurn(player, i);
 			player.setPlayerIndex(i);
-			
-			users.get(i).sendMessage(
-					new PlayerMessage(getName(), player, cardsForPlayers(i, player), i));
+
+			users.get(i).sendMessage(new PlayerMessage(getName(), player, cardsForPlayers(i, player), i));
 			players.add(player);
-			}
-		currentPlayerIndex=0;
-	
+		}
+		currentPlayerIndex = 0;
+
 		// send the list of players for client to set opponents
 		for (int i = 0; i < numberOfPlayers; i++) {
 
@@ -121,14 +117,12 @@ public class Game implements GameInterface{
 
 		}
 		for (int i = 0; i < numberOfPlayers; i++) {
-			
-			users.get(i).sendMessage(new GameStatusMessage(getName(), true,players.get(currentPlayerIndex)));
+
+			users.get(i).sendMessage(new GameStatusMessage(getName(), true, players.get(currentPlayerIndex)));
 
 		}
-		
+
 	}
-
-
 
 	private ArrayList<Card> cardsForPlayers(int playerIndex, Player player) {
 		ArrayList<Card> result = new ArrayList<>();
@@ -173,42 +167,36 @@ public class Game implements GameInterface{
 
 	// Here messages from clients arrive
 	public synchronized void processMessage(InGameMessage igm) {
-		if (igm instanceof GameStatusMessage){
-			System.out.println("Game STATUS MESSAGE RECEUVED FROM CLIENT");
-			new TurnMessage(((GameStatusMessage)igm).getGameName(),checkTurn(((GameStatusMessage)igm).getPlayerIndex()));
+		if (igm instanceof GameStatusMessage) {
+			users.get(((GameStatusMessage) igm).getPlayerIndex()).sendMessage(new TurnMessage(
+					((GameStatusMessage) igm).getGameName(), checkTurn(((GameStatusMessage) igm).getPlayerIndex())));
 			System.out.println("NOW SEND PLAYERINDEX FOR CLEINT ,, TURN MESSAGE");
 		}
-		
-	}
-	
-	
-	
-	
-	private boolean checkTurn(int playerIndex) {
-		if (playerIndex==currentPlayerIndex)
-		return true;
-		else return false;
+
 	}
 
-	public  void setPlayerColorAndTurn(Player player, int index) {
-			if (index == 0){
-				player.setColor(ColorChoice.blue);
-				player.setYourTurn(true);
-			}
-			else if(index==1){
-				player.setColor(ColorChoice.red);
-				player.setYourTurn(false);
-			}
-			else if(index==2){
-				player.setColor(ColorChoice.green);
-				player.setYourTurn(false);
-			}
-			else if(index==3){
-				player.setColor(ColorChoice.purple);
-				player.setYourTurn(false);
-			}
-			
+	private boolean checkTurn(int playerIndex) {
+		if (playerIndex == currentPlayerIndex)
+			return true;
+		else
+			return false;
+	}
+
+	public void setPlayerColorAndTurn(Player player, int index) {
+		if (index == 0) {
+			player.setColor(ColorChoice.blue);
+			player.setYourTurn(true);
+		} else if (index == 1) {
+			player.setColor(ColorChoice.red);
+			player.setYourTurn(false);
+		} else if (index == 2) {
+			player.setColor(ColorChoice.green);
+			player.setYourTurn(false);
+		} else if (index == 3) {
+			player.setColor(ColorChoice.purple);
+			player.setYourTurn(false);
 		}
 
-}
+	}
 
+}

@@ -11,11 +11,11 @@ import javafx.event.Event;
 import javafx.scene.paint.Color;
 import messageObjects.AtlantisMainLandMessage;
 import messageObjects.DeckLandTileMessage;
-import messageObjects.GameStatusMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
-import messageObjects.TurnMessage;
+import messageObjects.turnMessages.GameStatusMessage;
+import messageObjects.turnMessages.TurnMessage;
 
 public class GameModel {
 
@@ -83,7 +83,7 @@ public class GameModel {
 
 		}
 		if (msgIn instanceof TurnMessage) {
-			System.out.println("TURN MESSAGE RECEIVED FROM SERVER");
+
 			if (((TurnMessage) msgIn).isYourTurn()) {
 				Card selectedCard = null;
 				Pawn selectedPawn = null;
@@ -101,20 +101,31 @@ public class GameModel {
 					}
 				}
 
-				// move the pawn to the card
+				// move the pawn to the landTile
 				for (int i = 0; i < view.base.size(); i++) {
-					ColorChoice currentColor = selectedCard.getColor();
-					LandTile target = null;
 					int topNode = (view.getBase().get(i).getChildren().size() - 1);
-					if (((LandTile) view.getBase().get(i).getChildren().get(topNode)).getColor().equals(currentColor)) {
-						target = ((LandTile) view.getBase().get(i).getChildren().get(topNode));
-						selectedPawn.setLocation(target.getTileId());
-						target.setPawnOnTile(selectedPawn);
+					ColorChoice currentColor = selectedCard.getColor();
+					// if the water has a landtile
+					if (view.getBase().get(i).getChildren() != null) {
+						// doubld check 
+						if (((LandTile) view.getBase().get(i).getChildren().get(topNode)) != null) {
+							LandTile target = ((LandTile) view.getBase().get(i).getChildren().get(topNode));
+							// if the land same color as card
+							if (target.getColor().equals(currentColor)) {
 
-						view.movePawn(selectedPawn, target);
-						break;
+								target.setPawnOnTile(selectedPawn);
+
+								view.movePawn(selectedPawn, target);
+
+								if (view.getBase().get(i - 1) != null) {
+									int indexOfTarget = view.getBase().get(i).getChildren().indexOf(target);
+									view.givePlayerTreasure(
+											((LandTile) view.getBase().get(i - 1).getChildren().remove(indexOfTarget)));
+								}
+								break;
+							}
+						}
 					}
-
 				}
 
 			} else

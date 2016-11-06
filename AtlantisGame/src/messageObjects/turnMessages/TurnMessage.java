@@ -1,6 +1,8 @@
-package messageObjects;
+package messageObjects.turnMessages;
 
 import java.io.Serializable;
+
+import messageObjects.InGameMessage;
 
 public class TurnMessage extends InGameMessage implements Serializable {
 

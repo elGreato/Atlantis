@@ -12,19 +12,17 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-public class LandTile extends Tile  {
+public class LandTile extends Tile implements Serializable {
 	
 	private Pawn pawnOnTile;
 	private  ColorChoice landTileColor;
 	private int landValue;
-	private int col;
-	private int row;
 
 	public LandTile(int tileId,ColorChoice color, int value ){
 		super(tileId);
 	landTileColor=color;
 	landValue=value;
-
+	
 	}
 	
 	public  static Paint getFillColor(LandTile landTile) {
@@ -47,20 +45,14 @@ public class LandTile extends Tile  {
 
 	
 	}
-	public LandTile( int tileId,int co, int ro, ColorChoice color, int value) {
-		super(tileId,co, ro);
-		landTileColor=color;
-		landValue=value;
-		col=co;
-		row=ro;
-		
 
-	}
 	public Pawn getPawnOnTile() {
 		return pawnOnTile;
 	}
 	public void setPawnOnTile(Pawn pawnOnTile) {
 		this.pawnOnTile = pawnOnTile;
+		if (pawnOnTile!=null)
+		this.getChildren().add(pawnOnTile);
 	}
 	public ColorChoice getColor() {
 		return landTileColor;
