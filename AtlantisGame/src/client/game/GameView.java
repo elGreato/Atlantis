@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import gameObjects.AtlantisTile;
+import gameObjects.Card;
 import gameObjects.LandTile;
 import gameObjects.MainLand;
 import gameObjects.Pawn;
@@ -35,11 +36,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import messageObjects.PlayerMessage;
 
 public class GameView {
 	private BorderPane root = new BorderPane();
 	private GridPane mainBoard = new GridPane();
-	
+
 	// base for other stacks
 	ArrayList<StackPane> base = new ArrayList<>();
 
@@ -70,7 +72,7 @@ public class GameView {
 	private HBox hbOpponents = new HBox();
 	private HBox hboxCards = new HBox();
 	private HBox hbPawnHolder = new HBox();
-	
+	private HBox hbTreasures = new HBox();
 
 	private MainLand mainland;
 	private AtlantisTile atlantis;
@@ -78,12 +80,12 @@ public class GameView {
 	// VBox to hold players information+ VBox to hold individual players
 	private VBox vbPlayerInfo = new VBox();
 	private VBox vbPlayer = new VBox();
-	
 
 	private Label lblName = new Label();
 	private Label vpHolder = new Label();
 	private Label lblPlayerImage = new Label();
-
+	private Label lblcards = new Label("Your Cards");
+	private Label lbltreasures = new Label("Your Treasures");
 
 	// index for pawns on Atlantis
 	private int y = 0;
@@ -124,13 +126,14 @@ public class GameView {
 		// add players view stuff
 
 		// empty Labels for cards
-		/*for (int i = 0; i < numberOfMaxCards; i++) {
-			spCard = new StackPane();
-			// set class ID for css later
-		
-			hboxCards.getChildren().add(spCard);
-
-		}*/
+		/*
+		 * for (int i = 0; i < numberOfMaxCards; i++) { spCard = new
+		 * StackPane(); // set class ID for css later
+		 * 
+		 * hboxCards.getChildren().add(spCard);
+		 * 
+		 * }
+		 */
 		// set a random picture for each player
 		int numberOfPicturesAvailable = 4;
 		String[] paths = new String[numberOfPicturesAvailable];
@@ -146,7 +149,10 @@ public class GameView {
 		vbPlayerInfo.getChildren().add(lblName);
 		vbPlayerInfo.getChildren().add(vpHolder);
 		vbPlayerInfo.getChildren().add(lblPlayerImage);
+		vbPlayerInfo.getChildren().add(lblcards);
 		vbPlayerInfo.getChildren().add(hboxCards);
+		vbPlayerInfo.getChildren().add(lbltreasures);
+		vbPlayerInfo.getChildren().add(hbTreasures);
 		vbPlayer.getChildren().add(vbPlayerInfo);
 
 		hbPlayersInfo.getChildren().addAll(vbPlayer, hbOpponents);
@@ -161,7 +167,7 @@ public class GameView {
 		scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
-	}
+	} 
 
 	// those are index for base Children
 	// we start with column two for the Atlantis node
@@ -264,7 +270,7 @@ public class GameView {
 			Circle c = new Circle();
 			c.setRadius(10);
 			p.setCircle(c);
-			System.out.println("players pawns: " + player.getPawns().size());
+			p.setOnMouseClicked(e -> handlePawn(p));
 			c.setFill(Pawn.FillColor(player));
 			p.getChildren().add(c);
 
@@ -276,6 +282,24 @@ public class GameView {
 
 	}
 
+	private void handlePawn(Pawn p) {
+		for (Pawn pp : (p.getOwner()).getPawns()) {
+			if (pp.getPawnId() != p.getPawnId()) {
+				pp.getCircle().setStroke(Color.TRANSPARENT);
+				pp.setPawnSelected(false);
+			}
+		}
+		if (!p.isPawnSelected()) {
+			p.getCircle().setStroke(Color.BLACK);
+			p.setPawnSelected(!p.isPawnSelected());
+			System.out.println("pawn is selected" + p.isPawnSelected());
+		} else {
+			p.getCircle().setStroke(Color.TRANSPARENT);
+			p.setPawnSelected(!p.isPawnSelected());
+			System.out.println("pawn is selected" + p.isPawnSelected());
+		}
+	}
+
 	public void setOpponent(Player player, Player opponent) {
 		VBox vbOpponentInfo = new VBox();
 		Label lblopponentName = new Label();
@@ -283,16 +307,16 @@ public class GameView {
 		lblopponentName.setText(opponent.getPlayerName());
 		lblopponentCardCount
 				.setText("This enemy has " + String.valueOf(opponent.getPlayerHand().getNumCards()) + " cards\t");
-		
+
 		Rectangle recColor = new Rectangle();
 		recColor.setHeight(10);
 		recColor.setWidth(150);
 		recColor.setFill(Pawn.FillColor(opponent));
-		vbOpponentInfo.getChildren().addAll(lblopponentName,lblopponentCardCount,recColor);
+		vbOpponentInfo.getChildren().addAll(lblopponentName, lblopponentCardCount, recColor);
 		hbOpponents.getChildren().add(vbOpponentInfo);
-		
+
 		HBox hbOpponentPawnHolder = new HBox();
-		// i need to find a way to get the circle of the pawn 
+		// i need to find a way to get the circle of the pawn
 		for (Pawn p : opponent.getPawns()) {
 
 			Circle c = new Circle();
@@ -300,27 +324,11 @@ public class GameView {
 			c.setFill(Pawn.FillColor(opponent));
 			p.setCircle(c);
 			p.getChildren().add(c);
-			
+
 			hbOpponentPawnHolder.getChildren().add(p);
-			
+
 		}
 		atlantis.getChildren().add(hbOpponentPawnHolder);
-	}
-
-	public ArrayList<StackPane> getBase() {
-		return base;
-	}
-
-	public void setBase(ArrayList<StackPane> base) {
-		this.base = base;
-	}
-
-	public HBox getHboxCards() {
-		return hboxCards;
-	}
-
-	public void setHboxCards(HBox hboxCards) {
-		this.hboxCards = hboxCards;
 	}
 
 	public void placeAtlantisMainLand(AtlantisTile atlantis, MainLand mainland) {
@@ -348,18 +356,69 @@ public class GameView {
 	public void gameStarted() {
 		lblGameStatus.setText("The GAME HAS BEGUN");
 		lblGameStatus.setTextFill(Color.web("#ce2323"));
-		lblGameStatus.setFont(new Font("Cambria",32));
+		lblGameStatus.setFont(new Font("Cambria", 32));
 		vbGameStatus.setAlignment(Pos.CENTER);
-		
+
 	}
 
 	public void yourTurn() {
 		lblTurn.setText("It is YOUR turn");
-		
+
 	}
-	public void notYourTurn() {
-		lblTurn.setText("It is NOT your turn");
-		
+
+	public void notYourTurn(String curPlayer) {
+		lblTurn.setText("It is " + curPlayer + " turn");
+
+	}
+
+	public void createCardView(Card c) {
+		Rectangle rec = new Rectangle();
+		rec.setWidth(31);
+		rec.setHeight(51);
+		rec.setFill(Card.FillColor(c));
+		c.setRec(rec);
+		c.getChildren().add(rec);
+		getHboxCards().getChildren().add(c);
+
+	}
+
+	public void handleCard(Card c) {
+		// first unselected all the other cards in the hand
+		for (Card cc : c.getOwner().getPlayerHand().getCards()) {
+			if (cc.getCardId() != c.getCardId() && cc.getColor() != c.getColor()
+					|| (cc.getCardId() == c.getCardId() && cc.getColor() != c.getColor())
+					|| (cc.getCardId() != c.getCardId() && cc.getColor() == c.getColor())) {
+				cc.getRec().setStroke(Color.TRANSPARENT);
+				cc.setCardSelected(false);
+				System.out.println("unselected all the cards");
+			}
+		}
+		if (!c.isCardSelected()) {
+			c.getRec().setStroke(Color.BLACK);
+			c.setCardSelected(!c.isCardSelected());
+			System.out.println("card is selected" + c.isCardSelected());
+		} else {
+			c.getRec().setStroke(Color.TRANSPARENT);
+			c.setCardSelected(!c.isCardSelected());
+			System.out.println("card is selected" + c.isCardSelected());
+		}
+
+	}
+
+	public ArrayList<StackPane> getBase() {
+		return base;
+	}
+
+	public void setBase(ArrayList<StackPane> base) {
+		this.base = base;
+	}
+
+	public HBox getHboxCards() {
+		return hboxCards;
+	}
+
+	public void setHboxCards(HBox hboxCards) {
+		this.hboxCards = hboxCards;
 	}
 
 }

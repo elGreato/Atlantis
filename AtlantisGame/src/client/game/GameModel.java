@@ -2,8 +2,10 @@ package client.game;
 
 import client.lobby.ClientLobbyInterface;
 import client.lobby.LobbyModel;
+import gameObjects.Card;
 import gameObjects.Player;
-
+import javafx.event.Event;
+import javafx.scene.paint.Color;
 import messageObjects.AtlantisMainLandMessage;
 import messageObjects.DeckLandTileMessage;
 import messageObjects.GameStatusMessage;
@@ -50,9 +52,10 @@ public class GameModel {
 			currentPlayer = (((PlayerMessage) msgIn).getPlayer());
 
 			for (int i = 0; i < (((PlayerMessage) msgIn).getCards().size()); i++) {
-				(view.getHboxCards()).getChildren()
-						.add((((PlayerMessage) msgIn).getCards().get(i)).colorChoice.addImage());
-
+				Card c =(((PlayerMessage)msgIn).getCards().get(i));
+				((PlayerMessage) msgIn).getCards().get(i).setOnMouseClicked(e-> view.handleCard(c));
+				view.createCardView(c);
+				
 			}
 
 			view.showPlayer(currentPlayer);
@@ -77,14 +80,22 @@ public class GameModel {
 
 	}
 
-	public void startTurn(String firstPlayer) {
+	
+
+	public void startTurn(String curPlayer) {
 
 		view.gameStarted();
-		if (currentPlayer.getPlayerName().equalsIgnoreCase(firstPlayer))
+		if (currentPlayer.getPlayerName().equalsIgnoreCase(curPlayer)){
 			view.yourTurn();
+			
+			
+		}
 		else
-			view.notYourTurn();
+			view.notYourTurn(curPlayer);
 
+		
+		
+		
 	}
 
 }
