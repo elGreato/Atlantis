@@ -15,14 +15,11 @@ public class WaterTile extends Tile {
 		water.setStroke(Color.BLACK);
 
 		this.getChildren().add(water);*/
-
 	}
 
 	public boolean hasPawn() {
 		return false;
-
 	}
-
 
 	public int getCol() {
 		return col;

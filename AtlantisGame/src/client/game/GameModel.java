@@ -16,6 +16,7 @@ import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
 import messageObjects.turnMessages.GameStatusMessage;
+import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.TurnMessage;
 
 public class GameModel {
@@ -101,7 +102,7 @@ public class GameModel {
 						selectedPawn = pawn;
 						break;
 					}
-				}
+				} msgOut.sendMessage(new PawnCardSelectedMessage(gameName,currentPlayer.getPlayerIndex(),selectedPawn,selectedCard));
 
 				// move the pawn to the landTile
 				for (int i = 0; i < view.base.size(); i++) {

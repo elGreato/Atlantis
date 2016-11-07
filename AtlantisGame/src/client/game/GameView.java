@@ -72,7 +72,7 @@ public class GameView {
 	private HBox hbPlayersInfo = new HBox();
 	private HBox hbOpponents = new HBox();
 	private HBox hboxCards = new HBox();
-	private HBox hbPawnHolder = new HBox();
+//	private HBox hbPawnHolder = new HBox();
 	private HBox hbTreasures = new HBox();
 
 	private MainLand mainland;
@@ -110,9 +110,9 @@ public class GameView {
 			mainBoard.getColumnConstraints().add(colcon);
 		}
 		for (int i = 0; i < 9; i++) {
-		RowConstraints con = new RowConstraints();
-		con.setPrefHeight(50);
-		mainBoard.getRowConstraints().add(con);
+			RowConstraints con = new RowConstraints();
+			con.setPrefHeight(50);
+			mainBoard.getRowConstraints().add(con);
 		}
 		// add Buttons
 		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnPayWithCard, btnPayWithTreasure);
@@ -126,7 +126,7 @@ public class GameView {
 		paths[3] = "images4players/player4.png";
 		Random r = new Random();
 		int index = (r.nextInt(paths.length));
-		Image image = new Image(getClass().getResourceAsStream(paths[index])); 
+		Image image = new Image(getClass().getResourceAsStream(paths[index]));
 		lblPlayerImage.setGraphic(new ImageView(image));
 
 		vbPlayerInfo.getChildren().add(lblName);
@@ -150,8 +150,7 @@ public class GameView {
 		scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
-		
-	
+
 	}
 
 	// those are index for base Children
@@ -159,13 +158,9 @@ public class GameView {
 	int co = 2;
 	int ro = 1;
 
-
-	
 	// add stacks to the mainBoard
 	private void addToMainBoard(WaterTile water) {
-		System.out.println(water.getTileId()+"inside addto mainboard");
-	
-
+		
 		if (((ro == 1) || (ro == 5) || (ro == 9)) && co != maxColIndex) {
 
 			mainBoard.add(water, co, ro);
@@ -189,17 +184,16 @@ public class GameView {
 		}
 
 	}
-
+	// this method adds a Rectangle and Text to each landtile 
 	public void addRecAndText(ArrayList<WaterTile> base) {
 		this.base = base;
 		for (int i = 0; i < base.size(); i++) {
-		
+
 			WaterTile water = base.get(i);
 			final Image im = new Image(getClass().getResourceAsStream("images4Tiles/water.jpg"));
 			water.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
 					BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 			water.convertToChildren();
-			System.out.println(water.getChildren().size()+"size of water tile in rec and text");
 			
 			if (water.getChildren().size() != 0) {
 				for (int k = 0; k < water.getChildren().size(); k++) {
@@ -216,8 +210,6 @@ public class GameView {
 			}
 
 			addToMainBoard(water);
-		
-			System.out.println(water.getTileId());
 		}
 
 	}
@@ -232,7 +224,7 @@ public class GameView {
 		vbPlayer.getChildren().add(recColor);
 		vpHolder.setText("Your Victory Points: " + String.valueOf(player.getVictoryPoints()));
 
-		for (Pawn p : player.getPawns()) { 
+		for (Pawn p : player.getPawns()) {
 			Circle c = new Circle();
 			c.setRadius(10);
 			p.setCircle(c);
@@ -240,10 +232,11 @@ public class GameView {
 			c.setFill(Pawn.FillColor(player));
 			p.getChildren().add(c);
 
-			hbPawnHolder.getChildren().add(p);
+			//hbPawnHolder.getChildren().add(p);
+			atlantis.getChildren().add(p);
 
 		}
-		atlantis.getChildren().add(hbPawnHolder);
+		//atlantis.getChildren().add(hbPawnHolder);
 		stage.sizeToScene();
 
 	}
@@ -290,10 +283,10 @@ public class GameView {
 			c.setFill(Pawn.FillColor(opponent));
 			p.setCircle(c);
 			p.getChildren().add(c);
-			hbOpponentPawnHolder.getChildren().add(p);
-
+			//hbOpponentPawnHolder.getChildren().add(p);
+			atlantis.getChildren().add(p);
 		}
-		atlantis.getChildren().add(hbOpponentPawnHolder);
+	//	atlantis.getChildren().add(hbOpponentPawnHolder);
 	}
 
 	public void placeAtlantisMainLand(AtlantisTile atlantis, MainLand mainland) {
@@ -397,9 +390,9 @@ public class GameView {
 
 	public void movePawn(Pawn selectedPawn, LandTile target) {
 		// first we check if it is still on the atlnatis
-		for (int i = 0; i < hbPawnHolder.getChildren().size(); i++) {
-			if (((Pawn) hbPawnHolder.getChildren().get(i)).getPawnId() == selectedPawn.getPawnId())
-				hbPawnHolder.getChildren().remove(i);
+		for (int i = 0; i < atlantis.getChildren().size(); i++) {
+			if (((Pawn) atlantis.getChildren().get(i)).getPawnId() == selectedPawn.getPawnId())
+				atlantis.getChildren().remove(i);
 		}
 		LandTile tempLand = null;
 		WaterTile tempWater = null;
