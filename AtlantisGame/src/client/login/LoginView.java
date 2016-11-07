@@ -86,6 +86,7 @@ public class LoginView {
 	public void start()
 	{
 		stage.show();
+		loginusernametxt.requestFocus();
 	}
 	public void close() {
 		stage.close();

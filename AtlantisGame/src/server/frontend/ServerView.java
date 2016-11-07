@@ -71,11 +71,17 @@ public class ServerView {
 		
 		scene = new Scene(root);
 		stage.setScene(scene);
-		stage.setTitle("Atlantis server frontend");
+		stage.setTitle("Atlantis server frontroend");
 		stage.setResizable(false);
 	}
 	public void start()
 	{
 		stage.show();
+		dbusernametxt.requestFocus();
+		
+		//For development purposes
+		dbconnectbtn.requestFocus();
+		dbusernametxt.setText("root");
+		dbpasswordtxt.setText("root");
 	}
 }
