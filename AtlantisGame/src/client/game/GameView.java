@@ -232,7 +232,7 @@ public class GameView {
 		vbPlayer.getChildren().add(recColor);
 		vpHolder.setText("Your Victory Points: " + String.valueOf(player.getVictoryPoints()));
 
-		for (Pawn p : player.getPawns()) {
+		for (Pawn p : player.getPawns()) { 
 			Circle c = new Circle();
 			c.setRadius(10);
 			p.setCircle(c);
