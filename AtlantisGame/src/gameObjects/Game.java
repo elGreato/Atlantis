@@ -3,11 +3,14 @@ package gameObjects;
 // This class is part of the Gamer Server, should be moved from this package
 import java.util.ArrayList;
 
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import messageObjects.AtlantisMainLandMessage;
 import messageObjects.DeckLandTileMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
+import messageObjects.WaterMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.TurnMessage;
 import server.backend.Lobby;
@@ -24,16 +27,14 @@ public class Game implements GameInterface {
 	// Invoke lobby.addWin, lobby.addLoss & lobby.addTie methods on users at the
 	// end of the game
 	private Lobby lobby;
-	// waterTiles number
-	private final int numberOfWaterTiles = 120;
-
 	private DeckOfCards cards;
 	private DeckOfLandTiles deckA;
 	private DeckOfLandTiles deckB;
 	private ArrayList<Player> players = new ArrayList<>();
 	private AtlantisTile atlantis = new AtlantisTile();
 	private MainLand mainland = new MainLand();
-
+	// base for water
+	private ArrayList<WaterTile> base = new ArrayList<>();
 	private int currentPlayerIndex;
 
 	// Constructor (doesn't start game)
@@ -87,6 +88,18 @@ public class Game implements GameInterface {
 		deckA = new DeckOfLandTiles();
 		deckB = new DeckOfLandTiles();
 		cards = new DeckOfCards();
+		// create water tiles which will hold land tiles later on
+		for (int i = 1; i < 54; i++) {
+
+			WaterTile water = new WaterTile(i);
+			base.add(water);
+		}
+		distributeLandTiles(base, deckA.getDeckOfTiles(), deckB.getDeckOfTiles());
+
+		for (int i = 0; i < numberOfPlayers; i++) {
+			users.get(i).sendMessage(new WaterMessage(getName(), base));
+
+		}
 
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i)
@@ -195,6 +208,41 @@ public class Game implements GameInterface {
 		} else if (index == 3) {
 			player.setColor(ColorChoice.purple);
 			player.setYourTurn(false);
+		}
+
+	}
+
+	public void distributeLandTiles(ArrayList<WaterTile> base, ArrayList<LandTile> deckA, ArrayList<LandTile> deckB) {
+		// Distribution of Land Tiles according to the rules the first 10 stacks
+		// are single and then
+		// they are double,
+
+		// DeckA
+		for (int i = 0; i < 26; i++) {
+			LandTile tile = deckA.remove(0);
+			base.get(i).getChildren().add(tile);
+		}
+		for (int i = 0; i < 10; i++) {
+			LandTile tile = deckA.remove(0);
+			base.get(i).getChildren().add(tile);
+		}
+		for (int i = 21; i < 26; i++) {
+			LandTile tile = deckA.remove(0);
+			base.get(i).getChildren().add(tile);
+		}
+
+		// DeckB
+		for (int i = 27; i < 53; i++) {
+			LandTile tile = deckB.remove(0);
+			base.get(i).getChildren().add(tile);
+		}
+		for (int i = 27; i < 33; i++) {
+			LandTile tile = deckB.remove(0);
+			(base.get(i).getChildren()).add(tile);
+		}
+		for (int i = 43; i < 53; i++) {
+			LandTile tile = deckB.remove(0);
+			(base.get(i).getChildren()).add(tile);
 		}
 
 	}

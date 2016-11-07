@@ -38,14 +38,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import messageObjects.PlayerMessage;
 
 public class GameView {
 	private BorderPane root = new BorderPane();
 	private GridPane mainBoard = new GridPane();
 
 	// base for other stacks
-	ArrayList<WaterTile> base = new ArrayList<>();
+	ArrayList<WaterTile> base;
 
 	// fx stuff
 	public Scene scene;
@@ -98,7 +97,7 @@ public class GameView {
 
 	public GameView() {
 		root.setCenter(mainBoard);
-		mainBoard.setGridLinesVisible(false);
+		mainBoard.setGridLinesVisible(true);
 
 		// set Max indexes
 		maxColIndex = 14;
@@ -114,27 +113,9 @@ public class GameView {
 			mainBoard.getColumnConstraints().add(colcon);
 		}
 
-		// stacks to hold water panes
-		for (int i = 1; i < 54; i++) {
-
-			WaterTile water = new WaterTile(i);
-			base.add(water);
-			addToMainBoard(water);
-		}
-
 		// add Buttons
 		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnPayWithCard, btnPayWithTreasure);
-		// add players view stuff
 
-		// empty Labels for cards
-		/*
-		 * for (int i = 0; i < numberOfMaxCards; i++) { spCard = new
-		 * StackPane(); // set class ID for css later
-		 * 
-		 * hboxCards.getChildren().add(spCard);
-		 * 
-		 * }
-		 */
 		// set a random picture for each player
 		int numberOfPicturesAvailable = 4;
 		String[] paths = new String[numberOfPicturesAvailable];
@@ -177,6 +158,10 @@ public class GameView {
 
 	// add stacks to the mainBoard
 	private void addToMainBoard(WaterTile water) {
+		System.out.println(water.getTileId()+"inside addto mainboard");
+		final Image im = new Image(getClass().getResourceAsStream("images4Tiles/water.jpg"));
+		water.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
+				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
 		if (((ro == 1) || (ro == 5) || (ro == 9)) && co != maxColIndex) {
 
@@ -185,7 +170,7 @@ public class GameView {
 		} else if (co == maxColIndex && ((ro == 1) || (ro == 5) || (ro == 9))) {
 
 			mainBoard.add(water, maxColIndex - 1, ro + 1);
-
+			System.out.println("the extra tile");
 			ro += 2;
 			co -= 1;
 		} else if (((ro == 3) || (ro == 7) || (ro == 11)) && co <= maxColIndex && co != 0) {
@@ -195,65 +180,36 @@ public class GameView {
 
 		} else if (co == 0 && ((ro == 3) || (ro == 7) || (ro == 11))) {
 			mainBoard.add(water, 1, ro + 1);
-
+			System.out.println("the extra tile222");
 			ro += 2;
 			co += 1;
 		}
 
 	}
 
-	public void distributeLandTiles(ArrayList<LandTile> deckA, ArrayList<LandTile> deckB) {
-		// Distribution of Land Tiles
+	public void addRecAndText(ArrayList<WaterTile> base) {
+		this.base = base;
+		for (int i = 0; i < base.size(); i++) {
+		
+			WaterTile water = base.get(i);
 
-		// DeckA, according to the rules the first 10 stacks are single and then
-		// they are double,
+		/*	if (water.getChildren().size() != 0) {
+				for (int k = 0; k < water.getChildren().size(); k++) {
 
-		for (int i = 0; i < 26; i++) {
-			LandTile tile = deckA.get(i);
-			tile.setLandTileColor(deckA.get(i).getColor());
-			Rectangle rec = new Rectangle();
-			rec.setWidth(48.00f);
-			rec.setHeight(48.00f);
-			rec.setFill(LandTile.getFillColor(tile));
-			tile.getChildren().addAll(rec,
-					new Text(String.valueOf(deckA.get(i).getLandValue()) + "\n" + tile.getColor().toString()));
-			(base.get(i).getChildren()).add(tile);
-		}
-		for (int i = 11; i < 21; i++) {
-			LandTile tile = deckA.get(i + 16);
-			tile.setLandTileColor(deckA.get(i + 16).getColor());
-			Rectangle rec = new Rectangle();
-			rec.setWidth(48.00f);
-			rec.setHeight(48.00f);
-			rec.setFill(LandTile.getFillColor(tile));
-			tile.getChildren().addAll(rec,
-					new Text(String.valueOf(deckA.get(i + 16).getLandValue()) + "\n" + tile.getColor().toString()));
-			(base.get(i).getChildren()).add(tile);
-		}
+					LandTile tile = (LandTile) water.getChildren().get(k);
+					Rectangle rec = new Rectangle();
+					rec.setWidth(48.00f);
+					rec.setHeight(48.00f);
+					rec.setFill(LandTile.getFillColor(tile));
+					tile.getChildren().addAll(rec,
+							new Text(String.valueOf(tile.getLandValue()) + "\n" + tile.getColor().toString()));
 
-		// DeckB
+				}
+			}*/
 
-		for (int i = 27; i < 53; i++) {
-			LandTile tile = deckB.get(i - 27);
-			tile.setLandTileColor(deckB.get(i - 27).getColor());
-			Rectangle rec = new Rectangle();
-			rec.setWidth(48.00f);
-			rec.setHeight(48.00f);
-			rec.setFill(LandTile.getFillColor(tile));
-			tile.getChildren().addAll(rec,
-					new Text(String.valueOf(deckB.get(i - 27).getLandValue()) + "\n" + tile.getColor().toString()));
-			(base.get(i).getChildren()).add(tile);
-		}
-		for (int i = 28; i < 38; i++) {
-			LandTile tile = deckB.get(i - 2);
-			tile.setLandTileColor(deckB.get(i - 2).getColor());
-			Rectangle rec = new Rectangle();
-			rec.setWidth(48.00f);
-			rec.setHeight(48.00f);
-			rec.setFill(LandTile.getFillColor(tile));
-			tile.getChildren().addAll(rec,
-					new Text(String.valueOf(deckB.get(i - 2).getLandValue()) + "\n" + tile.getColor().toString()));
-			(base.get(i).getChildren()).add(tile);
+			addToMainBoard(water);
+		
+			System.out.println(water.getTileId());
 		}
 
 	}
@@ -442,11 +398,11 @@ public class GameView {
 
 		for (int i = 0; i < base.size(); i++) {
 			tempWater = base.get(i);
-			if (tempWater.getChildren().size()!=0){
-				if (((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1))!=null)
-			tempLand = ((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1));
-			} 
-			if (tempLand!=null&&tempLand.getPawnOnTile() != null) {
+			if (tempWater.getChildren().size() != 0) {
+				if (((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)) != null)
+					tempLand = ((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1));
+			}
+			if (tempLand != null && tempLand.getPawnOnTile() != null) {
 
 				if (tempLand.getPawnOnTile().getPawnId() == (selectedPawn.getPawnId())) {
 					tempLand.setPawnOnTile(null);

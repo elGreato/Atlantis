@@ -14,6 +14,7 @@ import messageObjects.DeckLandTileMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
+import messageObjects.WaterMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.TurnMessage;
 
@@ -23,7 +24,7 @@ public class GameModel {
 	private GameView view;
 	// send messages to server through method msgOut.sendMessage()
 	private ClientLobbyInterface msgOut;
-
+	
 	private Player currentPlayer;
 
 	public String getGameName() {
@@ -40,9 +41,9 @@ public class GameModel {
 	// Here messages from server arrive
 	public void processMessage(InGameMessage msgIn) {
 		// first we receive the main board stuff
-		if (msgIn instanceof DeckLandTileMessage) {
-			view.distributeLandTiles(((DeckLandTileMessage) msgIn).getArrayA(),
-					((DeckLandTileMessage) msgIn).getArrayB());
+		if (msgIn instanceof WaterMessage) {
+		
+			view.addRecAndText(((WaterMessage) msgIn).getBase());
 
 		}
 		// the atlantis and the main land
@@ -91,6 +92,7 @@ public class GameModel {
 				for (Card card : currentPlayer.getPlayerHand().getCards()) {
 					if (card.isCardSelected()) {
 						selectedCard = card;
+						
 						break;
 					}
 				}

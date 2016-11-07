@@ -1,6 +1,8 @@
 package gameObjects;
 
 
+import java.io.Serializable;
+
 import javafx.scene.image.Image;
 
 import javafx.scene.layout.Background;
@@ -9,7 +11,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 
-public class WaterTile extends Tile {
+public class WaterTile extends Tile implements Serializable{
 	
 
 	int col;
@@ -22,10 +24,6 @@ public class WaterTile extends Tile {
 		water.setStroke(Color.BLACK);
 
 		this.getChildren().add(water);*/
-
-		final Image im = new Image(getClass().getResourceAsStream("images4Tiles/water.jpg"));
-		this.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
-				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
 	}
 
