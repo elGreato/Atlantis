@@ -104,15 +104,16 @@ public class GameView {
 		maxRowIndex = 10;
 
 		// col and row constraints for the gridpane
-		for (int i = 0; i < 10; i++) {
-			RowConstraints con = new RowConstraints();
-			con.setPrefHeight(50);
-			mainBoard.getRowConstraints().add(con);
+		for (int i = 0; i < 14; i++) {
 			ColumnConstraints colcon = new ColumnConstraints();
 			colcon.setPrefWidth(50);
 			mainBoard.getColumnConstraints().add(colcon);
 		}
-
+		for (int i = 0; i < 9; i++) {
+		RowConstraints con = new RowConstraints();
+		con.setPrefHeight(50);
+		mainBoard.getRowConstraints().add(con);
+		}
 		// add Buttons
 		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnPayWithCard, btnPayWithTreasure);
 
@@ -149,6 +150,8 @@ public class GameView {
 		scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
+		
+	
 	}
 
 	// those are index for base Children
@@ -156,12 +159,12 @@ public class GameView {
 	int co = 2;
 	int ro = 1;
 
+
+	
 	// add stacks to the mainBoard
 	private void addToMainBoard(WaterTile water) {
 		System.out.println(water.getTileId()+"inside addto mainboard");
-		final Image im = new Image(getClass().getResourceAsStream("images4Tiles/water.jpg"));
-		water.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
-				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+	
 
 		if (((ro == 1) || (ro == 5) || (ro == 9)) && co != maxColIndex) {
 
@@ -192,8 +195,13 @@ public class GameView {
 		for (int i = 0; i < base.size(); i++) {
 		
 			WaterTile water = base.get(i);
-
-		/*	if (water.getChildren().size() != 0) {
+			final Image im = new Image(getClass().getResourceAsStream("images4Tiles/water.jpg"));
+			water.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
+					BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+			water.convertToChildren();
+			System.out.println(water.getChildren().size()+"size of water tile in rec and text");
+			
+			if (water.getChildren().size() != 0) {
 				for (int k = 0; k < water.getChildren().size(); k++) {
 
 					LandTile tile = (LandTile) water.getChildren().get(k);
@@ -205,7 +213,7 @@ public class GameView {
 							new Text(String.valueOf(tile.getLandValue()) + "\n" + tile.getColor().toString()));
 
 				}
-			}*/
+			}
 
 			addToMainBoard(water);
 		

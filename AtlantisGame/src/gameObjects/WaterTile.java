@@ -1,22 +1,13 @@
 package gameObjects;
 
+import java.util.ArrayList;
 
-import java.io.Serializable;
-
-import javafx.scene.image.Image;
-
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-
-public class WaterTile extends Tile implements Serializable{
+public class WaterTile extends Tile {
 	
 
 	int col;
 	int row;
-
+	ArrayList<LandTile> childrenTiles =new ArrayList<>();
 	public WaterTile(int tileId) {
 		super(tileId);
 
@@ -47,6 +38,22 @@ public class WaterTile extends Tile implements Serializable{
 
 	public void setRow(int row) {
 		this.row = row;
+	}
+
+	public ArrayList<LandTile> getChildrenTiles() {
+		return childrenTiles;
+	}
+
+	public void setChildrenTiles(ArrayList<LandTile> childrenTiles) {
+		this.childrenTiles = childrenTiles;
+	}
+	public void addLand(LandTile landtile){
+		childrenTiles.add(landtile);
+	}
+	public void convertToChildren(){
+		for (LandTile land: this.getChildrenTiles()){
+			this.getChildren().add(land);
+		}
 	}
 
 }
