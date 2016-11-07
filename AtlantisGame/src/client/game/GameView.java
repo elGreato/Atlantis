@@ -125,7 +125,7 @@ public class GameView {
 		paths[3] = "images4players/player4.png";
 		Random r = new Random();
 		int index = (r.nextInt(paths.length));
-		Image image = new Image(getClass().getResourceAsStream(paths[index]));
+		Image image = new Image(getClass().getResourceAsStream(paths[index])); 
 		lblPlayerImage.setGraphic(new ImageView(image));
 
 		vbPlayerInfo.getChildren().add(lblName);
