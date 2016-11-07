@@ -158,7 +158,7 @@ public class User implements Runnable{
 		while(loggedIn && connected)
 		{
 			try {
-				Object receivedMessage = ois.readObject();
+				Object receivedMessage = ois.readUnshared();
 				if(receivedMessage instanceof InGameMessage)
 				{
 					InGameMessage igm = (InGameMessage)receivedMessage;

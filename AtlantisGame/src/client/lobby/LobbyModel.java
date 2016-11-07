@@ -231,7 +231,7 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 	public synchronized void sendMessage(Message msg)
 	{
 		try {
-			oos.writeObject(msg);
+			oos.writeUnshared(msg);
 			oos.flush();
 		} catch (IOException e) {
 			connectionLost();
