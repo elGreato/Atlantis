@@ -34,7 +34,7 @@ public class Game implements GameInterface {
 	private AtlantisTile atlantis = new AtlantisTile();
 	private MainLand mainland = new MainLand();
 	// base for water
-	private ArrayList<WaterTile> base = new ArrayList<>();
+	private ArrayList<WaterTile> base;
 	private int currentPlayerIndex;
 
 	// Constructor (doesn't start game)
@@ -84,7 +84,8 @@ public class Game implements GameInterface {
 		}
 		// send waterTiles to all the players
 		int numberOfPlayers = getNumOfRegisteredPlayers();
-
+		
+		base  = new ArrayList<>();
 		deckA = new DeckOfLandTiles();
 		deckB = new DeckOfLandTiles();
 		cards = new DeckOfCards();
@@ -94,7 +95,7 @@ public class Game implements GameInterface {
 			WaterTile water = new WaterTile(i);
 			base.add(water);
 		}
-		distributeLandTiles(base, deckA.getDeckOfTiles(), deckB.getDeckOfTiles());
+		distributeLandTiles();
 
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i).sendMessage(new WaterMessage(getName(), base));
@@ -212,37 +213,35 @@ public class Game implements GameInterface {
 
 	}
 
-	public void distributeLandTiles(ArrayList<WaterTile> base, ArrayList<LandTile> deckA, ArrayList<LandTile> deckB) {
-		// Distribution of Land Tiles according to the rules the first 10 stacks
-		// are single and then
-		// they are double,
-
+	public void distributeLandTiles() {
+		// Distribution of Land Tiles according to the rules the first 10 stacks are doubled ..
+	
 		// DeckA
 		for (int i = 0; i < 26; i++) {
-			LandTile tile = deckA.remove(0);
-			base.get(i).getChildren().add(tile);
+			LandTile tile = deckA.getDeckOfTiles().remove(0);
+			 base.get(i).addLand(tile);
 		}
 		for (int i = 0; i < 10; i++) {
-			LandTile tile = deckA.remove(0);
-			base.get(i).getChildren().add(tile);
+			LandTile tile = deckA.getDeckOfTiles().remove(0);
+			 base.get(i).addLand(tile);
 		}
 		for (int i = 21; i < 26; i++) {
-			LandTile tile = deckA.remove(0);
-			base.get(i).getChildren().add(tile);
+			LandTile tile = deckA.getDeckOfTiles().remove(0);
+			 base.get(i).addLand(tile);
 		}
 
 		// DeckB
 		for (int i = 27; i < 53; i++) {
-			LandTile tile = deckB.remove(0);
-			base.get(i).getChildren().add(tile);
+			LandTile tile = deckB.getDeckOfTiles().remove(0);
+			 base.get(i).addLand(tile);
 		}
 		for (int i = 27; i < 33; i++) {
-			LandTile tile = deckB.remove(0);
-			(base.get(i).getChildren()).add(tile);
+			LandTile tile = deckB.getDeckOfTiles().remove(0);
+			 base.get(i).addLand(tile);
 		}
 		for (int i = 43; i < 53; i++) {
-			LandTile tile = deckB.remove(0);
-			(base.get(i).getChildren()).add(tile);
+			LandTile tile = deckB.getDeckOfTiles().remove(0);
+			 base.get(i).addLand(tile);
 		}
 
 	}
