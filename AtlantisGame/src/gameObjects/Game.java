@@ -2,6 +2,7 @@ package gameObjects;
 
 // This class is part of the Gamer Server, should be moved from this package
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -12,6 +13,7 @@ import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
 import messageObjects.turnMessages.GameStatusMessage;
+import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.TurnMessage;
 import server.backend.Lobby;
 import server.backend.User;
@@ -84,8 +86,8 @@ public class Game implements GameInterface {
 		}
 		// send waterTiles to all the players
 		int numberOfPlayers = getNumOfRegisteredPlayers();
-		
-		base  = new ArrayList<>();
+
+		base = new ArrayList<>();
 		deckA = new DeckOfLandTiles();
 		deckB = new DeckOfLandTiles();
 		cards = new DeckOfCards();
@@ -181,10 +183,66 @@ public class Game implements GameInterface {
 
 	// Here messages from clients arrive
 	public synchronized void processMessage(InGameMessage igm) {
+		// message from client asking who is first player and shall we start ?
 		if (igm instanceof GameStatusMessage) {
 			users.get(((GameStatusMessage) igm).getPlayerIndex()).sendMessage(new TurnMessage(
 					((GameStatusMessage) igm).getGameName(), checkTurn(((GameStatusMessage) igm).getPlayerIndex())));
-			System.out.println("NOW SEND PLAYERINDEX FOR CLEINT ,, TURN MESSAGE");
+
+		}
+		// message from client telling server what pawn and card are selected
+		// from which player
+		if (igm instanceof PawnCardSelectedMessage) {
+			PawnCardSelectedMessage message = (PawnCardSelectedMessage) igm;
+			Player player = players.get(message.getPlayerIndex());
+			for (Card c : player.getPlayerHand().getCards()) {
+				System.out.println("cards that player has in server" + c.getCardId());
+			}
+			ColorChoice selectedColor = null;
+			for (Card card : player.getPlayerHand().getCards()) {
+				if (card.getCardId() == message.getCardId()) {
+					selectedColor = card.getColor();
+					player.getPlayerHand().removeCardFromHand(card);
+					System.out.println(card.getCardId() + "remmoved from hand from server side");
+					break;
+				}
+			}
+
+			player.getPawns().get(message.getPawnId()).setPawnSelected(true);
+
+			Pawn selectedPawn = null;
+
+			for (Pawn pawn : player.getPawns()) {
+				if (pawn.isPawnSelected()){
+					selectedPawn = pawn;
+				System.out.println("found the selected pawn in server its ID is : " + pawn.getPawnId());}
+			}
+			// now the server shall give the player a treasure if any and move
+			// the pawn
+			// THIS IS NOT WORKING
+			boolean foundLand = false;
+			for (int f = 0; f < base.size() && !foundLand; f++) {
+				WaterTile water = base.get(f);	
+				if(water.getChildren().size()<1){
+					if(water.getChildren().get(water.getChildren().size()-1) instanceof LandTile){
+				LandTile land = (LandTile) water.getChildren().get(water.getChildren().size() - 1);
+					if (land.getColor().equals(selectedColor)) {
+						System.out.println("found a landtile with the color" + land.getColor().toString() + "and ID: "
+								+ land.getTileId());
+						land.setPawnOnTile(selectedPawn);
+						selectedPawn.setLocation(base.indexOf(water));
+						foundLand = true;
+					}
+					if (base.get(f - 1).getChildren() != null
+							&& base.get(f - 1).getChildren().get(base.get(f - 1).getChildren().size() - 1) != null) {
+						LandTile treasure = (LandTile) base.get(f - 1).getChildren()
+								.remove(base.get(f - 1).getChildren().size() - 1);
+						player.getPlayerHand().addTreasure(treasure);
+						System.out.println("foudnd a treasure with value " + treasure.getLandValue() + "and color "
+								+ treasure.getColor().toString());
+					}
+				}}
+			}
+
 		}
 
 	}
@@ -214,34 +272,35 @@ public class Game implements GameInterface {
 	}
 
 	public void distributeLandTiles() {
-		// Distribution of Land Tiles according to the rules the first 10 stacks are doubled ..
-	
+		// Distribution of Land Tiles according to the rules the first 10 stacks
+		// are doubled ..
+
 		// DeckA
 		for (int i = 0; i < 26; i++) {
 			LandTile tile = deckA.getDeckOfTiles().remove(0);
-			 base.get(i).addLand(tile);
+			base.get(i).addLand(tile);
 		}
 		for (int i = 0; i < 10; i++) {
 			LandTile tile = deckA.getDeckOfTiles().remove(0);
-			 base.get(i).addLand(tile);
+			base.get(i).addLand(tile);
 		}
 		for (int i = 21; i < 26; i++) {
 			LandTile tile = deckA.getDeckOfTiles().remove(0);
-			 base.get(i).addLand(tile);
+			base.get(i).addLand(tile);
 		}
 
 		// DeckB
 		for (int i = 27; i < 53; i++) {
 			LandTile tile = deckB.getDeckOfTiles().remove(0);
-			 base.get(i).addLand(tile);
+			base.get(i).addLand(tile);
 		}
 		for (int i = 27; i < 33; i++) {
 			LandTile tile = deckB.getDeckOfTiles().remove(0);
-			 base.get(i).addLand(tile);
+			base.get(i).addLand(tile);
 		}
 		for (int i = 43; i < 53; i++) {
 			LandTile tile = deckB.getDeckOfTiles().remove(0);
-			 base.get(i).addLand(tile);
+			base.get(i).addLand(tile);
 		}
 
 	}

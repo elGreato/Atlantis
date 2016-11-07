@@ -232,7 +232,7 @@ public class GameView {
 			c.setFill(Pawn.FillColor(player));
 			p.getChildren().add(c);
 
-			//hbPawnHolder.getChildren().add(p);
+			
 			atlantis.getChildren().add(p);
 
 		}
@@ -343,22 +343,21 @@ public class GameView {
 	public void handleCard(Card c) {
 		// first unselected all the other cards in the hand
 		for (Card cc : c.getOwner().getPlayerHand().getCards()) {
-			if (cc.getCardId() != c.getCardId() && cc.getColor() != c.getColor()
-					|| (cc.getCardId() == c.getCardId() && cc.getColor() != c.getColor())
-					|| (cc.getCardId() != c.getCardId() && cc.getColor() == c.getColor())) {
+			if (cc.getCardId() != c.getCardId() ) {
 				cc.getRec().setStroke(Color.TRANSPARENT);
 				cc.setCardSelected(false);
-				System.out.println("unselected all the cards");
+				
 			}
 		}
+		// this is to give the user ability to unselect a card when he clicks again
 		if (!c.isCardSelected()) {
 			c.getRec().setStroke(Color.BLACK);
-			c.setCardSelected(!c.isCardSelected());
-			System.out.println("card is selected" + c.isCardSelected());
+			c.setCardSelected(true);
+			System.out.println(c.getColor().toString()+"card is selected" + c.isCardSelected());
 		} else {
 			c.getRec().setStroke(Color.TRANSPARENT);
-			c.setCardSelected(!c.isCardSelected());
-			System.out.println("card is selected" + c.isCardSelected());
+			c.setCardSelected(false);
+			System.out.println(c.getColor().toString()+"card is unselected" + c.isCardSelected());
 		}
 
 	}

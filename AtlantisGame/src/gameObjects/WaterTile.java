@@ -3,18 +3,19 @@ package gameObjects;
 import java.util.ArrayList;
 
 public class WaterTile extends Tile {
-	
 
 	int col;
 	int row;
-	ArrayList<LandTile> childrenTiles =new ArrayList<>();
+	ArrayList<LandTile> childrenTiles = new ArrayList<>();
+
 	public WaterTile(int tileId) {
 		super(tileId);
 
-	/*	water.setFill(Color.TRANSPARENT);
-		water.setStroke(Color.BLACK);
-
-		this.getChildren().add(water);*/
+		/*
+		 * water.setFill(Color.TRANSPARENT); water.setStroke(Color.BLACK);
+		 * 
+		 * this.getChildren().add(water);
+		 */
 	}
 
 	public boolean hasPawn() {
@@ -44,13 +45,17 @@ public class WaterTile extends Tile {
 	public void setChildrenTiles(ArrayList<LandTile> childrenTiles) {
 		this.childrenTiles = childrenTiles;
 	}
-	public void addLand(LandTile landtile){
+
+	public void addLand(LandTile landtile) {
 		childrenTiles.add(landtile);
 	}
-	public void convertToChildren(){
-		for (LandTile land: this.getChildrenTiles()){
-			this.getChildren().add(land);
-		}
+
+	public void convertToChildren() {
+		if (this.getChildrenTiles() != null) {
+			for (LandTile land : this.getChildrenTiles()) {
+				this.getChildren().add(land);
+			}
+		} else System.out.println("this water has no landtiles above it");
 	}
 
 }

@@ -21,7 +21,7 @@ public class Card extends StackPane implements Serializable {
 	private boolean isCardSelected = false;
 	private Player owner;
 	private int cardId;
-	private Rectangle rec;
+	private transient Rectangle rec;
 	
 	public Card(int cardId,ColorChoice colorChoice){
 		

@@ -35,7 +35,7 @@ public class Player implements Serializable {
 		// create 3 pawns for each player
 		for (int i = 0; i < 3; i++) {
 			Pawn pawn = new Pawn(this, i);
-
+			pawn.setLocation(0);
 			pawns.add(pawn);
 			
 

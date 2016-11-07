@@ -25,7 +25,7 @@ public class GameModel {
 	private GameView view;
 	// send messages to server through method msgOut.sendMessage()
 	private ClientLobbyInterface msgOut;
-	
+
 	private Player currentPlayer;
 
 	public String getGameName() {
@@ -43,7 +43,7 @@ public class GameModel {
 	public void processMessage(InGameMessage msgIn) {
 		// first we receive the main board stuff
 		if (msgIn instanceof WaterMessage) {
-		
+
 			view.addRecAndText(((WaterMessage) msgIn).getBase());
 
 		}
@@ -93,7 +93,7 @@ public class GameModel {
 				for (Card card : currentPlayer.getPlayerHand().getCards()) {
 					if (card.isCardSelected()) {
 						selectedCard = card;
-						
+
 						break;
 					}
 				}
@@ -102,7 +102,10 @@ public class GameModel {
 						selectedPawn = pawn;
 						break;
 					}
-				} msgOut.sendMessage(new PawnCardSelectedMessage(gameName,currentPlayer.getPlayerIndex(),selectedPawn,selectedCard));
+				}
+				System.out.println("card that client selected "+selectedCard.getCardId());
+				msgOut.sendMessage(new PawnCardSelectedMessage(gameName, currentPlayer.getPlayerIndex(),
+						selectedPawn.getPawnId(), selectedCard.getCardId()));
 
 				// move the pawn to the landTile
 				for (int i = 0; i < view.base.size(); i++) {
@@ -110,7 +113,7 @@ public class GameModel {
 					ColorChoice currentColor = selectedCard.getColor();
 					// if the water has a landtile
 					if (view.getBase().get(i).getChildren() != null) {
-						// doubld check 
+						// doubld check
 						if (((LandTile) view.getBase().get(i).getChildren().get(topNode)) != null) {
 							LandTile target = ((LandTile) view.getBase().get(i).getChildren().get(topNode));
 							// if the land same color as card

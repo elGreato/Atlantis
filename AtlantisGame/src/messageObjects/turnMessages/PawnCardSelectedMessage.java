@@ -9,10 +9,10 @@ import messageObjects.InGameMessage;
 public class PawnCardSelectedMessage extends InGameMessage implements Serializable{
 
 	private int playerIndex;
-	private Pawn pawn;
-	private Card card;
+	private int pawn;
+	private int card;
 	
-	public PawnCardSelectedMessage(String gameName, int playerIndex, Pawn pawn, Card card) {
+	public PawnCardSelectedMessage(String gameName, int playerIndex, int pawn, int card) {
 		super(gameName);
 		this.playerIndex=playerIndex;
 		this.pawn=pawn;
@@ -28,22 +28,14 @@ public class PawnCardSelectedMessage extends InGameMessage implements Serializab
 		this.playerIndex = playerIndex;
 	}
 
-	public Pawn getPawn() {
+	public int getPawnId() {
 		return pawn;
 	}
 
-	public void setPawn(Pawn pawn) {
-		this.pawn = pawn;
-	}
 
-	public Card getCard() {
+	public int getCardId() {
 		return card;
 	}
 
-	public void setCard(Card card) {
-		this.card = card;
-	}
 
-	
-	
 }

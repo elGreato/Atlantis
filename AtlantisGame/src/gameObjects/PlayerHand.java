@@ -2,6 +2,7 @@ package gameObjects;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 //Ali
 public class PlayerHand implements Serializable {
@@ -53,6 +54,14 @@ public class PlayerHand implements Serializable {
 	public int getNumCards() {
      return cards.size();
 	}
+	public void removeCardFromHand(Card card){
+		Iterator<Card> it = this.getCards().iterator();
+		
+			if (it.next().getCardId()==card.getCardId()){
+				it.remove();
+			}
+		}
+	
 	 
 	 
 }
