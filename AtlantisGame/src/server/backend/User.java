@@ -210,7 +210,7 @@ public class User implements Runnable{
 
 	public synchronized void sendMessage(Message m) {
 		try {
-			oos.writeObject(m);
+			oos.writeUnshared(m);
 			oos.flush();
 		} catch (IOException e) {
 			logoutUser();

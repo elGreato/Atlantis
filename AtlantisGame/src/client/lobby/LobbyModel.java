@@ -70,7 +70,7 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 		while(connected)
 		{
 			try {
-				Object obj = ois.readObject();
+				Object obj = ois.readUnshared();
 				if(obj instanceof InGameMessage)
 				{
 					InGameMessage msg = (InGameMessage)obj;
