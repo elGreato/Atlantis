@@ -212,19 +212,22 @@ public class Game implements GameInterface {
 			Pawn selectedPawn = null;
 
 			for (Pawn pawn : player.getPawns()) {
-				if (pawn.isPawnSelected()){
+				if (pawn.isPawnSelected()) {
 					selectedPawn = pawn;
-				System.out.println("found the selected pawn in server its ID is : " + pawn.getPawnId());}
+					System.out.println("found the selected pawn in server its ID is : " + pawn.getPawnId());
+				}
 			}
 			// now the server shall give the player a treasure if any and move
 			// the pawn
 			// THIS IS NOT WORKING
 			boolean foundLand = false;
 			for (int f = 0; f < base.size() && !foundLand; f++) {
-				WaterTile water = base.get(f);	
-				if(water.getChildren().size()<1){
-					if(water.getChildren().get(water.getChildren().size()-1) instanceof LandTile){
-				LandTile land = (LandTile) water.getChildren().get(water.getChildren().size() - 1);
+				WaterTile water = base.get(f);
+			
+				int topNode = water.getChildren().size()-1;
+
+				if (water.getChildren().get(topNode) != null) {
+					LandTile land = (LandTile) water.getChildren().get(topNode);
 					if (land.getColor().equals(selectedColor)) {
 						System.out.println("found a landtile with the color" + land.getColor().toString() + "and ID: "
 								+ land.getTileId());
@@ -232,17 +235,21 @@ public class Game implements GameInterface {
 						selectedPawn.setLocation(base.indexOf(water));
 						foundLand = true;
 					}
-					if (base.get(f - 1).getChildren() != null
-							&& base.get(f - 1).getChildren().get(base.get(f - 1).getChildren().size() - 1) != null) {
-						LandTile treasure = (LandTile) base.get(f - 1).getChildren()
-								.remove(base.get(f - 1).getChildren().size() - 1);
+
+				}
+				if (f >= 1&&foundLand) {
+					WaterTile previousWater = base.get(f - 1);
+
+					if (previousWater.getChildren() != null) {
+
+						LandTile treasure = (LandTile) previousWater.getChildren()
+								.remove(previousWater.getChildren().size() - 1);
 						player.getPlayerHand().addTreasure(treasure);
 						System.out.println("foudnd a treasure with value " + treasure.getLandValue() + "and color "
 								+ treasure.getColor().toString());
 					}
-				}}
+				}
 			}
-
 		}
 
 	}
@@ -301,6 +308,10 @@ public class Game implements GameInterface {
 		for (int i = 43; i < 53; i++) {
 			LandTile tile = deckB.getDeckOfTiles().remove(0);
 			base.get(i).addLand(tile);
+		}
+		// now convert the arraylist to children
+		for(int i=0; i<base.size();i++){
+			base.get(i).convertToChildren();
 		}
 
 	}
