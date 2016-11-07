@@ -25,7 +25,7 @@ public class ServerconnectView {
 	public ServerconnectView(Stage stage)
 	{
 		this.stage = stage;
-		stage.setTitle("Atlantis");
+		stage.setTitle("Atlantis"); 
 		
 		root = new VBox();
 		
