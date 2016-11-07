@@ -64,8 +64,20 @@ public class ServerconnectModel implements Runnable{
 		InetAddress localHost;
 		try {
 			localHost = InetAddress.getLocalHost();
-			subnetAdress = (localHost.getHostAddress()).substring(0, 10);
-			System.out.println("Found it " +subnetAdress);
+			String ipAdress = localHost.getHostAddress();
+			int numPoints = 0;
+			for(int i = 0;i<ipAdress.length();i++)
+			{
+				if(ipAdress.charAt(i) == '.')
+				{
+					numPoints+=1;
+					if(numPoints == 3)
+					{
+						subnetAdress = ipAdress.substring(0,i+1);
+						break;
+					}
+				}
+			}
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -85,7 +97,6 @@ public class ServerconnectModel implements Runnable{
 	@Override
 	public void run() {
 		String testableIP = subnetAdress + takeIP();
-		System.out.println(testableIP);
 		
 		try
 		{
