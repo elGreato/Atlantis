@@ -42,7 +42,8 @@ import javafx.stage.Stage;
 public class GameView {
 	private BorderPane root = new BorderPane();
 	private GridPane mainBoard = new GridPane();
-
+	
+	public Player player;
 	// base for other stacks
 	ArrayList<WaterTile> base;
 
@@ -137,7 +138,10 @@ public class GameView {
 		vbPlayerInfo.getChildren().add(lbltreasures);
 		vbPlayerInfo.getChildren().add(hbTreasures);
 		vbPlayer.getChildren().add(vbPlayerInfo);
-
+		
+		
+	
+		
 		hbPlayersInfo.getChildren().addAll(vbPlayer, hbOpponents);
 		vbGameStatus.getChildren().addAll(lblGameStatus, lblTurn);
 		root.setBottom(hbPlayersInfo);
@@ -214,7 +218,7 @@ public class GameView {
 
 	}
 
-	public void showPlayer(Player player) {
+	public void showPlayer() {
 
 		lblName.setText(player.getPlayerName());
 		Rectangle recColor = new Rectangle();
@@ -274,7 +278,6 @@ public class GameView {
 		vbOpponentInfo.getChildren().addAll(lblopponentName, lblopponentCardCount, recColor);
 		hbOpponents.getChildren().add(vbOpponentInfo);
 
-		HBox hbOpponentPawnHolder = new HBox();
 		// i need to find a way to get the circle of the pawn
 		for (Pawn p : opponent.getPawns()) {
 

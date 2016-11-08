@@ -17,11 +17,9 @@ public class OpponentMessage extends InGameMessage implements Serializable{
 	}
 
 
-
 	public ArrayList<Player> getOpponents() {
 		return opponents;
 	}
-
 
 
 	public void setOpponents(ArrayList<Player> opponents) {

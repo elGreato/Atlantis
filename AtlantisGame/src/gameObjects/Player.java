@@ -24,6 +24,8 @@ public class Player implements Serializable {
 	private int playerIndex;
 	
 	private boolean yourTurn = false;
+	
+	private ArrayList<Player> opponents = new ArrayList<>();
 
 	public Player(String name) {
 		// the player extends vbox
@@ -111,6 +113,14 @@ public class Player implements Serializable {
 
 	public void setYourTurn(boolean yourTurn) {
 		this.yourTurn = yourTurn;
+	}
+
+	public ArrayList<Player> getOpponents() {
+		return opponents;
+	}
+
+	public void setOpponents(ArrayList<Player> opponents) {
+		this.opponents = opponents;
 	}
 
 }

@@ -1,5 +1,7 @@
 package client.game;
 
+import java.util.Iterator;
+
 import client.lobby.ClientLobbyInterface;
 import client.lobby.LobbyModel;
 import gameObjects.Card;
@@ -7,6 +9,7 @@ import gameObjects.ColorChoice;
 import gameObjects.Pawn;
 import gameObjects.LandTile;
 import gameObjects.Player;
+import gameObjects.WaterTile;
 import javafx.event.Event;
 import javafx.scene.paint.Color;
 import messageObjects.AtlantisMainLandMessage;
@@ -17,6 +20,7 @@ import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
+import messageObjects.turnMessages.RefreshPlayerMessage;
 import messageObjects.turnMessages.TurnMessage;
 
 public class GameModel {
@@ -63,8 +67,8 @@ public class GameModel {
 				view.createCardView(c);
 
 			}
-
-			view.showPlayer(currentPlayer);
+			view.player = currentPlayer;
+			view.showPlayer();
 
 		}
 		// here we assign each player his enemies
@@ -103,39 +107,85 @@ public class GameModel {
 						break;
 					}
 				}
-				System.out.println("card that client selected "+selectedCard.getCardId());
+				System.out.println("card that client selected " + selectedCard.getCardId());
 				msgOut.sendMessage(new PawnCardSelectedMessage(gameName, currentPlayer.getPlayerIndex(),
 						selectedPawn.getPawnId(), selectedCard.getCardId()));
 
 				// move the pawn to the landTile
-				for (int i = 0; i < view.base.size(); i++) {
-					int topNode = (view.getBase().get(i).getChildren().size() - 1);
-					ColorChoice currentColor = selectedCard.getColor();
-					// if the water has a landtile
-					if (view.getBase().get(i).getChildren() != null) {
-						// doubld check
-						if (((LandTile) view.getBase().get(i).getChildren().get(topNode)) != null) {
-							LandTile target = ((LandTile) view.getBase().get(i).getChildren().get(topNode));
-							// if the land same color as card
-							if (target.getColor().equals(currentColor)) {
-
-								target.setPawnOnTile(selectedPawn);
-
-								view.movePawn(selectedPawn, target);
-
-								if (view.getBase().get(i - 1) != null) {
-									int indexOfTarget = view.getBase().get(i).getChildren().indexOf(target);
-									view.givePlayerTreasure(
-											((LandTile) view.getBase().get(i - 1).getChildren().remove(indexOfTarget)));
-								}
-								break;
-							}
-						}
-					}
-				}
+				/*
+				 * for (int i = 0; i < view.base.size(); i++) { int topNode =
+				 * (view.getBase().get(i).getChildren().size() - 1); ColorChoice
+				 * currentColor = selectedCard.getColor(); // if the water has a
+				 * landtile if (view.getBase().get(i).getChildren() != null) {
+				 * // doubld check if (((LandTile)
+				 * view.getBase().get(i).getChildren().get(topNode)) != null) {
+				 * LandTile target = ((LandTile)
+				 * view.getBase().get(i).getChildren().get(topNode)); // if the
+				 * land same color as card if
+				 * (target.getColor().equals(currentColor)) {
+				 * 
+				 * target.setPawnOnTile(selectedPawn);
+				 * 
+				 * view.movePawn(selectedPawn, target);
+				 * 
+				 * if (view.getBase().get(i - 1) != null) { int indexOfTarget =
+				 * view.getBase().get(i).getChildren().indexOf(target);
+				 * view.givePlayerTreasure( ((LandTile) view.getBase().get(i -
+				 * 1).getChildren().remove(indexOfTarget))); } break; } } } }
+				 */
 
 			} else
 				view.showNotYourTurnAlert();
+		}
+		if (msgIn instanceof RefreshPlayerMessage) {
+			RefreshPlayerMessage message = (RefreshPlayerMessage) msgIn;
+			givePlayerTreasure(message.getIndexOfPlayer(), message.getTreasure());
+			removeTreasureFromBoard(message.getTreasure());
+			movePawn(message.getIndexOfPlayer(), message.getSelectedPawn(), message.getSelectedLand());
+
+		}
+
+	}
+
+	private void movePawn(int indexOfPlayer, Pawn selectedPawn, LandTile selectedLand) {
+		Pawn viewPawn = null;
+
+		if (currentPlayer.getPawns().contains(selectedPawn)) {
+			viewPawn = selectedPawn;
+		} else {
+			for (int i = 0; i < currentPlayer.getOpponents().size(); i++) {
+				if (currentPlayer.getOpponents().get(i).getPawns().contains(selectedPawn)) {
+					viewPawn=selectedPawn;
+				}
+			}
+		}
+		for (int g = 0; g < view.getBase().size(); g++) {
+			WaterTile tempWater = view.getBase().get(g);
+			if (tempWater.getChildren().contains(selectedLand)) {
+				((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).setPawnOnTile(viewPawn);
+			}
+
+		}
+
+	}
+
+	private void givePlayerTreasure(int indexOfPlayer, LandTile treasure) {
+		if (currentPlayer.getPlayerIndex() == indexOfPlayer) {
+			currentPlayer.getPlayerHand().addTreasure(treasure);
+			view.givePlayerTreasure(treasure);
+		}
+
+	}
+
+	private void removeTreasureFromBoard(LandTile treasure) {
+		for (int g = 0; g < view.getBase().size(); g++) {
+			System.out.println("looping through the base " + g);
+			WaterTile tempWater = view.getBase().get(g);
+			if (tempWater.getChildren().contains(treasure)) {
+				System.out.println("Foudn the treasure ");
+				tempWater.getChildren().remove(treasure);
+			}
+
 		}
 
 	}

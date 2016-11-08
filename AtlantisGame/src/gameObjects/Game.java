@@ -14,6 +14,7 @@ import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
+import messageObjects.turnMessages.RefreshPlayerMessage;
 import messageObjects.turnMessages.TurnMessage;
 import server.backend.Lobby;
 import server.backend.User;
@@ -124,6 +125,12 @@ public class Game implements GameInterface {
 			users.get(i).sendMessage(new PlayerMessage(getName(), player, cardsForPlayers(i, player), i));
 			players.add(player);
 		}
+		//set the opponents for each player
+	/*	for (int i=0;i<players.size();i++){
+			Player p = players.get(i);
+			p.setOpponents(players);
+			p.getOpponents().remove(p);
+		}*/
 		currentPlayerIndex = 0;
 
 		// send the list of players for client to set opponents
@@ -194,15 +201,14 @@ public class Game implements GameInterface {
 		if (igm instanceof PawnCardSelectedMessage) {
 			PawnCardSelectedMessage message = (PawnCardSelectedMessage) igm;
 			Player player = players.get(message.getPlayerIndex());
-			for (Card c : player.getPlayerHand().getCards()) {
-				System.out.println("cards that player has in server" + c.getCardId());
-			}
+			Card selectedCard = null;
 			ColorChoice selectedColor = null;
 			for (Card card : player.getPlayerHand().getCards()) {
 				if (card.getCardId() == message.getCardId()) {
 					selectedColor = card.getColor();
+					selectedCard = card;
 					player.getPlayerHand().removeCardFromHand(card);
-					System.out.println(card.getCardId() + "remmoved from hand from server side");
+					System.out.println(card.getCardId() + " Card remmoved from hand from server side");
 					break;
 				}
 			}
@@ -214,44 +220,92 @@ public class Game implements GameInterface {
 			for (Pawn pawn : player.getPawns()) {
 				if (pawn.isPawnSelected()) {
 					selectedPawn = pawn;
-					System.out.println("found the selected pawn in server its ID is : " + pawn.getPawnId());
+
 				}
 			}
 			// now the server shall give the player a treasure if any and move
 			// the pawn
 			// THIS IS NOT WORKING
 			boolean foundLand = false;
-			for (int f = 0; f < base.size() && !foundLand; f++) {
+			LandTile treasure = null;
+			LandTile selectedLand = null;
+			for (int f = selectedPawn.getLocation(); f < base.size() && !foundLand; f++) {
 				WaterTile water = base.get(f);
-			
-				int topNode = water.getChildren().size()-1;
 
-				if (water.getChildren().get(topNode) != null) {
+				int topNode = water.getChildren().size() - 1;
+
+				if (water.getChildren().size() != 0 && water.getChildren().get(topNode) instanceof LandTile) {
 					LandTile land = (LandTile) water.getChildren().get(topNode);
-					if (land.getColor().equals(selectedColor)) {
-						System.out.println("found a landtile with the color" + land.getColor().toString() + "and ID: "
-								+ land.getTileId());
+					if (land.getColor().equals(selectedColor) && !land.hasPawn()) {
+						System.out.println("found a landtile with the color" + land.getColor().toString() + " and ID: "
+								+ land.getTileId() + " And Value " + land.getLandValue());
 						land.setPawnOnTile(selectedPawn);
+						selectedLand=land;
 						selectedPawn.setLocation(base.indexOf(water));
 						foundLand = true;
+						selectedPawn.setPawnSelected(false);
+					} else if (land.getColor().equals(selectedColor) && land.hasPawn()) {
+						System.out.println("found land but it has pawn, so we put the pawn on the next land");
+						boolean done = false;
+						while (!done) {
+							water = base.get(++f);
+							if (water.getChildren().size() != 0
+									&& water.getChildren().get(topNode) instanceof LandTile) {
+								land = (LandTile) water.getChildren().get(topNode);
+								if (!land.hasPawn()) {
+									land.setPawnOnTile(selectedPawn);
+									selectedPawn.setLocation(base.indexOf(water));
+									foundLand = true;
+									selectedLand=land;
+									selectedPawn.setPawnSelected(false);
+									done = true;
+								}
+							}
+						}
 					}
 
 				}
-				if (f >= 1&&foundLand) {
-					WaterTile previousWater = base.get(f - 1);
+				if (f != 0 && foundLand) {
+					System.out.println("Trying to find a treasure for the player");
+					treasure = giveTreasureToPlayer(f, player);
 
-					if (previousWater.getChildren() != null) {
-
-						LandTile treasure = (LandTile) previousWater.getChildren()
-								.remove(previousWater.getChildren().size() - 1);
-						player.getPlayerHand().addTreasure(treasure);
-						System.out.println("foudnd a treasure with value " + treasure.getLandValue() + "and color "
-								+ treasure.getColor().toString());
-					}
 				}
 			}
+			int numberOfPlayers = getNumOfRegisteredPlayers();
+			for (int i = 0; i < numberOfPlayers; i++) {
+				users.get(i).sendMessage(
+						new RefreshPlayerMessage(getName(), i, selectedLand, selectedPawn, selectedCard, treasure));
+
+			}
+
 		}
 
+	}
+
+	private LandTile giveTreasureToPlayer(int f, Player player) {
+		boolean gotIt = false;
+		LandTile treasure = null;
+		int waterIndex = -1;
+		while (!gotIt) {
+			System.out.println("index of f is : " + f);
+			if (f + waterIndex >= 0) {
+				System.out.println("ok the index is bigger than 0");
+				WaterTile previousWater = base.get(f + waterIndex);
+				if (previousWater.getChildren().size() != 0
+						&& previousWater.getChildren().get(previousWater.getChildren().size() - 1) instanceof LandTile
+						&& !((LandTile) previousWater.getChildren().get(previousWater.getChildren().size() - 1))
+								.hasPawn()) {
+
+					treasure = (LandTile) previousWater.getChildren().remove(previousWater.getChildren().size() - 1);
+					player.getPlayerHand().addTreasure(treasure);
+					System.out.println("foudnd a treasure with value: " + treasure.getLandValue() + "and color: "
+							+ treasure.getColor().toString());
+					gotIt = true;
+				} else
+					waterIndex -= 1;
+			}
+		}
+		return treasure;
 	}
 
 	private boolean checkTurn(int playerIndex) {
@@ -310,7 +364,7 @@ public class Game implements GameInterface {
 			base.get(i).addLand(tile);
 		}
 		// now convert the arraylist to children
-		for(int i=0; i<base.size();i++){
+		for (int i = 0; i < base.size(); i++) {
 			base.get(i).convertToChildren();
 		}
 
