@@ -34,6 +34,9 @@ public class GameController {
 		model.tryPlayCard();
 		
 	}
+	private void handExtraCard(){
+		model.tryPlayExtra();
+	}
 	private void handleBase(MouseEvent e) {
 		if(!(((StackPane) e.getSource()).getChildren().get(((StackPane) e.getSource()).getChildren().size()-1) instanceof WaterTile))
 		((StackPane) e.getSource()).getChildren().remove(((StackPane) e.getSource()).getChildren().size()-1);

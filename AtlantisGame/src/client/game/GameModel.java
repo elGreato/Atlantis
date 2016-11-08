@@ -18,8 +18,10 @@ import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
+import messageObjects.turnMessages.ExtraCardMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
+import messageObjects.turnMessages.PlayAnotherCardMessage;
 import messageObjects.turnMessages.RefreshPlayerMessage;
 import messageObjects.turnMessages.TurnMessage;
 
@@ -69,18 +71,19 @@ public class GameModel {
 			}
 			view.player = currentPlayer;
 			view.showPlayer();
-
-		}
+		}	
+		
 		// here we assign each player his enemies
 		if (msgIn instanceof OpponentMessage) {
 			System.out.println("Opponent message received");
 
 			for (int i = 0; i < ((OpponentMessage) msgIn).getOpponents().size(); i++) {
 				if (!currentPlayer.getPlayerName()
-						.equalsIgnoreCase((((OpponentMessage) msgIn).getOpponents().get(i).getPlayerName())))
+						.equalsIgnoreCase((((OpponentMessage) msgIn).getOpponents().get(i).getPlayerName()))){
 					view.setOpponent(currentPlayer, ((OpponentMessage) msgIn).getOpponents().get(i));
+					currentPlayer.getOpponents().add(((OpponentMessage) msgIn).getOpponents().get(i));
+				}
 			}
-
 		}
 		if (msgIn instanceof GameStatusMessage) {
 
@@ -97,7 +100,7 @@ public class GameModel {
 				for (Card card : currentPlayer.getPlayerHand().getCards()) {
 					if (card.isCardSelected()) {
 						selectedCard = card;
-
+						currentPlayer.getPlayerHand().removeCardFromHand(card);
 						break;
 					}
 				}
@@ -111,29 +114,6 @@ public class GameModel {
 				msgOut.sendMessage(new PawnCardSelectedMessage(gameName, currentPlayer.getPlayerIndex(),
 						selectedPawn.getPawnId(), selectedCard.getCardId()));
 
-				// move the pawn to the landTile
-				/*
-				 * for (int i = 0; i < view.base.size(); i++) { int topNode =
-				 * (view.getBase().get(i).getChildren().size() - 1); ColorChoice
-				 * currentColor = selectedCard.getColor(); // if the water has a
-				 * landtile if (view.getBase().get(i).getChildren() != null) {
-				 * // doubld check if (((LandTile)
-				 * view.getBase().get(i).getChildren().get(topNode)) != null) {
-				 * LandTile target = ((LandTile)
-				 * view.getBase().get(i).getChildren().get(topNode)); // if the
-				 * land same color as card if
-				 * (target.getColor().equals(currentColor)) {
-				 * 
-				 * target.setPawnOnTile(selectedPawn);
-				 * 
-				 * view.movePawn(selectedPawn, target);
-				 * 
-				 * if (view.getBase().get(i - 1) != null) { int indexOfTarget =
-				 * view.getBase().get(i).getChildren().indexOf(target);
-				 * view.givePlayerTreasure( ((LandTile) view.getBase().get(i -
-				 * 1).getChildren().remove(indexOfTarget))); } break; } } } }
-				 */
-
 			} else
 				view.showNotYourTurnAlert();
 		}
@@ -143,6 +123,10 @@ public class GameModel {
 			removeTreasureFromBoard(message.getTreasure());
 			movePawn(message.getIndexOfPlayer(), message.getSelectedPawn(), message.getSelectedLand());
 
+		}
+		if(msgIn instanceof PlayAnotherCardMessage){
+			view.playerAnother();
+			
 		}
 
 	}
@@ -155,7 +139,7 @@ public class GameModel {
 		} else {
 			for (int i = 0; i < currentPlayer.getOpponents().size(); i++) {
 				if (currentPlayer.getOpponents().get(i).getPawns().contains(selectedPawn)) {
-					viewPawn=selectedPawn;
+					viewPawn = selectedPawn;
 				}
 			}
 		}
@@ -170,11 +154,12 @@ public class GameModel {
 	}
 
 	private void givePlayerTreasure(int indexOfPlayer, LandTile treasure) {
+		if(treasure!=null){
 		if (currentPlayer.getPlayerIndex() == indexOfPlayer) {
 			currentPlayer.getPlayerHand().addTreasure(treasure);
 			view.givePlayerTreasure(treasure);
 		}
-
+		}
 	}
 
 	private void removeTreasureFromBoard(LandTile treasure) {
@@ -204,6 +189,19 @@ public class GameModel {
 	public void tryPlayCard() {
 		msgOut.sendMessage(new GameStatusMessage(gameName, currentPlayer.getPlayerIndex()));
 		System.out.println("tryPlayCard Method, message sent");
+	}
+
+	public void tryPlayExtra() {
+		Card selectedCard=null;
+		for (Card card : currentPlayer.getPlayerHand().getCards()) {
+			if (card.isCardSelected()) {
+				selectedCard = card;
+				currentPlayer.getPlayerHand().removeCardFromHand(card);
+				break;
+			}
+		}
+		msgOut.sendMessage(new ExtraCardMessage(gameName, selectedCard));
+		
 	}
 
 }
