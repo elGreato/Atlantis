@@ -74,7 +74,7 @@ public class GameModel {
 			view.showPlayer();
 		}	
 		
-		// here we assign each player his enemies
+		// here we assign each player his enemies 
 		if (msgIn instanceof OpponentMessage) {
 			System.out.println("Opponent message received");
 
