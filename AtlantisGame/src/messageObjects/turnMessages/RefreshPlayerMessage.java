@@ -14,14 +14,16 @@ public class RefreshPlayerMessage extends InGameMessage implements Serializable 
 	Card selectedCard;
 	LandTile treasure;
 	LandTile selectedLand;
+	Card newCard;
 
 	public RefreshPlayerMessage(String gameName, int indexOfPlayer, LandTile selectedLand, Pawn selectedPawn, Card selectedCard,
-			LandTile treasure) {
+			LandTile treasure, Card newCard) {
 		super(gameName);
 		this.selectedCard = selectedCard;
 		this.selectedPawn = selectedPawn;
 		this.treasure = treasure;
 		this.selectedLand=selectedLand;
+		this.newCard=newCard;
 	}
 
 	public int getIndexOfPlayer() {
@@ -62,6 +64,14 @@ public class RefreshPlayerMessage extends InGameMessage implements Serializable 
 
 	public void setSelectedLand(LandTile selectedLand) {
 		this.selectedLand = selectedLand;
+	}
+
+	public Card getNewCard() {
+		return newCard;
+	}
+
+	public void setNewCard(Card newCard) {
+		this.newCard = newCard;
 	}
 
 }

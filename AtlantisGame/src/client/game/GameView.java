@@ -1,6 +1,7 @@
 package client.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import gameObjects.AtlantisTile;
@@ -74,8 +75,9 @@ public class GameView {
 	private HBox hbPlayersInfo = new HBox();
 	private HBox hbOpponents = new HBox();
 	private HBox hboxCards = new HBox();
-//	private HBox hbPawnHolder = new HBox();
 	private HBox hbTreasures = new HBox();
+	
+	private HashMap<Integer,HBox> hbEnemiesTreasures =new HashMap<Integer, HBox>();
 
 	private MainLand mainland;
 	private AtlantisTile atlantis;
@@ -271,12 +273,14 @@ public class GameView {
 		lblopponentName.setText(opponent.getPlayerName());
 		lblopponentCardCount
 				.setText("This enemy has " + String.valueOf(opponent.getPlayerHand().getNumCards()) + " cards\t");
-
+		HBox hbEnemyTreasures = new HBox();
+		Integer index=opponent.getPlayerIndex();
+		hbEnemiesTreasures.put(index,hbEnemyTreasures);
 		Rectangle recColor = new Rectangle();
 		recColor.setHeight(10);
 		recColor.setWidth(150);
 		recColor.setFill(Pawn.FillColor(opponent));
-		vbOpponentInfo.getChildren().addAll(lblopponentName, lblopponentCardCount, recColor);
+		vbOpponentInfo.getChildren().addAll(lblopponentName, lblopponentCardCount,hbEnemyTreasures, recColor);
 		hbOpponents.getChildren().add(vbOpponentInfo);
 
 		// i need to find a way to get the circle of the pawn
@@ -425,6 +429,12 @@ public class GameView {
 	}
 	public void removeCardFromHand(Card card) {
 		hboxCards.getChildren().remove(card);
+		
+	}
+	public void giveEnemyTreasure(int indexOfPlayer, LandTile treasure) {
+		Integer index=indexOfPlayer;
+		HBox hbOpponentTreasure = hbEnemiesTreasures.get(index);
+		hbOpponentTreasure.getChildren().add(treasure);
 		
 	}
 }
