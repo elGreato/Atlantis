@@ -60,6 +60,7 @@ public class GameModel {
 
 		}
 		// now the players
+		// I NEEEEED TOO CHECKKKKKKKK INDEXXXXXXXXXXXXXXXXx
 		if (msgIn instanceof PlayerMessage) {
 			currentPlayer = (((PlayerMessage) msgIn).getPlayer());
 
@@ -85,12 +86,15 @@ public class GameModel {
 				}
 			}
 		}
+		// message about state of the game
 		if (msgIn instanceof GameStatusMessage) {
 
 			if (((GameStatusMessage) msgIn).isStarted())
 				startTurn(((GameStatusMessage) msgIn).getCurrentPlayer().getPlayerName());
 
 		}
+		
+		// a turn message 
 		if (msgIn instanceof TurnMessage) {
 
 			if (((TurnMessage) msgIn).isYourTurn()) {
@@ -101,6 +105,7 @@ public class GameModel {
 					if (card.isCardSelected()) {
 						selectedCard = card;
 						currentPlayer.getPlayerHand().removeCardFromHand(card);
+						view.removeCardFromHand(card);
 						break;
 					}
 				}
@@ -117,19 +122,23 @@ public class GameModel {
 			} else
 				view.showNotYourTurnAlert();
 		}
+		// update players
 		if (msgIn instanceof RefreshPlayerMessage) {
 			RefreshPlayerMessage message = (RefreshPlayerMessage) msgIn;
 			givePlayerTreasure(message.getIndexOfPlayer(), message.getTreasure());
 			removeTreasureFromBoard(message.getTreasure());
 			movePawn(message.getIndexOfPlayer(), message.getSelectedPawn(), message.getSelectedLand());
-
+			
 		}
+		// inform player to play another card
 		if(msgIn instanceof PlayAnotherCardMessage){
 			view.playerAnother();
 			
 		}
 
 	}
+
+	
 
 	private void movePawn(int indexOfPlayer, Pawn selectedPawn, LandTile selectedLand) {
 		Pawn viewPawn = null;
@@ -191,17 +200,5 @@ public class GameModel {
 		System.out.println("tryPlayCard Method, message sent");
 	}
 
-	public void tryPlayExtra() {
-		Card selectedCard=null;
-		for (Card card : currentPlayer.getPlayerHand().getCards()) {
-			if (card.isCardSelected()) {
-				selectedCard = card;
-				currentPlayer.getPlayerHand().removeCardFromHand(card);
-				break;
-			}
-		}
-		msgOut.sendMessage(new ExtraCardMessage(gameName, selectedCard));
-		
-	}
 
 }

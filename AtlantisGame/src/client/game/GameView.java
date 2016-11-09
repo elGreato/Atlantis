@@ -55,7 +55,7 @@ public class GameView {
 	public Button btnPlayCard = new Button("Play a Selected Card");
 	public Button btnPayWithCard = new Button("Pay with a Card");
 	public Button btnPayWithTreasure = new Button("Pay with a treasure");
-	public Button btnPlayAnother = new Button ("play extra card");
+
 
 	// Labels for main game controls
 	private Label lblGameBtns = new Label("Action Buttons");
@@ -117,7 +117,7 @@ public class GameView {
 			mainBoard.getRowConstraints().add(con);
 		}
 		// add Buttons
-		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnPayWithCard, btnPayWithTreasure,btnPlayAnother);
+		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnPayWithCard, btnPayWithTreasure);
 
 		// set a random picture for each player
 		int numberOfPicturesAvailable = 4;
@@ -422,5 +422,9 @@ public class GameView {
 	public void givePlayerTreasure(LandTile landTile) {
 		hbTreasures.getChildren().add(landTile);
 
+	}
+	public void removeCardFromHand(Card card) {
+		hboxCards.getChildren().remove(card);
+		
 	}
 }

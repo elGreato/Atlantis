@@ -12,6 +12,7 @@ import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
+import messageObjects.turnMessages.ExtraCardMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
@@ -40,6 +41,7 @@ public class Game implements GameInterface {
 	// base for water
 	private ArrayList<WaterTile> base;
 	private int currentPlayerIndex;
+
 
 	// Constructor (doesn't start game)
 	public Game(String name, String password, int maxPlayers, User creator, Lobby lobby) {
@@ -219,6 +221,7 @@ public class Game implements GameInterface {
 			performTurn(player, selectedCard, selectedColor, selectedPawn);
 
 		}
+	
 	}
 
 	private void performTurn(Player player, Card selectedCard, ColorChoice selectedColor, Pawn selectedPawn) {
@@ -229,29 +232,43 @@ public class Game implements GameInterface {
 		boolean foundLand = false;
 		LandTile treasure = null;
 		LandTile selectedLand = null;
-
-		for (int f = selectedPawn.getLocation(); f < base.size() && !foundLand; f++) {
+		// loop through the base and assign watertile 
+		for (int f = selectedPawn.getLocation() + 1; f < base.size() && !foundLand; f++) {
 			WaterTile water = base.get(f);
+			// check if water has tiles
 			int topNode = water.getChildren().size() - 1;
+			boolean giveTreasure=false;
+			// get the top tile on that water
 			if (water.getChildren().size() != 0 && water.getChildren().get(topNode) instanceof LandTile) {
 				LandTile land = (LandTile) water.getChildren().get(topNode);
 				if (land.getColor().equals(selectedColor) && !land.hasPawn()) {
-					System.out.println("found a landtile with the color" + land.getColor().toString() + " and ID: "
-							+ land.getTileId() + " And Value " + land.getLandValue());
+					
 					land.setPawnOnTile(selectedPawn);
 					selectedLand = land;
 					selectedPawn.setLocation(base.indexOf(water));
 					foundLand = true;
+					giveTreasure=true;
 					selectedPawn.setPawnSelected(false);
+					// end current player turn
+					if (currentPlayerIndex < players.size() - 1)
+						currentPlayerIndex += 1;
+					else
+						currentPlayerIndex = 0;
 
-				} else if (land.getColor().equals(selectedColor) && land.hasPawn()) {
+				}
+				if (land.getColor().equals(selectedColor) && land.hasPawn()&&!foundLand) {
+					selectedPawn.setLocation(base.indexOf(water));
+					land.setPawnOnTile(selectedPawn);
+					selectedLand = land;
+					foundLand=true;
+					giveTreasure=false;
 					System.out.println("found land but it has pawn, so player has to play another card");
 					users.get(player.getPlayerIndex()).sendMessage(new PlayAnotherCardMessage(getName()));
 
 				}
 
 			}
-			if (f != 0 && foundLand) {
+			if (f != 0 && foundLand&&giveTreasure) {
 				System.out.println("Trying to find a treasure for the player");
 				treasure = giveTreasureToPlayer(f, player);
 
@@ -262,6 +279,7 @@ public class Game implements GameInterface {
 			users.get(i).sendMessage(
 					new RefreshPlayerMessage(getName(), i, selectedLand, selectedPawn, selectedCard, treasure));
 
+
 		}
 
 	}
@@ -271,9 +289,9 @@ public class Game implements GameInterface {
 		LandTile treasure = null;
 		int waterIndex = -1;
 		while (!gotIt) {
-			System.out.println("index of f is : " + f);
+		
 			if (f + waterIndex >= 0) {
-				System.out.println("ok the index is bigger than 0");
+	
 				WaterTile previousWater = base.get(f + waterIndex);
 				if (previousWater.getChildren().size() != 0
 						&& previousWater.getChildren().get(previousWater.getChildren().size() - 1) instanceof LandTile
@@ -282,8 +300,7 @@ public class Game implements GameInterface {
 
 					treasure = (LandTile) previousWater.getChildren().remove(previousWater.getChildren().size() - 1);
 					player.getPlayerHand().addTreasure(treasure);
-					System.out.println("foudnd a treasure with value: " + treasure.getLandValue() + "and color: "
-							+ treasure.getColor().toString());
+				
 					gotIt = true;
 				}
 

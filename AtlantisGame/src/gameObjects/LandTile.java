@@ -17,6 +17,7 @@ public class LandTile extends Tile implements Serializable {
 	private Pawn pawnOnTile;
 	private  ColorChoice landTileColor;
 	private int landValue;
+	private Pawn tempPawn;
 
 	public LandTile(int tileId,ColorChoice color, int value ){
 		super(tileId);
@@ -54,6 +55,7 @@ public class LandTile extends Tile implements Serializable {
 		if (pawnOnTile!=null)
 		this.getChildren().add(pawnOnTile);
 	}
+	
 	public ColorChoice getColor() {
 		return landTileColor;
 	}
@@ -73,6 +75,16 @@ public class LandTile extends Tile implements Serializable {
 	
 	public Pawn getPawn(){
 		return pawnOnTile;
+	}
+
+	public Pawn getTempPawn() {
+		return tempPawn;
+	}
+
+	public void setTempPawn(Pawn tempPawn) {
+		this.tempPawn = tempPawn;
+		if(tempPawn!=null)
+			this.getChildren().add(tempPawn);
 	}
 		
 	
