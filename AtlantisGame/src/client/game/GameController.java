@@ -20,9 +20,7 @@ public class GameController {
 		view.btnPlayCard.setOnAction(e -> handlePlayCard());
 		view.btnPayWithCard.setOnAction(e -> handlePayWithCard());
 		view.btnPayWithTreasure.setOnAction(e -> handlePayWithTreasure());
-		for (Pawn p : model.currentPlayer.getPawns()) {
-			p.setOnMouseClicked(e -> view.handlePawn(p));
-		}
+	
 	}
 
 	private void handlePayWithTreasure() {

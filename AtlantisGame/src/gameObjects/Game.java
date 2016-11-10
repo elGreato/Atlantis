@@ -157,6 +157,7 @@ public class Game implements GameInterface {
 
 			for (Pawn p : currentPlayer.getPawns()) {
 				if (p.getPawnId() == message.getPawn().getPawnId()) {
+					System.out.println("HERE");
 					p = message.getPawn();
 					selectedPawn = p;
 					selectedPawn.setPawnSelected(true);
