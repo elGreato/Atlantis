@@ -5,18 +5,19 @@ import java.io.Serializable;
 import gameObjects.Card;
 import gameObjects.LandTile;
 import gameObjects.Pawn;
+import gameObjects.Player;
 import messageObjects.InGameMessage;
 
 public class RefreshPlayerMessage extends InGameMessage implements Serializable {
 
-	int indexOfPlayer;
+	Player currentPlayer;
 	Pawn selectedPawn;
 	Card selectedCard;
 	LandTile treasure;
 	LandTile selectedLand;
 	Card newCard;
 
-	public RefreshPlayerMessage(String gameName, int indexOfPlayer, LandTile selectedLand, Pawn selectedPawn, Card selectedCard,
+	public RefreshPlayerMessage(String gameName, Player currentPlayer, LandTile selectedLand, Pawn selectedPawn, Card selectedCard,
 			LandTile treasure, Card newCard) {
 		super(gameName);
 		this.selectedCard = selectedCard;
@@ -24,15 +25,20 @@ public class RefreshPlayerMessage extends InGameMessage implements Serializable 
 		this.treasure = treasure;
 		this.selectedLand=selectedLand;
 		this.newCard=newCard;
+		this.currentPlayer=currentPlayer;
 	}
 
-	public int getIndexOfPlayer() {
-		return indexOfPlayer;
+	
+
+	public Player getCurrentPlayer() {
+		return currentPlayer;
 	}
 
-	public void setIndexOfPlayer(int indexOfPlayer) {
-		this.indexOfPlayer = indexOfPlayer;
+	public void setCurrentPlayer(Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
 	}
+
+
 
 	public Pawn getSelectedPawn() {
 		return selectedPawn;

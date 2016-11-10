@@ -19,12 +19,8 @@ public class MainLand  extends HBox implements Serializable{
 	public MainLand(){
 	
 	}
-
-
 	public int getMainLandid() {
 		return mainLandid;
 	}
-
-
 
 }

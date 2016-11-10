@@ -13,9 +13,9 @@ import gameObjects.WaterTile;
 import javafx.event.Event;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
+
 import messageObjects.AtlantisMainLandMessage;
-import messageObjects.DeckLandTileMessage;
+
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
@@ -64,13 +64,9 @@ public class GameModel {
 
 		if (msgIn instanceof PlayerMessage) {
 			currentPlayer = (((PlayerMessage) msgIn).getPlayer());
-			currentPlayer.setPlayerIndex(((PlayerMessage) msgIn).getIndexOfPlayer());
 
-			for (int i = 0; i < (((PlayerMessage) msgIn).getCards().size()); i++) {
-				Card c = (((PlayerMessage) msgIn).getCards().get(i));
-				((PlayerMessage) msgIn).getCards().get(i).setOnMouseClicked(e -> view.handleCard(c));
-				view.createCardView(c);
-
+			for (Card c : currentPlayer.getPlayerHand().getCards()) {
+				addClickToCard(c);
 			}
 			view.player = currentPlayer;
 			view.showPlayer();
@@ -117,14 +113,15 @@ public class GameModel {
 						break;
 					}
 				}
-				
+
 				msgOut.sendMessage(new PawnCardSelectedMessage(gameName, currentPlayer.getPlayerIndex(),
 						selectedPawn.getPawnId(), selectedCard.getCardId()));
-				for (Pawn pawn : currentPlayer.getPawns()) {
+/*				for (Pawn pawn : currentPlayer.getPawns()) {
 					if (pawn.isPawnSelected()) {
-						Event.fireEvent(pawn, new MouseEvent(MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1, true,
-								true, true, true, true, true, true, true, true, true, null));
-					}}
+						Event.fireEvent(pawn, new MouseEvent(MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY,
+								1, true, true, true, true, true, true, true, true, true, true, null));
+					}
+				}*/
 
 			} else
 				view.showNotYourTurnAlert();
@@ -132,21 +129,22 @@ public class GameModel {
 		// update players
 		if (msgIn instanceof RefreshPlayerMessage) {
 			RefreshPlayerMessage message = (RefreshPlayerMessage) msgIn;
+		
 			LandTile treasure = message.getTreasure();
 			Card newCard = message.getNewCard();
-			if (newCard != null && message.getIndexOfPlayer() == currentPlayer.getPlayerIndex()) {
+			if (newCard != null && message.getCurrentPlayer().getPlayerIndex()  == currentPlayer.getPlayerIndex()) {
 				addCardToPlayer(newCard);
 
 			}
 			if (treasure != null) {
-				if (message.getIndexOfPlayer() == currentPlayer.getPlayerIndex()) {
+				if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 					givePlayerTreasure(treasure);
 				} else {
-					giveEnemyTreasure(message.getIndexOfPlayer(), treasure);
+					giveEnemyTreasure(message.getCurrentPlayer().getPlayerIndex() , treasure);
 				}
 				removeTreasureFromBoard(treasure);
 			}
-			movePawn(message.getIndexOfPlayer(), message.getSelectedPawn(), message.getSelectedLand());
+			movePawn(message.getCurrentPlayer().getPlayerIndex(), message.getSelectedPawn(), message.getSelectedLand());
 
 		}
 		// inform player to play another card
@@ -154,6 +152,12 @@ public class GameModel {
 			view.playerAnother();
 
 		}
+
+	}
+
+	private void addClickToCard(Card c) {
+		c.setOnMouseClicked(e -> view.handleCard(c));
+		view.createCardView(c);
 
 	}
 
@@ -228,10 +232,9 @@ public class GameModel {
 	}
 
 	public void tryPlayCard() {
-	
-			msgOut.sendMessage(new GameStatusMessage(gameName, currentPlayer.getPlayerIndex()));
-			System.out.println("tryPlayCard Method, message sent");
-		}
 
-	
+		msgOut.sendMessage(new GameStatusMessage(gameName, currentPlayer.getPlayerIndex()));
+		System.out.println("tryPlayCard Method, message sent");
+	}
+
 }

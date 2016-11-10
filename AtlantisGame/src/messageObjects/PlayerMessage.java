@@ -10,33 +10,14 @@ import gameObjects.Player;
 public class PlayerMessage extends InGameMessage implements Serializable {
 
 	private Player player;
-	private ArrayList<Card> cards;
-	private int indexOfPlayer;
 
-	public PlayerMessage(String gameName, Player player, ArrayList<Card> cards, int indexOfPlayer) {
+
+
+	public PlayerMessage(String gameName, Player player) {
 		super(gameName);
-		this.cards= cards;
 		this.player = player;
-		this.indexOfPlayer=indexOfPlayer;
 		
 
-	}
-	
-	public ArrayList<Card> getCards() {
-		return cards;
-	}
-
-	public void setCards(ArrayList<Card> cards) {
-		this.cards = cards;
-	}
-
-
-	public int getIndexOfPlayer() {
-		return indexOfPlayer;
-	}
-
-	public void setIndexOfPlayer(int indexOfPlayer) {
-		this.indexOfPlayer = indexOfPlayer;
 	}
 
 	public Player getPlayer() {

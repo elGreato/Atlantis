@@ -49,6 +49,11 @@ public class PlayerHand implements Serializable {
 		cards.clear();
 
 	}
+	
+
+	public void setCards(ArrayList<Card> cards) {
+		this.cards = cards;
+	}
 
 	public int getNumCards() {
 		return cards.size();
