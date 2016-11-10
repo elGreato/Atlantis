@@ -175,12 +175,14 @@ public class Game implements GameInterface {
 			WaterTile water = base.get(f);
 			// check if water has tiles
 			int topNode = 0;
-			if (water.getChildren().size() != 0) {
+			if (water.getChildren().size()>0) {
 				topNode = water.getChildren().size() - 1;
+				System.out.println("TOP NODE IS "+topNode);
 				waterHasTile = true;
 			}
 			// get the top tile on that water
 			if (waterHasTile && water.getChildren().get(topNode) instanceof LandTile) {
+				waterHasTile=false;
 				LandTile land = (LandTile) water.getChildren().get(topNode);
 				// does this tile has the same color ?
 				if (land.getColor().equals(selectedCard.getColor()) && !land.hasPawn()) {
@@ -216,9 +218,13 @@ public class Game implements GameInterface {
 		if (selectedPawn.getNewLocation() > 0 && foundLand && giveTreasure) {
 			System.out.println("Trying to find a treasure for the player");
 			treasure = giveTreasureToPlayer(selectedPawn.getNewLocation());
-			users.get(currentPlayerIndex)
-					.sendMessage(new ServerMessage(getName(), "found Treasure: " + treasure.getColor().toString()));
-					
+			if (treasure != null) {
+				users.get(currentPlayerIndex)
+						.sendMessage(new ServerMessage(getName(), "found Treasure: " + treasure.getColor().toString()));
+
+			} else
+				users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "No treasure found"));
+
 		} else {
 			users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "No treasure found"));
 		}
@@ -227,9 +233,10 @@ public class Game implements GameInterface {
 			users.get(i).sendMessage(new RefreshPlayerMessage(getName(), currentPlayer, selectedLand, selectedPawn,
 					selectedCard, treasure, newCard));
 		}
-		if(foundLand&&nextPlayer) endTurn();
+		if (foundLand && nextPlayer)
+			endTurn();
 
-		System.out.println("the next player is : "+currentPlayerIndex);
+		System.out.println("the next player is : " + currentPlayerIndex);
 	}
 
 	public void endTurn() {
@@ -265,10 +272,11 @@ public class Game implements GameInterface {
 	}
 
 	private LandTile giveTreasureToPlayer(int f) {
+		System.out.println("the location of pawn is " + f);
 		boolean gotIt = false;
 		LandTile treasure = null;
 		int waterIndex = -1;
-		while (!gotIt) {
+		while (!gotIt && f + waterIndex >= 0) {
 			WaterTile previousWater = base.get(f + waterIndex);
 			if (previousWater.getChildren().size() != 0
 					&& previousWater.getChildren().get(previousWater.getChildren().size() - 1) instanceof LandTile
@@ -288,9 +296,12 @@ public class Game implements GameInterface {
 	}
 
 	private boolean checkTurn(int playerIndex) {
-		if (playerIndex == currentPlayerIndex)
+		System.out.println("checking ur index");
+		if (playerIndex == currentPlayerIndex) {
+
+			System.out.println("YUPPPPPPPPPP");
 			return true;
-		else
+		} else
 			return false;
 	}
 

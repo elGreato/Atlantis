@@ -166,7 +166,7 @@ public class GameModel {
 				}
 			}
 
-			currentPlayer.setPlayerIndex(message.getCurrentPlayer().getPlayerIndex());
+		
 			movePawn(currentPlayer.getPlayerIndex(), selectedPawn, message.getSelectedLand());
 
 		}
