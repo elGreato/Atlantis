@@ -142,7 +142,6 @@ public class Lobby implements LobbyInterface{
 			if(g.getName().equals(gameName) && g.getPassword().equals(password))
 			{
 				gameFound = true;
-				System.out.println(g.getMaxPlayers() + " " + g.getNumOfRegisteredPlayers());
 				 if(g.getMaxPlayers() > g.getNumOfRegisteredPlayers())
 				 {
 					 boolean alreadyRegistered = false;
@@ -156,7 +155,6 @@ public class Lobby implements LobbyInterface{
 					 }
 					 if(!alreadyRegistered)
 					 {
-						 System.out.println("I'm here");
 						 g.addUser(user);
 						 serverAnswer = "You have successfully registered for this game.";
 					
@@ -169,9 +167,7 @@ public class Lobby implements LobbyInterface{
 							
 						 
 						 }
-						 System.out.println(g.getNumOfRegisteredPlayers());
 						 updateLobby(g);
-						 System.out.println("updated lobby");
 					 }
 
 				 }
@@ -237,10 +233,8 @@ public class Lobby implements LobbyInterface{
 		{
 			UserInfo ui = userInfoAllUsers.get(i);
 			leaderboard.add(new UserInfoMessage(ui,getPosition(ui)));
-			System.out.println(ui.getUsername());
 		}
 		user.sendMessage(new UserInfoListMessage(leaderboard));
-		System.out.println("I was sending the leaderboard");
 		
 		
 	}
@@ -253,7 +247,6 @@ public class Lobby implements LobbyInterface{
 		
 		if(game.getPassword().equals(""))
 		{
-			System.out.println(game.getPassword());
 			hasPassword = false;
 		}
 		GameListItem updatedGame = new GameListItem(game.getName(),hasPassword, game.getNumOfRegisteredPlayers(), game.getMaxPlayers());
@@ -261,7 +254,6 @@ public class Lobby implements LobbyInterface{
 		for(User u: onlineUsers)
 		{
 			u.sendMessage(updatedGame);
-			System.out.println(updatedGame.getRegisteredPlayers());
 		}
 	}
 	

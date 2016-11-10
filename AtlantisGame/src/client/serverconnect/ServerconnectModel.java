@@ -113,7 +113,6 @@ public class ServerconnectModel implements Runnable{
 			{
 				testSocket.close(); 
 			}
-			System.out.println("No catch" + testableIP);
 		}
 		catch(IOException e)
 		{

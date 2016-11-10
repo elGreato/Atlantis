@@ -109,7 +109,7 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 				else if(obj instanceof GameListItem)
 				{
 					GameListItemDataModel updatedGame = new GameListItemDataModel((GameListItem)obj);
-					System.out.println(updatedGame.getRegisteredPlayers());
+					
 					
 					boolean isSelected = false;
 					

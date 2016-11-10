@@ -180,13 +180,10 @@ public class User implements Runnable{
 				}
 				else if(receivedMessage instanceof CreateGameMessage)
 				{
-					System.out.println("create game message received");
 					CreateGameMessage cgm = (CreateGameMessage)receivedMessage;
 					String answer = lobbyInterface.createGame(this, cgm);
-					System.out.println("Create game message processed");
 					oos.writeObject(new ServerInfoMessage(answer));
 					oos.flush();
-					System.out.println("Answer sent");
 				
 				}
 				else if(receivedMessage instanceof LobbyChatMessage)
