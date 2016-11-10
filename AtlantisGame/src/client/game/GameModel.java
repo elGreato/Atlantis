@@ -24,6 +24,7 @@ import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
 import messageObjects.turnMessages.RefreshPlayerMessage;
+import messageObjects.turnMessages.ServerMessage;
 import messageObjects.turnMessages.TurnMessage;
 
 public class GameModel {
@@ -88,6 +89,9 @@ public class GameModel {
 			if (((GameStatusMessage) msgIn).isStarted())
 				startTurn(((GameStatusMessage) msgIn).getCurrentPlayer().getPlayerName());
 
+		}
+		if(msgIn instanceof ServerMessage){
+			view.showMessageFromServer(((ServerMessage)msgIn).getTheMessage());
 		}
 
 		// a turn message

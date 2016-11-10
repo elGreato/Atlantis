@@ -441,4 +441,8 @@ public class GameView {
 		lblTurn.setText("Please SELECT A PAWN");
 		
 	}
+	public void showMessageFromServer(String theMessage) {
+		lblTurn.setText(theMessage);
+		
+	}
 }
