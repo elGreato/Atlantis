@@ -38,6 +38,7 @@ public class Player implements Serializable {
 		for (int i = 0; i < 3; i++) {
 			Pawn pawn = new Pawn(this, i);
 			pawn.setOldLocation(-1);
+			pawn.setOwner(this);
 			pawns.add(pawn);
 			
 

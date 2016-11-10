@@ -34,7 +34,7 @@ public class GameModel {
 	// send messages to server through method msgOut.sendMessage()
 	private ClientLobbyInterface msgOut;
 
-	private Player currentPlayer;
+	protected Player currentPlayer;
 
 	public String getGameName() {
 		return gameName;
@@ -67,8 +67,12 @@ public class GameModel {
 			for (Card c : currentPlayer.getPlayerHand().getCards()) {
 				addClickToCard(c);
 			}
-			view.player = currentPlayer;
-			view.showPlayer();
+
+			view.showPlayer(currentPlayer);
+			for (Pawn p : currentPlayer.getPawns()) {
+				p.setOnMouseClicked(e -> view.handlePawn(p));
+			}
+			
 		}
 
 		// here we assign each player his enemies
@@ -103,6 +107,7 @@ public class GameModel {
 
 				for (Pawn pawn : currentPlayer.getPawns()) {
 					if (pawn.isPawnSelected()) {
+						System.out.println("found a seleted pawn");
 						selectedPawn = pawn;
 						break;
 					}

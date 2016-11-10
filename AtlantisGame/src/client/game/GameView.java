@@ -44,7 +44,7 @@ public class GameView {
 	private BorderPane root = new BorderPane();
 	private GridPane mainBoard = new GridPane();
 	
-	public Player player;
+
 	// base for other stacks
 	ArrayList<WaterTile> base;
 
@@ -221,7 +221,7 @@ public class GameView {
 
 	}
 
-	public void showPlayer() {
+	public void showPlayer(Player player) {
 
 		lblName.setText(player.getPlayerName());
 		Rectangle recColor = new Rectangle();
@@ -235,11 +235,11 @@ public class GameView {
 			Circle c = new Circle();
 			c.setRadius(10);
 			p.setCircle(c);
-			p.setOnMouseClicked(e -> handlePawn(p));
+			
 			c.setFill(Pawn.FillColor(player));
 			p.getChildren().add(c);
 
-			
+			System.out.println(p.getPawnId()+" PAWN ID IN VIEW");
 			atlantis.getChildren().add(p);
 
 		}
@@ -248,7 +248,7 @@ public class GameView {
 
 	}
 
-	private void handlePawn(Pawn p) {
+	protected void handlePawn(Pawn p) {
 		for (Pawn pp : (p.getOwner()).getPawns()) {
 			if (pp.getPawnId() != p.getPawnId()) {
 				pp.getCircle().setStroke(Color.TRANSPARENT);

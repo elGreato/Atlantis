@@ -154,17 +154,20 @@ public class Game implements GameInterface {
 				}
 			}
 			Pawn selectedPawn = null;
-			if (currentPlayer.getPawns().contains(message.getPawn())) {
-				for (Pawn p : currentPlayer.getPawns()) {
-					if (p.getPawnId() == message.getPawn().getPawnId())
-						p = message.getPawn();
+
+			for (Pawn p : currentPlayer.getPawns()) {
+				if (p.getPawnId() == message.getPawn().getPawnId()) {
+					p = message.getPawn();
 					selectedPawn = p;
 					selectedPawn.setPawnSelected(true);
 				}
 
-			} else
-				users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "I didn't find a pawn"));
-			performTurn(selectedCard, selectedPawn);
+				else {
+					users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "I didn't find a pawn"));
+					
+				}
+				performTurn(selectedCard, selectedPawn);
+			}
 		}
 
 	}
@@ -224,7 +227,8 @@ public class Game implements GameInterface {
 				System.out.println("Trying to find a treasure for the player");
 				treasure = giveTreasureToPlayer(selectedPawn.getNewLocation());
 
-			} else users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "No treasure found"));
+			} else
+				users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "No treasure found"));
 		}
 		int numberOfPlayers = getNumOfRegisteredPlayers();
 		for (int i = 0; i < numberOfPlayers; i++) {
@@ -261,17 +265,17 @@ public class Game implements GameInterface {
 		LandTile treasure = null;
 		int waterIndex = -1;
 		while (!gotIt) {
-				WaterTile previousWater = base.get(f + waterIndex);
-				if (previousWater.getChildren().size() != 0
-						&& previousWater.getChildren().get(previousWater.getChildren().size() - 1) instanceof LandTile
-						&& !((LandTile) previousWater.getChildren().get(previousWater.getChildren().size() - 1))
-								.hasPawn()) {
+			WaterTile previousWater = base.get(f + waterIndex);
+			if (previousWater.getChildren().size() != 0
+					&& previousWater.getChildren().get(previousWater.getChildren().size() - 1) instanceof LandTile
+					&& !((LandTile) previousWater.getChildren().get(previousWater.getChildren().size() - 1))
+							.hasPawn()) {
 
-					treasure = (LandTile) previousWater.getChildren().remove(previousWater.getChildren().size() - 1);
-					currentPlayer.getPlayerHand().addTreasure(treasure);
-					previousWater.getChildren().remove(f + waterIndex);
-					gotIt = true;
-				}
+				treasure = (LandTile) previousWater.getChildren().remove(previousWater.getChildren().size() - 1);
+				currentPlayer.getPlayerHand().addTreasure(treasure);
+				previousWater.getChildren().remove(f + waterIndex);
+				gotIt = true;
+			}
 
 			waterIndex -= 1;
 
