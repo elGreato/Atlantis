@@ -437,4 +437,8 @@ public class GameView {
 		hbOpponentTreasure.getChildren().add(treasure);
 		
 	}
+	public void selectPawnPlease() {
+		lblTurn.setText("Please SELECT A PAWN");
+		
+	}
 }

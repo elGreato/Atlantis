@@ -98,7 +98,15 @@ public class GameModel {
 			if (((TurnMessage) msgIn).isYourTurn()) {
 				Card selectedCard = null;
 				Pawn selectedPawn = null;
-
+				while(!scanPawns()){
+					view.selectPawnPlease();
+				}
+				for (Pawn pawn : currentPlayer.getPawns()) {
+					if (pawn.isPawnSelected()) {
+						selectedPawn = pawn;
+						break;
+					}
+				}
 				for (Card card : currentPlayer.getPlayerHand().getCards()) {
 					if (card.isCardSelected()) {
 						selectedCard = card;
@@ -107,12 +115,7 @@ public class GameModel {
 						break;
 					}
 				}
-				for (Pawn pawn : currentPlayer.getPawns()) {
-					if (pawn.isPawnSelected()) {
-						selectedPawn = pawn;
-						break;
-					}
-				}
+				
 
 				msgOut.sendMessage(new PawnCardSelectedMessage(gameName, currentPlayer.getPlayerIndex(),
 						selectedPawn.getPawnId(), selectedCard.getCardId()));
@@ -153,6 +156,17 @@ public class GameModel {
 
 		}
 
+	}
+
+	private boolean scanPawns() {
+		boolean pawnSelected = false;
+		for (Pawn pawn : currentPlayer.getPawns()) {
+			if (pawn.isPawnSelected()) {
+				pawnSelected=true;
+				break;
+			}
+		}
+		return pawnSelected;
 	}
 
 	private void addClickToCard(Card c) {
