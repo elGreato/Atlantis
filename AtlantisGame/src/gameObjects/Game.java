@@ -142,17 +142,18 @@ public class Game implements GameInterface {
 			currentPlayer = players.get(message.getPlayerIndex());
 			currentPlayerIndex = currentPlayer.getPlayerIndex();
 			Card selectedCard = null;
-			ColorChoice selectedColor = null;
+			// i didn't assign it to double check
+			ColorChoice selectedColor = null; 
 			for (Card card : currentPlayer.getPlayerHand().getCards()) {
-				if (card.getCardId() == message.getCardId()) {
+				if (card== message.getCard()) {
 					selectedColor = card.getColor();
 					selectedCard = card;
 					currentPlayer.getPlayerHand().removeCardFromHand(card);
 					break;
 				}
 			}
-
-			Pawn selectedPawn = currentPlayer.getPawns().get(message.getPawnId());
+			
+			Pawn selectedPawn = message.getPawn();
 			selectedPawn.setPawnSelected(true);
 
 			performTurn(selectedCard, selectedPawn);

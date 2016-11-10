@@ -60,11 +60,8 @@ public class PlayerHand implements Serializable {
 	}
 
 	public void removeCardFromHand(Card card) {
-		Iterator<Card> it = this.getCards().iterator();
+		cards.remove(card);
 
-		if (it.next().getCardId() == card.getCardId()) {
-			it.remove();
-		}
 	}
 
 }

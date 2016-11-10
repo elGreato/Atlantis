@@ -113,7 +113,7 @@ public class GameModel {
 				}
 
 				msgOut.sendMessage(new PawnCardSelectedMessage(gameName, currentPlayer.getPlayerIndex(),
-						selectedPawn.getPawnId(), selectedCard.getCardId()));
+						selectedPawn, selectedCard));
 				/*
 				 * for (Pawn pawn : currentPlayer.getPawns()) { if
 				 * (pawn.isPawnSelected()) { Event.fireEvent(pawn, new
@@ -242,7 +242,6 @@ public class GameModel {
 
 	public void tryPlayCard() {
 		if (scanPawns()) {
-
 			msgOut.sendMessage(new GameStatusMessage(gameName, currentPlayer.getPlayerIndex()));
 			System.out.println("tryPlayCard Method, message sent");
 		} else
