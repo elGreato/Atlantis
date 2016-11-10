@@ -224,7 +224,7 @@ public class Game implements GameInterface {
 
 			} else
 				continue;
-			if (selectedPawn.getNewLocation() < 0 && foundLand && giveTreasure) {
+			if (selectedPawn.getNewLocation() > 0 && foundLand && giveTreasure) {
 				System.out.println("Trying to find a treasure for the player");
 				treasure = giveTreasureToPlayer(selectedPawn.getNewLocation());
 
