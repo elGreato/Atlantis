@@ -146,7 +146,7 @@ public class Game implements GameInterface {
 			// i didn't assign it to double check
 			ColorChoice selectedColor = null;
 			for (Card card : currentPlayer.getPlayerHand().getCards()) {
-				if (card == message.getCard()) {
+				if (card.getCardId()==message.getCard().getCardId()) {
 					selectedColor = card.getColor();
 					selectedCard = card;
 					currentPlayer.getPlayerHand().removeCardFromHand(card);
