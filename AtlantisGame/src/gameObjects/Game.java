@@ -167,8 +167,8 @@ public class Game implements GameInterface {
 					users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "I didn't find a pawn"));
 					
 				}
-				performTurn(selectedCard, selectedPawn);
-			}
+				
+			}performTurn(selectedCard, selectedPawn);
 		}
 
 	}
