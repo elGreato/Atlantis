@@ -34,10 +34,10 @@ public class Player implements Serializable {
 		// create the player hand
 		playerHand = new PlayerHand(name);
 
-		// create 3 pawns for each player
+		// create 3 pawns for each player, -1 is the location for Atlantis
 		for (int i = 0; i < 3; i++) {
 			Pawn pawn = new Pawn(this, i);
-			pawn.setLocation(0);
+			pawn.setOldLocation(-1);
 			pawns.add(pawn);
 			
 

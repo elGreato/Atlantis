@@ -155,12 +155,12 @@ public class Game implements GameInterface {
 			Pawn selectedPawn = currentPlayer.getPawns().get(message.getPawnId());
 			selectedPawn.setPawnSelected(true);
 
-			performTurn(selectedCard,selectedPawn);
+			performTurn(selectedCard, selectedPawn);
 		}
 
 	}
 
-	private void performTurn(Card selectedCard,Pawn selectedPawn) {
+	private void performTurn(Card selectedCard, Pawn selectedPawn) {
 
 		Card newCard = null;
 		boolean foundLand = false;
@@ -168,7 +168,7 @@ public class Game implements GameInterface {
 		LandTile selectedLand = null;
 		boolean giveTreasure = false;
 		// loop through the base and assign watertile
-		for (int f = selectedPawn.getLocation() + 1; f < base.size() && !foundLand; f++) {
+		for (int f = selectedPawn.getOldLocation() + 1; f < base.size() && !foundLand; f++) {
 			WaterTile water = base.get(f);
 			// check if water has tiles
 			int topNode = water.getChildren().size() - 1;
@@ -180,17 +180,18 @@ public class Game implements GameInterface {
 
 					land.setPawnOnTile(selectedPawn);
 					selectedLand = land;
-					selectedPawn.setLocation(base.indexOf(water));
+					selectedPawn.setNewLocation(base.indexOf(water));
 					foundLand = true;
 					giveTreasure = true;
 					selectedPawn.setPawnSelected(false);
 					newCard = cards.deal();
 					newCard.setOwner(currentPlayer);
 					currentPlayer.addCard(newCard);
+					removePawnFromOldTile(selectedPawn);
 
 				}
 				if (land.getColor().equals(selectedCard.getColor()) && land.hasPawn() && !foundLand) {
-					selectedPawn.setLocation(base.indexOf(water));
+					selectedPawn.setNewLocation(base.indexOf(water));
 					land.setTempPawn(selectedPawn);
 					selectedPawn.setPawnSelected(false);
 					selectedLand = land;
@@ -224,6 +225,18 @@ public class Game implements GameInterface {
 				currentPlayer = players.get(currentPlayerIndex);
 			}
 		}
+	}
+
+	private void removePawnFromOldTile(Pawn selectedPawn) {
+		WaterTile w;
+		if (selectedPawn.getOldLocation() != -1) {
+			w = base.get(selectedPawn.getOldLocation());
+			if (((LandTile) w.getChildren().get(w.getChildren().size() - 1)).hasPawn()
+					|| ((LandTile) w.getChildren().get(w.getChildren().size() - 1)).hasTempPawn()) {
+				((LandTile) w.getChildren().get((w.getChildren().size() - 1))).getPawns().clear();
+			}
+		}
+
 	}
 
 	private LandTile giveTreasureToPlayer(int f) {

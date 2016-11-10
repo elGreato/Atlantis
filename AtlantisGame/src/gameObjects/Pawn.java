@@ -12,7 +12,8 @@ import javafx.scene.shape.Circle;
 public class Pawn extends StackPane implements Serializable{
 
 	private  ColorChoice pawnColor;
-	private int location;
+	private int oldLocation;
+	private int newLocation;
 	private Player owner;
 	private int pawnId;
 	private transient Circle circle;
@@ -70,12 +71,21 @@ public class Pawn extends StackPane implements Serializable{
 		this.owner = owner;
 	}
 
-	public int getLocation() {
-		return location;
+
+	public int getOldLocation() {
+		return oldLocation;
 	}
 
-	public void setLocation(int location) {
-		this.location = location;
+	public void setOldLocation(int oldLocation) {
+		this.oldLocation = oldLocation;
+	}
+
+	public int getNewLocation() {
+		return newLocation;
+	}
+
+	public void setNewLocation(int newLocation) {
+		this.newLocation = newLocation;
 	}
 
 	public Circle getCircle() {

@@ -85,13 +85,20 @@ public class LandTile extends Tile implements Serializable {
 		return (pawnOnTile!=null);
 	
 	}
-	
-	public Pawn getPawn(){
-		return pawnOnTile;
+	public boolean hasTempPawn(){
+		return(tempPawn!=null);
 	}
-
+	
 	public Pawn getTempPawn() {
 		return tempPawn;
+	}
+
+	public ArrayList<Pawn> getPawns() {
+		return pawns;
+	}
+
+	public void setPawns(ArrayList<Pawn> pawns) {
+		this.pawns = pawns;
 	}
 
 
