@@ -1,21 +1,13 @@
 package client.game;
 
-import java.util.Iterator;
-
 import client.lobby.ClientLobbyInterface;
 import client.lobby.LobbyModel;
 import gameObjects.Card;
-import gameObjects.ColorChoice;
 import gameObjects.Pawn;
 import gameObjects.LandTile;
 import gameObjects.Player;
 import gameObjects.WaterTile;
-import javafx.event.Event;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-
 import messageObjects.AtlantisMainLandMessage;
-
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
@@ -53,13 +45,13 @@ public class GameModel {
 		if (msgIn instanceof WaterMessage) {
 			view.addRecAndText(((WaterMessage) msgIn).getBase());
 		}
-		
+
 		// the atlantis and the main land
 		if (msgIn instanceof AtlantisMainLandMessage) {
 			view.placeAtlantisMainLand(((AtlantisMainLandMessage) msgIn).getAtlantis(),
 					((AtlantisMainLandMessage) msgIn).getMainland());
 		}
-		
+
 		// now the players
 		if (msgIn instanceof PlayerMessage) {
 			currentPlayer = (((PlayerMessage) msgIn).getPlayer());
@@ -67,23 +59,22 @@ public class GameModel {
 			for (Card c : currentPlayer.getPlayerHand().getCards()) {
 				addClickToCard(c);
 			}
-
-			view.showPlayer(currentPlayer);
 			for (Pawn p : currentPlayer.getPawns()) {
 				p.setOnMouseClicked(e -> view.handlePawn(p));
 			}
-			
+
+			view.showPlayer(currentPlayer);
+
 		}
 
 		// here we assign each player his enemies
 		if (msgIn instanceof OpponentMessage) {
 			System.out.println("Opponent message received");
-
-			for (int i = 0; i < ((OpponentMessage) msgIn).getOpponents().size(); i++) {
-				if (!currentPlayer.getPlayerName()
-						.equalsIgnoreCase((((OpponentMessage) msgIn).getOpponents().get(i).getPlayerName()))) {
-					view.setOpponent(currentPlayer, ((OpponentMessage) msgIn).getOpponents().get(i));
-					currentPlayer.getOpponents().add(((OpponentMessage) msgIn).getOpponents().get(i));
+			OpponentMessage message = ((OpponentMessage) msgIn);
+			for (int i = 0; i < message.getOpponents().size(); i++) {
+				if (currentPlayer.getPlayerIndex() != message.getOpponents().get(i).getPlayerIndex()) {
+					view.setOpponent(message.getOpponents().get(i));
+					currentPlayer.getOpponents().add((message).getOpponents().get(i));
 				}
 			}
 		}
@@ -91,24 +82,26 @@ public class GameModel {
 		if (msgIn instanceof GameStatusMessage) {
 
 			if (((GameStatusMessage) msgIn).isStarted())
-				startTurn(((GameStatusMessage) msgIn).getCurrentPlayer().getPlayerName());
+				startTurn(((GameStatusMessage) msgIn).getCurrentPlayer());
 
 		}
-		if(msgIn instanceof ServerMessage){
-			view.showMessageFromServer(((ServerMessage)msgIn).getTheMessage());
+		if (msgIn instanceof ServerMessage) {
+			view.showMessageFromServer(((ServerMessage) msgIn).getTheMessage());
 		}
 
 		// a turn message
 		if (msgIn instanceof TurnMessage) {
-
+			System.out.println("checking if my turn");
 			if (((TurnMessage) msgIn).isYourTurn()) {
+				System.out.println("sent my index"+currentPlayer.getPlayerIndex());
+				currentPlayer.setYourTurn(true);
 				Card selectedCard = null;
 				Pawn selectedPawn = null;
 
 				for (Pawn pawn : currentPlayer.getPawns()) {
 					if (pawn.isPawnSelected()) {
-						System.out.println("found a seleted pawn");
 						selectedPawn = pawn;
+						System.out.println("found pown in client");
 						break;
 					}
 				}
@@ -121,8 +114,8 @@ public class GameModel {
 					}
 				}
 
-				msgOut.sendMessage(new PawnCardSelectedMessage(gameName, currentPlayer.getPlayerIndex(),
-						selectedPawn, selectedCard));
+				msgOut.sendMessage(new PawnCardSelectedMessage(gameName, currentPlayer.getPlayerIndex(), selectedPawn,
+						selectedCard));
 				/*
 				 * for (Pawn pawn : currentPlayer.getPawns()) { if
 				 * (pawn.isPawnSelected()) { Event.fireEvent(pawn, new
@@ -131,8 +124,10 @@ public class GameModel {
 				 * true, true, true, true, null)); } }
 				 */
 
-			} else
+			} else {
+				currentPlayer.setYourTurn(false);
 				view.showNotYourTurnAlert();
+			}
 		}
 		// update players
 		if (msgIn instanceof RefreshPlayerMessage) {
@@ -143,7 +138,8 @@ public class GameModel {
 			if (newCard != null && message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 				addCardToPlayer(newCard);
 
-			}else System.out.println("didn't get new card or nt ur turn");
+			} else
+				System.out.println("didn't get new card or nt ur turn");
 			if (treasure != null) {
 				if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 					givePlayerTreasure(treasure);
@@ -152,12 +148,26 @@ public class GameModel {
 				}
 				removeTreasureFromBoard(treasure);
 			}
-			Pawn selectedPawn=null;
-			for(Pawn pp:currentPlayer.getPawns()){
-				if (message.getSelectedPawn().getPawnId()==pp.getPawnId())
-					selectedPawn=pp;
+			Pawn selectedPawn = null;
+			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
+				for (Pawn pp : currentPlayer.getPawns()) {
+					if (message.getSelectedPawn().getPawnId() == pp.getPawnId())
+						selectedPawn = pp;
+				}
+			} else {
+				for (Player enemy : currentPlayer.getOpponents()) {
+					if (enemy.getPlayerIndex() == message.getCurrentPlayer().getPlayerIndex()) {
+						for (Pawn pp : enemy.getPawns()) {
+							if (pp.getPawnId() == message.getSelectedPawn().getPawnId()) {
+								selectedPawn = pp;
+							}
+						}
+					}
+				}
 			}
-			movePawn(message.getCurrentPlayer().getPlayerIndex(), selectedPawn, message.getSelectedLand());
+
+			currentPlayer.setPlayerIndex(message.getCurrentPlayer().getPlayerIndex());
+			movePawn(currentPlayer.getPlayerIndex(), selectedPawn, message.getSelectedLand());
 
 		}
 		// inform player to play another card
@@ -244,21 +254,23 @@ public class GameModel {
 
 	}
 
-	public void startTurn(String curPlayer) {
+	public void startTurn(Player player) {
 
 		view.gameStarted();
-		if (currentPlayer.getPlayerName().equalsIgnoreCase(curPlayer)) {
+		if (currentPlayer.getPlayerIndex() == player.getPlayerIndex()) {
 			view.yourTurn();
+			currentPlayer.setYourTurn(true);
 
-		} else
-			view.notYourTurn(curPlayer);
-
+		} else {
+			view.notYourTurn(player.getPlayerName());
+			currentPlayer.setYourTurn(false);
+		}
 	}
 
 	public void tryPlayCard() {
 		if (scanPawns()) {
 			msgOut.sendMessage(new GameStatusMessage(gameName, currentPlayer.getPlayerIndex()));
-			System.out.println("tryPlayCard Method, message sent");
+			System.out.println("tryPlayCard Method, message sent from index"+ currentPlayer.getPlayerIndex());
 		} else
 			view.selectPawnPlease();
 	}

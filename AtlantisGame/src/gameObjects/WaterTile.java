@@ -11,11 +11,6 @@ public class WaterTile extends Tile {
 	public WaterTile(int tileId) {
 		super(tileId);
 
-		/*
-		 * water.setFill(Color.TRANSPARENT); water.setStroke(Color.BLACK);
-		 * 
-		 * this.getChildren().add(water);
-		 */
 	}
 
 	public boolean hasPawn() {

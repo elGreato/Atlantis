@@ -229,21 +229,17 @@ public class GameView {
 		recColor.setWidth(150);
 		recColor.setFill(Pawn.FillColor(player));
 		vbPlayer.getChildren().add(recColor);
-		vpHolder.setText("Your Victory Points: " + String.valueOf(player.getVictoryPoints()));
+		vpHolder.setText("Your Victory Points: " + String.valueOf(player.countVictoryPoints()));
 
 		for (Pawn p : player.getPawns()) {
 			Circle c = new Circle();
-			c.setRadius(10);
-			p.setCircle(c);
-			
+			c.setRadius(20);
+			p.setCircle(c);	
 			c.setFill(Pawn.FillColor(player));
 			p.getChildren().add(c);
-
-			System.out.println(p.getPawnId()+" PAWN ID IN VIEW");
 			atlantis.getChildren().add(p);
-
+			System.out.println(p.getNewLocation()+" new location ");
 		}
-		//atlantis.getChildren().add(hbPawnHolder);
 		stage.sizeToScene();
 
 	}
@@ -257,16 +253,16 @@ public class GameView {
 		}
 		if (!p.isPawnSelected()) {
 			p.getCircle().setStroke(Color.BLACK);
-			p.setPawnSelected(!p.isPawnSelected());
+			p.setPawnSelected(true);
 			System.out.println("pawn is selected" + p.isPawnSelected());
 		} else {
 			p.getCircle().setStroke(Color.TRANSPARENT);
-			p.setPawnSelected(!p.isPawnSelected());
-			System.out.println("pawn is selected" + p.isPawnSelected());
+			p.setPawnSelected(false);
+			System.out.println("pawn is not selected " + p.isPawnSelected());
 		}
 	}
 
-	public void setOpponent(Player player, Player opponent) {
+	public void setOpponent(Player opponent) {
 		VBox vbOpponentInfo = new VBox();
 		Label lblopponentName = new Label();
 		Label lblopponentCardCount = new Label();
@@ -285,16 +281,13 @@ public class GameView {
 
 		// i need to find a way to get the circle of the pawn
 		for (Pawn p : opponent.getPawns()) {
-
 			Circle c = new Circle();
-			c.setRadius(10);
+			c.setRadius(20);
 			c.setFill(Pawn.FillColor(opponent));
 			p.setCircle(c);
 			p.getChildren().add(c);
-			//hbOpponentPawnHolder.getChildren().add(p);
 			atlantis.getChildren().add(p);
 		}
-	//	atlantis.getChildren().add(hbOpponentPawnHolder);
 	}
 
 	public void placeAtlantisMainLand(AtlantisTile atlantis, MainLand mainland) {
@@ -357,7 +350,6 @@ public class GameView {
 			if (cc.getCardId() != c.getCardId() ) {
 				cc.getRec().setStroke(Color.TRANSPARENT);
 				cc.setCardSelected(false);
-				
 			}
 		}
 		// this is to give the user ability to unselect a card when he clicks again

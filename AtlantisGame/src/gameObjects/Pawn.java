@@ -85,7 +85,7 @@ public class Pawn extends StackPane implements Serializable{
 	}
 
 	public void setNewLocation(int newLocation) {
-		this.newLocation=oldLocation;
+		oldLocation=this.newLocation;
 		this.newLocation = newLocation;
 	}
 

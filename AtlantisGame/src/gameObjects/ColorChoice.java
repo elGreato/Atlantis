@@ -10,7 +10,7 @@ import javafx.scene.image.ImageView;
  * this allow us to replace normal colors with images of cooler colors
  */
 public enum ColorChoice implements Serializable{ blue,red,gray,yellow,green,purple,brown;
-	 
+/*	 
 	public ImageView addImage(){
 	
 	String[] paths= new String[7];
@@ -40,6 +40,6 @@ public enum ColorChoice implements Serializable{ blue,red,gray,yellow,green,purp
 	iv.setFitHeight(50);
 	iv.setFitWidth(30);
 	return iv ;
-}
+}*/
 
 }
