@@ -155,12 +155,12 @@ public class Game implements GameInterface {
 			Pawn selectedPawn = currentPlayer.getPawns().get(message.getPawnId());
 			selectedPawn.setPawnSelected(true);
 
-			performTurn(selectedCard, selectedColor, selectedPawn);
+			performTurn(selectedCard,selectedPawn);
 		}
 
 	}
 
-	private void performTurn(Card selectedCard, ColorChoice selectedColor, Pawn selectedPawn) {
+	private void performTurn(Card selectedCard,Pawn selectedPawn) {
 
 		Card newCard = null;
 		boolean foundLand = false;
@@ -176,7 +176,7 @@ public class Game implements GameInterface {
 			// get the top tile on that water
 			if (water.getChildren().size() != 0 && water.getChildren().get(topNode) instanceof LandTile) {
 				LandTile land = (LandTile) water.getChildren().get(topNode);
-				if (land.getColor().equals(selectedColor) && !land.hasPawn()) {
+				if (land.getColor().equals(selectedCard.getColor()) && !land.hasPawn()) {
 
 					land.setPawnOnTile(selectedPawn);
 					selectedLand = land;
@@ -186,12 +186,12 @@ public class Game implements GameInterface {
 					selectedPawn.setPawnSelected(false);
 					newCard = cards.deal();
 					newCard.setOwner(currentPlayer);
-					players.get(currentPlayerIndex).getPlayerHand().addCard(newCard);
+					currentPlayer.addCard(newCard);
 
 				}
-				if (land.getColor().equals(selectedColor) && land.hasPawn() && !foundLand) {
+				if (land.getColor().equals(selectedCard.getColor()) && land.hasPawn() && !foundLand) {
 					selectedPawn.setLocation(base.indexOf(water));
-					land.setPawnOnTile(selectedPawn);
+					land.setTempPawn(selectedPawn);
 					selectedPawn.setPawnSelected(false);
 					selectedLand = land;
 					foundLand = true;

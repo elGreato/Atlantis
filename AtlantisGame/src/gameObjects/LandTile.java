@@ -5,6 +5,7 @@ package gameObjects;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import gameObjects.ColorChoice;
 import javafx.scene.paint.Color;
@@ -15,9 +16,10 @@ import javafx.scene.text.Text;
 public class LandTile extends Tile implements Serializable {
 	
 	private Pawn pawnOnTile;
+	private Pawn tempPawn;
 	private  ColorChoice landTileColor;
 	private int landValue;
-	private Pawn tempPawn;
+	private ArrayList<Pawn> pawns=new ArrayList<>();
 
 	public LandTile(int tileId,ColorChoice color, int value ){
 		super(tileId);
@@ -53,7 +55,18 @@ public class LandTile extends Tile implements Serializable {
 	public void setPawnOnTile(Pawn pawnOnTile) {
 		this.pawnOnTile = pawnOnTile;
 		if (pawnOnTile!=null)
+			pawns.add(pawnOnTile);
+		
+	}
+	public void setTempPawn(Pawn pawn){
+		this.tempPawn=pawn;
+		if(pawn!=null)
+			pawns.add(pawn);
+			
+	}
+	public void convertPawns(){
 		this.getChildren().add(pawnOnTile);
+		this.getChildren().add(tempPawn);
 	}
 	
 	public ColorChoice getColor() {
@@ -81,11 +94,6 @@ public class LandTile extends Tile implements Serializable {
 		return tempPawn;
 	}
 
-	public void setTempPawn(Pawn tempPawn) {
-		this.tempPawn = tempPawn;
-		if(tempPawn!=null)
-			this.getChildren().add(tempPawn);
-	}
-		
+
 	
 }

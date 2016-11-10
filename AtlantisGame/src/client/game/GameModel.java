@@ -176,8 +176,7 @@ public class GameModel {
 	private void addCardToPlayer(Card newCard) {
 		currentPlayer.addCard(newCard);
 		newCard.setOwner(currentPlayer);
-		newCard.setOnMouseClicked(e -> view.handleCard(newCard));
-		view.createCardView(newCard);
+		addClickToCard(newCard);
 
 	}
 
