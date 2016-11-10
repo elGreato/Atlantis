@@ -98,9 +98,7 @@ public class GameModel {
 			if (((TurnMessage) msgIn).isYourTurn()) {
 				Card selectedCard = null;
 				Pawn selectedPawn = null;
-				while(!scanPawns()){
-					view.selectPawnPlease();
-				}
+				
 				for (Pawn pawn : currentPlayer.getPawns()) {
 					if (pawn.isPawnSelected()) {
 						selectedPawn = pawn;
@@ -246,9 +244,12 @@ public class GameModel {
 	}
 
 	public void tryPlayCard() {
-
+		if(scanPawns()){
+		
+			
+		
 		msgOut.sendMessage(new GameStatusMessage(gameName, currentPlayer.getPlayerIndex()));
 		System.out.println("tryPlayCard Method, message sent");
+		}else 	view.selectPawnPlease();
 	}
-
 }
