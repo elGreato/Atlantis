@@ -143,11 +143,9 @@ public class Game implements GameInterface {
 			currentPlayer = players.get(message.getPlayerIndex());
 			currentPlayerIndex = currentPlayer.getPlayerIndex();
 			Card selectedCard = null;
-			// i didn't assign it to double check
-			ColorChoice selectedColor = null;
+
 			for (Card card : currentPlayer.getPlayerHand().getCards()) {
-				if (card.getCardId()==message.getCard().getCardId()) {
-					selectedColor = card.getColor();
+				if (card.getCardId() == message.getCard().getCardId()) {
 					selectedCard = card;
 					currentPlayer.getPlayerHand().removeCardFromHand(card);
 					break;
@@ -157,18 +155,12 @@ public class Game implements GameInterface {
 
 			for (Pawn p : currentPlayer.getPawns()) {
 				if (p.getPawnId() == message.getPawn().getPawnId()) {
-					System.out.println("HERE");
-					p = message.getPawn();
 					selectedPawn = p;
 					selectedPawn.setPawnSelected(true);
 				}
 
-				else {
-					users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "I didn't find a pawn"));
-					
-				}
-				
-			}performTurn(selectedCard, selectedPawn);
+			}
+			performTurn(selectedCard, selectedPawn);
 		}
 
 	}
@@ -176,23 +168,25 @@ public class Game implements GameInterface {
 	private void performTurn(Card selectedCard, Pawn selectedPawn) {
 
 		Card newCard = null;
+
 		boolean foundLand = false;
+		boolean giveTreasure = false;
+		boolean waterHasTile =false;
+
 		LandTile treasure = null;
 		LandTile selectedLand = null;
-		boolean giveTreasure = false;
+
 		// loop through the base and assign watertile
-		for (int f = selectedPawn.getOldLocation() + 1; f < base.size() && !foundLand; f++) {
+		for (int f = selectedPawn.getNewLocation() + 1; f < base.size() && !foundLand; f++) {
 			WaterTile water = base.get(f);
 			// check if water has tiles
 			int topNode = 0;
-			if (water.getChildren() != null) {
+			if (water.getChildren().size() != 0) {
 				topNode = water.getChildren().size() - 1;
-			} else {
-				continue;
+				waterHasTile=true;
 			}
-
 			// get the top tile on that water
-			if (water.getChildren().get(topNode) instanceof LandTile) {
+			if (waterHasTile&&water.getChildren().get(topNode) instanceof LandTile) {
 				LandTile land = (LandTile) water.getChildren().get(topNode);
 				// does this tile has the same color ?
 				if (land.getColor().equals(selectedCard.getColor()) && !land.hasPawn()) {
@@ -224,13 +218,14 @@ public class Game implements GameInterface {
 
 			} else
 				continue;
-			if (selectedPawn.getNewLocation() > 0 && foundLand && giveTreasure) {
-				System.out.println("Trying to find a treasure for the player");
-				treasure = giveTreasureToPlayer(selectedPawn.getNewLocation());
-
-			} else
-				users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "No treasure found"));
 		}
+		if (selectedPawn.getNewLocation() > 0 && foundLand && giveTreasure) {
+			System.out.println("Trying to find a treasure for the player");
+			treasure = giveTreasureToPlayer(selectedPawn.getNewLocation());
+
+		} else
+			users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "No treasure found"));
+
 		int numberOfPlayers = getNumOfRegisteredPlayers();
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i).sendMessage(new RefreshPlayerMessage(getName(), currentPlayer, selectedLand, selectedPawn,
@@ -274,7 +269,7 @@ public class Game implements GameInterface {
 
 				treasure = (LandTile) previousWater.getChildren().remove(previousWater.getChildren().size() - 1);
 				currentPlayer.getPlayerHand().addTreasure(treasure);
-				previousWater.getChildren().remove(f + waterIndex);
+
 				gotIt = true;
 			}
 

@@ -137,13 +137,13 @@ public class GameModel {
 		// update players
 		if (msgIn instanceof RefreshPlayerMessage) {
 			RefreshPlayerMessage message = (RefreshPlayerMessage) msgIn;
-
+			System.out.println("REFERESH REC");
 			LandTile treasure = message.getTreasure();
 			Card newCard = message.getNewCard();
 			if (newCard != null && message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 				addCardToPlayer(newCard);
 
-			}
+			}else System.out.println("didn't get new card or nt ur turn");
 			if (treasure != null) {
 				if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 					givePlayerTreasure(treasure);
@@ -152,7 +152,12 @@ public class GameModel {
 				}
 				removeTreasureFromBoard(treasure);
 			}
-			movePawn(message.getCurrentPlayer().getPlayerIndex(), message.getSelectedPawn(), message.getSelectedLand());
+			Pawn selectedPawn=null;
+			for(Pawn pp:currentPlayer.getPawns()){
+				if (message.getSelectedPawn().getPawnId()==pp.getPawnId())
+					selectedPawn=pp;
+			}
+			movePawn(message.getCurrentPlayer().getPlayerIndex(), selectedPawn, message.getSelectedLand());
 
 		}
 		// inform player to play another card
@@ -191,6 +196,7 @@ public class GameModel {
 		Pawn viewPawn = null;
 
 		if (currentPlayer.getPawns().contains(selectedPawn)) {
+			System.out.println("pawn selectedddddddd");
 			viewPawn = selectedPawn;
 		} else {
 			for (int i = 0; i < currentPlayer.getOpponents().size(); i++) {
@@ -203,6 +209,7 @@ public class GameModel {
 			WaterTile tempWater = view.getBase().get(g);
 			if (tempWater.getChildren().contains(selectedLand)) {
 				((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).setPawnOnTile(viewPawn);
+				((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).convertPawns();
 			}
 
 		}
@@ -227,7 +234,6 @@ public class GameModel {
 
 	private void removeTreasureFromBoard(LandTile treasure) {
 		for (int g = 0; g < view.getBase().size(); g++) {
-			System.out.println("looping through the base " + g);
 			WaterTile tempWater = view.getBase().get(g);
 			if (tempWater.getChildren().contains(treasure)) {
 				System.out.println("Foudn the treasure ");

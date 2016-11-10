@@ -56,6 +56,7 @@ public class LandTile extends Tile implements Serializable {
 		this.pawnOnTile = pawnOnTile;
 		if (pawnOnTile!=null)
 			pawns.add(pawnOnTile);
+	
 		
 	}
 	public void setTempPawn(Pawn pawn){
@@ -65,7 +66,9 @@ public class LandTile extends Tile implements Serializable {
 			
 	}
 	public void convertPawns(){
+		if(pawnOnTile!=null)
 		this.getChildren().add(pawnOnTile);
+		if(tempPawn!=null)
 		this.getChildren().add(tempPawn);
 	}
 	
