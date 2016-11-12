@@ -2,22 +2,30 @@ package server.backend;
 
 import java.util.ArrayList;
 
+import gameObjects.GameInterface;
+import messageObjects.InGameMessage;
 import messageObjects.Message;
 import messageObjects.WaterMessage;
 
 public class AIUser extends AllUsers implements Runnable{
 	
 	private ArrayList<Message> incomingMessages;
-	
+	private ArrayList<AIGameInfoStorage> activeGames;
 	//Constructor
 	public AIUser(UserInfo ui)
 	{
 		super(ui);
 		incomingMessages = new ArrayList<Message>();
+		activeGames = new ArrayList<AIGameInfoStorage>();
 		Thread t = new Thread(this);
 		t.start();
 	}
-	
+	@Override
+	public synchronized void initiateGameStart(GameInterface game)
+	{
+		activeGames.add(new AIGameInfoStorage(game.getName()));
+		super.initiateGameStart(game);
+	}
 	//Process messages
 	private void processMessages()
 	{
@@ -30,10 +38,18 @@ public class AIUser extends AllUsers implements Runnable{
 			}
 		}
 		
-		Message msg = incomingMessages.remove(0);
-		if (msg instanceof WaterMessage)
+		Message receivedMessage = incomingMessages.remove(0);
+		if (receivedMessage instanceof InGameMessage)
 		{
-			
+			InGameMessage igm = (InGameMessage)receivedMessage;
+			for(AIGameInfoStorage aig : activeGames)
+			{
+				if(igm.getGameName().equals(aig.getGameName()))
+				{
+					aig.processMessage(igm);
+					break;
+				}
+			}
 		}
 	}
 	//receiving messages
