@@ -174,14 +174,14 @@ public class Game implements GameInterface {
 			WaterTile water = base.get(f);
 			// check if water has tiles
 			int topNode = 0;
-			if (water.getChildren().size()>0) {
+			if (water.getChildren().size() > 0) {
 				topNode = water.getChildren().size() - 1;
-				System.out.println("TOP NODE IS "+topNode);
+				System.out.println("TOP NODE IS " + topNode);
 				waterHasTile = true;
 			}
 			// get the top tile on that water
 			if (waterHasTile && water.getChildren().get(topNode) instanceof LandTile) {
-				waterHasTile=false;
+				waterHasTile = false;
 				LandTile land = (LandTile) water.getChildren().get(topNode);
 				// does this tile has the same color ?
 				if (land.getColor().equals(selectedCard.getColor()) && !land.hasPawn()) {
@@ -224,8 +224,8 @@ public class Game implements GameInterface {
 			} else
 				users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "No treasure found"));
 
-		} else {
-			users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "No treasure found"));
+		} else if(selectedPawn.getNewLocation()==0&&foundLand) {
+			users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "You are next to the atlantis, you don't get a treasure"));
 		}
 		int numberOfPlayers = getNumOfRegisteredPlayers();
 		for (int i = 0; i < numberOfPlayers; i++) {
@@ -245,25 +245,26 @@ public class Game implements GameInterface {
 		if (currentPlayerIndex == players.size() - 1) {
 			currentPlayerIndex = 0;
 			currentPlayer = players.get(currentPlayerIndex);
-				} else {
+		} else {
 			currentPlayerIndex++;
 			currentPlayer = players.get(currentPlayerIndex);
-			}
-		int numberOfPlayers=getNumOfRegisteredPlayers();
+		}
+		int numberOfPlayers = getNumOfRegisteredPlayers();
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i).sendMessage(new GameStatusMessage(getName(), true, currentPlayer));
 
 		}
 		
+
 	}
 
 	private void removePawnFromOldTile(Pawn selectedPawn) {
 		WaterTile w = null;
 		if (selectedPawn.getOldLocation() != -1) {
 			w = base.get(selectedPawn.getOldLocation());
-			if (((LandTile) w.getChildren().get(w.getChildren().size() - 1)).hasPawn()) {
-				((LandTile) w.getChildren().get((w.getChildren().size() - 1))).getPawns().clear();
-			}
+	//		if (((LandTile) w.getChildren().get(w.getChildren().size() - 1)).hasPawn()) {
+				((LandTile) w.getChildren().get((w.getChildren().size() - 1))).removePawn(selectedPawn);
+			//}
 
 		}
 	}
