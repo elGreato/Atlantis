@@ -203,6 +203,7 @@ public class Game implements GameInterface {
 				if (land.getColor().equals(selectedCard.getColor()) && land.hasPawn() && !foundLand) {
 					selectedPawn.setNewLocation(base.indexOf(water));
 					land.setTempPawn(selectedPawn);
+					removePawnFromOldTile(selectedPawn);
 					selectedPawn.setPawnSelected(false);
 					selectedLand = land;
 					foundLand = true;
@@ -224,8 +225,6 @@ public class Game implements GameInterface {
 			} else
 				users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "No treasure found"));
 
-		} else if(selectedPawn.getNewLocation()==0&&foundLand) {
-			users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "You are next to the atlantis, you don't get a treasure"));
 		}
 		int numberOfPlayers = getNumOfRegisteredPlayers();
 		for (int i = 0; i < numberOfPlayers; i++) {
@@ -235,7 +234,6 @@ public class Game implements GameInterface {
 		if (foundLand && nextPlayer)
 			endTurn();
 
-		System.out.println("the next player is : " + currentPlayerIndex);
 	}
 
 	public void endTurn() {
@@ -254,7 +252,6 @@ public class Game implements GameInterface {
 			users.get(i).sendMessage(new GameStatusMessage(getName(), true, currentPlayer));
 
 		}
-		
 
 	}
 
@@ -262,9 +259,7 @@ public class Game implements GameInterface {
 		WaterTile w = null;
 		if (selectedPawn.getOldLocation() != -1) {
 			w = base.get(selectedPawn.getOldLocation());
-	//		if (((LandTile) w.getChildren().get(w.getChildren().size() - 1)).hasPawn()) {
-				((LandTile) w.getChildren().get((w.getChildren().size() - 1))).removePawn(selectedPawn);
-			//}
+			((LandTile) w.getChildren().get((w.getChildren().size() - 1))).removePawn(selectedPawn);
 
 		}
 	}

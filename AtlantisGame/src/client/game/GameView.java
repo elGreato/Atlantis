@@ -101,7 +101,7 @@ public class GameView {
 
 	public GameView() {
 		root.setCenter(mainBoard);
-		mainBoard.setGridLinesVisible(true);
+		mainBoard.setGridLinesVisible(false);
 
 		// set Max indexes
 		maxColIndex = 14;
@@ -110,12 +110,12 @@ public class GameView {
 		// col and row constraints for the gridpane
 		for (int i = 0; i < 14; i++) {
 			ColumnConstraints colcon = new ColumnConstraints();
-			colcon.setPrefWidth(50);
+			colcon.setPrefWidth(70);
 			mainBoard.getColumnConstraints().add(colcon);
 		}
 		for (int i = 0; i < 9; i++) {
 			RowConstraints con = new RowConstraints();
-			con.setPrefHeight(50);
+			con.setPrefHeight(70);
 			mainBoard.getRowConstraints().add(con);
 		}
 		// add Buttons
@@ -155,6 +155,9 @@ public class GameView {
 		mainBoard.setVgap(3);
 		mainBoard.setHgap(3);
 		scene = new Scene(root);
+		final Image im = new Image(getClass().getResourceAsStream("images4mainBoard/waterback.jpg"));
+		mainBoard.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
+				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 		stage.setScene(scene);
 		stage.show();
 
@@ -207,8 +210,8 @@ public class GameView {
 
 					LandTile tile = (LandTile) water.getChildren().get(k);
 					Rectangle rec = new Rectangle();
-					rec.setWidth(48.00f);
-					rec.setHeight(48.00f);
+					rec.setWidth(68.00f);
+					rec.setHeight(68.00f);
 					rec.setFill(LandTile.getFillColor(tile));
 					tile.getChildren().addAll(rec,
 							new Text(String.valueOf(tile.getLandValue()) + "\n" + tile.getColor().toString()));
@@ -233,7 +236,7 @@ public class GameView {
 
 		for (Pawn p : player.getPawns()) {
 			Circle c = new Circle();
-			c.setRadius(20);
+			c.setRadius(14);
 			p.setCircle(c);	
 			c.setFill(Pawn.FillColor(player));
 			p.getChildren().add(c);
@@ -282,7 +285,7 @@ public class GameView {
 		// i need to find a way to get the circle of the pawn
 		for (Pawn p : opponent.getPawns()) {
 			Circle c = new Circle();
-			c.setRadius(20);
+			c.setRadius(14);
 			c.setFill(Pawn.FillColor(opponent));
 			p.setCircle(c);
 			p.getChildren().add(c);

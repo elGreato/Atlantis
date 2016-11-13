@@ -77,11 +77,12 @@ public class LandTile extends Tile implements Serializable {
 			if (p.getPawnColor().equals(pawn.getPawnColor())&&p.getPawnId()==pawn.getPawnId()){
 				pawn=p;
 				pawns.remove(pawn);
-				this.getChildren().remove(pawn);
-				setPawnOnTile(null);
-				setTempPawn(null);
+				
 			}
+			
 		}
+		if(pawns.isEmpty())
+			setPawnOnTile(null);
 	}
 	
 	public ColorChoice getColor() {
