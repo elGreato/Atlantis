@@ -249,6 +249,12 @@ public class Game implements GameInterface {
 			currentPlayerIndex++;
 			currentPlayer = players.get(currentPlayerIndex);
 			}
+		int numberOfPlayers=getNumOfRegisteredPlayers();
+		for (int i = 0; i < numberOfPlayers; i++) {
+			users.get(i).sendMessage(new GameStatusMessage(getName(), true, currentPlayer));
+
+		}
+		
 	}
 
 	private void removePawnFromOldTile(Pawn selectedPawn) {
