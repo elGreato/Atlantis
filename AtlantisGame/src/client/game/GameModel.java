@@ -92,30 +92,25 @@ public class GameModel {
 		if (msgIn instanceof TurnMessage) {
 			System.out.println("checking if my turn");
 			if (((TurnMessage) msgIn).isYourTurn()) {
-				if(scanPawns()!=null){
-					if(scanCards()!=null){
-				System.out.println("sent my index" + currentPlayer.getPlayerIndex());
-				currentPlayer.setYourTurn(true);
-				Card selectedCard = null;
-				Pawn selectedPawn = null;
-				
-				selectedPawn=scanPawns();
-				selectedCard=scanCards();
-				
-				for (Card card : currentPlayer.getPlayerHand().getCards()) {
-					if (card.isCardSelected()) {
-						selectedCard = card;
-						currentPlayer.getPlayerHand().removeCardFromHand(card);
-						view.removeCardFromHand(card);
-						break;
-					}
-				}
+				if (scanPawns() != null) {
+					if (scanCards() != null) {
+						System.out.println("sent my index" + currentPlayer.getPlayerIndex());
+						currentPlayer.setYourTurn(true);
+						Card selectedCard = null;
+						Pawn selectedPawn = null;
 
-				msgOut.sendMessage(new PawnCardSelectedMessage(gameName, currentPlayer.getPlayerIndex(), selectedPawn,
-						selectedCard));
-					}else view.selectCardPlease();
-				} else view.selectPawnPlease();
-				
+						selectedPawn = scanPawns();
+						selectedCard = scanCards();
+
+						currentPlayer.getPlayerHand().removeCardFromHand(selectedCard);
+						view.removeCardFromHand(selectedCard);
+						msgOut.sendMessage(new PawnCardSelectedMessage(gameName, currentPlayer.getPlayerIndex(),
+								selectedPawn, selectedCard));
+					} else
+						view.selectCardPlease();
+				} else
+					view.selectPawnPlease();
+
 			} else
 				view.showNotYourTurnAlert();
 
@@ -168,15 +163,14 @@ public class GameModel {
 
 	}
 
-
-	private Pawn scanPawns(){
-		Pawn foundPawn=null;
+	private Pawn scanPawns() {
+		Pawn foundPawn = null;
 		for (Pawn pawn : currentPlayer.getPawns()) {
 			if (pawn.isPawnSelected()) {
 				foundPawn = pawn;
 				System.out.println("found pown in client");
 				break;
-			} 
+			}
 		}
 		return foundPawn;
 	}
@@ -207,13 +201,19 @@ public class GameModel {
 				}
 			}
 		}
-		for (int g = 0; g < view.getBase().size(); g++) {
+		for (int g = 0; g < view.getBase().size()&&selectedLand!=null; g++) {
 			WaterTile tempWater = view.getBase().get(g);
 			if (tempWater.getChildren().contains(selectedLand)) {
 				((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).setPawnOnTile(viewPawn);
 				((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).convertPawns();
 			}
+			
 
+		} if (selectedLand==null){
+			System.out.println("raeched the last in client");
+			selectedPawn.setOnMouseClicked(null);
+			view.addPawnToMainLand(selectedPawn);
+			
 		}
 
 	}
@@ -270,9 +270,11 @@ public class GameModel {
 		for (Card card : currentPlayer.getPlayerHand().getCards()) {
 			if (card.isCardSelected()) {
 				cardSelected = card;
+
 				break;
 			}
 		}
+
 		return cardSelected;
 	}
 }

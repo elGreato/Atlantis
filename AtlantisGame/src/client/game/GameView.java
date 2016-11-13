@@ -444,4 +444,9 @@ public class GameView {
 		lblTurn.setText("Please Select a CARD");
 		
 	}
+	public void addPawnToMainLand(Pawn selectedPawn) {
+		mainland.getPawns().add(selectedPawn);
+		mainland.convertToChildren();
+		
+	}
 }

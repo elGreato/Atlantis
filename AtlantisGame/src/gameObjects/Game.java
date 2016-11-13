@@ -176,7 +176,7 @@ public class Game implements GameInterface {
 			int topNode = 0;
 			if (water.getChildren().size() > 0) {
 				topNode = water.getChildren().size() - 1;
-				System.out.println("TOP NODE IS " + topNode);
+				System.out.println("amount of Water is " + base.size());
 				waterHasTile = true;
 			}
 			// get the top tile on that water
@@ -194,9 +194,8 @@ public class Game implements GameInterface {
 					nextPlayer = true;
 					selectedPawn.setPawnSelected(false);
 					// give a new card
-					newCard = cards.deal();
-					newCard.setOwner(currentPlayer);
-					currentPlayer.addCard(newCard);
+					newCard=dealACard(currentPlayer);
+					// renive 
 					removePawnFromOldTile(selectedPawn);
 
 				}
@@ -211,6 +210,18 @@ public class Game implements GameInterface {
 					System.out.println("found land but it has pawn, so player has to play another card");
 					users.get(currentPlayer.getPlayerIndex()).sendMessage(new PlayAnotherCardMessage(getName()));
 
+				}
+				if(!foundLand&&f==base.size()-1){
+					System.out.println("reached the end, f now is "+f);
+					selectedPawn.setNewLocation(53);
+					mainland.getPawns().add(selectedPawn);
+					foundLand =true;
+					selectedLand=null;
+					selectedPawn.setPawnSelected(false);
+					nextPlayer=true;
+					giveTreasure=true;
+					newCard=dealACard(currentPlayer);
+					removePawnFromOldTile(selectedPawn);
 				}
 
 			}
@@ -253,6 +264,12 @@ public class Game implements GameInterface {
 
 		}
 
+	}
+	public Card dealACard(Player player){
+		Card newCard = cards.deal();
+		newCard.setOwner(player);
+		player.addCard(newCard);
+		return newCard;
 	}
 
 	private void removePawnFromOldTile(Pawn selectedPawn) {
