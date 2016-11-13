@@ -102,7 +102,6 @@ public class Game implements GameInterface {
 
 		currentPlayerIndex = 0;
 		currentPlayer = players.get(currentPlayerIndex);
-		currentPlayer.setYourTurn(true);
 
 		// send the list of players for client to set opponents
 		for (int i = 0; i < numberOfPlayers; i++) {
@@ -246,18 +245,10 @@ public class Game implements GameInterface {
 		if (currentPlayerIndex == players.size() - 1) {
 			currentPlayerIndex = 0;
 			currentPlayer = players.get(currentPlayerIndex);
-			for (Player p : players) {
-				if (p.getPlayerIndex() != currentPlayerIndex)
-					p.setYourTurn(false);
-			}
-		} else {
+				} else {
 			currentPlayerIndex++;
 			currentPlayer = players.get(currentPlayerIndex);
-			for (Player p : players) {
-				if (p.getPlayerIndex() != currentPlayerIndex)
-					p.setYourTurn(false);
 			}
-		}
 	}
 
 	private void removePawnFromOldTile(Pawn selectedPawn) {
@@ -308,16 +299,12 @@ public class Game implements GameInterface {
 	public void setPlayerColorAndTurn(Player player, int index) {
 		if (index == 0) {
 			player.setColor(ColorChoice.blue);
-			player.setYourTurn(true);
 		} else if (index == 1) {
 			player.setColor(ColorChoice.red);
-			player.setYourTurn(false);
 		} else if (index == 2) {
 			player.setColor(ColorChoice.green);
-			player.setYourTurn(false);
 		} else if (index == 3) {
 			player.setColor(ColorChoice.purple);
-			player.setYourTurn(false);
 		}
 
 	}

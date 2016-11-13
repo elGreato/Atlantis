@@ -80,11 +80,10 @@ public class GameModel {
 		}
 		// message about state of the game
 		if (msgIn instanceof GameStatusMessage) {
-
 			if (((GameStatusMessage) msgIn).isStarted())
 				startTurn(((GameStatusMessage) msgIn).getCurrentPlayer());
-
 		}
+
 		if (msgIn instanceof ServerMessage) {
 			view.showMessageFromServer(((ServerMessage) msgIn).getTheMessage());
 		}
@@ -93,18 +92,16 @@ public class GameModel {
 		if (msgIn instanceof TurnMessage) {
 			System.out.println("checking if my turn");
 			if (((TurnMessage) msgIn).isYourTurn()) {
-				System.out.println("sent my index"+currentPlayer.getPlayerIndex());
+				if(scanPawns()!=null){
+					if(scanCards()!=null){
+				System.out.println("sent my index" + currentPlayer.getPlayerIndex());
 				currentPlayer.setYourTurn(true);
 				Card selectedCard = null;
 				Pawn selectedPawn = null;
-
-				for (Pawn pawn : currentPlayer.getPawns()) {
-					if (pawn.isPawnSelected()) {
-						selectedPawn = pawn;
-						System.out.println("found pown in client");
-						break;
-					}
-				}
+				
+				selectedPawn=scanPawns();
+				selectedCard=scanCards();
+				
 				for (Card card : currentPlayer.getPlayerHand().getCards()) {
 					if (card.isCardSelected()) {
 						selectedCard = card;
@@ -116,18 +113,12 @@ public class GameModel {
 
 				msgOut.sendMessage(new PawnCardSelectedMessage(gameName, currentPlayer.getPlayerIndex(), selectedPawn,
 						selectedCard));
-				/*
-				 * for (Pawn pawn : currentPlayer.getPawns()) { if
-				 * (pawn.isPawnSelected()) { Event.fireEvent(pawn, new
-				 * MouseEvent(MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0,
-				 * MouseButton.PRIMARY, 1, true, true, true, true, true, true,
-				 * true, true, true, true, null)); } }
-				 */
-
-			} else {
-				currentPlayer.setYourTurn(false);
+					}else view.selectCardPlease();
+				} else view.selectPawnPlease();
+				
+			} else
 				view.showNotYourTurnAlert();
-			}
+
 		}
 		// update players
 		if (msgIn instanceof RefreshPlayerMessage) {
@@ -166,7 +157,6 @@ public class GameModel {
 				}
 			}
 
-		
 			movePawn(currentPlayer.getPlayerIndex(), selectedPawn, message.getSelectedLand());
 
 		}
@@ -178,15 +168,17 @@ public class GameModel {
 
 	}
 
-	private boolean scanPawns() {
-		boolean pawnSelected = false;
+
+	private Pawn scanPawns(){
+		Pawn foundPawn=null;
 		for (Pawn pawn : currentPlayer.getPawns()) {
 			if (pawn.isPawnSelected()) {
-				pawnSelected = true;
+				foundPawn = pawn;
+				System.out.println("found pown in client");
 				break;
-			}
+			} 
 		}
-		return pawnSelected;
+		return foundPawn;
 	}
 
 	private void addClickToCard(Card c) {
@@ -268,10 +260,19 @@ public class GameModel {
 	}
 
 	public void tryPlayCard() {
-		if (scanPawns()) {
-			msgOut.sendMessage(new GameStatusMessage(gameName, currentPlayer.getPlayerIndex()));
-			System.out.println("tryPlayCard Method, message sent from index"+ currentPlayer.getPlayerIndex());
-		} else
-			view.selectPawnPlease();
+
+		msgOut.sendMessage(new GameStatusMessage(gameName, currentPlayer.getPlayerIndex()));
+
+	}
+
+	private Card scanCards() {
+		Card cardSelected = null;
+		for (Card card : currentPlayer.getPlayerHand().getCards()) {
+			if (card.isCardSelected()) {
+				cardSelected = card;
+				break;
+			}
+		}
+		return cardSelected;
 	}
 }

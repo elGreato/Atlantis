@@ -437,4 +437,8 @@ public class GameView {
 		lblTurn.setText(theMessage);
 		
 	}
+	public void selectCardPlease() {
+		lblTurn.setText("Please Select a CARD");
+		
+	}
 }
