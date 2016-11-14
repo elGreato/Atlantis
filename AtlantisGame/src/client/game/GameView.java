@@ -54,7 +54,7 @@ public class GameView {
 
 	// the main game controls
 	public Button btnPlayCard = new Button("Play a Selected Card");
-	public Button btnPayWithCard = new Button("Pay with a Card");
+	public Button btnBuyCard = new Button("Buy Cards");
 	public Button btnPayWithTreasure = new Button("Pay with a treasure");
 
 
@@ -119,7 +119,7 @@ public class GameView {
 			mainBoard.getRowConstraints().add(con);
 		}
 		// add Buttons
-		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnPayWithCard, btnPayWithTreasure);
+		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnBuyCard, btnPayWithTreasure);
 
 		// set a random picture for each player
 		int numberOfPicturesAvailable = 4;
@@ -209,6 +209,7 @@ public class GameView {
 				for (int k = 0; k < water.getChildren().size(); k++) {
 
 					LandTile tile = (LandTile) water.getChildren().get(k);
+					tile.setOnMouseClicked(e-> handleTreasure(tile));
 					Rectangle rec = new Rectangle();
 					rec.setWidth(68.00f);
 					rec.setHeight(68.00f);
@@ -224,6 +225,7 @@ public class GameView {
 
 	}
 
+	
 	public void showPlayer(Player player) {
 
 		lblName.setText(player.getPlayerName());
@@ -367,6 +369,17 @@ public class GameView {
 		}
 
 	}
+	private void handleTreasure(LandTile treasure) {
+		if(!treasure.isSelected()){
+		((Rectangle)treasure.getChildren().get(0)).setFill(Color.BLACK);
+		treasure.setSelected(true);}
+		else {
+			((Rectangle)treasure.getChildren().get(0)).setFill(Color.TRANSPARENT);
+			treasure.setSelected(false);
+		}
+		
+		
+	}
 
 	public ArrayList<WaterTile> getBase() {
 		return base;
@@ -448,5 +461,10 @@ public class GameView {
 		mainland.getPawns().add(selectedPawn);
 		mainland.convertToChildren();
 		
+	}
+	public int showBuyCards() {
+		BorderPane buyPane = new BorderPane();
+		Scene buyScene = new Scene(buyPane);
+		return 0;
 	}
 }

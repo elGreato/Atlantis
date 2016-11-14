@@ -20,6 +20,7 @@ public class LandTile extends Tile implements Serializable {
 	private  ColorChoice landTileColor;
 	private int landValue;
 	private ArrayList<Pawn> pawns=new ArrayList<>();
+	private boolean selected=false;
 
 	public LandTile(int tileId,ColorChoice color, int value ){
 		super(tileId);
@@ -115,6 +116,14 @@ public class LandTile extends Tile implements Serializable {
 
 	public void setPawns(ArrayList<Pawn> pawns) {
 		this.pawns = pawns;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 
 

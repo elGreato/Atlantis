@@ -3,7 +3,6 @@ package gameObjects;
 // This class is part of the Gamer Server, should be moved from this package
 import java.util.ArrayList;
 import messageObjects.AtlantisMainLandMessage;
-import messageObjects.DeckLandTileMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
@@ -74,12 +73,12 @@ public class Game implements GameInterface {
 			users.get(i).sendMessage(new WaterMessage(getName(), base));
 
 		}
-
+/*
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i)
 					.sendMessage(new DeckLandTileMessage(getName(), deckA.getDeckOfTiles(), deckB.getDeckOfTiles()));
 
-		}
+		}*/
 		// send the atlantis and main land
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i).sendMessage(new AtlantisMainLandMessage(getName(), atlantis, mainland));

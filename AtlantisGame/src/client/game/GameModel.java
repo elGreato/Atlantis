@@ -277,4 +277,13 @@ public class GameModel {
 
 		return cardSelected;
 	}
+
+	public void tryBuyCards() {
+		if(currentPlayer.isYourTurn()){
+			int numberBought=view.showBuyCards();
+		}
+		
+	}
+
+	
 }

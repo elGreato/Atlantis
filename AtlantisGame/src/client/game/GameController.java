@@ -18,7 +18,7 @@ public class GameController {
 
 		// }
 		view.btnPlayCard.setOnAction(e -> handlePlayCard());
-		view.btnPayWithCard.setOnAction(e -> handlePayWithCard());
+		view.btnBuyCard.setOnAction(e -> handleBuyCard());
 		view.btnPayWithTreasure.setOnAction(e -> handlePayWithTreasure());
 	
 	}
@@ -27,9 +27,9 @@ public class GameController {
 		// TODO Auto-generated method stub
 	}
 
-	private Object handlePayWithCard() {
-		// TODO Auto-generated method stub
-		return null;
+	private void handleBuyCard() {
+		model.tryBuyCards();
+		
 	}
 
 	private void handlePlayCard() {
