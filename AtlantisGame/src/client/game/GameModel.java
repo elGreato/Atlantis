@@ -1,5 +1,7 @@
 package client.game;
 
+import java.util.ArrayList;
+
 import client.lobby.ClientLobbyInterface;
 import client.lobby.LobbyModel;
 import gameObjects.Card;
@@ -18,6 +20,7 @@ import messageObjects.turnMessages.PlayAnotherCardMessage;
 import messageObjects.turnMessages.RefreshPlayerMessage;
 import messageObjects.turnMessages.ServerMessage;
 import messageObjects.turnMessages.TurnMessage;
+import messageObjects.turnMessages.buyCardsMessage;
 
 public class GameModel {
 
@@ -120,9 +123,9 @@ public class GameModel {
 			RefreshPlayerMessage message = (RefreshPlayerMessage) msgIn;
 			System.out.println("REFERESH REC");
 			LandTile treasure = message.getTreasure();
-			Card newCard = message.getNewCard();
-			if (newCard != null && message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
-				addCardToPlayer(newCard);
+			ArrayList<Card> newCards = message.getNewCards();
+			if (newCards.size() != 0 && message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
+				addCardToPlayer(newCards);
 
 			} else
 				System.out.println("didn't get new card or nt ur turn");
@@ -181,11 +184,12 @@ public class GameModel {
 
 	}
 
-	private void addCardToPlayer(Card newCard) {
+	private void addCardToPlayer(ArrayList<Card> newCards) {
+		for(Card newCard:newCards){
 		currentPlayer.addCard(newCard);
 		newCard.setOwner(currentPlayer);
 		addClickToCard(newCard);
-
+		}
 	}
 
 	private void movePawn(int indexOfPlayer, Pawn selectedPawn, LandTile selectedLand) {
@@ -280,9 +284,28 @@ public class GameModel {
 
 	public void tryBuyCards() {
 		if(currentPlayer.isYourTurn()){
-			int numberBought=view.showBuyCards();
+			
+			view.showBuyCards();
 		}
 		
+	}
+
+	public void pay4Cards() {
+		ArrayList<LandTile> treasuresChosen= new ArrayList<>();
+		for(int i=0; i<currentPlayer.getPlayerHand().getTreasures().size();i++){
+			LandTile treasureSelected=currentPlayer.getPlayerHand().getTreasures().get(i);
+			if(treasureSelected.isSelected()){
+				treasuresChosen.add(treasureSelected);
+				currentPlayer.getPlayerHand().getTreasures().remove(treasureSelected);
+				//view.removePlayerTreasure(treasureSelected);
+			}
+	
+		}
+	
+		msgOut.sendMessage(new buyCardsMessage (gameName,currentPlayer,treasuresChosen));
+		
+		view.closeBuyScene();
+				
 	}
 
 	

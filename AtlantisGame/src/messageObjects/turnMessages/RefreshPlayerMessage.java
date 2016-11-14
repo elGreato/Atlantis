@@ -1,6 +1,7 @@
 package messageObjects.turnMessages;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import gameObjects.Card;
 import gameObjects.LandTile;
@@ -15,16 +16,16 @@ public class RefreshPlayerMessage extends InGameMessage implements Serializable 
 	Card selectedCard;
 	LandTile treasure;
 	LandTile selectedLand;
-	Card newCard;
+	ArrayList<Card> newCards;
 
 	public RefreshPlayerMessage(String gameName, Player currentPlayer, LandTile selectedLand, Pawn selectedPawn, Card selectedCard,
-			LandTile treasure, Card newCard) {
+			LandTile treasure, ArrayList<Card> newCards) {
 		super(gameName);
 		this.selectedCard = selectedCard;
 		this.selectedPawn = selectedPawn;
 		this.treasure = treasure;
 		this.selectedLand=selectedLand;
-		this.newCard=newCard;
+		this.newCards=newCards;
 		this.currentPlayer=currentPlayer;
 	}
 
@@ -72,12 +73,8 @@ public class RefreshPlayerMessage extends InGameMessage implements Serializable 
 		this.selectedLand = selectedLand;
 	}
 
-	public Card getNewCard() {
-		return newCard;
-	}
-
-	public void setNewCard(Card newCard) {
-		this.newCard = newCard;
+	public ArrayList<Card> getNewCards() {
+		return newCards;
 	}
 
 }

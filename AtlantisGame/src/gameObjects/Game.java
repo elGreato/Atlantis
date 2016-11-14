@@ -73,12 +73,13 @@ public class Game implements GameInterface {
 			users.get(i).sendMessage(new WaterMessage(getName(), base));
 
 		}
-/*
-		for (int i = 0; i < numberOfPlayers; i++) {
-			users.get(i)
-					.sendMessage(new DeckLandTileMessage(getName(), deckA.getDeckOfTiles(), deckB.getDeckOfTiles()));
-
-		}*/
+		/*
+		 * for (int i = 0; i < numberOfPlayers; i++) { users.get(i)
+		 * .sendMessage(new DeckLandTileMessage(getName(),
+		 * deckA.getDeckOfTiles(), deckB.getDeckOfTiles()));
+		 * 
+		 * }
+		 */
 		// send the atlantis and main land
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i).sendMessage(new AtlantisMainLandMessage(getName(), atlantis, mainland));
@@ -158,7 +159,7 @@ public class Game implements GameInterface {
 
 	private void performTurn(Card selectedCard, Pawn selectedPawn) {
 
-		Card newCard = null;
+		ArrayList<Card> newCards=null;
 
 		boolean foundLand = false;
 		boolean giveTreasure = false;
@@ -193,8 +194,8 @@ public class Game implements GameInterface {
 					nextPlayer = true;
 					selectedPawn.setPawnSelected(false);
 					// give a new card
-					newCard=dealACard(currentPlayer);
-					// renive 
+					newCards = dealCards(currentPlayer);
+					// renive
 					removePawnFromOldTile(selectedPawn);
 
 				}
@@ -210,16 +211,16 @@ public class Game implements GameInterface {
 					users.get(currentPlayer.getPlayerIndex()).sendMessage(new PlayAnotherCardMessage(getName()));
 
 				}
-				if(!foundLand&&f==base.size()-1){
-					System.out.println("reached the end, f now is "+f);
+				if (!foundLand && f == base.size() - 1) {
+					System.out.println("reached the end, f now is " + f);
 					selectedPawn.setNewLocation(53);
 					mainland.getPawns().add(selectedPawn);
-					foundLand =true;
-					selectedLand=null;
+					foundLand = true;
+					selectedLand = null;
 					selectedPawn.setPawnSelected(false);
-					nextPlayer=true;
-					giveTreasure=true;
-					newCard=dealACard(currentPlayer);
+					nextPlayer = true;
+					giveTreasure = true;
+					newCards = dealCards(currentPlayer);
 					removePawnFromOldTile(selectedPawn);
 				}
 
@@ -239,7 +240,7 @@ public class Game implements GameInterface {
 		int numberOfPlayers = getNumOfRegisteredPlayers();
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i).sendMessage(new RefreshPlayerMessage(getName(), currentPlayer, selectedLand, selectedPawn,
-					selectedCard, treasure, newCard));
+					selectedCard, treasure, newCards));
 		}
 		if (foundLand && nextPlayer)
 			endTurn();
@@ -264,11 +265,25 @@ public class Game implements GameInterface {
 		}
 
 	}
-	public Card dealACard(Player player){
-		Card newCard = cards.deal();
-		newCard.setOwner(player);
-		player.addCard(newCard);
-		return newCard;
+
+	public ArrayList<Card> dealCards(Player player) {
+		ArrayList<Card> result = new ArrayList<>();
+		// after each round a player gets a card anyway
+		Card turnCard = cards.deal();
+		turnCard.setOwner(player);
+		player.getPlayerHand().addCard(turnCard);
+		result.add(turnCard);
+		// for each pawn in mainland he gets an extra one
+		for (Pawn p : player.getPawns()) {
+			if (p.getNewLocation() == 53) {
+				Card newCard = cards.deal();
+				newCard.setOwner(player);
+				player.getPlayerHand().addCard(newCard);
+				player.addCard(newCard);
+			}
+		}
+
+		return result;
 	}
 
 	private void removePawnFromOldTile(Pawn selectedPawn) {

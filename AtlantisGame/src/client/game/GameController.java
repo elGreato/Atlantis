@@ -18,14 +18,18 @@ public class GameController {
 
 		// }
 		view.btnPlayCard.setOnAction(e -> handlePlayCard());
-		view.btnBuyCard.setOnAction(e -> handleBuyCard());
-		view.btnPayWithTreasure.setOnAction(e -> handlePayWithTreasure());
+		view.btnBuyCards.setOnAction(e -> handleBuyCard());
+		view.btnPay4cards.setOnAction(e-> handlePay4cards());
+	}
+
+
+
+	private void handlePay4cards() {
+		model.pay4Cards();
 	
 	}
 
-	private void handlePayWithTreasure() {
-		// TODO Auto-generated method stub
-	}
+
 
 	private void handleBuyCard() {
 		model.tryBuyCards();

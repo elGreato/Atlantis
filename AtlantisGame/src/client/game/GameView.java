@@ -38,6 +38,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class GameView {
@@ -51,11 +52,13 @@ public class GameView {
 	// fx stuff
 	public Scene scene;
 	public Stage stage;
+	public Stage tempStage ;
 
 	// the main game controls
 	public Button btnPlayCard = new Button("Play a Selected Card");
-	public Button btnBuyCard = new Button("Buy Cards");
-	public Button btnPayWithTreasure = new Button("Pay with a treasure");
+	public Button btnBuyCards = new Button("Buy Cards");
+
+	public Button btnPay4cards = new Button("Pay");
 
 
 	// Labels for main game controls
@@ -119,7 +122,7 @@ public class GameView {
 			mainBoard.getRowConstraints().add(con);
 		}
 		// add Buttons
-		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnBuyCard, btnPayWithTreasure);
+		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnBuyCards);
 
 		// set a random picture for each player
 		int numberOfPicturesAvailable = 4;
@@ -371,10 +374,10 @@ public class GameView {
 	}
 	private void handleTreasure(LandTile treasure) {
 		if(!treasure.isSelected()){
-		((Rectangle)treasure.getChildren().get(0)).setFill(Color.BLACK);
+		((Rectangle)treasure.getChildren().get(0)).setStroke(Color.BLACK);
 		treasure.setSelected(true);}
 		else {
-			((Rectangle)treasure.getChildren().get(0)).setFill(Color.TRANSPARENT);
+			((Rectangle)treasure.getChildren().get(0)).setStroke(Color.TRANSPARENT);
 			treasure.setSelected(false);
 		}
 		
@@ -435,6 +438,10 @@ public class GameView {
 		hbTreasures.getChildren().add(landTile);
 
 	}
+	public void removePlayerTreasure(LandTile landTile){
+		hbTreasures.getChildren().remove(landTile);
+		
+	}
 	public void removeCardFromHand(Card card) {
 		hboxCards.getChildren().remove(card);
 		
@@ -462,9 +469,24 @@ public class GameView {
 		mainland.convertToChildren();
 		
 	}
-	public int showBuyCards() {
-		BorderPane buyPane = new BorderPane();
+	public void showBuyCards() {
+		VBox buyPane = new VBox();
+		buyPane.getChildren().addAll(hbTreasures,btnPay4cards);
 		Scene buyScene = new Scene(buyPane);
-		return 0; 
+		tempStage = new Stage();
+		tempStage.setScene(buyScene);
+		tempStage.initModality(Modality.WINDOW_MODAL);
+		tempStage.initOwner(stage);
+		tempStage.show();
+		tempStage.setAlwaysOnTop(true);
+		
+		
+		
+	}
+	public void closeBuyScene() {
+		vbPlayer.getChildren().add(vbPlayer.getChildren().size()-1, hbTreasures);
+		tempStage.close();
+		
+		
 	}
 }
