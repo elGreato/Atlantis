@@ -10,20 +10,20 @@ import messageObjects.WaterMessage;
 public class AIUser extends AllUsers implements Runnable{
 	
 	private ArrayList<Message> incomingMessages;
-	private ArrayList<AIGameInfoStorage> activeGames;
+	private ArrayList<GameAI> activeGames;
 	//Constructor
 	public AIUser(UserInfo ui)
 	{
 		super(ui);
 		incomingMessages = new ArrayList<Message>();
-		activeGames = new ArrayList<AIGameInfoStorage>();
+		activeGames = new ArrayList<GameAI>();
 		Thread t = new Thread(this);
 		t.start();
 	}
 	@Override
 	public synchronized void initiateGameStart(GameInterface game)
 	{
-		activeGames.add(new AIGameInfoStorage(game.getName()));
+		activeGames.add(new GameAI(game));
 		super.initiateGameStart(game);
 	}
 	//Process messages
@@ -42,7 +42,7 @@ public class AIUser extends AllUsers implements Runnable{
 		if (receivedMessage instanceof InGameMessage)
 		{
 			InGameMessage igm = (InGameMessage)receivedMessage;
-			for(AIGameInfoStorage aig : activeGames)
+			for(GameAI aig : activeGames)
 			{
 				if(igm.getGameName().equals(aig.getGameName()))
 				{
