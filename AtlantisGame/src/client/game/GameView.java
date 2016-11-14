@@ -465,6 +465,6 @@ public class GameView {
 	public int showBuyCards() {
 		BorderPane buyPane = new BorderPane();
 		Scene buyScene = new Scene(buyPane);
-		return 0;
+		return 0; 
 	}
 }
