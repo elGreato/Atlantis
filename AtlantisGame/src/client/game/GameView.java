@@ -162,7 +162,7 @@ public class GameView {
 		mainBoard.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
 				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 		stage.setScene(scene);
-		stage.setTitle("Atlantis GAME");
+		stage.setTitle("Atlantis GAME"); 
 		stage.show();
 
 	}
