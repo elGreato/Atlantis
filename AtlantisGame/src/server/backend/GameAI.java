@@ -31,6 +31,8 @@ public class GameAI {
 	public GameAI(GameInterface game, double aiSpeed, double aiPawnSpread)
 	{
 		this.game = game;
+		this.aiPawnSpread = aiPawnSpread;
+		this.aiSpeed = aiSpeed;
 	}
 	public void processMessage(InGameMessage igm) {
 		if(igm instanceof WaterMessage)
@@ -55,27 +57,20 @@ public class GameAI {
 		}
 		else if(igm instanceof PlayAnotherCardMessage)
 		{
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//System.out.println("AI plays another card");
 			game.processMessage(new PawnCardSelectedMessage(game.getName(),me.getPlayerIndex(), bestPawn, bestCards.remove(0)));
 		}
 		else if(igm instanceof RefreshPlayerMessage)
 		{
+
 			RefreshPlayerMessage rpm = (RefreshPlayerMessage)igm;
-			if(rpm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex())
-			{
-				/*
-				for(Card c : rpm.getNewCards())
-				{
-					me.getPlayerHand().addCard(c);
-				}
-				
-				for(Pawn p : me.getPawns())
-				{
-					if (p.getId() == rpm.getSelectedPawn().getId())
-					{
-						p.setNewLocation(rpm.getSelectedPawn().getNewLocation());
-					}
-				}*/
-			}
+			
 		}
 		
 	}
@@ -87,10 +82,15 @@ public class GameAI {
 	private double avgDistanceOtherPlayers;
 	private double avgDistanceMe;
 	private void doATurn() {
+		//System.out.println("New turn initiated");
+		bestCards = new ArrayList<Card>();
+		bestCards.clear();
+		bestPawn = null;
 		calculateAverageDistances();
 		doAMove(me.getPawns(), me.getPlayerHand().getCards(),new ArrayList<Card>(),  0, 0);
+		//System.out.println("AI sends turn message");
 		game.processMessage(new PawnCardSelectedMessage(game.getName(),me.getPlayerIndex(),bestPawn, bestCards.remove(0)));
-		
+
 	}
 
 	private void calculateAverageDistances() {
@@ -112,41 +112,44 @@ public class GameAI {
 	}
 
 	private void doAMove(ArrayList<Pawn> pawns, ArrayList<Card> cardsOnHand,ArrayList<Card> cardsAlreadyPlayed, int distance, int costs) {
-		bestCards = new ArrayList<Card>();
-		bestCards.clear();
-		bestPawn = null;
+		//System.out.println("New move calculation initiated");
+		
 		for(Pawn p : pawns)
 		{
 			for(Card c : cardsOnHand)
 			{
-				cardsAlreadyPlayed.add(c);
-				
-				int distanceForMove = calculateDistanceOfMove(p,distance, c);
-				int costsForMove = calculateCostsOfMove(p,distance, c);
-				distance+= distanceForMove;
-				costs += costsForMove;
-				if((path.get(p.getNewLocation()+distanceForMove)).hasPawn())
+				ArrayList<Card> tempCardsPlayed = new ArrayList<Card>(cardsAlreadyPlayed);
+				tempCardsPlayed.add(c);
+				//System.out.println("Distance before: " + distance);
+				int distanceForMove = distance + calculateDistanceOfMove(p,distance, c);
+				//System.out.println("Distance after: " + distanceForMove);
+				int costsForMove = costs + calculateCostsOfMove(p,distance, c);
+				if((path.size()>p.getNewLocation()+distanceForMove) && (path.get(p.getNewLocation()+distanceForMove).getChildrenTiles().get(path.get(p.getNewLocation()+distanceForMove).getChildrenTiles().size()-1).hasPawn()))
 				{
+					//System.out.println("plan second move");
 					ArrayList<Card> cardsForNextIteration = new ArrayList<Card>(cardsOnHand);
 					cardsForNextIteration.remove(c);
 					
 					ArrayList<Pawn> pawnsForNextIteration = new ArrayList<Pawn>();
 					pawnsForNextIteration.add(p);
 					
-					ArrayList<Card> cardsAlreadyPlayedForNextIteration = new ArrayList<Card>(cardsAlreadyPlayed);
-					
-					doAMove(pawnsForNextIteration, cardsForNextIteration,cardsAlreadyPlayedForNextIteration, distance,costs);
+					doAMove(pawnsForNextIteration, cardsForNextIteration,tempCardsPlayed, distanceForMove,costsForMove);
 				}
 				else
 				{
-					int points = calculatePointsOfTurn(p,distance);
-					double valueOfTurn = points + (aiSpeed * (avgDistanceOtherPlayers/avgDistanceMe)*distance)+ aiPawnSpread/(avgDistanceMe - p.getNewLocation());
+					int points = calculatePointsOfTurn(p,distanceForMove);
+					double valueOfTurn = points + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceForMove)/*+ aiPawnSpread*(avgDistanceMe - p.getNewLocation())*/;
+					//System.out.println("New calculation for turn: " + valueOfTurn + " points: " + points +" Comparing to: " + valueBestTurn);
 					if(valueOfTurn > valueBestTurn||bestCards.isEmpty())
 					{
 						valueBestTurn = valueOfTurn;
 						bestPawn = p;
-						bestCards = new ArrayList<Card>(cardsAlreadyPlayed);
+						bestCards = new ArrayList<Card>(tempCardsPlayed);
+						//System.out.println("New best turn detected " + valueBestTurn + " points: " + points + " speed: " + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceForMove)+ " spread: " + aiPawnSpread*(avgDistanceMe - p.getNewLocation()));
+						//System.out.println("Average other players: " + avgDistanceOtherPlayers+ " AVGMe: "+ avgDistanceMe);
+						//System.out.println("Distance: " + distanceForMove);
 					}
+					
 				}
 			}
 		}
@@ -175,10 +178,11 @@ public class GameAI {
 		for(int i = startingLocation +1; i<path.size(); i++)
 		{
 			WaterTile wt = path.get(i);
-			if(!(wt.getChildrenTiles().isEmpty())||(wt.getChildrenTiles().get(wt.getChildrenTiles().size()-1).getColor().equals(c.getColor())))
+			if(!(wt.getChildrenTiles().isEmpty())&&(wt.getChildrenTiles().get(wt.getChildrenTiles().size()-1).getColor().equals(c.getColor())))
 			{
 				return i-startingLocation;
 			}
+		
 		}
 		return path.size();
 	}
