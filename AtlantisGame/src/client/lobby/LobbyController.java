@@ -14,7 +14,24 @@ public class LobbyController {
 		this.view = view;
 		this.model = model;
 		
-		
+		view.createNumPlayerscbx.valueProperty().addListener((observable, oldValue, newValue) ->
+		{
+			if(oldValue<newValue)
+			{
+				for(int i = oldValue; i< newValue;i++)
+				{
+					view.createNumAIPlayerscbx.getItems().add(i);
+				}
+			}
+			else if(oldValue > newValue)
+			{
+				for(int i = oldValue-1 ; i>= newValue;i--)
+				{
+					view.createNumAIPlayerscbx.getItems().remove((Integer)i);
+				}
+			}
+			view.createNumAIPlayerscbx.getItems();
+		});
 		view.createButton.setOnAction(new EventHandler<ActionEvent>(){
 
 			@Override

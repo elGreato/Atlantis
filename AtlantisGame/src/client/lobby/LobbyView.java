@@ -76,6 +76,8 @@ public class LobbyView {
 	protected TextField createGamePasswordtxt;
 	private Label createNumPlayerslbl;
 	protected ComboBox<Integer> createNumPlayerscbx;
+	protected Label createNumAIPlayerslbl;
+	protected ComboBox<Integer> createNumAIPlayerscbx;
 	protected Button createButton;
 	
 	protected TextArea chatHistory;
@@ -179,6 +181,10 @@ public class LobbyView {
 		createNumPlayerscbx = new ComboBox<Integer>();
 		createNumPlayerscbx.getItems().addAll(2, 3, 4);
 		createNumPlayerscbx.setValue(2);
+		createNumAIPlayerslbl = new Label("of which AI: ");
+		createNumAIPlayerscbx = new ComboBox<Integer>();
+		createNumAIPlayerscbx.getItems().addAll(0,1);
+		createNumAIPlayerscbx.setValue(0);
 		createButton = new Button("Create");
 		
 		createGameControls.add(createGameNamelbl, 0, 0);
@@ -187,7 +193,9 @@ public class LobbyView {
 		createGameControls.add(createGamePasswordtxt, 1, 1);
 		createGameControls.add(createNumPlayerslbl, 0, 2);
 		createGameControls.add(createNumPlayerscbx, 1, 2);
-		createGameControls.add(createButton, 1, 3);
+		createGameControls.add(createNumAIPlayerslbl, 0, 3);
+		createGameControls.add(createNumAIPlayerscbx, 1, 3);
+		createGameControls.add(createButton, 1, 4);
 		createGameSection = new TitledPane("Create game",createGameControls);
 		createGameSection.setCollapsible(false);
 		createGameSection.setMaxHeight(Double.MAX_VALUE);

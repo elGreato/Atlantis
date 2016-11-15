@@ -154,7 +154,7 @@ public class GameAI {
 		for(int i = startingLocation +1; i<path.size(); i++)
 		{
 			WaterTile wt = path.get(i);
-			if((wt.getChildrenTiles().get(wt.getChildrenTiles().size()-1).getColor().equals(c.getColor())))
+			if(!(wt.getChildrenTiles().isEmpty())||(wt.getChildrenTiles().get(wt.getChildrenTiles().size()-1).getColor().equals(c.getColor())))
 			{
 				return i-startingLocation;
 			}

@@ -16,6 +16,7 @@ import messageObjects.UserInfoMessage;
 
 public class Lobby implements LobbyInterface{
 	private ArrayList<HumanUser> onlineUsers;
+	private ArrayList<AIUser> aiUsers;
 	private ArrayList<UserInfo> userInfoAllUsers;
 	private ArrayList<Game> waitingGames;
 	private ArrayList<Game> runningGames;
@@ -32,6 +33,27 @@ public class Lobby implements LobbyInterface{
 		databaseAccess = new DatabaseInterface(dbAccessCon);
 		
 		userInfoAllUsers = databaseAccess.getUsers();
+		aiUsers = new ArrayList<AIUser>();
+		//find AIUsers
+		for(String aiName: AIUser.aiNames)
+		{	
+			boolean found = false;
+			for(UserInfo ui : userInfoAllUsers)
+			{
+				if(ui.getUsername().equals(aiName))
+				{
+					aiUsers.add(new AIUser(ui));
+					found = true;
+				}
+					
+			}
+			if(!found)
+			{
+				UserInfo newUI = new UserInfo(aiName,"",0,0,0);
+				userInfoAllUsers.add(newUI);
+				databaseAccess.addNewUserToDatabase(newUI);
+			}
+		}
 		Collections.sort(userInfoAllUsers);
 		onlineUsers = new ArrayList<HumanUser>();
 		
@@ -74,6 +96,14 @@ public class Lobby implements LobbyInterface{
 	//Checks validity of entered passwords from login requests
 	@Override
 	public synchronized UserInfo loginUser(String username, String password, HumanUser user) {
+		
+		for(AIUser aiu : aiUsers)
+		{
+			if(username.equals(aiu.getUserInfo().getUsername()))
+			{
+				return null;
+			}
+		}
 		for(UserInfo ui: userInfoAllUsers)
 		{
 			
@@ -94,6 +124,7 @@ public class Lobby implements LobbyInterface{
 		String gameName = createMsg.getGameName();
 		String password = createMsg.getPassword();
 		int maxPlayers = createMsg.getMaxPlayers();
+		int numAIPlayers = createMsg.getaiPlayers();
 		
 		boolean nameAvailable = true;
 		for(Game g: waitingGames)
@@ -113,8 +144,24 @@ public class Lobby implements LobbyInterface{
 		if(nameAvailable)
 		{
 			Game newGame = new Game(gameName,password, maxPlayers, user, this);
-			waitingGames.add(newGame);
-			updateLobby(newGame);
+		
+			Collections.shuffle(aiUsers);
+			for(int i = 0; i<numAIPlayers;i++)
+			{
+				newGame.addUser(aiUsers.get(i));
+				System.out.println("AI User added");
+			}
+			if(newGame.getMaxPlayers() == newGame.getNumOfRegisteredPlayers())
+			{
+				System.out.println("I'm here");
+				newGame.start();
+				runningGames.add(newGame);
+			}
+			else	
+			{
+				waitingGames.add(newGame);
+				updateLobby(newGame);
+			}
 			
 			serverAnswer = "Game successfully created!";
 		}

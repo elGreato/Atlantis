@@ -8,7 +8,7 @@ import messageObjects.Message;
 import messageObjects.WaterMessage;
 
 public class AIUser extends User implements Runnable{
-	public static String[] aiNames = {"AI_BernGuy", "AI_Bolt","AI_SGASquad","AI_GovernmentOfficials"};
+	public static String[] aiNames = {"AI_BernGuy", "AI_Bolt","AI_SGASquad","AI_GovOfficials"};
 	private double aiSpeed;
 	private double aiPawnSpread;
 	private ArrayList<Message> incomingMessages;
@@ -23,7 +23,7 @@ public class AIUser extends User implements Runnable{
 		case "AI_BernGUY" : aiSpeed = 0.1; aiPawnSpread = 1;
 		case "AI_Bolt" : aiSpeed = 5; aiPawnSpread = 0;
 		case "AI_SGASquad" : aiSpeed = 2; aiPawnSpread = 5;
-		case "AI_GovernmentOfficials" : aiSpeed = 0.2; aiPawnSpread = 0.1;
+		case "AI_GovOfficials" : aiSpeed = 0.2; aiPawnSpread = 0.1;
 		default : aiSpeed = 1; aiPawnSpread = 1;
 		}
 		Thread t = new Thread(this);
@@ -40,10 +40,13 @@ public class AIUser extends User implements Runnable{
 	{
 		while(incomingMessages.size() == 0)
 		{
-			try {
-				incomingMessages.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			synchronized(incomingMessages)
+			{
+				try {
+					incomingMessages.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
@@ -64,8 +67,11 @@ public class AIUser extends User implements Runnable{
 	//receiving messages
 	@Override
 	public synchronized void sendMessage(Message msg) {
-		incomingMessages.add(msg);
-		incomingMessages.notify();
+		synchronized(incomingMessages)
+		{
+			incomingMessages.add(msg);
+			incomingMessages.notify();
+		}
 	}
 
 	//AI thread

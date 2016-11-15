@@ -207,7 +207,7 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 	}
 
 	public void createGame() {
-		CreateGameMessage createGameMsg = new CreateGameMessage(view.createGameNametxt.getText(), view.createGamePasswordtxt.getText(), view.createNumPlayerscbx.getValue());
+		CreateGameMessage createGameMsg = new CreateGameMessage(view.createGameNametxt.getText(), view.createGamePasswordtxt.getText(), view.createNumPlayerscbx.getValue(), view.createNumAIPlayerscbx.getValue());
 		sendMessage(createGameMsg);
 	}
 
