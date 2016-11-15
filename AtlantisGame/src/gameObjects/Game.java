@@ -309,14 +309,12 @@ public class Game implements GameInterface {
 		// for each pawn in mainland he gets an extra one
 		for (Pawn p : player.getPawns()) {
 			if (p.ReachedMainLand()) {
-				System.out.println("found pawn in main land");
 				Card newCard = cards.deal();
 				newCard.setOwner(player);
 				player.getPlayerHand().addCard(newCard);
-				player.addCard(newCard);
+				result.add(newCard);
 			}
 		}
-
 		return result;
 	}
 
@@ -330,7 +328,6 @@ public class Game implements GameInterface {
 	}
 
 	private LandTile giveTreasureToPlayer(int f) {
-		System.out.println("the location of pawn is " + f);
 		boolean gotIt = false;
 		LandTile treasure = null;
 		int waterIndex = -1;
@@ -354,10 +351,7 @@ public class Game implements GameInterface {
 	}
 
 	private boolean checkTurn(int playerIndex) {
-		System.out.println("checking ur index");
 		if (playerIndex == currentPlayerIndex) {
-
-			System.out.println("YUPPPPPPPPPP");
 			return true;
 		} else
 			return false;

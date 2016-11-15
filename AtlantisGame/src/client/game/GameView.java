@@ -162,6 +162,7 @@ public class GameView {
 		mainBoard.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
 				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 		stage.setScene(scene);
+		stage.setTitle("Atlantis GAME");
 		stage.show();
 
 	}
@@ -181,7 +182,6 @@ public class GameView {
 		} else if (co == maxColIndex && ((ro == 1) || (ro == 5) || (ro == 9))) {
 
 			mainBoard.add(water, maxColIndex - 1, ro + 1);
-			System.out.println("the extra tile");
 			ro += 2;
 			co -= 1;
 		} else if (((ro == 3) || (ro == 7) || (ro == 11)) && co <= maxColIndex && co != 0) {
@@ -191,7 +191,6 @@ public class GameView {
 
 		} else if (co == 0 && ((ro == 3) || (ro == 7) || (ro == 11))) {
 			mainBoard.add(water, 1, ro + 1);
-			System.out.println("the extra tile222");
 			ro += 2;
 			co += 1;
 		}
@@ -245,7 +244,6 @@ public class GameView {
 			c.setFill(Pawn.FillColor(player));
 			p.getChildren().add(c);
 			atlantis.getChildren().add(p);
-			System.out.println(p.getNewLocation()+" new location ");
 		}
 		stage.sizeToScene();
 
@@ -261,11 +259,9 @@ public class GameView {
 		if (!p.isPawnSelected()) {
 			p.getCircle().setStroke(Color.BLACK);
 			p.setPawnSelected(true);
-			System.out.println("pawn is selected" + p.isPawnSelected());
 		} else {
 			p.getCircle().setStroke(Color.TRANSPARENT);
 			p.setPawnSelected(false);
-			System.out.println("pawn is not selected " + p.isPawnSelected());
 		}
 	}
 
@@ -320,7 +316,7 @@ public class GameView {
 	}
 
 	public void gameStarted() {
-		lblGameStatus.setText("The GAME HAS BEGUN");
+		lblGameStatus.setText("The GAME HAS BEGAN");
 		lblGameStatus.setTextFill(Color.web("#ce2323"));
 		lblGameStatus.setFont(new Font("Cambria", 32));
 		vbGameStatus.setAlignment(Pos.CENTER);
@@ -334,10 +330,14 @@ public class GameView {
 
 	public void notYourTurn(String curPlayer) {
 		lblTurn.setText("It is " + curPlayer + " turn");
+		lblTurn.setTextFill(Color.BLACK);
+		lblTurn.setFont(new Font("Cambria", 25));
 
 	}
 	public void playerAnother(){
 		lblTurn.setText("Please play another card");
+		lblTurn.setTextFill(Color.RED);
+		lblTurn.setFont(new Font("Cambria", 32));
 	}
 
 	public void createCardView(Card c) {
@@ -455,6 +455,8 @@ public class GameView {
 	}
 	public void selectPawnPlease() {
 		lblTurn.setText("Please SELECT A PAWN");
+		lblTurn.setTextFill(Color.RED);
+		lblTurn.setFont(new Font("Cambria", 25));
 		
 	}
 	public void showMessageFromServer(String theMessage) {
@@ -463,6 +465,8 @@ public class GameView {
 	}
 	public void selectCardPlease() {
 		lblTurn.setText("Please Select a CARD");
+		lblTurn.setTextFill(Color.RED);
+		lblTurn.setFont(new Font("Cambria", 25));
 		
 	}
 	public void addPawnToMainLand(Pawn selectedPawn) {
@@ -472,7 +476,9 @@ public class GameView {
 	}
 	public void showBuyCards() {
 		VBox buyPane = new VBox();
-		buyPane.getChildren().addAll(hbTreasures,btnPay4cards);
+		Label lblBuyCards = new Label("Choose the treasures that you would like to Sacrfice to buy cards"
+				+ "\nRemember, half of what you pay, rounded down, will be refunded as cards");
+		buyPane.getChildren().addAll(lblBuyCards,hbTreasures,btnPay4cards);
 		Scene buyScene = new Scene(buyPane);
 		tempStage = new Stage();
 		tempStage.setScene(buyScene);
@@ -480,9 +486,7 @@ public class GameView {
 		tempStage.initOwner(stage);
 		tempStage.show();
 		tempStage.setAlwaysOnTop(true);
-		
-		
-		
+
 	}
 	public void closeBuyScene() {
 		vbPlayer.getChildren().add(vbPlayer.getChildren().size()-1, hbTreasures);
