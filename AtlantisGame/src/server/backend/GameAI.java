@@ -57,6 +57,8 @@ public class GameAI {
 		}
 		else if(igm instanceof PlayAnotherCardMessage)
 		{
+
+			System.out.println("Name: "+ me.getPlayerName()+" Cards: " + me.getPlayerHand().getNumCards());
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
@@ -122,7 +124,6 @@ public class GameAI {
 				tempCardsPlayed.add(c);
 				//System.out.println("Distance before: " + distance);
 				int distanceForMove = distance + calculateDistanceOfMove(p,distance, c);
-				//System.out.println("Distance after: " + distanceForMove);
 				int costsForMove = costs + calculateCostsOfMove(p,distance, c);
 				if((path.size()>p.getNewLocation()+distanceForMove) && (path.get(p.getNewLocation()+distanceForMove).getChildrenTiles().get(path.get(p.getNewLocation()+distanceForMove).getChildrenTiles().size()-1).hasPawn()))
 				{
@@ -184,6 +185,6 @@ public class GameAI {
 			}
 		
 		}
-		return path.size();
+		return path.size()-startingLocation;
 	}
 }
