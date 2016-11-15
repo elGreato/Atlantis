@@ -16,6 +16,7 @@ import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
 import messageObjects.turnMessages.RefreshPlayerMessage;
+import messageObjects.turnMessages.ServerMessage;
 
 public class GameAI {
 	private GameInterface game;
@@ -52,13 +53,13 @@ public class GameAI {
 			GameStatusMessage gsm =(GameStatusMessage)igm;
 			if(gsm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex())
 			{
+
 				doATurn();
 			}
 		}
 		else if(igm instanceof PlayAnotherCardMessage)
 		{
-
-			System.out.println("Name: "+ me.getPlayerName()+" Cards: " + me.getPlayerHand().getNumCards());
+		
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
@@ -67,6 +68,7 @@ public class GameAI {
 			}
 			//System.out.println("AI plays another card");
 			game.processMessage(new PawnCardSelectedMessage(game.getName(),me.getPlayerIndex(), bestPawn, bestCards.remove(0)));
+			
 		}
 		else if(igm instanceof RefreshPlayerMessage)
 		{
@@ -74,7 +76,10 @@ public class GameAI {
 			RefreshPlayerMessage rpm = (RefreshPlayerMessage)igm;
 			
 		}
-		
+		else if(igm instanceof ServerMessage)
+		{
+			System.out.println(((ServerMessage)igm).getTheMessage());
+		}
 	}
 
 	private double valueBestTurn;
@@ -133,10 +138,14 @@ public class GameAI {
 					
 					ArrayList<Pawn> pawnsForNextIteration = new ArrayList<Pawn>();
 					pawnsForNextIteration.add(p);
-					
-					doAMove(pawnsForNextIteration, cardsForNextIteration,tempCardsPlayed, distanceForMove,costsForMove);
+					if(cardsForNextIteration.size() != 0)
+					{
+						doAMove(pawnsForNextIteration, cardsForNextIteration,tempCardsPlayed, distanceForMove,costsForMove);
+					}
 				}
-				else
+				else if((path.size()<=p.getNewLocation()+distanceForMove)||
+						((path.size()>p.getNewLocation()+distanceForMove)
+								&&(!path.get(p.getNewLocation()+distanceForMove).getChildrenTiles().get(path.get(p.getNewLocation()+distanceForMove).getChildrenTiles().size()-1).hasPawn())))
 				{
 					int points = calculatePointsOfTurn(p,distanceForMove);
 					double valueOfTurn = points + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceForMove)/*+ aiPawnSpread*(avgDistanceMe - p.getNewLocation())*/;
