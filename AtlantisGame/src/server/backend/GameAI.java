@@ -62,11 +62,12 @@ public class GameAI {
 			RefreshPlayerMessage rpm = (RefreshPlayerMessage)igm;
 			if(rpm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex())
 			{
+				/*
 				for(Card c : rpm.getNewCards())
 				{
 					me.getPlayerHand().addCard(c);
 				}
-				/*
+				
 				for(Pawn p : me.getPawns())
 				{
 					if (p.getId() == rpm.getSelectedPawn().getId())
