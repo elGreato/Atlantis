@@ -15,6 +15,7 @@ import messageObjects.WaterMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
+import messageObjects.turnMessages.RefreshPlayerMessage;
 
 public class GameAI {
 	private GameInterface game;
@@ -55,6 +56,25 @@ public class GameAI {
 		else if(igm instanceof PlayAnotherCardMessage)
 		{
 			game.processMessage(new PawnCardSelectedMessage(game.getName(),me.getPlayerIndex(), bestPawn, bestCards.remove(0)));
+		}
+		else if(igm instanceof RefreshPlayerMessage)
+		{
+			RefreshPlayerMessage rpm = (RefreshPlayerMessage)igm;
+			if(rpm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex())
+			{
+				for(Card c : rpm.getNewCards())
+				{
+					me.getPlayerHand().addCard(c);
+				}
+				/*
+				for(Pawn p : me.getPawns())
+				{
+					if (p.getId() == rpm.getSelectedPawn().getId())
+					{
+						p.setNewLocation(rpm.getSelectedPawn().getNewLocation());
+					}
+				}*/
+			}
 		}
 		
 	}
