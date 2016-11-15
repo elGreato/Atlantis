@@ -134,7 +134,7 @@ public class GameAI {
 
 	private int calculateCostsOfMove(Pawn p, int distance, Card c) {
 
-		return 0;
+		return 0; 
 	}
 
 	private int calculatePointsOfTurn(Pawn p, int distance) {
