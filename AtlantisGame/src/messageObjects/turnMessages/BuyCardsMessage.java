@@ -7,24 +7,21 @@ import gameObjects.LandTile;
 import gameObjects.Player;
 import messageObjects.InGameMessage;
 
-public class buyCardsMessage extends InGameMessage implements Serializable{
-	Player currentPlayer;
+public class BuyCardsMessage extends InGameMessage implements Serializable{
+	int currentPlayerIndex;
 	ArrayList<LandTile> treasuresChosen;
 	
 	
-	public buyCardsMessage(String gameName, Player currentPlayer, ArrayList<LandTile> treasuresChosen) {
+	public BuyCardsMessage(String gameName, int i, ArrayList<LandTile> treasuresChosen) {
 		super(gameName);
+		this.currentPlayerIndex=i;
+		this.treasuresChosen=treasuresChosen;
 		
 	}
 
 
-	public Player getCurrentPlayer() {
-		return currentPlayer;
-	}
-
-
-	public void setCurrentPlayer(Player currentPlayer) {
-		this.currentPlayer = currentPlayer;
+	public int getCurrentPlayerIndex() {
+		return currentPlayerIndex;
 	}
 
 

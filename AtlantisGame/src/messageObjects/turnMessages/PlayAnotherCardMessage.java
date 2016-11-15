@@ -2,15 +2,21 @@ package messageObjects.turnMessages;
 
 import java.io.Serializable;
 
+import gameObjects.Pawn;
 import messageObjects.InGameMessage;
 
 public class PlayAnotherCardMessage extends InGameMessage implements Serializable {
-
+	Pawn selectedPawn;
 	
 	
-	public PlayAnotherCardMessage(String gameName) {
+	public PlayAnotherCardMessage(String gameName, Pawn selectedPawn) {
 		super(gameName);
-		// TODO Auto-generated constructor stub
+		this.selectedPawn=selectedPawn;
+	}
+
+
+	public Pawn getSelectedPawn() {
+		return selectedPawn;
 	}
 
 }

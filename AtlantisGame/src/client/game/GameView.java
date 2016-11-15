@@ -212,7 +212,6 @@ public class GameView {
 				for (int k = 0; k < water.getChildren().size(); k++) {
 
 					LandTile tile = (LandTile) water.getChildren().get(k);
-					tile.setOnMouseClicked(e-> handleTreasure(tile));
 					Rectangle rec = new Rectangle();
 					rec.setWidth(68.00f);
 					rec.setHeight(68.00f);
@@ -435,10 +434,12 @@ public class GameView {
 	}
 
 	public void givePlayerTreasure(LandTile landTile) {
+		landTile.setOnMouseClicked(e-> handleTreasure(landTile));
 		hbTreasures.getChildren().add(landTile);
 
 	}
 	public void removePlayerTreasure(LandTile landTile){
+		System.out.println("in view remove treasures ");
 		hbTreasures.getChildren().remove(landTile);
 		
 	}
@@ -488,5 +489,14 @@ public class GameView {
 		tempStage.close();
 		
 		
+	}
+	public void removeEnemyTreasures(int index, LandTile soldLand) {
+		HBox hbOpponentTreasure = hbEnemiesTreasures.get(index);
+		for(int i =0; i<hbOpponentTreasure.getChildren().size();i++){
+			if (((LandTile)hbOpponentTreasure.getChildren().get(i)).getTileId()==soldLand.getTileId()){
+				hbOpponentTreasure.getChildren().remove(i);
+				lblTurn.setText("The enemy sold a treasure to buy Cards");
+			}
+		}
 	}
 }

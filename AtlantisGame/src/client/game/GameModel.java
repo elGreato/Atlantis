@@ -20,7 +20,8 @@ import messageObjects.turnMessages.PlayAnotherCardMessage;
 import messageObjects.turnMessages.RefreshPlayerMessage;
 import messageObjects.turnMessages.ServerMessage;
 import messageObjects.turnMessages.TurnMessage;
-import messageObjects.turnMessages.buyCardsMessage;
+import messageObjects.turnMessages.BuyCardsMessage;
+import messageObjects.turnMessages.CardsBoughtMessage;
 
 public class GameModel {
 
@@ -97,7 +98,6 @@ public class GameModel {
 			if (((TurnMessage) msgIn).isYourTurn()) {
 				if (scanPawns() != null) {
 					if (scanCards() != null) {
-						System.out.println("sent my index" + currentPlayer.getPlayerIndex());
 						currentPlayer.setYourTurn(true);
 						Card selectedCard = null;
 						Pawn selectedPawn = null;
@@ -120,11 +120,17 @@ public class GameModel {
 		}
 		// update players
 		if (msgIn instanceof RefreshPlayerMessage) {
+
 			RefreshPlayerMessage message = (RefreshPlayerMessage) msgIn;
-			System.out.println("REFERESH REC");
+			// release the locked pawns
+			if (message.getCurrentPlayer().getPlayerIndex() != currentPlayer.getPlayerIndex()) {
+				for (Pawn p : currentPlayer.getPawns()) {
+					p.setOnMouseClicked(e -> view.handlePawn(p));
+				}
+			}
 			LandTile treasure = message.getTreasure();
 			ArrayList<Card> newCards = message.getNewCards();
-			if (newCards.size() != 0 && message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
+			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex() && newCards != null) {
 				addCardToPlayer(newCards);
 
 			} else
@@ -160,8 +166,42 @@ public class GameModel {
 		}
 		// inform player to play another card
 		if (msgIn instanceof PlayAnotherCardMessage) {
+			for (Pawn p : currentPlayer.getPawns()) {
+				if (((PlayAnotherCardMessage) msgIn).getSelectedPawn().getPawnId() != p.getPawnId()) {
+					p.setOnMouseClicked(null);
+				}
+			}
 			view.playerAnother();
 
+		}
+		if (msgIn instanceof CardsBoughtMessage) {
+			CardsBoughtMessage message = (CardsBoughtMessage) msgIn;
+			ArrayList<LandTile> sold = message.getSold();
+			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
+				for (int i = 0; i < sold.size(); i++) {
+					LandTile soldLand = sold.get(i);
+					for (int k = 0; k < currentPlayer.getPlayerHand().getTreasures().size(); k++) {
+						if (currentPlayer.getPlayerHand().getTreasures().get(k).getTileId() == soldLand.getTileId()) {
+							currentPlayer.getPlayerHand().getTreasures().remove(k);
+
+						}
+					}
+				}
+				ArrayList<Card> boughtCards = message.getPurchase();
+				if (boughtCards.size() != 0
+						&& message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
+					addCardToPlayer(boughtCards);
+
+				}
+
+			} else {
+				for (int i = 0; i < sold.size(); i++) {
+					LandTile soldLand = sold.get(i);
+					view.removeEnemyTreasures(message.getCurrentPlayer().getPlayerIndex(), soldLand);
+
+				}
+
+			}
 		}
 
 	}
@@ -185,10 +225,10 @@ public class GameModel {
 	}
 
 	private void addCardToPlayer(ArrayList<Card> newCards) {
-		for(Card newCard:newCards){
-		currentPlayer.addCard(newCard);
-		newCard.setOwner(currentPlayer);
-		addClickToCard(newCard);
+		for (Card newCard : newCards) {
+			currentPlayer.addCard(newCard);
+			newCard.setOwner(currentPlayer);
+			addClickToCard(newCard);
 		}
 	}
 
@@ -205,19 +245,19 @@ public class GameModel {
 				}
 			}
 		}
-		for (int g = 0; g < view.getBase().size()&&selectedLand!=null; g++) {
+		for (int g = 0; g < view.getBase().size() && selectedLand != null; g++) {
 			WaterTile tempWater = view.getBase().get(g);
 			if (tempWater.getChildren().contains(selectedLand)) {
 				((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).setPawnOnTile(viewPawn);
 				((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).convertPawns();
 			}
-			
 
-		} if (selectedLand==null){
-			System.out.println("raeched the last in client");
+		}
+		if (selectedLand == null) {
+			selectedPawn.setPawnSelected(false);
 			selectedPawn.setOnMouseClicked(null);
 			view.addPawnToMainLand(selectedPawn);
-			
+
 		}
 
 	}
@@ -232,7 +272,6 @@ public class GameModel {
 
 	private void giveEnemyTreasure(int indexOfPlayer, LandTile treasure) {
 		if (treasure != null) {
-			System.out.println("GIVE ENEMY TREASURE ACT");
 			view.giveEnemyTreasure(indexOfPlayer, treasure);
 		}
 
@@ -242,7 +281,6 @@ public class GameModel {
 		for (int g = 0; g < view.getBase().size(); g++) {
 			WaterTile tempWater = view.getBase().get(g);
 			if (tempWater.getChildren().contains(treasure)) {
-				System.out.println("Foudn the treasure ");
 				tempWater.getChildren().remove(treasure);
 			}
 
@@ -283,30 +321,29 @@ public class GameModel {
 	}
 
 	public void tryBuyCards() {
-		if(currentPlayer.isYourTurn()){
-			
+		if (currentPlayer.isYourTurn()) {
+
 			view.showBuyCards();
 		}
-		
+
 	}
 
 	public void pay4Cards() {
-		ArrayList<LandTile> treasuresChosen= new ArrayList<>();
-		for(int i=0; i<currentPlayer.getPlayerHand().getTreasures().size();i++){
-			LandTile treasureSelected=currentPlayer.getPlayerHand().getTreasures().get(i);
-			if(treasureSelected.isSelected()){
+		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
+		for (int i = 0; i < currentPlayer.getPlayerHand().getTreasures().size(); i++) {
+			LandTile treasureSelected = currentPlayer.getPlayerHand().getTreasures().get(i);
+			if (treasureSelected.isSelected()) {
 				treasuresChosen.add(treasureSelected);
 				currentPlayer.getPlayerHand().getTreasures().remove(treasureSelected);
-				//view.removePlayerTreasure(treasureSelected);
+				view.removePlayerTreasure(treasureSelected);
 			}
-	
+
 		}
-	
-		msgOut.sendMessage(new buyCardsMessage (gameName,currentPlayer,treasuresChosen));
-		
+		System.out.println("currentPlayer index is in pay4cards " + currentPlayer.getPlayerIndex());
+		msgOut.sendMessage(new BuyCardsMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen));
+
 		view.closeBuyScene();
-				
+
 	}
 
-	
 }

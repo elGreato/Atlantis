@@ -7,6 +7,8 @@ import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
+import messageObjects.turnMessages.BuyCardsMessage;
+import messageObjects.turnMessages.CardsBoughtMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
@@ -154,12 +156,42 @@ public class Game implements GameInterface {
 			System.out.println("and a card from this colo " + selectedCard.getColor().toString());
 			performTurn(selectedCard, selectedPawn);
 		}
+		if (igm instanceof BuyCardsMessage) {
+			BuyCardsMessage message = ((BuyCardsMessage) igm);
+			ArrayList<Card> purchase = new ArrayList<>();
+			ArrayList<LandTile> sold = new ArrayList<>();
+			if (message.getCurrentPlayerIndex() == currentPlayerIndex) {
+				System.out.println("received buycards message in server");
+				int amount = 0;
+				for (LandTile t : message.getTreasuresChosen()) {
+					amount += t.getLandValue();
+				}
+				amount = amount / 2;
+				while (amount != 0) {
+					Card c = cards.deal();
+					c.setOwner(currentPlayer);
+					currentPlayer.addCard(c);
+					purchase.add(c);
+					amount--;
+				}
+				for (LandTile gone : message.getTreasuresChosen()) {
+					sold.add(gone);
+					currentPlayer.getPlayerHand().getTreasures().remove(gone);
+				}
+				int numberOfPlayers = getNumOfRegisteredPlayers();
+				for (int i = 0; i < numberOfPlayers; i++) {
+					users.get(i).sendMessage(new CardsBoughtMessage(getName(),currentPlayer, purchase, sold));
+
+				}
+
+			}
+		}
 
 	}
 
 	private void performTurn(Card selectedCard, Pawn selectedPawn) {
 
-		ArrayList<Card> newCards=null;
+		ArrayList<Card> newCards = null;
 
 		boolean foundLand = false;
 		boolean giveTreasure = false;
@@ -208,12 +240,13 @@ public class Game implements GameInterface {
 					foundLand = true;
 					giveTreasure = false;
 					System.out.println("found land but it has pawn, so player has to play another card");
-					users.get(currentPlayer.getPlayerIndex()).sendMessage(new PlayAnotherCardMessage(getName()));
+					users.get(currentPlayer.getPlayerIndex()).sendMessage(new PlayAnotherCardMessage(getName(),selectedPawn));
 
 				}
 				if (!foundLand && f == base.size() - 1) {
 					System.out.println("reached the end, f now is " + f);
 					selectedPawn.setNewLocation(53);
+					selectedPawn.setReachedMainLand(true);
 					mainland.getPawns().add(selectedPawn);
 					foundLand = true;
 					selectedLand = null;
@@ -275,7 +308,8 @@ public class Game implements GameInterface {
 		result.add(turnCard);
 		// for each pawn in mainland he gets an extra one
 		for (Pawn p : player.getPawns()) {
-			if (p.getNewLocation() == 53) {
+			if (p.ReachedMainLand()) {
+				System.out.println("found pawn in main land");
 				Card newCard = cards.deal();
 				newCard.setOwner(player);
 				player.getPlayerHand().addCard(newCard);
@@ -387,7 +421,7 @@ public class Game implements GameInterface {
 			Card card = cards.deal();
 			card.setOwner(player);
 			result.add(card);
-			player.getPlayerHand().addCard(card);
+			player.addCard(card);
 		}
 		return result;
 	}

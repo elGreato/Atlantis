@@ -18,6 +18,7 @@ public class Pawn extends StackPane implements Serializable{
 	private int pawnId;
 	private transient Circle circle;
 	private boolean isPawnSelected = false;
+	private boolean reachedMainLand =false;
 	
 	public Pawn(Player player, int pawnId){
 		
@@ -95,6 +96,14 @@ public class Pawn extends StackPane implements Serializable{
 
 	public void setPawnSelected(boolean isPawnSelected) {
 		this.isPawnSelected = isPawnSelected;
+	}
+
+	public boolean ReachedMainLand() {
+		return reachedMainLand;
+	}
+
+	public void setReachedMainLand(boolean reachedMainLand) {
+		this.reachedMainLand = reachedMainLand;
 	}
 
 	
