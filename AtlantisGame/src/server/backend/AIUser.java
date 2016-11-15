@@ -7,7 +7,7 @@ import messageObjects.InGameMessage;
 import messageObjects.Message;
 import messageObjects.WaterMessage;
 
-public class AIUser extends AllUsers implements Runnable{
+public class AIUser extends User implements Runnable{
 	public static String[] aiNames = {"AI_BernGuy", "AI_Bolt","AI_SGASquad","AI_GovernmentOfficials"};
 	private double aiSpeed;
 	private double aiPawnSpread;

@@ -7,22 +7,22 @@ import messageObjects.LobbyChatMessage;
 
 public interface LobbyInterface {
 	
-	UserInfo loginUser(String username, String password, User user);
+	UserInfo loginUser(String username, String password, HumanUser user);
 	
-	void logoutFromOnlineUsers(User user);
+	void logoutFromOnlineUsers(HumanUser user);
 	
-	UserInfo createNewUser(String username, String password, User user);
+	UserInfo createNewUser(String username, String password, HumanUser user);
 	
 	
-	String createGame(User user, CreateGameMessage cgm);
+	String createGame(HumanUser user, CreateGameMessage cgm);
 
-	String joinGame(User user, GameJoinMessage gjm);
+	String joinGame(HumanUser user, GameJoinMessage gjm);
 	
 	
 
 	void processChatMessage(LobbyChatMessage chatMessage);
 
-	void sendWholeLobby(User user);
+	void sendWholeLobby(HumanUser user);
 
 	int getPosition(UserInfo userInfo);
 	

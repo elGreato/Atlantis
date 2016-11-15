@@ -16,6 +16,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import server.backend.HumanUser;
 import server.backend.Lobby;
 import server.backend.User;
 
@@ -151,7 +152,7 @@ public class ServerModel implements Runnable{
 			while(true)
 			{
 				Socket client = serverSocket.accept();
-				User user = new User(client, lobby);
+				HumanUser user = new HumanUser(client, lobby);
 				Thread thread = new Thread(user);
 				thread.start();
 			}

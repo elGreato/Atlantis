@@ -15,7 +15,7 @@ import messageObjects.UserInfoListMessage;
 import messageObjects.UserInfoMessage;
 
 public class Lobby implements LobbyInterface{
-	private ArrayList<User> onlineUsers;
+	private ArrayList<HumanUser> onlineUsers;
 	private ArrayList<UserInfo> userInfoAllUsers;
 	private ArrayList<Game> waitingGames;
 	private ArrayList<Game> runningGames;
@@ -33,7 +33,7 @@ public class Lobby implements LobbyInterface{
 		
 		userInfoAllUsers = databaseAccess.getUsers();
 		Collections.sort(userInfoAllUsers);
-		onlineUsers = new ArrayList<User>();
+		onlineUsers = new ArrayList<HumanUser>();
 		
 		waitingGames = new ArrayList<Game>();
 		runningGames = new ArrayList<Game>();
@@ -43,7 +43,7 @@ public class Lobby implements LobbyInterface{
 	
 	//checks if username already exists and creates new user if it doesn't. If create user successful user will be informed and logged in.
 	@Override
-	public synchronized UserInfo createNewUser(String username, String password, User user)
+	public synchronized UserInfo createNewUser(String username, String password, HumanUser user)
 	{
 		
 		boolean userNameAvailable = true;
@@ -73,7 +73,7 @@ public class Lobby implements LobbyInterface{
 
 	//Checks validity of entered passwords from login requests
 	@Override
-	public synchronized UserInfo loginUser(String username, String password, User user) {
+	public synchronized UserInfo loginUser(String username, String password, HumanUser user) {
 		for(UserInfo ui: userInfoAllUsers)
 		{
 			
@@ -88,7 +88,7 @@ public class Lobby implements LobbyInterface{
 	
 	//Creates new game from user input
 	@Override
-	public synchronized String createGame(User user, CreateGameMessage createMsg)
+	public synchronized String createGame(HumanUser user, CreateGameMessage createMsg)
 	{
 		String serverAnswer = new String("");
 		String gameName = createMsg.getGameName();
@@ -128,7 +128,7 @@ public class Lobby implements LobbyInterface{
 	
 	//Makes user join a game if preconditions are met
 	@Override
-	public synchronized String joinGame(User user, GameJoinMessage joinMsg)
+	public synchronized String joinGame(HumanUser user, GameJoinMessage joinMsg)
 	{
 		String serverAnswer = new String("");
 		String gameName = joinMsg.getGameName();
@@ -197,7 +197,7 @@ public class Lobby implements LobbyInterface{
 
 	//After informing the user about the successful login, all the lobby data including games has to be sent to the user. After that the user is added to the group that gets automatic updates called onlineUsers
 	@Override
-	public synchronized void sendWholeLobby(User user) {
+	public synchronized void sendWholeLobby(HumanUser user) {
 
 		ArrayList<GameListItem> allGamesInLobby = new ArrayList<GameListItem>(); 
 		for(Game game: waitingGames)
@@ -218,7 +218,7 @@ public class Lobby implements LobbyInterface{
 		
 		
 	}
-	private synchronized void sendLeaderboard(User user) {
+	private synchronized void sendLeaderboard(HumanUser user) {
 		ArrayList<UserInfoMessage> leaderboard = new ArrayList<UserInfoMessage>();
 		int leaderboardEntries = 0;
 		if(userInfoAllUsers.size()< leaderboardSize)
@@ -338,7 +338,7 @@ public class Lobby implements LobbyInterface{
 		}
 		if(listPositionAfter < leaderboardSize || listPositionBefore < leaderboardSize)
 		{
-			for(User u : onlineUsers)
+			for(HumanUser u : onlineUsers)
 			{
 				sendLeaderboard(u);
 			}
@@ -362,7 +362,7 @@ public class Lobby implements LobbyInterface{
 	}
 
 	@Override
-	public void logoutFromOnlineUsers(User user) {
+	public void logoutFromOnlineUsers(HumanUser user) {
 		onlineUsers.remove(user);
 		
 	}
