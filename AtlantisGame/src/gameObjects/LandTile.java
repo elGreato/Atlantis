@@ -15,8 +15,8 @@ import javafx.scene.text.Text;
 
 public class LandTile extends Tile implements Serializable {
 	
-	private Pawn pawnOnTile;
-	private Pawn tempPawn;
+	private volatile Pawn pawnOnTile;
+	private volatile Pawn tempPawn;
 	private  ColorChoice landTileColor;
 	private int landValue;
 	private ArrayList<Pawn> pawns=new ArrayList<>();

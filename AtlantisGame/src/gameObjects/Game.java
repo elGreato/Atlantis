@@ -180,7 +180,7 @@ public class Game implements GameInterface {
 				}
 				int numberOfPlayers = getNumOfRegisteredPlayers();
 				for (int i = 0; i < numberOfPlayers; i++) {
-					users.get(i).sendMessage(new CardsBoughtMessage(getName(),currentPlayer, purchase, sold));
+					users.get(i).sendMessage(new CardsBoughtMessage(getName(), currentPlayer, purchase, sold));
 
 				}
 
@@ -210,6 +210,8 @@ public class Game implements GameInterface {
 				topNode = water.getChildren().size() - 1;
 				System.out.println("amount of Water is " + base.size());
 				waterHasTile = true;
+			} else {
+				payForWater(water);
 			}
 			// get the top tile on that water
 			if (waterHasTile && water.getChildren().get(topNode) instanceof LandTile) {
@@ -240,7 +242,8 @@ public class Game implements GameInterface {
 					foundLand = true;
 					giveTreasure = false;
 					System.out.println("found land but it has pawn, so player has to play another card");
-					users.get(currentPlayer.getPlayerIndex()).sendMessage(new PlayAnotherCardMessage(getName(),selectedPawn));
+					users.get(currentPlayer.getPlayerIndex())
+							.sendMessage(new PlayAnotherCardMessage(getName(), selectedPawn));
 
 				}
 				if (!foundLand && f == base.size() - 1) {
@@ -277,6 +280,49 @@ public class Game implements GameInterface {
 		}
 		if (foundLand && nextPlayer)
 			endTurn();
+
+	}
+
+	private void payForWater(WaterTile water) {
+		int waterIndex = base.indexOf(water);
+		WaterTile waterBefore;
+		WaterTile waterAfter;
+		LandTile landBefore;
+		LandTile landAfter;
+		int valueBefore;
+		int valueAfter;
+		boolean foundPreviousWaterWithTiles=false;
+		boolean foundAfterWaterWithTiles = false;
+
+		if (waterIndex > 0&& waterIndex<52){
+			int waterBeforeIndex=waterIndex-1;
+			while(!foundPreviousWaterWithTiles){
+				waterBefore = base.get(waterBeforeIndex);
+				if(waterBefore.getChildrenTiles().size()!=0){
+			landBefore = (LandTile) waterBefore.getChildren().get(waterBefore.getChildren().size()-1);
+			
+			valueBefore = landBefore.getLandValue();
+			foundPreviousWaterWithTiles =true;
+				}else waterBeforeIndex--;
+			}
+			int waterAfterIndex = waterIndex+1;
+			while(!foundAfterWaterWithTiles){
+				waterAfter = base.get(waterAfterIndex);
+				if(waterAfter.getChildrenTiles().size()!=0){
+			landAfter = (LandTile) waterAfter.getChildren().get(waterAfter.getChildren().size()-1);
+			
+			valueAfter = landAfter.getLandValue();
+			foundAfterWaterWithTiles =true;
+				}else waterBeforeIndex++;
+			}
+			
+		}
+		else if(waterIndex==0){
+			waterBefore = null;
+			landBefore =null;
+			valueBefore=0;
+		}
+
 
 	}
 
