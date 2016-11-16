@@ -44,7 +44,6 @@ import javafx.stage.Stage;
 public class GameView {
 	private BorderPane root = new BorderPane();
 	private GridPane mainBoard = new GridPane();
-	
 
 	// base for other stacks
 	ArrayList<WaterTile> base;
@@ -52,19 +51,21 @@ public class GameView {
 	// fx stuff
 	public Scene scene;
 	public Stage stage;
-	public Stage tempStage ;
+	public Stage tempStage;
 
 	// the main game controls
 	public Button btnPlayCard = new Button("Play a Selected Card");
 	public Button btnBuyCards = new Button("Buy Cards");
 	public Button btnPay4Water = new Button("Pay");
 	public Button btnPay4cards = new Button("Pay");
-
+	public Button btnCalc = new Button("Calculate what I chose");
 
 	// Labels for main game controls
 	private Label lblGameBtns = new Label("Action Buttons");
 	private Label lblGameStatus = new Label();
 	private Label lblTurn = new Label();
+	protected Label lblWaterCalc = new Label();
+	private Label lblPay= new Label();
 	// Vbox to hold buttons and HBox to hold Game status
 	private VBox vbMainControls = new VBox();
 	private VBox vbGameStatus = new VBox();
@@ -79,8 +80,8 @@ public class GameView {
 	private HBox hbOpponents = new HBox();
 	private HBox hboxCards = new HBox();
 	private HBox hbTreasures = new HBox();
-	
-	private HashMap<Integer,HBox> hbEnemiesTreasures =new HashMap<Integer, HBox>();
+
+	private HashMap<Integer, HBox> hbEnemiesTreasures = new HashMap<Integer, HBox>();
 
 	private MainLand mainland;
 	private AtlantisTile atlantis;
@@ -99,6 +100,7 @@ public class GameView {
 	private int y = 0;
 	private int x = 5;
 
+	protected boolean mutliCardMode = false;
 	int maxColIndex;
 	int maxRowIndex;
 
@@ -144,10 +146,7 @@ public class GameView {
 		vbPlayerInfo.getChildren().add(lbltreasures);
 		vbPlayerInfo.getChildren().add(hbTreasures);
 		vbPlayer.getChildren().add(vbPlayerInfo);
-		
-		
-	
-		
+
 		hbPlayersInfo.getChildren().addAll(vbPlayer, hbOpponents);
 		vbGameStatus.getChildren().addAll(lblGameStatus, lblTurn);
 		root.setBottom(hbPlayersInfo);
@@ -162,7 +161,7 @@ public class GameView {
 		mainBoard.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
 				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 		stage.setScene(scene);
-		stage.setTitle("Atlantis GAME"); 
+		stage.setTitle("Atlantis GAME");
 		stage.show();
 
 	}
@@ -174,7 +173,7 @@ public class GameView {
 
 	// add stacks to the mainBoard
 	private void addToMainBoard(WaterTile water) {
-		
+
 		if (((ro == 1) || (ro == 5) || (ro == 9)) && co != maxColIndex) {
 
 			mainBoard.add(water, co, ro);
@@ -196,7 +195,8 @@ public class GameView {
 		}
 
 	}
-	// this method adds a Rectangle and Text to each landtile 
+
+	// this method adds a Rectangle and Text to each landtile
 	public void addRecAndText(ArrayList<WaterTile> base) {
 		this.base = base;
 		for (int i = 0; i < base.size(); i++) {
@@ -206,7 +206,7 @@ public class GameView {
 			water.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
 					BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 			water.convertToChildren();
-			
+
 			if (water.getChildren().size() != 0) {
 				for (int k = 0; k < water.getChildren().size(); k++) {
 
@@ -226,7 +226,6 @@ public class GameView {
 
 	}
 
-	
 	public void showPlayer(Player player) {
 
 		lblName.setText(player.getPlayerName());
@@ -240,7 +239,7 @@ public class GameView {
 		for (Pawn p : player.getPawns()) {
 			Circle c = new Circle();
 			c.setRadius(14);
-			p.setCircle(c);	
+			p.setCircle(c);
 			c.setFill(Pawn.FillColor(player));
 			p.getChildren().add(c);
 			atlantis.getChildren().add(p);
@@ -273,13 +272,13 @@ public class GameView {
 		lblopponentCardCount
 				.setText("This enemy has " + String.valueOf(opponent.getPlayerHand().getNumCards()) + " cards\t");
 		HBox hbEnemyTreasures = new HBox();
-		Integer index=opponent.getPlayerIndex();
-		hbEnemiesTreasures.put(index,hbEnemyTreasures);
+		Integer index = opponent.getPlayerIndex();
+		hbEnemiesTreasures.put(index, hbEnemyTreasures);
 		Rectangle recColor = new Rectangle();
 		recColor.setHeight(10);
 		recColor.setWidth(150);
 		recColor.setFill(Pawn.FillColor(opponent));
-		vbOpponentInfo.getChildren().addAll(lblopponentName, lblopponentCardCount,hbEnemyTreasures, recColor);
+		vbOpponentInfo.getChildren().addAll(lblopponentName, lblopponentCardCount, hbEnemyTreasures, recColor);
 		hbOpponents.getChildren().add(vbOpponentInfo);
 
 		// i need to find a way to get the circle of the pawn
@@ -332,9 +331,11 @@ public class GameView {
 		lblTurn.setText("It is " + curPlayer + " turn");
 		lblTurn.setTextFill(Color.BLACK);
 		lblTurn.setFont(new Font("Cambria", 25));
+		mutliCardMode=false;
 
 	}
-	public void playerAnother(){
+
+	public void playerAnother() {
 		lblTurn.setText("Please play another card");
 		lblTurn.setTextFill(Color.RED);
 		lblTurn.setFont(new Font("Cambria", 32));
@@ -352,35 +353,37 @@ public class GameView {
 	}
 
 	public void handleCard(Card c) {
-		// first unselected all the other cards in the hand
-		for (Card cc : c.getOwner().getPlayerHand().getCards()) {
-			if (cc.getCardId() != c.getCardId() ) {
-				cc.getRec().setStroke(Color.TRANSPARENT);
-				cc.setCardSelected(false);
+		if (!mutliCardMode) {
+			// first unselected all the other cards in the hand
+			for (Card cc : c.getOwner().getPlayerHand().getCards()) {
+				if (cc.getCardId() != c.getCardId()) {
+					cc.getRec().setStroke(Color.TRANSPARENT);
+					cc.setCardSelected(false);
+				}
+			}}
+			// this is to give the user ability to unselect a card when he
+			// clicks again
+			if (!c.isCardSelected()) {
+				c.getRec().setStroke(Color.BLACK);
+				c.setCardSelected(true);
+				System.out.println(c.getColor().toString() + "card is selected" + c.isCardSelected());
+			} else {
+				c.getRec().setStroke(Color.TRANSPARENT);
+				c.setCardSelected(false);
+				System.out.println(c.getColor().toString() + "card is unselected" + c.isCardSelected());
 			}
-		}
-		// this is to give the user ability to unselect a card when he clicks again
-		if (!c.isCardSelected()) {
-			c.getRec().setStroke(Color.BLACK);
-			c.setCardSelected(true);
-			System.out.println(c.getColor().toString()+"card is selected" + c.isCardSelected());
-		} else {
-			c.getRec().setStroke(Color.TRANSPARENT);
-			c.setCardSelected(false);
-			System.out.println(c.getColor().toString()+"card is unselected" + c.isCardSelected());
-		}
-
+		
 	}
+
 	private void handleTreasure(LandTile treasure) {
-		if(!treasure.isSelected()){
-		((Rectangle)treasure.getChildren().get(0)).setStroke(Color.BLACK);
-		treasure.setSelected(true);}
-		else {
-			((Rectangle)treasure.getChildren().get(0)).setStroke(Color.TRANSPARENT);
+		if (!treasure.isSelected()) {
+			((Rectangle) treasure.getChildren().get(0)).setStroke(Color.BLACK);
+			treasure.setSelected(true);
+		} else {
+			((Rectangle) treasure.getChildren().get(0)).setStroke(Color.TRANSPARENT);
 			treasure.setSelected(false);
 		}
-		
-		
+
 	}
 
 	public ArrayList<WaterTile> getBase() {
@@ -434,51 +437,59 @@ public class GameView {
 	}
 
 	public void givePlayerTreasure(LandTile landTile) {
-		landTile.setOnMouseClicked(e-> handleTreasure(landTile));
+		landTile.setOnMouseClicked(e -> handleTreasure(landTile));
 		hbTreasures.getChildren().add(landTile);
 
 	}
-	public void removePlayerTreasure(LandTile landTile){
+
+	public void removePlayerTreasure(LandTile landTile) {
 		System.out.println("in view remove treasures ");
 		hbTreasures.getChildren().remove(landTile);
-		
+
 	}
+
 	public void removeCardFromHand(Card card) {
 		hboxCards.getChildren().remove(card);
-		
+
 	}
+
 	public void giveEnemyTreasure(int indexOfPlayer, LandTile treasure) {
-		Integer index=indexOfPlayer;
+		Integer index = indexOfPlayer;
 		HBox hbOpponentTreasure = hbEnemiesTreasures.get(index);
 		hbOpponentTreasure.getChildren().add(treasure);
-		
+
 	}
+
 	public void selectPawnPlease() {
 		lblTurn.setText("Please SELECT A PAWN");
 		lblTurn.setTextFill(Color.RED);
 		lblTurn.setFont(new Font("Cambria", 25));
-		
+
 	}
+
 	public void showMessageFromServer(String theMessage) {
 		lblTurn.setText(theMessage);
-		
+
 	}
+
 	public void selectCardPlease() {
 		lblTurn.setText("Please Select a CARD");
 		lblTurn.setTextFill(Color.RED);
 		lblTurn.setFont(new Font("Cambria", 25));
-		
+
 	}
+
 	public void addPawnToMainLand(Pawn selectedPawn) {
 		mainland.getPawns().add(selectedPawn);
 		mainland.convertToChildren();
-		
+
 	}
+
 	public void showBuyCards() {
 		VBox buyPane = new VBox();
 		Label lblBuyCards = new Label("Choose the treasures that you would like to Sacrfice to buy cards"
 				+ "\nRemember, half of what you pay, rounded down, will be refunded as cards");
-		buyPane.getChildren().addAll(lblBuyCards,hbTreasures,btnPay4cards);
+		buyPane.getChildren().addAll(lblBuyCards, hbTreasures, btnPay4cards);
 		Scene buyScene = new Scene(buyPane);
 		tempStage = new Stage();
 		tempStage.setScene(buyScene);
@@ -488,34 +499,46 @@ public class GameView {
 		tempStage.setAlwaysOnTop(true);
 
 	}
+
 	public void closeBuyScene() {
-		vbPlayer.getChildren().add(vbPlayer.getChildren().size()-1, hbTreasures);
+		vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 1, hbTreasures);
 		tempStage.close();
-		
-		
+
 	}
+
 	public void removeEnemyTreasures(int index, LandTile soldLand) {
 		HBox hbOpponentTreasure = hbEnemiesTreasures.get(index);
-		for(int i =0; i<hbOpponentTreasure.getChildren().size();i++){
-			if (((LandTile)hbOpponentTreasure.getChildren().get(i)).getTileId()==soldLand.getTileId()){
+		for (int i = 0; i < hbOpponentTreasure.getChildren().size(); i++) {
+			if (((LandTile) hbOpponentTreasure.getChildren().get(i)).getTileId() == soldLand.getTileId()) {
 				hbOpponentTreasure.getChildren().remove(i);
 				lblTurn.setText("The enemy sold a treasure to buy Cards");
 			}
 		}
 	}
+
 	public void showWaterBill(int waterBill, int waterPassedCount) {
 		VBox payPane = new VBox();
-		Label lblPay = new Label("You have crossed "+String.valueOf(waterPassedCount) +" Water Tiles"
-				+"\n Now you have to pay "+String.valueOf(waterBill)+ " points, choose the treasures and cards that you wanna pay with");
-		payPane.getChildren().addAll(lblPay,hbTreasures,hboxCards,btnPay4Water);
+	
+		 lblPay.setText("You have crossed " + String.valueOf(waterPassedCount) + " Water Tiles"
+				+ "\n Now you have to pay " + String.valueOf(waterBill)
+				+ " points, choose the treasures and cards that you wanna pay with");
+		
+		btnPay4Water.setDisable(true);
+		payPane.getChildren().addAll(lblPay,lblWaterCalc, hbTreasures, hboxCards,btnCalc, btnPay4Water);
 		Scene payScene = new Scene(payPane);
 		tempStage = new Stage();
 		tempStage.setScene(payScene);
 		tempStage.initModality(Modality.WINDOW_MODAL);
 		tempStage.initOwner(stage);
+		tempStage.setTitle("Payment for water");
 		tempStage.show();
 		tempStage.setAlwaysOnTop(true);
 
-		
+	}
+	public void closePayWaterScene(){
+		vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 1, hbTreasures);
+		vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 2, hboxCards);
+		lblPay.setText("");
+		tempStage.close();
 	}
 }

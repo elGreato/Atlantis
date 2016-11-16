@@ -21,13 +21,19 @@ public class GameController {
 		view.btnBuyCards.setOnAction(e -> handleBuyCard());
 		view.btnPay4cards.setOnAction(e-> handlePay4cards());
 		view.btnPay4Water.setOnAction(e-> handlePay4Water());
+		view.btnCalc.setOnAction(e-> handleCalc());
 	}
 
 
 
-	private Object handlePay4Water() {
-		// TODO Auto-generated method stub
-		return null;
+	private void handleCalc() {
+		model.handleCalc();
+	}
+
+
+
+	private void handlePay4Water() {
+		model.pay4Water();
 	}
 
 

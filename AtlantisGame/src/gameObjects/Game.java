@@ -320,7 +320,7 @@ public class Game implements GameInterface {
 			int waterAfterIndex = waterIndex + 1;
 			while (!foundAfterWaterWithTiles) {
 				waterAfter = base.get(waterAfterIndex);
-				if (waterAfter.getChildrenTiles().size() != 0) {
+				if (waterAfter.getChildren().size() != 0) {
 					landAfter = (LandTile) waterAfter.getChildren().get(waterAfter.getChildren().size() - 1);
 
 					valueAfter = landAfter.getLandValue();

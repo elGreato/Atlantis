@@ -20,6 +20,7 @@ import messageObjects.turnMessages.PlayAnotherCardMessage;
 import messageObjects.turnMessages.RefreshPlayerMessage;
 import messageObjects.turnMessages.ServerMessage;
 import messageObjects.turnMessages.TurnMessage;
+import messageObjects.turnMessages.WaterPaidMessage;
 import messageObjects.turnMessages.BuyCardsMessage;
 import messageObjects.turnMessages.CardsBoughtMessage;
 
@@ -29,7 +30,7 @@ public class GameModel {
 	private GameView view;
 	// send messages to server through method msgOut.sendMessage()
 	private ClientLobbyInterface msgOut;
-
+	private int waterBill = 0;
 	protected Player currentPlayer;
 
 	public String getGameName() {
@@ -128,8 +129,9 @@ public class GameModel {
 					p.setOnMouseClicked(e -> view.handlePawn(p));
 				}
 			}
-			if(message.getCurrentPlayer().getPlayerIndex()==currentPlayer.getPlayerIndex()){
-				payForPassingWater(message.getWaterBill(),message.getWaterPassedCount());
+			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
+
+				payForPassingWater(message.getWaterBill(), message.getWaterPassedCount());
 			}
 			LandTile treasure = message.getTreasure();
 			ArrayList<Card> newCards = message.getNewCards();
@@ -207,12 +209,6 @@ public class GameModel {
 			}
 		}
 
-	}
-
-	private void payForPassingWater(int waterBill,int waterPassedCount) {
-		if (waterPassedCount>0)
-		view.showWaterBill(waterBill,waterPassedCount);
-		
 	}
 
 	private Pawn scanPawns() {
@@ -348,10 +344,82 @@ public class GameModel {
 			}
 
 		}
-		System.out.println("currentPlayer index is in pay4cards " + currentPlayer.getPlayerIndex());
+
 		msgOut.sendMessage(new BuyCardsMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen));
 
 		view.closeBuyScene();
+
+	}
+
+	private void payForPassingWater(int waterBill, int waterPassedCount) {
+		if (waterPassedCount > 0) {
+			view.mutliCardMode = true;
+			this.waterBill = waterBill;
+			view.showWaterBill(waterBill, waterPassedCount);
+		}
+
+	}
+
+	public void pay4Water() {
+		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
+		ArrayList<Card> cardsChosen = new ArrayList<>();
+		int totalChosen = 0;
+		for (int i = 0; i < currentPlayer.getPlayerHand().getTreasures().size(); i++) {
+			LandTile treasureSelected = currentPlayer.getPlayerHand().getTreasures().get(i);
+			if (treasureSelected.isSelected()) {
+				treasuresChosen.add(treasureSelected);
+				totalChosen += treasureSelected.getLandValue();
+				currentPlayer.getPlayerHand().getTreasures().remove(treasureSelected);
+				view.removePlayerTreasure(treasureSelected);
+			}
+
+		}
+		for (int i = 0; i < currentPlayer.getPlayerHand().getNumCards(); i++) {
+			Card cardSelected = currentPlayer.getPlayerHand().getCards().get(i);
+			if (cardSelected.isCardSelected()) {
+				cardsChosen.add(cardSelected);
+				totalChosen += 1;
+				currentPlayer.getPlayerHand().getCards().remove(cardSelected);
+				view.removeCardFromHand(cardSelected);
+			}
+		}
+		msgOut.sendMessage(new WaterPaidMessage(gameName,currentPlayer.getPlayerIndex(),treasuresChosen,cardsChosen));
+		view.closePayWaterScene();
+
+	}
+
+	public void handleCalc() {
+		// try RemoveIf method in Server tomorrow
+		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
+		ArrayList<Card> cardsChosen = new ArrayList<>();
+		int totalChosen = 0;
+		for (int i = 0; i < currentPlayer.getPlayerHand().getTreasures().size(); i++) {
+			LandTile treasureSelected = currentPlayer.getPlayerHand().getTreasures().get(i);
+			if (treasureSelected.isSelected()) {
+				treasuresChosen.add(treasureSelected);
+				totalChosen += treasureSelected.getLandValue();
+
+			}
+
+		}
+		for (int i = 0; i < currentPlayer.getPlayerHand().getNumCards(); i++) {
+			Card cardSelected = currentPlayer.getPlayerHand().getCards().get(i);
+			if (cardSelected.isCardSelected()) {
+				cardsChosen.add(cardSelected);
+				totalChosen += 1;
+
+			}
+		}
+		
+		if (totalChosen >= waterBill) {
+			view.btnPay4Water.setDisable(false);
+			view.lblWaterCalc.setText("");
+			view.lblWaterCalc.setText("You will pay "+String.valueOf(totalChosen)+"\n Remember, no change is offered");
+		} else {
+			view.btnPay4Water.setDisable(true);
+			view.lblWaterCalc.setText("");
+			view.lblWaterCalc.setText("This is not enough!"+"You still need to pay extra"+String.valueOf(waterBill-totalChosen));
+		}
 
 	}
 
