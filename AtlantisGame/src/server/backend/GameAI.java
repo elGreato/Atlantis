@@ -53,7 +53,12 @@ public class GameAI {
 			GameStatusMessage gsm =(GameStatusMessage)igm;
 			if(gsm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex())
 			{
-
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				doATurn();
 			}
 		}
@@ -61,7 +66,7 @@ public class GameAI {
 		{
 		
 			try {
-				Thread.sleep(3000);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
