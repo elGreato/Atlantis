@@ -211,7 +211,7 @@ public class Game implements GameInterface {
 				System.out.println("amount of Water is " + base.size());
 				waterHasTile = true;
 			} else {
-				payForWater(water);
+				//payForWater(water);
 			}
 			// get the top tile on that water
 			if (waterHasTile && water.getChildren().get(topNode) instanceof LandTile) {
