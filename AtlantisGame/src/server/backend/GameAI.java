@@ -111,8 +111,21 @@ public class GameAI {
 		calculateAverageDistances();
 		doAMove(me.getPawns(), me.getPlayerHand().getCards(),new ArrayList<Card>(),  0, 0);
 		//System.out.println("AI sends turn message");
-		game.processMessage(new PawnCardSelectedMessage(game.getName(),me.getPlayerIndex(),bestPawn, bestCards.remove(0)));
+		if(bestPawn != null && !bestCards.isEmpty())
+		{
+			game.processMessage(new PawnCardSelectedMessage(game.getName(),me.getPlayerIndex(),bestPawn, bestCards.remove(0)));
+		}
+		else
+		{
+			System.out.println("Can't make a turn");
+			giveUpTurn();
+		}
 
+	}
+
+	private void giveUpTurn() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void calculateAverageDistances() {
