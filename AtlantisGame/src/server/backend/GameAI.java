@@ -94,6 +94,16 @@ public class GameAI {
 	private double avgDistanceOtherPlayers;
 	private double avgDistanceMe;
 	private void doATurn() {
+		//int i = 0;
+		/*for(WaterTile wt:path)
+		{
+			i++;
+			if(!wt.getChildrenTiles().isEmpty()&&!wt.getChildren().isEmpty())
+			{
+			System.out.println(i + " " + ((LandTile)(wt.getChildren().get(wt.getChildren().size()-1))).hasPawn() + " " +((LandTile)(wt.getChildren().get(wt.getChildrenTiles().size()-1))).hasPawn());
+		
+			}
+		}*/
 		//System.out.println("New turn initiated");
 		bestCards = new ArrayList<Card>();
 		bestCards.clear();
@@ -135,8 +145,10 @@ public class GameAI {
 				//System.out.println("Distance before: " + distance);
 				int distanceForMove = distance + calculateDistanceOfMove(p,distance, c);
 				int costsForMove = costs + calculateCostsOfMove(p,distance, c);
-				if((path.size()>p.getNewLocation()+distanceForMove) && (path.get(p.getNewLocation()+distanceForMove).getChildrenTiles().get(path.get(p.getNewLocation()+distanceForMove).getChildrenTiles().size()-1).hasPawn()))
-				{
+				/*if((path.size()>p.getNewLocation()+distanceForMove) && 
+						(path.get(p.getNewLocation()+distanceForMove).getChildrenTiles().get(path.get(p.getNewLocation()+distanceForMove).getChildrenTiles().size()-1).hasPawn()))
+				*/if((path.size()>p.getNewLocation()+distanceForMove) && 
+						(((LandTile) ((path.get(p.getNewLocation()+distanceForMove).getChildren().get(path.get(p.getNewLocation()+distanceForMove).getChildren().size()-1)))).hasPawn())){
 					//System.out.println("plan second move");
 					ArrayList<Card> cardsForNextIteration = new ArrayList<Card>(cardsOnHand);
 					cardsForNextIteration.remove(c);
@@ -193,7 +205,7 @@ public class GameAI {
 		for(int i = startingLocation +1; i<path.size(); i++)
 		{
 			WaterTile wt = path.get(i);
-			if(!(wt.getChildrenTiles().isEmpty())&&(wt.getChildrenTiles().get(wt.getChildrenTiles().size()-1).getColor().equals(c.getColor())))
+			if(!(wt.getChildren().isEmpty())&&((LandTile)wt.getChildren().get(wt.getChildren().size()-1)).getColor().equals(c.getColor()))
 			{
 				return i-startingLocation;
 			}
