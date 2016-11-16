@@ -17,9 +17,11 @@ public class RefreshPlayerMessage extends InGameMessage implements Serializable 
 	LandTile treasure;
 	LandTile selectedLand;
 	ArrayList<Card> newCards;
+	private int waterBill;
+	private int waterPassedCount;
 
 	public RefreshPlayerMessage(String gameName, Player currentPlayer, LandTile selectedLand, Pawn selectedPawn, Card selectedCard,
-			LandTile treasure, ArrayList<Card> newCards) {
+			LandTile treasure, ArrayList<Card> newCards, int waterBill, int waterPassedCount) {
 		super(gameName);
 		this.selectedCard = selectedCard;
 		this.selectedPawn = selectedPawn;
@@ -27,6 +29,8 @@ public class RefreshPlayerMessage extends InGameMessage implements Serializable 
 		this.selectedLand=selectedLand;
 		this.newCards=newCards;
 		this.currentPlayer=currentPlayer;
+		this.waterBill =waterBill;
+		this.waterPassedCount=waterPassedCount;
 	}
 
 	
@@ -37,6 +41,30 @@ public class RefreshPlayerMessage extends InGameMessage implements Serializable 
 
 	public void setCurrentPlayer(Player currentPlayer) {
 		this.currentPlayer = currentPlayer;
+	}
+
+
+
+	public int getWaterPassedCount() {
+		return waterPassedCount;
+	}
+
+
+
+	public void setWaterPassedCount(int waterPassedCount) {
+		this.waterPassedCount = waterPassedCount;
+	}
+
+
+
+	public int getWaterBill() {
+		return waterBill;
+	}
+
+
+
+	public void setWaterBill(int waterBill) {
+		this.waterBill = waterBill;
 	}
 
 

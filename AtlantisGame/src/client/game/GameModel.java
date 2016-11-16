@@ -128,6 +128,9 @@ public class GameModel {
 					p.setOnMouseClicked(e -> view.handlePawn(p));
 				}
 			}
+			if(message.getCurrentPlayer().getPlayerIndex()==currentPlayer.getPlayerIndex()){
+				payForPassingWater(message.getWaterBill(),message.getWaterPassedCount());
+			}
 			LandTile treasure = message.getTreasure();
 			ArrayList<Card> newCards = message.getNewCards();
 			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex() && newCards != null) {
@@ -204,6 +207,12 @@ public class GameModel {
 			}
 		}
 
+	}
+
+	private void payForPassingWater(int waterBill,int waterPassedCount) {
+		if (waterPassedCount>0)
+		view.showWaterBill(waterBill,waterPassedCount);
+		
 	}
 
 	private Pawn scanPawns() {

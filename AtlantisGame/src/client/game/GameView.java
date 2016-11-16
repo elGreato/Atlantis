@@ -57,7 +57,7 @@ public class GameView {
 	// the main game controls
 	public Button btnPlayCard = new Button("Play a Selected Card");
 	public Button btnBuyCards = new Button("Buy Cards");
-
+	public Button btnPay4Water = new Button("Pay");
 	public Button btnPay4cards = new Button("Pay");
 
 
@@ -502,5 +502,20 @@ public class GameView {
 				lblTurn.setText("The enemy sold a treasure to buy Cards");
 			}
 		}
+	}
+	public void showWaterBill(int waterBill, int waterPassedCount) {
+		VBox payPane = new VBox();
+		Label lblPay = new Label("You have crossed "+String.valueOf(waterPassedCount) +" Water Tiles"
+				+"\n Now you have to pay "+String.valueOf(waterBill)+ " points, choose the treasures and cards that you wanna pay with");
+		payPane.getChildren().addAll(lblPay,hbTreasures,hboxCards,btnPay4Water);
+		Scene payScene = new Scene(payPane);
+		tempStage = new Stage();
+		tempStage.setScene(payScene);
+		tempStage.initModality(Modality.WINDOW_MODAL);
+		tempStage.initOwner(stage);
+		tempStage.show();
+		tempStage.setAlwaysOnTop(true);
+
+		
 	}
 }
