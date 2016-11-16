@@ -52,6 +52,7 @@ public class Lobby implements LobbyInterface{
 				UserInfo newUI = new UserInfo(aiName,"",0,0,0);
 				userInfoAllUsers.add(newUI);
 				databaseAccess.addNewUserToDatabase(newUI);
+				aiUsers.add(new AIUser(newUI));
 			}
 		}
 		Collections.sort(userInfoAllUsers);
