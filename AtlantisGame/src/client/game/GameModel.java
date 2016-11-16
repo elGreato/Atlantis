@@ -222,7 +222,7 @@ public class GameModel {
 				foundPawn = pawn;
 				System.out.println("found pown in client");
 				break;
-			} 
+			}
 		}
 		return foundPawn;
 	}
