@@ -59,6 +59,7 @@ public class GameView {
 	public Button btnPay4Water = new Button("Pay");
 	public Button btnPay4cards = new Button("Pay");
 	public Button btnCalc = new Button("Calculate what I chose");
+	public Button btnEndMyTurn = new Button ("End Turn");
 
 	// Labels for main game controls
 	private Label lblGameBtns = new Label("Action Buttons");

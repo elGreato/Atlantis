@@ -266,11 +266,13 @@ public class Game implements GameInterface {
 					selectedPawn.setPawnSelected(false);
 					// give a new card
 					newCards = dealCards(currentPlayer);
-					// renive
+					// remove pawn stamp
 					removePawnFromOldTile(selectedPawn);
 
 				}
+				// here a player played a pawn and landed on another that has a pawn, if he has no other cards, he gets 2 free
 				if (land.getColor().equals(selectedCard.getColor()) && land.hasPawn() && !foundLand) {
+					ArrayList<Card> extraCards = new ArrayList<>();
 					selectedPawn.setNewLocation(base.indexOf(water));
 					land.setTempPawn(selectedPawn);
 					removePawnFromOldTile(selectedPawn);
@@ -278,9 +280,19 @@ public class Game implements GameInterface {
 					selectedLand = land;
 					foundLand = true;
 					giveTreasure = false;
-					System.out.println("found land but it has pawn, so player has to play another card");
+					if(currentPlayer.getPlayerHand().getNumCards()==0){
+						Card c1 = cards.deal();
+						Card c2 = cards.deal();
+						c1.setOwner(currentPlayer);
+						c2.setOwner(currentPlayer);
+						currentPlayer.addCard(c1);
+						currentPlayer.addCard(c2);
+						extraCards.add(c1);
+						extraCards.add(c2);
+						
+					}
 					users.get(currentPlayer.getPlayerIndex())
-							.sendMessage(new PlayAnotherCardMessage(getName(), selectedPawn));
+							.sendMessage(new PlayAnotherCardMessage(getName(), selectedPawn,extraCards));
 
 				}
 			}

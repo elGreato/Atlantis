@@ -177,6 +177,9 @@ public class GameModel {
 					p.setOnMouseClicked(null);
 				}
 			}
+			if(((PlayAnotherCardMessage)msgIn).getExtraCards().size()!=0){
+				addCardToPlayer((((PlayAnotherCardMessage)msgIn).getExtraCards()));
+			}
 			view.playerAnother();
 
 		}
@@ -432,6 +435,11 @@ public class GameModel {
 			view.lblWaterCalc.setText("This is not enough!"+"You still need to pay extra"+String.valueOf(waterBill-totalChosen));
 		}
 
+	}
+
+	public void handleEndMyTurn() {
+		
+		
 	}
 
 }
