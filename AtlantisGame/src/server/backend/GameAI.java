@@ -205,9 +205,9 @@ public class GameAI {
 		for(int i = p.getNewLocation() + distance -1;i>=0; i--)
 		{
 			WaterTile wt = path.get(i);
-			if(!(wt.getChildrenTiles().isEmpty()))
+			if(!(wt.getChildren().isEmpty())&&!(((LandTile)wt.getChildren().get(wt.getChildren().size()-1))).hasPawn())
 			{
-				return (wt.getChildrenTiles().get(wt.getChildrenTiles().size()-1)).getLandValue();
+				return ((LandTile)(wt.getChildren().get(wt.getChildren().size()-1))).getLandValue();
 			}
 		}
 		return 0;
