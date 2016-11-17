@@ -11,10 +11,12 @@ import messageObjects.turnMessages.BuyCardsMessage;
 import messageObjects.turnMessages.CardsBoughtMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
+import messageObjects.turnMessages.PaymentDoneMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
 import messageObjects.turnMessages.RefreshPlayerMessage;
 import messageObjects.turnMessages.ServerMessage;
 import messageObjects.turnMessages.TurnMessage;
+import messageObjects.turnMessages.WaterPaidMessage;
 import server.backend.Lobby;
 import server.backend.User;
 
@@ -185,6 +187,34 @@ public class Game implements GameInterface {
 				}
 
 			}
+		}
+		if(igm instanceof WaterPaidMessage){
+			WaterPaidMessage message = (WaterPaidMessage) igm;
+			Player player=players.get(message.getPlayerIndex());
+			for (int i=0;i<player.getPlayerHand().getNumCards();i++){
+				Card c= player.getPlayerHand().getCards().get(i);
+				for(int k=0; k<message.getCardsChosen().size();k++){
+					if (c.getCardId()==message.getCardsChosen().get(k).getCardId())
+						player.getPlayerHand().removeCardFromHand(c);
+				}
+			}
+			for (int i=0;i<player.getPlayerHand().getTreasures().size();i++){
+				LandTile t= player.getPlayerHand().getTreasures().get(i);
+				for(int k=0; k<message.getTreasuresChosen().size();k++){
+					if (t.getTileId()==message.getTreasuresChosen().get(k).getTileId())
+						player.getPlayerHand().getTreasures().remove(t);
+				}
+			}
+			
+			int numberOfPlayers = getNumOfRegisteredPlayers();
+			for (int i = 0; i < numberOfPlayers; i++) {
+				users.get(i).sendMessage(new PaymentDoneMessage(getName(), player.getPlayerIndex(), message.getCardsChosen(), message.getTreasuresChosen()));
+
+			}
+			
+			
+			
+			
 		}
 
 	}

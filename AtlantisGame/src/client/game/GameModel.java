@@ -16,6 +16,7 @@ import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
+import messageObjects.turnMessages.PaymentDoneMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
 import messageObjects.turnMessages.RefreshPlayerMessage;
 import messageObjects.turnMessages.ServerMessage;
@@ -206,6 +207,16 @@ public class GameModel {
 
 				}
 
+			}
+		}
+		if(msgIn instanceof PaymentDoneMessage){
+			PaymentDoneMessage message = (PaymentDoneMessage) msgIn;
+			if(message.getPlayerIndex()!=currentPlayer.getPlayerIndex()){
+				for (int i=0;i<message.getTreasuresChosen().size();i++){
+					LandTile paidTreasure = message.getTreasuresChosen().get(i);
+					view.removeEnemyTreasures(message.getPlayerIndex(), paidTreasure);
+
+				}
 			}
 		}
 
