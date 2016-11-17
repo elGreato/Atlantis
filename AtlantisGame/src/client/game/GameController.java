@@ -22,6 +22,13 @@ public class GameController {
 		view.btnPay4cards.setOnAction(e-> handlePay4cards());
 		view.btnPay4Water.setOnAction(e-> handlePay4Water());
 		view.btnCalc.setOnAction(e-> handleCalc());
+		view.btnEndMyTurn.setOnAction(e->handleEndMyTurn());
+	}
+
+
+
+	private void handleEndMyTurn() {
+		model.handleEndMyTurn();
 	}
 
 
