@@ -285,7 +285,7 @@ public class Game implements GameInterface {
 			}
 			if (!foundLand && f == base.size() - 1) {
 				System.out.println("reached the end, f now is " + f);
-				selectedPawn.setNewLocation(base.size() - 1);
+				selectedPawn.setNewLocation(f+1);
 				selectedPawn.setReachedMainLand(true);
 				mainland.getPawns().add(selectedPawn);
 				removePawnFromOldTile(selectedPawn);
