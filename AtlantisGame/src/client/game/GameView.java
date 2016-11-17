@@ -101,7 +101,7 @@ public class GameView {
 	private int y = 0;
 	private int x = 5;
 
-	protected boolean mutliCardMode = false;
+	protected boolean multiCardsMode = false;
 	int maxColIndex;
 	int maxRowIndex;
 
@@ -125,7 +125,7 @@ public class GameView {
 			mainBoard.getRowConstraints().add(con);
 		}
 		// add Buttons
-		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnBuyCards);
+		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnBuyCards,btnEndMyTurn);
 
 		// set a random picture for each player
 		int numberOfPicturesAvailable = 4;
@@ -332,7 +332,7 @@ public class GameView {
 		lblTurn.setText("It is " + curPlayer + " turn");
 		lblTurn.setTextFill(Color.BLACK);
 		lblTurn.setFont(new Font("Cambria", 25));
-		mutliCardMode=false;
+		
 
 	}
 
@@ -354,7 +354,7 @@ public class GameView {
 	}
 
 	public void handleCard(Card c) {
-		if (!mutliCardMode) {
+		if (!multiCardsMode) {
 			// first unselected all the other cards in the hand
 			for (Card cc : c.getOwner().getPlayerHand().getCards()) {
 				if (cc.getCardId() != c.getCardId()) {
@@ -519,7 +519,8 @@ public class GameView {
 
 	public void showWaterBill(int waterBill, int waterPassedCount) {
 		VBox payPane = new VBox();
-	
+		multiCardsMode=true;
+		lblPay.setText("");
 		 lblPay.setText("You have crossed " + String.valueOf(waterPassedCount) + " Water Tiles"
 				+ "\n Now you have to pay " + String.valueOf(waterBill)
 				+ " points, choose the treasures and cards that you wanna pay with");
@@ -534,12 +535,14 @@ public class GameView {
 		tempStage.setTitle("Payment for water");
 		tempStage.show();
 		tempStage.setAlwaysOnTop(true);
+		tempStage.setOnCloseRequest(e-> e.consume());
 
 	}
 	public void closePayWaterScene(){
 		vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 1, hbTreasures);
 		vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 2, hboxCards);
 		lblPay.setText("");
+		multiCardsMode=false;
 		tempStage.close();
 	}
 }

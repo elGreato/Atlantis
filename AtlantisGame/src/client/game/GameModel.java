@@ -24,6 +24,7 @@ import messageObjects.turnMessages.TurnMessage;
 import messageObjects.turnMessages.WaterPaidMessage;
 import messageObjects.turnMessages.BuyCardsMessage;
 import messageObjects.turnMessages.CardsBoughtMessage;
+import messageObjects.turnMessages.EndMYTurnMessage;
 
 public class GameModel {
 
@@ -177,8 +178,8 @@ public class GameModel {
 					p.setOnMouseClicked(null);
 				}
 			}
-			if(((PlayAnotherCardMessage)msgIn).getExtraCards().size()!=0){
-				addCardToPlayer((((PlayAnotherCardMessage)msgIn).getExtraCards()));
+			if (((PlayAnotherCardMessage) msgIn).getExtraCards().size() != 0) {
+				addCardToPlayer((((PlayAnotherCardMessage) msgIn).getExtraCards()));
 			}
 			view.playerAnother();
 
@@ -212,13 +213,21 @@ public class GameModel {
 
 			}
 		}
-		if(msgIn instanceof PaymentDoneMessage){
+		if (msgIn instanceof PaymentDoneMessage) {
 			PaymentDoneMessage message = (PaymentDoneMessage) msgIn;
-			if(message.getPlayerIndex()!=currentPlayer.getPlayerIndex()){
-				for (int i=0;i<message.getTreasuresChosen().size();i++){
+			if (message.getPlayerIndex() != currentPlayer.getPlayerIndex()) {
+				for (int i = 0; i < message.getTreasuresChosen().size(); i++) {
 					LandTile paidTreasure = message.getTreasuresChosen().get(i);
 					view.removeEnemyTreasures(message.getPlayerIndex(), paidTreasure);
 
+				}
+			}
+		}
+		if (msgIn instanceof EndMYTurnMessage) {
+			EndMYTurnMessage message = (EndMYTurnMessage) msgIn;
+			if (message.getPlayerIndex() == currentPlayer.getPlayerIndex()) {
+				if (message.getNewCards().size() != 0) {
+					addCardToPlayer(message.getNewCards());
 				}
 			}
 		}
@@ -367,7 +376,7 @@ public class GameModel {
 
 	private void payForPassingWater(int waterBill, int waterPassedCount) {
 		if (waterPassedCount > 0) {
-			view.mutliCardMode = true;
+			
 			this.waterBill = waterBill;
 			view.showWaterBill(waterBill, waterPassedCount);
 		}
@@ -397,7 +406,8 @@ public class GameModel {
 				view.removeCardFromHand(cardSelected);
 			}
 		}
-		msgOut.sendMessage(new WaterPaidMessage(gameName,currentPlayer.getPlayerIndex(),treasuresChosen,cardsChosen));
+		msgOut.sendMessage(
+				new WaterPaidMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen, cardsChosen));
 		view.closePayWaterScene();
 
 	}
@@ -424,22 +434,27 @@ public class GameModel {
 
 			}
 		}
-		
+
 		if (totalChosen >= waterBill) {
 			view.btnPay4Water.setDisable(false);
 			view.lblWaterCalc.setText("");
-			view.lblWaterCalc.setText("You will pay "+String.valueOf(totalChosen)+"\n Remember, no change is offered");
+			view.lblWaterCalc
+					.setText("You will pay " + String.valueOf(totalChosen) + "\n Remember, no change is offered");
 		} else {
 			view.btnPay4Water.setDisable(true);
 			view.lblWaterCalc.setText("");
-			view.lblWaterCalc.setText("This is not enough!"+"You still need to pay extra"+String.valueOf(waterBill-totalChosen));
+			view.lblWaterCalc.setText(
+					"This is not enough!" + "You still need to pay extra" + String.valueOf(waterBill - totalChosen));
 		}
 
 	}
 
 	public void handleEndMyTurn() {
-		
-		
+		if (currentPlayer.isYourTurn()) {
+			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex()));
+
+		}
+		else view.showNotYourTurnAlert();
 	}
 
 }

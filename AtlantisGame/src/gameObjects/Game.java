@@ -9,6 +9,7 @@ import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
 import messageObjects.turnMessages.BuyCardsMessage;
 import messageObjects.turnMessages.CardsBoughtMessage;
+import messageObjects.turnMessages.EndMYTurnMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PaymentDoneMessage;
@@ -214,6 +215,18 @@ public class Game implements GameInterface {
 
 			}
 
+		}
+		// in case of a player ending his turn, he gets an extra card
+		if(igm instanceof EndMYTurnMessage){
+			EndMYTurnMessage message = (EndMYTurnMessage)igm;
+			Player player = players.get(message.getPlayerIndex());
+			ArrayList<Card> newCards = dealCards(player);
+			Card extra = cards.deal();
+			extra.setOwner(player);
+			player.addCard(extra);
+			newCards.add(extra);
+			users.get(player.getPlayerIndex()).sendMessage(new EndMYTurnMessage(getName(), player.getPlayerIndex(),newCards));
+			endTurn();
 		}
 
 	}
