@@ -53,7 +53,7 @@ public class Game implements GameInterface {
 		users.add(creator);
 		this.lobby = lobby;
 	}
-
+ 
 	// Here the game starts
 	public void start() {
 		// Informs clients about game start
