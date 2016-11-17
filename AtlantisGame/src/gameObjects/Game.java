@@ -18,6 +18,7 @@ import messageObjects.turnMessages.ServerMessage;
 import messageObjects.turnMessages.TurnMessage;
 import messageObjects.turnMessages.WaterPaidMessage;
 import server.backend.Lobby;
+import server.backend.LobbyInterface;
 import server.backend.User;
 
 public class Game implements GameInterface {
@@ -30,7 +31,7 @@ public class Game implements GameInterface {
 	private int maxPlayers;
 	// Invoke lobby.addWin, lobby.addLoss & lobby.addTie methods on users at the
 	// end of the game
-	private Lobby lobby;
+	private LobbyInterface lobby;
 	private DeckOfCards cards;
 	private DeckOfLandTiles deckA;
 	private DeckOfLandTiles deckB;
@@ -241,14 +242,14 @@ public class Game implements GameInterface {
 				System.out.println("amount of Water is " + base.size());
 				waterHasTile = true;
 				connectedWater = false;
-			} /*else {
+			} else {
 				if (!connectedWater) {
 					connectedWater = true;
 					waterPassedCount++;
 					int i = payForWater(water);
 					waterBill += i;
 				}
-			}*/
+			}
 			// get the top tile on that water
 			if (waterHasTile && water.getChildren().get(topNode) instanceof LandTile) {
 				waterHasTile = false;
