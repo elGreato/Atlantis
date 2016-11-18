@@ -19,6 +19,7 @@ import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PaymentDoneMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
 import messageObjects.turnMessages.RefreshPlayerMessage;
+import messageObjects.turnMessages.RevertTurnMessage;
 import messageObjects.turnMessages.ServerMessage;
 import messageObjects.turnMessages.TurnMessage;
 import messageObjects.turnMessages.WaterPaidMessage;
@@ -76,7 +77,6 @@ public class GameModel {
 
 		// here we assign each player his enemies
 		if (msgIn instanceof OpponentMessage) {
-			System.out.println("Opponent message received");
 			OpponentMessage message = ((OpponentMessage) msgIn);
 			for (int i = 0; i < message.getOpponents().size(); i++) {
 				if (currentPlayer.getPlayerIndex() != message.getOpponents().get(i).getPlayerIndex()) {
@@ -97,7 +97,6 @@ public class GameModel {
 
 		// a turn message
 		if (msgIn instanceof TurnMessage) {
-			System.out.println("checking if my turn");
 			if (((TurnMessage) msgIn).isYourTurn()) {
 				if (scanPawns() != null) {
 					if (scanCards() != null) {
@@ -140,8 +139,7 @@ public class GameModel {
 			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex() && newCards != null) {
 				addCardToPlayer(newCards);
 
-			} else
-				System.out.println("didn't get new card or nt ur turn");
+			} 
 			if (treasure != null) {
 				if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 					givePlayerTreasure(treasure);
@@ -151,24 +149,8 @@ public class GameModel {
 				removeTreasureFromBoard(treasure);
 			}
 			Pawn selectedPawn = null;
-			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
-				for (Pawn pp : currentPlayer.getPawns()) {
-					if (message.getSelectedPawn().getPawnId() == pp.getPawnId())
-						selectedPawn = pp;
-				}
-			} else {
-				for (Player enemy : currentPlayer.getOpponents()) {
-					if (enemy.getPlayerIndex() == message.getCurrentPlayer().getPlayerIndex()) {
-						for (Pawn pp : enemy.getPawns()) {
-							if (pp.getPawnId() == message.getSelectedPawn().getPawnId()) {
-								selectedPawn = pp;
-							}
-						}
-					}
-				}
-			}
-
-			movePawn(currentPlayer.getPlayerIndex(), selectedPawn, message.getSelectedLand());
+			assignThenMovePawn(message.getCurrentPlayer().getPlayerIndex(),message.getSelectedPawn(),message.getSelectedLand());
+			
 
 		}
 		// inform player to play another card
@@ -231,7 +213,38 @@ public class GameModel {
 				}
 			}
 		}
+		if(msgIn instanceof RevertTurnMessage){
+			System.out.println("Revert received in client");
+			RevertTurnMessage message = (RevertTurnMessage)msgIn;
+			if(message.getRemovedTreasure()!=null){
+				view.base.get(message.getRemovedIndex()).getChildren().add(message.getRemovedTreasure());
+			}
+			assignThenMovePawn(message.getPlayerIndex(), message.getSelectedPawn(), message.getSelectedLand());
+			
+		}
 
+	}
+
+	private void assignThenMovePawn(int playerIndex, Pawn selectedPawn, LandTile selectedLand) {
+		if (playerIndex == currentPlayer.getPlayerIndex()) {
+			for (Pawn pp : currentPlayer.getPawns()) {
+				if (selectedPawn.getPawnId() == pp.getPawnId())
+					selectedPawn = pp;
+			}
+		} else {
+			for (Player enemy : currentPlayer.getOpponents()) {
+				if (enemy.getPlayerIndex() ==playerIndex) {
+					for (Pawn pp : enemy.getPawns()) {
+						if (pp.getPawnId() == selectedPawn.getPawnId()) {
+							selectedPawn = pp;
+						}
+					}
+				}
+			}
+		}
+
+		movePawn(currentPlayer.getPlayerIndex(), selectedPawn, selectedLand);
+		
 	}
 
 	private Pawn scanPawns() {
@@ -239,7 +252,6 @@ public class GameModel {
 		for (Pawn pawn : currentPlayer.getPawns()) {
 			if (pawn.isPawnSelected()) {
 				foundPawn = pawn;
-				System.out.println("found pown in client");
 				break;
 			}
 		}
@@ -264,7 +276,6 @@ public class GameModel {
 		Pawn viewPawn = null;
 
 		if (currentPlayer.getPawns().contains(selectedPawn)) {
-			System.out.println("pawn selectedddddddd");
 			viewPawn = selectedPawn;
 		} else {
 			for (int i = 0; i < currentPlayer.getOpponents().size(); i++) {
@@ -455,6 +466,12 @@ public class GameModel {
 
 		}
 		else view.showNotYourTurnAlert();
+	}
+
+	public void handleRevert() {
+		System.out.println("Rever from client");
+		msgOut.sendMessage(new RevertTurnMessage(gameName, currentPlayer.getPlayerIndex()));
+		
 	}
 
 }

@@ -23,6 +23,13 @@ public class GameController {
 		view.btnPay4Water.setOnAction(e-> handlePay4Water());
 		view.btnCalc.setOnAction(e-> handleCalc());
 		view.btnEndMyTurn.setOnAction(e->handleEndMyTurn());
+		view.btnRevert.setOnAction(e-> handleRevert());
+	}
+
+
+
+	private void handleRevert() {
+		model.handleRevert();
 	}
 
 

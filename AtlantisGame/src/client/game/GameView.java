@@ -60,6 +60,7 @@ public class GameView {
 	public Button btnPay4cards = new Button("Pay");
 	public Button btnCalc = new Button("Calculate what I chose");
 	public Button btnEndMyTurn = new Button ("End Turn");
+	public Button btnRevert = new Button ("Cancel my turn and give me my money back");
 
 	// Labels for main game controls
 	private Label lblGameBtns = new Label("Action Buttons");
@@ -367,11 +368,9 @@ public class GameView {
 			if (!c.isCardSelected()) {
 				c.getRec().setStroke(Color.BLACK);
 				c.setCardSelected(true);
-				System.out.println(c.getColor().toString() + "card is selected" + c.isCardSelected());
 			} else {
 				c.getRec().setStroke(Color.TRANSPARENT);
 				c.setCardSelected(false);
-				System.out.println(c.getColor().toString() + "card is unselected" + c.isCardSelected());
 			}
 		
 	}
@@ -444,7 +443,6 @@ public class GameView {
 	}
 
 	public void removePlayerTreasure(LandTile landTile) {
-		System.out.println("in view remove treasures ");
 		hbTreasures.getChildren().remove(landTile);
 
 	}
@@ -526,7 +524,7 @@ public class GameView {
 				+ " points, choose the treasures and cards that you wanna pay with");
 		
 		btnPay4Water.setDisable(true);
-		payPane.getChildren().addAll(lblPay,lblWaterCalc, hbTreasures, hboxCards,btnCalc, btnPay4Water);
+		payPane.getChildren().addAll(lblPay,lblWaterCalc, hbTreasures, hboxCards,btnCalc, btnPay4Water, btnRevert);
 		Scene payScene = new Scene(payPane);
 		tempStage = new Stage();
 		tempStage.setScene(payScene);
