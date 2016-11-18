@@ -85,20 +85,19 @@ public class GameAI {
 		{
 
 			RefreshPlayerMessage rpm = (RefreshPlayerMessage)igm;
-			if (rpm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex()&&rpm.getWaterBill()!=0)
+			if (rpm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex()&&rpm.getWaterBill()>0)
 			{
 				ArrayList<LandTile> tilesForPayment = null;
 				ArrayList<Card> cardsForPayment = null;
 				if(payments != null && payments.getTilesPaidInEachMove().containsKey(moves))
 				{
 					tilesForPayment = payments.getTilesPaidInEachMove().remove(moves);
-					System.out.println("Put payments in arraylist. size: " + tilesForPayment.size());
 				}
 				if(payments != null &&payments.getCardsPaidInEachMove().containsKey(moves))
 				{
 					cardsForPayment = payments.getCardsPaidInEachMove().remove(moves);
 				}
-				if(cardsForPayment != null || tilesForPayment != null)
+				if(cardsForPayment != null && !cardsForPayment.isEmpty() /*|| tilesForPayment != null*/)
 				{
 					System.out.println("Send payment message ");
 					for(LandTile lt:tilesForPayment)
@@ -138,8 +137,15 @@ public class GameAI {
 		bestCards = thisTurn.getCardsAlreadyPlayed();
 		bestPawn = thisTurn.getPawnsThatCanBePlayed().get(0);
 		payments = thisTurn.getCostsIncurredPerMove();
-		System.out.println("Sizes: " + thisTurn.getCostsIncurredPerMove().getTilesPaidInEachMove().size());
-		System.out.println("Size of pawns: " + thisTurn.getPawnsThatCanBePlayed().size());
+		getValueOfCosts(payments);
+		System.out.println("Showing Indexes");
+		/*if(payments != null && payments.getTilesPaidInEachMove() !=null)
+		{
+			for(Integer intg : payments.getTilesPaidInEachMove().keySet())
+			{
+			System.out.println("Index: " + intg);
+			}
+		}*/
 		//System.out.println("AI sends turn message");
 		if(bestPawn != null && !bestCards.isEmpty())
 		{
@@ -182,7 +188,6 @@ public class GameAI {
 
 	private AITurnObject doMove(AITurnObject inputForMove, int moveNumber)
 	{
-		System.out.println(moveNumber);
 		AITurnObject bestPossibleTurn = null;
 		for(Pawn p : inputForMove.getPawnsThatCanBePlayed())
 		{
@@ -202,7 +207,6 @@ public class GameAI {
 					tilesPaidInEachMove.put(e, copy);
 				}
 
-				System.out.println(tilesPaidInEachMove.keySet());
 				HashMap<Integer,ArrayList<Card>> cardsPaidInEachMove = new HashMap<Integer,ArrayList<Card>>(inputForMove.getCostsIncurredPerMove().getCardsPaidInEachMove());
 				int distanceAlreadyTraveled = inputForMove.getDistanceTraveled() + calculateDistanceOfMove(p,inputForMove.getDistanceTraveled(), c);
 				int costsForThisMove =calculateCostsOfMove(p,inputForMove.getDistanceTraveled(), distanceAlreadyTraveled);
@@ -219,7 +223,6 @@ public class GameAI {
 					costs = determineTilesToPay(costs, cardsLeftOnHand, tilesLeftInHand,costsForThisMove,moveNumber);
 					if(costs == null)
 					{
-						System.out.println("Cannot pay this");
 						canBePaid = false;
 					}
 					if(canBePaid && costs.getTilesPaidInEachMove().containsKey(moveNumber)&& costs.getTilesPaidInEachMove().get(moveNumber)!= null)
@@ -248,12 +251,11 @@ public class GameAI {
 					pawnsForNextIteration.add(p);
 					if(cardsLeftOnHand.size() != 0)
 					{
-						moveNumber +=1;
-						System.out.println("Enter next level of movement");
+						int updatedMoveNumber = moveNumber + 1;
 						AITurnObject output = doMove(new AITurnObject(pawnsForNextIteration,
 								cardsLeftOnHand,cardsAlreadyPlayed,
 								tilesLeftInHand, costs,
-								distanceAlreadyTraveled,costsAlreadyIncurred),moveNumber);
+								distanceAlreadyTraveled,costsAlreadyIncurred),updatedMoveNumber);
 						if(output != null&&(bestPossibleTurn == null||output.getValueOfTurn() > bestPossibleTurn.getValueOfTurn()))
 						{
 							bestPossibleTurn = output;
@@ -272,9 +274,8 @@ public class GameAI {
 						bestPossibleTurn = new AITurnObject(pawn, cardsLeftOnHand,cardsAlreadyPlayed,tilesLeftInHand,costs,
 								distanceAlreadyTraveled,costsAlreadyIncurred);
 						bestPossibleTurn.setValueOfTurn(valueOfTurn);
-						System.out.println("Total costs: " + costsAlreadyIncurred);
-						int i = getValueOfCosts(costs);
-						System.out.println("Total value of payment: " + i + " costs: " + costsForThisMove);
+						//int i = getValueOfCosts(costs);
+						//System.out.println("Total value of payment: " + i + " costs: " + costsForThisMove);
 						//System.out.println("New best turn detected " + valueBestTurn + " points: " + points + " speed: " + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceForMove)+ " spread: " + aiPawnSpread*(avgDistanceMe - p.getNewLocation()));
 						//System.out.println("Average other players: " + avgDistanceOtherPlayers+ " AVGMe: "+ avgDistanceMe);
 						//System.out.println("Distance: " + distanceForMove);
@@ -287,13 +288,17 @@ public class GameAI {
 	}
 	private int getValueOfCosts(AICostObject costs) {
 		int i = 0;
+		System.out.println("Starting cost calc.");
 		for(Integer e:costs.getTilesPaidInEachMove().keySet())
 		{
+			int moveCosts = 0;
 			System.out.println("Getting values from key " + e);
 			for(LandTile lt:costs.getTilesPaidInEachMove().get(e))
 			{
-				i+=lt.getLandValue();
+				moveCosts+=lt.getLandValue();
 			}
+			System.out.println("Move: " + e +" Costs paid: " + moveCosts);
+			i+=moveCosts;
 		}
 		return i;
 	}
@@ -396,7 +401,7 @@ public class GameAI {
 				if (bestPayment == null || updatedCosts.getRealCosts(moveNumber) < bestPayment.getRealCosts(moveNumber))
 				{
 					bestPayment = updatedCosts;
-					System.out.println("New best payment detected: " + updatedCosts.getRealCosts(moveNumber) + " Costs left: " + updatedPaymentSize);
+					//System.out.println("New best payment detected: " + updatedCosts.getRealCosts(moveNumber) + " Costs left: " + updatedPaymentSize);
 				}
 			}
 		}
@@ -425,7 +430,7 @@ public class GameAI {
 						costsForThisWater = ((LandTile)wt.getChildren().get(wt.getChildren().size()-1)).getLandValue();
 					}
 					totalCosts+=costsForThisWater;
-					System.out.println("Could add " + costsForThisWater + " to these total costs: " + totalCosts);
+					//System.out.println("Could add " + costsForThisWater + " to these total costs: " + totalCosts);
 				}
 
 				else if(wt.getChildren().isEmpty() && i==0)
