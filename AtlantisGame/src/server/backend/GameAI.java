@@ -1,6 +1,9 @@
 package server.backend;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import gameObjects.Card;
 import gameObjects.GameInterface;
@@ -89,27 +92,44 @@ public class GameAI {
 
 	private double valueBestTurn;
 	private ArrayList<Card> bestCards;
+	private ArrayList<Integer> bestTurnCosts;
 	private Pawn bestPawn;
-	
+	private HashMap<Integer, ArrayList<LandTile>> LandTilesPayments;
+	private HashMap<Integer, ArrayList<Card>> CardPayments;
 	private double avgDistanceOtherPlayers;
 	private double avgDistanceMe;
 	private void doATurn() {
-		//int i = 0;
-		/*for(WaterTile wt:path)
-		{
-			i++;
-			if(!wt.getChildrenTiles().isEmpty()&&!wt.getChildren().isEmpty())
-			{
-			System.out.println(i + " " + ((LandTile)(wt.getChildren().get(wt.getChildren().size()-1))).hasPawn() + " " +((LandTile)(wt.getChildren().get(wt.getChildrenTiles().size()-1))).hasPawn());
-		
-			}
-		}*/
 		//System.out.println("New turn initiated");
 		bestCards = new ArrayList<Card>();
 		bestCards.clear();
 		bestPawn = null;
 		calculateAverageDistances();
-		doAMove(me.getPawns(), me.getPlayerHand().getCards(),new ArrayList<Card>(),  0, 0);
+		AITurnObject thisTurn = doMove(new AITurnObject(me.getPawns(), me.getPlayerHand().getCards(),me.getPlayerHand().getTreasures()),1);
+		bestCards = thisTurn.getCardsAlreadyPlayed();
+		bestPawn = thisTurn.getPawnsThatCanBePlayed().get(0);
+		System.out.println("Sizes: " + thisTurn.getCostsIncurredPerMove().getTilesPaidInEachMove().size());
+		for(int x= 0; x<4; x++)
+		{
+			if(thisTurn.getCostsIncurredPerMove().getTilesPaidInEachMove().containsKey(x))
+			{
+				System.out.println("Turn: " + (x+1) +"Paid tiles: " + thisTurn.getCostsIncurredPerMove().getTilesPaidInEachMove().get(x).size());
+			}
+			else
+			{
+				System.out.println("Did not find tile payment for " + (x+1));
+			}
+			if(thisTurn.getCostsIncurredPerMove().getTilesPaidInEachMove().containsKey(x))
+			{
+				System.out.println("Turn: " + (x+1) +"Paid Cards: " + thisTurn.getCostsIncurredPerMove().getCardsPaidInEachMove().get(x).size());
+			}
+			else
+			{
+				System.out.println("Did not find card payment for " + (x+1));
+
+			}
+			
+		}
+		System.out.println("Size of pawns: " + thisTurn.getPawnsThatCanBePlayed().size());
 		//System.out.println("AI sends turn message");
 		if(bestPawn != null && !bestCards.isEmpty())
 		{
@@ -121,6 +141,70 @@ public class GameAI {
 			giveUpTurn();
 		}
 
+	}
+	
+	private AICostObject determineTilesToPay(AICostObject input, ArrayList<Card> cardsLeftInHand, ArrayList<LandTile> tilesLeftInHand, int paymentSize, int moveNumber) {
+		AICostObject bestPayment = null;
+		for(LandTile lt: tilesLeftInHand)
+		{
+			int costsLeftToPay = paymentSize - lt.getLandValue();
+			ArrayList<LandTile> tempTilesLeftOnHand = new ArrayList<LandTile>(tilesLeftInHand);
+			tempTilesLeftOnHand.remove(lt);
+			ArrayList<LandTile> updatedMovePayment = new ArrayList<LandTile>(input.getTilesPaidInEachMove().get(moveNumber));
+			updatedMovePayment.add(lt);
+			HashMap<Integer,ArrayList<LandTile>> updatedTilesCostList = new HashMap<Integer,ArrayList<LandTile>>();
+			for (Integer e:input.getTilesPaidInEachMove().keySet())
+			{
+				ArrayList<LandTile> copy = new ArrayList<LandTile>(input.getTilesPaidInEachMove().get(e));
+				updatedTilesCostList.put(e, copy);
+			}
+			updatedTilesCostList.remove(moveNumber);
+			updatedTilesCostList.put(moveNumber, updatedMovePayment);
+			AICostObject updatedPayment = new AICostObject(updatedTilesCostList,input.getCardsPaidInEachMove());
+			
+			if(costsLeftToPay <= 0)
+			{
+				if(bestPayment == null || bestPayment.getRealCosts(moveNumber)>updatedPayment.getRealCosts(moveNumber))
+				{
+					bestPayment = updatedPayment;
+					System.out.println("new payment calc: " +bestPayment.getTilesPaidInEachMove().size() + " " + bestPayment.getTilesPaidInEachMove().get(moveNumber).size());
+				}
+			}
+			/*else if(costsLeftToPay <= cardsLeftInHand.size())
+			{
+				ArrayList<Card> cardsUsedInPayment = new ArrayList<Card>();
+				for(int i=0;i<costsLeftToPay;i++)
+				{
+					cardsUsedInPayment.add(cardsLeftInHand.get(i));
+				}
+				HashMap<Integer,ArrayList<Card>> updatedCardCostList = new HashMap<Integer,ArrayList<Card>>(input.getCardsPaidInEachMove());
+				updatedCardCostList.put(moveNumber, cardsUsedInPayment);
+				AICostObject paymentIncludingCards = new AICostObject(updatedTilesCostList, updatedCardCostList);
+				if(bestPayment == null || paymentIncludingCards.getRealCosts(moveNumber) < bestPayment.getRealCosts(moveNumber))
+				{
+					bestPayment = paymentIncludingCards;
+					
+				}
+				AICostObject finishedPayment =determineTilesToPay(updatedPayment,cardsLeftInHand, tempTilesLeftOnHand,costsLeftToPay,moveNumber);
+				if(bestPayment == null || finishedPayment.getRealCosts(moveNumber)< bestPayment.getRealCosts(moveNumber))
+				{
+					bestPayment = finishedPayment;
+				}
+			}*/
+			else
+			{
+				
+				AICostObject finishedPayment = determineTilesToPay(updatedPayment,cardsLeftInHand,tempTilesLeftOnHand,costsLeftToPay,moveNumber);
+				if(finishedPayment != null &&(bestPayment == null || finishedPayment.getRealCosts(moveNumber)< bestPayment.getRealCosts(moveNumber)))
+				{
+					bestPayment = finishedPayment;
+					System.out.println("new payment calc: " +bestPayment.getTilesPaidInEachMove().size() + " " + bestPayment.getTilesPaidInEachMove().get(moveNumber).size());
+					
+				}
+			}
+		}
+		return bestPayment;
+		
 	}
 
 	private void giveUpTurn() {
@@ -146,45 +230,98 @@ public class GameAI {
 		avgDistanceMe /= 3;
 	}
 
-	private void doAMove(ArrayList<Pawn> pawns, ArrayList<Card> cardsOnHand,ArrayList<Card> cardsAlreadyPlayed, int distance, int costs) {
-		//System.out.println("New move calculation initiated");
-		
-		for(Pawn p : pawns)
+	private AITurnObject doMove(AITurnObject inputForMove, int moveNumber)
+	{
+		System.out.println(moveNumber);
+		AITurnObject bestPossibleTurn = null;
+		for(Pawn p : inputForMove.getPawnsThatCanBePlayed())
 		{
-			for(Card c : cardsOnHand)
+			for(Card c : inputForMove.getCardsOnHandLeft())
 			{
-				ArrayList<Card> tempCardsPlayed = new ArrayList<Card>(cardsAlreadyPlayed);
-				tempCardsPlayed.add(c);
-				//System.out.println("Distance before: " + distance);
-				int distanceForMove = distance + calculateDistanceOfMove(p,distance, c);
-				int costsForMove = costs + calculateCostsOfMove(p,distance, c);
-				/*if((path.size()>p.getNewLocation()+distanceForMove) && 
-						(path.get(p.getNewLocation()+distanceForMove).getChildrenTiles().get(path.get(p.getNewLocation()+distanceForMove).getChildrenTiles().size()-1).hasPawn()))
-				*/if((path.size()>p.getNewLocation()+distanceForMove) && 
-						(((LandTile) ((path.get(p.getNewLocation()+distanceForMove).getChildren().get(path.get(p.getNewLocation()+distanceForMove).getChildren().size()-1)))).hasPawn())){
+				ArrayList<Card> cardsAlreadyPlayed = new ArrayList<Card>(inputForMove.getCardsAlreadyPlayed());
+				cardsAlreadyPlayed.add(c);
+				ArrayList<Card> cardsLeftOnHand = new ArrayList<Card>(inputForMove.getCardsOnHandLeft());
+				cardsLeftOnHand.remove(c);
+				
+				ArrayList<LandTile> tilesLeftInHand = new ArrayList<LandTile>(inputForMove.getLandTilesLeftOnHand());
+				HashMap<Integer,ArrayList<LandTile>> tilesPaidInEachMove = new HashMap<Integer,ArrayList<LandTile>>();
+
+				for(Integer e: inputForMove.getCostsIncurredPerMove().getTilesPaidInEachMove().keySet())
+				{
+					ArrayList<LandTile> copy = new ArrayList<LandTile>(inputForMove.getCostsIncurredPerMove().getTilesPaidInEachMove().get(e));
+					tilesPaidInEachMove.put(e, copy);
+				}
+
+				tilesPaidInEachMove.remove(moveNumber);
+				HashMap<Integer,ArrayList<Card>> cardsPaidInEachMove = new HashMap<Integer,ArrayList<Card>>(inputForMove.getCostsIncurredPerMove().getCardsPaidInEachMove());
+				int distanceAlreadyTraveled = inputForMove.getDistanceTraveled() + calculateDistanceOfMove(p,inputForMove.getDistanceTraveled(), c);
+				int costsForThisMove =calculateCostsOfMove(p,inputForMove.getDistanceTraveled(), distanceAlreadyTraveled);
+				int costsAlreadyIncurred = inputForMove.getCostsIncurred() + costsForThisMove;
+				AICostObject costs = new AICostObject(inputForMove.getCostsIncurredPerMove().getTilesPaidInEachMove(), inputForMove.getCostsIncurredPerMove().getCardsPaidInEachMove());
+
+				boolean canBePaid = true;
+				if(costsForThisMove>0)
+				{
+					ArrayList<Card> newCostsCards = new ArrayList<Card>();
+					ArrayList<LandTile> tilesCostCards = new ArrayList<LandTile>();
+					costs.getCardsPaidInEachMove().put(moveNumber, newCostsCards);
+					costs.getTilesPaidInEachMove().put(moveNumber, tilesCostCards);
+					costs = determineTilesToPay(costs, cardsLeftOnHand, tilesLeftInHand,costsForThisMove,moveNumber);
+					if(costs == null)
+					{
+						System.out.println("Cannot pay this");
+						canBePaid = false;
+					}
+					if(canBePaid && costs.getTilesPaidInEachMove().containsKey(moveNumber)&& costs.getTilesPaidInEachMove().get(moveNumber)!= null)
+					{
+						for(LandTile t : costs.getTilesPaidInEachMove().get(moveNumber))
+						{
+							tilesLeftInHand.remove(t);
+						}
+					}
+					if(canBePaid&& costs.getCardsPaidInEachMove().containsKey(moveNumber)&&costs.getCardsPaidInEachMove().get(moveNumber) !=null)
+					{
+						for(Card crd : costs.getCardsPaidInEachMove().get(moveNumber))
+						{
+							cardsLeftOnHand.remove(crd);
+						}
+					}
+				}
+				if(canBePaid&&(path.size()>p.getNewLocation()+distanceAlreadyTraveled) && 
+						(((LandTile) ((path.get(p.getNewLocation()+distanceAlreadyTraveled).getChildren().get(path.get(p.getNewLocation()+distanceAlreadyTraveled).getChildren().size()-1)))).hasPawn())
+						&&costsAlreadyIncurred < 0.25 * me.getPlayerHand().getNumCards() + me.getPlayerHand().getTreasuresValue(me.getPlayerHand().getTreasures())){
 					//System.out.println("plan second move");
-					ArrayList<Card> cardsForNextIteration = new ArrayList<Card>(cardsOnHand);
-					cardsForNextIteration.remove(c);
+			
 					
 					ArrayList<Pawn> pawnsForNextIteration = new ArrayList<Pawn>();
 					pawnsForNextIteration.add(p);
-					if(cardsForNextIteration.size() != 0)
+					if(cardsLeftOnHand.size() != 0)
 					{
-						doAMove(pawnsForNextIteration, cardsForNextIteration,tempCardsPlayed, distanceForMove,costsForMove);
+						moveNumber +=1;
+						System.out.println("Enter next level of movement");
+						AITurnObject output = doMove(new AITurnObject(pawnsForNextIteration,
+								cardsLeftOnHand,cardsAlreadyPlayed,
+								tilesLeftInHand, costs,
+								distanceAlreadyTraveled,costsAlreadyIncurred),moveNumber);
+						if(output != null&&(bestPossibleTurn == null||output.getValueOfTurn() > bestPossibleTurn.getValueOfTurn()))
+						{
+							bestPossibleTurn = output;
+						}
 					}
 				}
-				else if((path.size()<=p.getNewLocation()+distanceForMove)||
-						((path.size()>p.getNewLocation()+distanceForMove)
-								&&(!path.get(p.getNewLocation()+distanceForMove).getChildrenTiles().get(path.get(p.getNewLocation()+distanceForMove).getChildrenTiles().size()-1).hasPawn())))
+				else if(canBePaid)
 				{
-					int points = calculatePointsOfTurn(p,distanceForMove);
-					double valueOfTurn = points + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceForMove)/*+ aiPawnSpread*(avgDistanceMe - p.getNewLocation())*/;
+					int points = calculatePointsOfTurn(p,distanceAlreadyTraveled);
+					double valueOfTurn = points - costsAlreadyIncurred + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceAlreadyTraveled);
 					//System.out.println("New calculation for turn: " + valueOfTurn + " points: " + points +" Comparing to: " + valueBestTurn);
-					if(valueOfTurn > valueBestTurn||bestCards.isEmpty())
+					if(bestPossibleTurn == null||valueOfTurn > bestPossibleTurn.getValueOfTurn())
 					{
-						valueBestTurn = valueOfTurn;
-						bestPawn = p;
-						bestCards = new ArrayList<Card>(tempCardsPlayed);
+						ArrayList<Pawn> pawn = new ArrayList<Pawn>();
+						pawn.add(p);
+						bestPossibleTurn = new AITurnObject(pawn, cardsLeftOnHand,cardsAlreadyPlayed,tilesLeftInHand,new AICostObject(tilesPaidInEachMove,cardsPaidInEachMove),
+								distanceAlreadyTraveled,costsAlreadyIncurred);
+						bestPossibleTurn.setValueOfTurn(valueOfTurn);
+						System.out.println("Total costs: " + costsAlreadyIncurred);
 						//System.out.println("New best turn detected " + valueBestTurn + " points: " + points + " speed: " + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceForMove)+ " spread: " + aiPawnSpread*(avgDistanceMe - p.getNewLocation()));
 						//System.out.println("Average other players: " + avgDistanceOtherPlayers+ " AVGMe: "+ avgDistanceMe);
 						//System.out.println("Distance: " + distanceForMove);
@@ -193,12 +330,49 @@ public class GameAI {
 				}
 			}
 		}
-		
+		return bestPossibleTurn;
 	}
+	private int calculateCostsOfMove(Pawn p, int distanceTraveledBefore, int distanceTraveledAfter) {
+		int totalCosts = 0;
+		int costsForThisWater =0;
+		boolean isInWater = false;
+		boolean isBeginningWater = false;
+		for(int i = p.getNewLocation() + distanceTraveledBefore +1;i<=p.getNewLocation() + distanceTraveledAfter; i++)
+		{
+			if(i<path.size())
+			{
+				WaterTile wt = path.get(i);
+				if(wt.getChildren().isEmpty()&&!isInWater&&i>0 && !isBeginningWater)
+				{
+					isInWater = true;
+					costsForThisWater = ((LandTile)path.get(i-1).getChildren().get(path.get(i-1).getChildren().size()-1)).getLandValue();
+				}
+				else if((!wt.getChildren().isEmpty())&&(isInWater)&&(!isBeginningWater))
+				{
+					isInWater= false;
+					if(((LandTile)wt.getChildren().get(wt.getChildren().size()-1)).getLandValue() < costsForThisWater)
+					{
+						costsForThisWater = ((LandTile)wt.getChildren().get(wt.getChildren().size()-1)).getLandValue();
+					}
+					totalCosts+=costsForThisWater;
+					System.out.println("Could add " + costsForThisWater + " to these total costs: " + totalCosts);
+				}
 
-	private int calculateCostsOfMove(Pawn p, int distance, Card c) {
-
-		return 0; 
+				else if(wt.getChildren().isEmpty() && i==0)
+				{
+					isBeginningWater = true;
+				}
+				else if((!wt.getChildren().isEmpty())&&isBeginningWater)
+				{
+					isBeginningWater = false;
+				}
+			}
+			else if(isInWater)
+			{
+				isInWater = false;
+			}
+		}
+		return totalCosts; 
 	}
 
 	private int calculatePointsOfTurn(Pawn p, int distance) {
