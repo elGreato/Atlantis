@@ -38,7 +38,11 @@ public class AICostObject {
 	
 	}
 	public int getRealCosts(int moveNumber) {
-		int realCosts = cardsPaidInEachMove.get(moveNumber).size()*2 + tilesPaidInEachMove.get(moveNumber).size();
+		int realCosts = cardsPaidInEachMove.get(moveNumber).size()*2;
+		for(LandTile lt:tilesPaidInEachMove.get(moveNumber))
+		{
+			realCosts+=lt.getLandValue();
+		}
 		return realCosts;
 	}
 }
