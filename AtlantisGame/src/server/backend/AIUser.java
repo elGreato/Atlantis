@@ -8,7 +8,7 @@ import messageObjects.Message;
 import messageObjects.WaterMessage;
 
 public class AIUser extends User implements Runnable{
-	public static String[] aiNames = {"AI_BernGuy", "AI_Bolt","AI_SGASquad","AI_GovOfficials"};
+	public static String[] aiNames = {"AI_BernGuy", "AI_Bolt","AI_SGASquad","AI_GovOfficials", "AI_TheStandard"};
 	private double aiSpeed;
 	private double aiPawnSpread;
 	private ArrayList<Message> incomingMessages;
@@ -20,11 +20,11 @@ public class AIUser extends User implements Runnable{
 		incomingMessages = new ArrayList<Message>();
 		activeGames = new ArrayList<GameAI>();
 		switch(ui.getUsername()){
-		case "AI_BernGUY" : aiSpeed = 0.1d; aiPawnSpread = 1d;
-		case "AI_Bolt" : aiSpeed = 5d; aiPawnSpread = 0.1d;
-		case "AI_SGASquad" : aiSpeed = 2d; aiPawnSpread = 5d;
-		case "AI_GovOfficials" : aiSpeed = 0.2d; aiPawnSpread = 0.1d;
-		default : aiSpeed = 1; aiPawnSpread = 1d;
+		case "AI_BernGUY" : aiSpeed = -1d; aiPawnSpread = 4d;
+		case "AI_Bolt" : aiSpeed = 10d; aiPawnSpread = -5d;
+		case "AI_SGASquad" : aiSpeed = 4d; aiPawnSpread = 15d;
+		case "AI_GovOfficials" : aiSpeed = 0.02d; aiPawnSpread = -2d;
+		default : aiSpeed = 1; aiPawnSpread = 0d;
 		}
 		Thread t = new Thread(this);
 		t.start();

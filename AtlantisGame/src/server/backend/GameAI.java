@@ -15,6 +15,7 @@ import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
+import messageObjects.turnMessages.EndMYTurnMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PaymentDoneMessage;
@@ -30,6 +31,16 @@ public class GameAI {
 	public Player me;
 	private double aiSpeed;
 	private double aiPawnSpread;
+	private double valueBestTurn;
+	private ArrayList<Card> bestCards;
+	private ArrayList<Integer> bestTurnCosts;
+	private Pawn bestPawn;
+	private HashMap<Integer, ArrayList<LandTile>> LandTilesPayments;
+	private HashMap<Integer, ArrayList<Card>> CardPayments;
+	private double avgDistanceOtherPlayers;
+	private double avgDistanceMe;
+	private AICostObject payments;
+	private int moves;
 	public String getGameName() {
 		return game.getName();
 	}
@@ -124,16 +135,7 @@ public class GameAI {
 		}
 	}
 
-	private double valueBestTurn;
-	private ArrayList<Card> bestCards;
-	private ArrayList<Integer> bestTurnCosts;
-	private Pawn bestPawn;
-	private HashMap<Integer, ArrayList<LandTile>> LandTilesPayments;
-	private HashMap<Integer, ArrayList<Card>> CardPayments;
-	private double avgDistanceOtherPlayers;
-	private double avgDistanceMe;
-	private AICostObject payments;
-	private int moves;
+
 	private void doATurn() {
 		//System.out.println("New turn initiated");
 		bestCards = new ArrayList<Card>();
@@ -143,9 +145,7 @@ public class GameAI {
 		moves = 0;
 		calculateAverageDistances();
 		AITurnObject thisTurn = doMove(new AITurnObject(me.getPawns(), me.getPlayerHand().getCards(),me.getPlayerHand().getTreasures()),1);
-		bestCards = thisTurn.getCardsAlreadyPlayed();
-		bestPawn = thisTurn.getPawnsThatCanBePlayed().get(0);
-		payments = thisTurn.getCostsIncurredPerMove();
+
 		getValueOfCosts(payments);
 		System.out.println("Showing Indexes");
 		/*if(payments != null && payments.getTilesPaidInEachMove() !=null)
@@ -156,8 +156,11 @@ public class GameAI {
 			}
 		}*/
 		//System.out.println("AI sends turn message");
-		if(bestPawn != null && !bestCards.isEmpty())
+		if(thisTurn.getCardsAlreadyPlayed() != null && !thisTurn.getCardsAlreadyPlayed().isEmpty())
 		{
+			bestCards = thisTurn.getCardsAlreadyPlayed();
+			bestPawn = thisTurn.getPawnsThatCanBePlayed().get(0);
+			payments = thisTurn.getCostsIncurredPerMove();
 			moves+=1;
 			game.processMessage(new PawnCardSelectedMessage(game.getName(),me.getPlayerIndex(),bestPawn, bestCards.remove(0)));
 			
@@ -173,7 +176,7 @@ public class GameAI {
 
 
 	private void giveUpTurn() {
-		// TODO Auto-generated method stub
+		game.processMessage(new EndMYTurnMessage(game.getName(), me.getPlayerIndex()));
 		
 	}
 
@@ -274,7 +277,7 @@ public class GameAI {
 				else if(canBePaid)
 				{
 					int points = calculatePointsOfTurn(p,distanceAlreadyTraveled);
-					double valueOfTurn = (points - costsAlreadyIncurred - 2*cardsAlreadyPlayed.size()) + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceAlreadyTraveled);
+					double valueOfTurn = (points - costsAlreadyIncurred - 2*cardsAlreadyPlayed.size()) + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceAlreadyTraveled)+(aiPawnSpread*(avgDistanceMe- p.getNewLocation()));
 					//System.out.println("New calculation for turn: " + valueOfTurn + " points: " + points +" Comparing to: " + valueBestTurn);
 					if(bestPossibleTurn == null||valueOfTurn > bestPossibleTurn.getValueOfTurn())
 					{
