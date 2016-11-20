@@ -139,7 +139,7 @@ public class GameModel {
 			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex() && newCards != null) {
 				addCardToPlayer(newCards);
 
-			} 
+			}
 			if (treasure != null) {
 				if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 					givePlayerTreasure(treasure);
@@ -149,8 +149,8 @@ public class GameModel {
 				removeTreasureFromBoard(treasure);
 			}
 			Pawn selectedPawn = null;
-			assignThenMovePawn(message.getCurrentPlayer().getPlayerIndex(),message.getSelectedPawn(),message.getSelectedLand());
-			
+			assignThenMovePawn(message.getCurrentPlayer().getPlayerIndex(), message.getSelectedPawn(),
+					message.getSelectedLand());
 
 		}
 		// inform player to play another card
@@ -213,30 +213,38 @@ public class GameModel {
 				}
 			}
 		}
-		if(msgIn instanceof RevertTurnMessage){
+		if (msgIn instanceof RevertTurnMessage) {
 			System.out.println("Revert received in client");
-			RevertTurnMessage message = (RevertTurnMessage)msgIn;
-			if(message.getRemovedTreasure()!=null){
+			RevertTurnMessage message = (RevertTurnMessage) msgIn;
+
+			if (message.getRemovedTreasure() != null) {
+
+				System.out.println("trying to put back the land tile");
 				view.base.get(message.getRemovedIndex()).getChildren().add(message.getRemovedTreasure());
 			}
+
 			assignThenMovePawn(message.getPlayerIndex(), message.getSelectedPawn(), message.getSelectedLand());
-			
+
 		}
 
 	}
 
 	private void assignThenMovePawn(int playerIndex, Pawn selectedPawn, LandTile selectedLand) {
+		System.out.println("revert message player index "+playerIndex);
+		System.out.println("my index"+ currentPlayer.getPlayerIndex());
 		if (playerIndex == currentPlayer.getPlayerIndex()) {
 			for (Pawn pp : currentPlayer.getPawns()) {
 				if (selectedPawn.getPawnId() == pp.getPawnId())
 					selectedPawn = pp;
+				System.out.println("owner of pawn " +pp.getOwner().getPlayerName());
 			}
 		} else {
 			for (Player enemy : currentPlayer.getOpponents()) {
-				if (enemy.getPlayerIndex() ==playerIndex) {
+				if (enemy.getPlayerIndex() == playerIndex) {
 					for (Pawn pp : enemy.getPawns()) {
 						if (pp.getPawnId() == selectedPawn.getPawnId()) {
 							selectedPawn = pp;
+							System.out.println("enemy of pawn " +pp.getOwner().getPlayerName());
 						}
 					}
 				}
@@ -244,7 +252,7 @@ public class GameModel {
 		}
 
 		movePawn(currentPlayer.getPlayerIndex(), selectedPawn, selectedLand);
-		
+
 	}
 
 	private Pawn scanPawns() {
@@ -387,7 +395,7 @@ public class GameModel {
 
 	private void payForPassingWater(int waterBill, int waterPassedCount) {
 		if (waterPassedCount > 0) {
-			
+
 			this.waterBill = waterBill;
 			view.showWaterBill(waterBill, waterPassedCount);
 		}
@@ -427,6 +435,7 @@ public class GameModel {
 		// try RemoveIf method in Server tomorrow
 		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
+		boolean allSelectedAndNotEnough =true;
 		int totalChosen = 0;
 		for (int i = 0; i < currentPlayer.getPlayerHand().getTreasures().size(); i++) {
 			LandTile treasureSelected = currentPlayer.getPlayerHand().getTreasures().get(i);
@@ -434,7 +443,7 @@ public class GameModel {
 				treasuresChosen.add(treasureSelected);
 				totalChosen += treasureSelected.getLandValue();
 
-			}
+			}else allSelectedAndNotEnough=false;
 
 		}
 		for (int i = 0; i < currentPlayer.getPlayerHand().getNumCards(); i++) {
@@ -442,10 +451,11 @@ public class GameModel {
 			if (cardSelected.isCardSelected()) {
 				cardsChosen.add(cardSelected);
 				totalChosen += 1;
-
-			}
+				
+			} else allSelectedAndNotEnough=false;
 		}
-
+		// ability to revert only when you can't afford the water that you jumped
+		if(allSelectedAndNotEnough&&totalChosen<waterBill) view.btnRevert.setDisable(false);
 		if (totalChosen >= waterBill) {
 			view.btnPay4Water.setDisable(false);
 			view.lblWaterCalc.setText("");
@@ -464,14 +474,14 @@ public class GameModel {
 		if (currentPlayer.isYourTurn()) {
 			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex()));
 
-		}
-		else view.showNotYourTurnAlert();
+		} else
+			view.showNotYourTurnAlert();
 	}
 
 	public void handleRevert() {
 		System.out.println("Rever from client");
 		msgOut.sendMessage(new RevertTurnMessage(gameName, currentPlayer.getPlayerIndex()));
-		
+
 	}
 
 }

@@ -13,6 +13,7 @@ public class GameController {
 	public GameController(GameView gameView, GameModel gameModel) {
 		this.view = gameView;
 		this.model = gameModel;
+		view.btnRevert.setDisable(true);
 		// for (StackPane s: view.getBase()){
 		// s.setOnMouseClicked(e-> handleBase(e));
 
@@ -27,7 +28,7 @@ public class GameController {
 	}
 
 
-
+	
 	private void handleRevert() {
 		model.handleRevert();
 	}
