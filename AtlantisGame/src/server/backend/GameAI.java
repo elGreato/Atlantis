@@ -146,7 +146,7 @@ public class GameAI {
 		calculateAverageDistances();
 		AITurnObject thisTurn = doMove(new AITurnObject(me.getPawns(), me.getPlayerHand().getCards(),me.getPlayerHand().getTreasures()),1);
 
-		getValueOfCosts(payments);
+		//getValueOfCosts(payments);
 		System.out.println("Showing Indexes");
 		/*if(payments != null && payments.getTilesPaidInEachMove() !=null)
 		{
@@ -156,7 +156,7 @@ public class GameAI {
 			}
 		}*/
 		//System.out.println("AI sends turn message");
-		if(thisTurn.getCardsAlreadyPlayed() != null && !thisTurn.getCardsAlreadyPlayed().isEmpty())
+		if(thisTurn != null && thisTurn.getCardsAlreadyPlayed() != null && !thisTurn.getCardsAlreadyPlayed().isEmpty())
 		{
 			bestCards = thisTurn.getCardsAlreadyPlayed();
 			bestPawn = thisTurn.getPawnsThatCanBePlayed().get(0);
