@@ -1,6 +1,7 @@
 package client.game;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import client.lobby.ClientLobbyInterface;
 import client.lobby.LobbyModel;
@@ -148,9 +149,8 @@ public class GameModel {
 				}
 				removeTreasureFromBoard(treasure);
 			}
-			Pawn selectedPawn = null;
-			assignThenMovePawn(message.getCurrentPlayer().getPlayerIndex(), message.getSelectedPawn(),
-					message.getSelectedLand());
+			Pawn selectedPawn = message.getSelectedPawn();
+			assignThenMovePawn(message.getCurrentPlayer().getPlayerIndex(), selectedPawn, message.getSelectedLand());
 
 		}
 		// inform player to play another card
@@ -172,9 +172,11 @@ public class GameModel {
 			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 				for (int i = 0; i < sold.size(); i++) {
 					LandTile soldLand = sold.get(i);
-					for (int k = 0; k < currentPlayer.getPlayerHand().getTreasures().size(); k++) {
-						if (currentPlayer.getPlayerHand().getTreasures().get(k).getTileId() == soldLand.getTileId()) {
-							currentPlayer.getPlayerHand().getTreasures().remove(k);
+					Iterator<LandTile> it = currentPlayer.getPlayerHand().getTreasures().iterator();
+					while (it.hasNext()) {
+						LandTile lt = it.next();
+						if (lt.getTileId() == soldLand.getTileId()) {
+							it.remove();
 
 						}
 					}
@@ -198,8 +200,9 @@ public class GameModel {
 		if (msgIn instanceof PaymentDoneMessage) {
 			PaymentDoneMessage message = (PaymentDoneMessage) msgIn;
 			if (message.getPlayerIndex() != currentPlayer.getPlayerIndex()) {
-				for (int i = 0; i < message.getTreasuresChosen().size(); i++) {
-					LandTile paidTreasure = message.getTreasuresChosen().get(i);
+				Iterator<LandTile> it = message.getTreasuresChosen().iterator();
+				while (it.hasNext()) {
+					LandTile paidTreasure = it.next();
 					view.removeEnemyTreasures(message.getPlayerIndex(), paidTreasure);
 
 				}
@@ -230,13 +233,13 @@ public class GameModel {
 	}
 
 	private void assignThenMovePawn(int playerIndex, Pawn selectedPawn, LandTile selectedLand) {
-		System.out.println("revert message player index "+playerIndex);
-		System.out.println("my index"+ currentPlayer.getPlayerIndex());
+		System.out.println("revert message player index " + playerIndex);
+		System.out.println("my index" + currentPlayer.getPlayerIndex());
 		if (playerIndex == currentPlayer.getPlayerIndex()) {
 			for (Pawn pp : currentPlayer.getPawns()) {
 				if (selectedPawn.getPawnId() == pp.getPawnId())
 					selectedPawn = pp;
-				System.out.println("owner of pawn " +pp.getOwner().getPlayerName());
+				System.out.println("owner of pawn " + pp.getOwner().getPlayerName());
 			}
 		} else {
 			for (Player enemy : currentPlayer.getOpponents()) {
@@ -244,7 +247,7 @@ public class GameModel {
 					for (Pawn pp : enemy.getPawns()) {
 						if (pp.getPawnId() == selectedPawn.getPawnId()) {
 							selectedPawn = pp;
-							System.out.println("enemy of pawn " +pp.getOwner().getPlayerName());
+							System.out.println("enemy of pawn " + pp.getOwner().getPlayerName());
 						}
 					}
 				}
@@ -376,21 +379,27 @@ public class GameModel {
 	}
 
 	public void pay4Cards() {
-		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
-		for (int i = 0; i < currentPlayer.getPlayerHand().getTreasures().size(); i++) {
-			LandTile treasureSelected = currentPlayer.getPlayerHand().getTreasures().get(i);
-			if (treasureSelected.isSelected()) {
-				treasuresChosen.add(treasureSelected);
-				currentPlayer.getPlayerHand().getTreasures().remove(treasureSelected);
-				view.removePlayerTreasure(treasureSelected);
-			}
-
-		}
+		ArrayList<LandTile> treasuresChosen = removeSelectedLandTiles();
 
 		msgOut.sendMessage(new BuyCardsMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen));
 
 		view.closeBuyScene();
 
+	}
+
+	private ArrayList<LandTile> removeSelectedLandTiles() {
+		ArrayList<LandTile> result = new ArrayList<>();
+		Iterator<LandTile> it = currentPlayer.getPlayerHand().getTreasures().iterator();
+		while (it.hasNext()) {
+			LandTile treasureSelected = it.next();
+			if (treasureSelected.isSelected()) {
+
+				result.add(treasureSelected);
+				it.remove();
+				view.removePlayerTreasure(treasureSelected);
+			}
+		}
+		return result;
 	}
 
 	private void payForPassingWater(int waterBill, int waterPassedCount) {
@@ -403,25 +412,15 @@ public class GameModel {
 	}
 
 	public void pay4Water() {
-		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
+		ArrayList<LandTile> treasuresChosen = removeSelectedLandTiles();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
-		int totalChosen = 0;
-		for (int i = 0; i < currentPlayer.getPlayerHand().getTreasures().size(); i++) {
-			LandTile treasureSelected = currentPlayer.getPlayerHand().getTreasures().get(i);
-			if (treasureSelected.isSelected()) {
-				treasuresChosen.add(treasureSelected);
-				totalChosen += treasureSelected.getLandValue();
-				currentPlayer.getPlayerHand().getTreasures().remove(treasureSelected);
-				view.removePlayerTreasure(treasureSelected);
-			}
-
-		}
-		for (int i = 0; i < currentPlayer.getPlayerHand().getNumCards(); i++) {
-			Card cardSelected = currentPlayer.getPlayerHand().getCards().get(i);
+		Iterator<Card> it = currentPlayer.getPlayerHand().getCards().iterator();
+		while (it.hasNext()) {
+			Card cardSelected = it.next();
 			if (cardSelected.isCardSelected()) {
 				cardsChosen.add(cardSelected);
-				totalChosen += 1;
-				currentPlayer.getPlayerHand().getCards().remove(cardSelected);
+
+				it.remove();
 				view.removeCardFromHand(cardSelected);
 			}
 		}
@@ -435,7 +434,7 @@ public class GameModel {
 		// try RemoveIf method in Server tomorrow
 		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
-		boolean allSelectedAndNotEnough =true;
+		boolean allSelectedAndNotEnough = true;
 		int totalChosen = 0;
 		for (int i = 0; i < currentPlayer.getPlayerHand().getTreasures().size(); i++) {
 			LandTile treasureSelected = currentPlayer.getPlayerHand().getTreasures().get(i);
@@ -443,7 +442,8 @@ public class GameModel {
 				treasuresChosen.add(treasureSelected);
 				totalChosen += treasureSelected.getLandValue();
 
-			}else allSelectedAndNotEnough=false;
+			} else
+				allSelectedAndNotEnough = false;
 
 		}
 		for (int i = 0; i < currentPlayer.getPlayerHand().getNumCards(); i++) {
@@ -451,11 +451,14 @@ public class GameModel {
 			if (cardSelected.isCardSelected()) {
 				cardsChosen.add(cardSelected);
 				totalChosen += 1;
-				
-			} else allSelectedAndNotEnough=false;
+
+			} else
+				allSelectedAndNotEnough = false;
 		}
-		// ability to revert only when you can't afford the water that you jumped
-		if(allSelectedAndNotEnough&&totalChosen<waterBill) view.btnRevert.setDisable(false);
+		// ability to revert only when you can't afford the water that you
+		// jumped
+		if (allSelectedAndNotEnough && totalChosen < waterBill)
+			view.btnRevert.setDisable(false);
 		if (totalChosen >= waterBill) {
 			view.btnPay4Water.setDisable(false);
 			view.lblWaterCalc.setText("");
