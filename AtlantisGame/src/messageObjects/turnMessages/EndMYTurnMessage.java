@@ -11,11 +11,13 @@ public class EndMYTurnMessage extends InGameMessage  implements Serializable {
 	
 	int playerIndex;
 	private ArrayList<Card> newCards;
+	private boolean normalEnd;
 	
 	// from client to Server
-	public EndMYTurnMessage(String gameName, int playerIndex) {
+	public EndMYTurnMessage(String gameName, int playerIndex, boolean normalEnd) {
 		super(gameName);
 		this.playerIndex=playerIndex;
+		this.normalEnd=normalEnd;
 	}
 	
 	// from Server to Client
@@ -42,6 +44,10 @@ public class EndMYTurnMessage extends InGameMessage  implements Serializable {
 	}
 	public void setPlayerIndex(int playerIndex) {
 		this.playerIndex = playerIndex;
+	}
+
+	public boolean isNormalEnd() {
+		return normalEnd;
 	}
 
 

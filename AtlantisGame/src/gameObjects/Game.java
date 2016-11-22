@@ -154,8 +154,8 @@ public class Game implements GameInterface {
 				if (p.getPawnId() == message.getPawn().getPawnId()) {
 					selectedPawn = p;
 					selectedPawn.setPawnSelected(true);
-				}
-				else p.setPawnSelected(false);
+				} else
+					p.setPawnSelected(false);
 
 			}
 
@@ -214,13 +214,15 @@ public class Game implements GameInterface {
 						message.getCardsChosen(), message.getTreasuresChosen()));
 
 			}
+			if(message.isNextPlayer())
+			endTurn();
 
 		}
 		// in case of a player ending his turn, he gets an extra card
 		if (igm instanceof EndMYTurnMessage) {
 			EndMYTurnMessage message = (EndMYTurnMessage) igm;
-			performEndTurn(message.getPlayerIndex());
-			
+			performEndTurn(message.getPlayerIndex(),message.isNormalEnd());
+
 		}
 		if (igm instanceof RevertTurnMessage) {
 			System.out.println("Rever from Server");
@@ -238,10 +240,12 @@ public class Game implements GameInterface {
 				removePawnFromNewTile(selectedPawn);
 				selectedPawn.setNewLocation(selectedPawn.getOldLocation());
 				selectedPawn.setOldLocation(selectedPawn.getNewLocation());
-				if (initialLand!=null)initialLand.setPawnOnTile(selectedPawn); else atlantis.getChildren().add(selectedPawn);
-				System.out.println("initial land is "+initialLand.getCol()+" value "+ initialLand.getLandValue());
+				if (initialLand != null)
+					initialLand.setPawnOnTile(selectedPawn);
+				else
+					atlantis.getChildren().add(selectedPawn);
+				System.out.println("initial land is " + initialLand.getCol() + " value " + initialLand.getLandValue());
 				System.out.println("pawn new location" + selectedPawn.getNewLocation());
-				
 
 			}
 			int numberOfPlayers = getNumOfRegisteredPlayers();
@@ -249,11 +253,12 @@ public class Game implements GameInterface {
 				users.get(i).sendMessage(new RevertTurnMessage(getName(), currentPlayerIndex, removedCards,
 						removedTreasure, removedTreasureIndex, selectedPawn, initialLand));
 			}
-			performEndTurn(message.getPlayerIndex());
+			performEndTurn(message.getPlayerIndex(),true);
 		}
 	}
 
-	private void performEndTurn(int playerIndex) {
+	private void performEndTurn(int playerIndex, boolean normalEnd) {
+		if(normalEnd){
 		Player player = players.get(playerIndex);
 		ArrayList<Card> newCards = dealCards(player);
 		Card extra = cards.deal();
@@ -263,7 +268,9 @@ public class Game implements GameInterface {
 		users.get(player.getPlayerIndex())
 				.sendMessage(new EndMYTurnMessage(getName(), player.getPlayerIndex(), newCards));
 		endTurn();
-		
+		}
+		else endTurn();
+
 	}
 
 	private void performTurn(Card selectedCard, Pawn selectedPawn) {
@@ -275,7 +282,7 @@ public class Game implements GameInterface {
 		boolean waterHasTile = false;
 		boolean nextPlayer = false;
 		boolean connectedWater = false;
-
+		boolean gameEnded = false;
 		int waterPassedCount = 0;
 		int waterBill = 0;
 		LandTile treasure = null;
@@ -355,6 +362,15 @@ public class Game implements GameInterface {
 				}
 			}
 			if (!foundLand && f == base.size() - 1) {
+				if(mainland.getPawns().size()>=3){
+					int currentPawnsCount =0;
+					for(Pawn p: currentPlayer.getPawns()){
+						if(p.getNewLocation()==f+1) currentPawnsCount++;
+						else currentPawnsCount--;
+					}
+					if(currentPawnsCount==3) gameEnded=true;
+				}
+				
 				selectedPawn.setNewLocation(f + 1);
 				selectedPawn.setReachedMainLand(true);
 				mainland.getPawns().add(selectedPawn);
@@ -364,8 +380,11 @@ public class Game implements GameInterface {
 				selectedPawn.setPawnSelected(false);
 				nextPlayer = true;
 				giveTreasure = true;
+				if(!gameEnded){
 				newCards = dealCards(currentPlayer);
-
+				}
+				
+				
 			}
 
 		}
@@ -382,11 +401,16 @@ public class Game implements GameInterface {
 		int numberOfPlayers = getNumOfRegisteredPlayers();
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i).sendMessage(new RefreshPlayerMessage(getName(), currentPlayer, selectedLand, selectedPawn,
-					selectedCard, treasure, newCards, waterBill, waterPassedCount));
+					selectedCard, treasure, newCards, waterBill, waterPassedCount,nextPlayer));
 		}
-		if (foundLand && nextPlayer)
-			endTurn();
+			 if(gameEnded)
+			endThisGame();
 
+	}
+
+	private void endThisGame() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private int payForWater(WaterTile water) {
@@ -481,7 +505,7 @@ public class Game implements GameInterface {
 			w = base.get(selectedPawn.getOldLocation());
 			((LandTile) w.getChildren().get((w.getChildren().size() - 1))).removePawn(selectedPawn);
 
-		} else 
+		} else
 			atlantis.getChildren().remove(selectedPawn);
 	}
 

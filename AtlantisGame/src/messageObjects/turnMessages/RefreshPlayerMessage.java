@@ -19,9 +19,10 @@ public class RefreshPlayerMessage extends InGameMessage implements Serializable 
 	ArrayList<Card> newCards;
 	private int waterBill;
 	private int waterPassedCount;
+	private boolean nextPlayer;
 
 	public RefreshPlayerMessage(String gameName, Player currentPlayer, LandTile selectedLand, Pawn selectedPawn, Card selectedCard,
-			LandTile treasure, ArrayList<Card> newCards, int waterBill, int waterPassedCount) {
+			LandTile treasure, ArrayList<Card> newCards, int waterBill, int waterPassedCount, boolean nextPlayer) {
 		super(gameName);
 		this.selectedCard = selectedCard;
 		this.selectedPawn = selectedPawn;
@@ -31,16 +32,13 @@ public class RefreshPlayerMessage extends InGameMessage implements Serializable 
 		this.currentPlayer=currentPlayer;
 		this.waterBill =waterBill;
 		this.waterPassedCount=waterPassedCount;
+		this.nextPlayer=nextPlayer;
 	}
 
 	
 
 	public Player getCurrentPlayer() {
 		return currentPlayer;
-	}
-
-	public void setCurrentPlayer(Player currentPlayer) {
-		this.currentPlayer = currentPlayer;
 	}
 
 
@@ -50,31 +48,14 @@ public class RefreshPlayerMessage extends InGameMessage implements Serializable 
 	}
 
 
-
-	public void setWaterPassedCount(int waterPassedCount) {
-		this.waterPassedCount = waterPassedCount;
-	}
-
-
-
 	public int getWaterBill() {
 		return waterBill;
 	}
 
 
 
-	public void setWaterBill(int waterBill) {
-		this.waterBill = waterBill;
-	}
-
-
-
 	public Pawn getSelectedPawn() {
 		return selectedPawn;
-	}
-
-	public void setSelectedPawn(Pawn selectedPawn) {
-		this.selectedPawn = selectedPawn;
 	}
 
 	public Card getSelectedCard() {
@@ -89,17 +70,18 @@ public class RefreshPlayerMessage extends InGameMessage implements Serializable 
 		return treasure;
 	}
 
-	public void setTreasure(LandTile treasure) {
-		this.treasure = treasure;
-	}
 
 	public LandTile getSelectedLand() {
 		return selectedLand;
 	}
 
-	public void setSelectedLand(LandTile selectedLand) {
-		this.selectedLand = selectedLand;
+	
+
+	public boolean isNextPlayer() {
+		return nextPlayer;
 	}
+
+
 
 	public ArrayList<Card> getNewCards() {
 		return newCards;

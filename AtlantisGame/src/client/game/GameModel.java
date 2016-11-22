@@ -36,6 +36,7 @@ public class GameModel {
 	private ClientLobbyInterface msgOut;
 	private int waterBill = 0;
 	protected Player currentPlayer;
+	private boolean nextPlayer=true;
 
 	public String getGameName() {
 		return gameName;
@@ -132,7 +133,7 @@ public class GameModel {
 				}
 			}
 			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
-
+				nextPlayer = message.isNextPlayer();
 				payForPassingWater(message.getWaterBill(), message.getWaterPassedCount());
 			}
 			LandTile treasure = message.getTreasure();
@@ -144,6 +145,7 @@ public class GameModel {
 			if (treasure != null) {
 				if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 					givePlayerTreasure(treasure);
+					
 				} else {
 					giveEnemyTreasure(message.getCurrentPlayer().getPlayerIndex(), treasure);
 				}
@@ -155,6 +157,7 @@ public class GameModel {
 		}
 		// inform player to play another card
 		if (msgIn instanceof PlayAnotherCardMessage) {
+			nextPlayer=false;
 			for (Pawn p : currentPlayer.getPawns()) {
 				if (((PlayAnotherCardMessage) msgIn).getSelectedPawn().getPawnId() != p.getPawnId()) {
 					p.setOnMouseClicked(null);
@@ -408,6 +411,7 @@ public class GameModel {
 			this.waterBill = waterBill;
 			view.showWaterBill(waterBill, waterPassedCount);
 		}
+		else if(waterPassedCount<1&&nextPlayer)msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(),false));
 
 	}
 
@@ -425,13 +429,14 @@ public class GameModel {
 			}
 		}
 		msgOut.sendMessage(
-				new WaterPaidMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen, cardsChosen));
+				new WaterPaidMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen, cardsChosen,nextPlayer));
 		view.closePayWaterScene();
 
 	}
 
 	public void handleCalc() {
 		// try RemoveIf method in Server tomorrow
+		view.lblWaterCalc.setText("");
 		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
 		boolean allSelectedAndNotEnough = true;
@@ -461,7 +466,6 @@ public class GameModel {
 			view.btnRevert.setDisable(false);
 		if (totalChosen >= waterBill) {
 			view.btnPay4Water.setDisable(false);
-			view.lblWaterCalc.setText("");
 			view.lblWaterCalc
 					.setText("You will pay " + String.valueOf(totalChosen) + "\n Remember, no change is offered");
 		} else {
@@ -475,7 +479,7 @@ public class GameModel {
 
 	public void handleEndMyTurn() {
 		if (currentPlayer.isYourTurn()) {
-			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex()));
+			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(),true));
 
 		} else
 			view.showNotYourTurnAlert();
