@@ -146,7 +146,7 @@ public class GameModel {
 			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex() && newCards != null) {
 				addCardToPlayer(newCards);
 
-			}
+			} 
 			if (treasure != null) {
 				if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 					givePlayerTreasure(treasure);
