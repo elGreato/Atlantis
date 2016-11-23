@@ -110,13 +110,27 @@ public class GameAI {
 					for (LandTile lt : tilesForPayment) {
 						System.out.println("Tile with value: " + lt.getLandValue());
 					}
-					WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), tilesForPayment,
-							cardsForPayment);
-					game.processMessage(wpm);
+					if(rpm.isNextPlayer())
+					{
+						WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), tilesForPayment,
+								cardsForPayment, true);
+						game.processMessage(wpm);
+					}
+					else
+					{
+						WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), tilesForPayment,
+								cardsForPayment, false);
+						game.processMessage(wpm);
+					}
 				}
 				moves += 1;
 			} else if (rpm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex()) {
+				
 				moves += 1;
+				if(rpm.isNextPlayer())
+				{
+					game.processMessage(new EndMYTurnMessage(game.getName(),me.getPlayerIndex(),true));
+				}
 			}
 		} else if (igm instanceof ServerMessage) {
 			System.out.println(((ServerMessage) igm).getTheMessage());
@@ -159,7 +173,7 @@ public class GameAI {
 	}
 
 	private void giveUpTurn() {
-		game.processMessage(new EndMYTurnMessage(game.getName(), me.getPlayerIndex()));
+		game.processMessage(new EndMYTurnMessage(game.getName(), me.getPlayerIndex(),false));
 
 	}
 
