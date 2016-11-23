@@ -84,7 +84,7 @@ public class GameView {
 	private HBox hbTreasures = new HBox();
 
 	private HashMap<Integer, HBox> hbEnemiesTreasures = new HashMap<Integer, HBox>();
-	private HashMap<Integer, HBox> hbOpponents = new HashMap<>();
+	private HashMap<Integer, VBox> mapOpponents = new HashMap<>();
 
 	private MainLand mainland;
 	private AtlantisTile atlantis;
@@ -149,8 +149,11 @@ public class GameView {
 		vbPlayerInfo.getChildren().add(lbltreasures);
 		vbPlayerInfo.getChildren().add(hbTreasures);
 		vbPlayer.getChildren().add(vbPlayerInfo);
-		
-		hbPlayersInfo.getChildren().addAll(vbPlayer, hbOpponents);
+		hbPlayersInfo.getChildren().add(vbPlayer);
+	/*	for(int i=0; i<mapOpponents.size();i++){
+			VBox vb = mapOpponents.get(i);
+		hbPlayersInfo.getChildren().add(vb);
+		}*/
 		vbGameStatus.getChildren().addAll(lblGameStatus, lblTurn);
 		root.setBottom(hbPlayersInfo);
 		root.setRight(vbMainControls);
@@ -282,7 +285,11 @@ public class GameView {
 		recColor.setWidth(150);
 		recColor.setFill(Pawn.FillColor(opponent));
 		vbOpponentInfo.getChildren().addAll(lblopponentName, lblopponentCardCount, hbEnemyTreasures, recColor);
-		hbOpponents.getChildren().add(vbOpponentInfo);
+		
+		mapOpponents.put(opponent.getPlayerIndex(),vbOpponentInfo);
+
+		hbPlayersInfo.getChildren().add(vbOpponentInfo);
+
 
 		// i need to find a way to get the circle of the pawn
 		for (Pawn p : opponent.getPawns()) {
@@ -554,7 +561,8 @@ public class GameView {
 	}
 
 	public void setCarsCountForEnemy(int playerIndex, int cardsCount) {
-		HBox enemy = hb
+		VBox enemy = (VBox) mapOpponents.get(playerIndex);
+		((Label)enemy.getChildren().get(1)).setText(String.valueOf(cardsCount));
 		
 	}
 }

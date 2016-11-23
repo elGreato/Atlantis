@@ -2,6 +2,8 @@ package gameObjects;
 
 // This class is part of the Gamer Server, should be moved from this package
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import messageObjects.AtlantisMainLandMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
@@ -194,18 +196,22 @@ public class Game implements GameInterface {
 		if (igm instanceof WaterPaidMessage) {
 			WaterPaidMessage message = (WaterPaidMessage) igm;
 			Player player = players.get(message.getPlayerIndex());
-			for (int i = 0; i < player.getPlayerHand().getNumCards(); i++) {
-				Card c = player.getPlayerHand().getCards().get(i);
+			Iterator<Card> it = player.getPlayerHand().getCards().iterator();
+				while(it.hasNext()){
+				Card c =it.next();
 				for (int k = 0; k < message.getCardsChosen().size(); k++) {
-					if (c.getCardId() == message.getCardsChosen().get(k).getCardId())
-						player.getPlayerHand().removeCardFromHand(c);
+					if (c.getCardId() == message.getCardsChosen().get(k).getCardId()){
+						it.remove();
+					break;}
 				}
 			}
-			for (int i = 0; i < player.getPlayerHand().getTreasures().size(); i++) {
-				LandTile t = player.getPlayerHand().getTreasures().get(i);
+				Iterator<LandTile> it2 = player.getPlayerHand().getTreasures().iterator();
+				while(it2.hasNext()){
+				LandTile t = it2.next();
 				for (int k = 0; k < message.getTreasuresChosen().size(); k++) {
-					if (t.getTileId() == message.getTreasuresChosen().get(k).getTileId())
-						player.getPlayerHand().getTreasures().remove(t);
+					if (t.getTileId() == message.getTreasuresChosen().get(k).getTileId()){
+						it2.remove();
+					break;}
 				}
 			}
 
@@ -482,7 +488,7 @@ public class Game implements GameInterface {
 		if (waterIndex != base.size() - 1) {
 
 			int waterAfterIndex = waterIndex + 1;
-			while (!foundAfterWaterWithTiles) {
+			while (!foundAfterWaterWithTiles&&waterAfterIndex<53) {
 				waterAfter = base.get(waterAfterIndex);
 				if (waterAfter.getChildren().size() != 0) {
 					landAfter = (LandTile) waterAfter.getChildren().get(waterAfter.getChildren().size() - 1);
