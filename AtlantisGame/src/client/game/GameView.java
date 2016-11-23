@@ -79,11 +79,12 @@ public class GameView {
 	// Player View
 
 	private HBox hbPlayersInfo = new HBox();
-	private HBox hbOpponents = new HBox();
+
 	private HBox hboxCards = new HBox();
 	private HBox hbTreasures = new HBox();
 
 	private HashMap<Integer, HBox> hbEnemiesTreasures = new HashMap<Integer, HBox>();
+	private HashMap<Integer, HBox> hbOpponents = new HashMap<>();
 
 	private MainLand mainland;
 	private AtlantisTile atlantis;
@@ -93,7 +94,7 @@ public class GameView {
 	private VBox vbPlayer = new VBox();
 
 	private Label lblName = new Label();
-	private Label vpHolder = new Label();
+	protected Label vpHolder = new Label();
 	private Label lblPlayerImage = new Label();
 	private Label lblcards = new Label("Your Cards");
 	private Label lbltreasures = new Label("Your Treasures");
@@ -148,7 +149,7 @@ public class GameView {
 		vbPlayerInfo.getChildren().add(lbltreasures);
 		vbPlayerInfo.getChildren().add(hbTreasures);
 		vbPlayer.getChildren().add(vbPlayerInfo);
-
+		
 		hbPlayersInfo.getChildren().addAll(vbPlayer, hbOpponents);
 		vbGameStatus.getChildren().addAll(lblGameStatus, lblTurn);
 		root.setBottom(hbPlayersInfo);
@@ -510,12 +511,12 @@ public class GameView {
 		for (int i = 0; i < hbOpponentTreasure.getChildren().size(); i++) {
 			if (((LandTile) hbOpponentTreasure.getChildren().get(i)).getTileId() == soldLand.getTileId()) {
 				hbOpponentTreasure.getChildren().remove(i);
-				lblTurn.setText("The enemy sold a treasure to buy Cards");
+				lblTurn.setText("A treasure got removed from an Enemy");
 			}
 		}
 	}
 
-	public void showWaterBill(int waterBill, int waterPassedCount) {
+	public void showWaterBill(int waterBill, int waterPassedCount, boolean gameFinished) {
 		VBox payPane = new VBox();
 		multiCardsMode=true;
 		lblPay.setText("");
@@ -534,6 +535,14 @@ public class GameView {
 		tempStage.show();
 		tempStage.setAlwaysOnTop(true);
 		tempStage.setOnCloseRequest(e-> e.consume());
+		if(gameFinished){
+			 lblPay.setText("The Game is OVER, now all the pawns are moved to MainLand"
+			 		+ "\n BUT you still have to pay for crossing " + String.valueOf(waterPassedCount) + " Water Tiles"
+						+ "\n total amount:  " + String.valueOf(waterBill)
+						+ " points, choose the treasures and cards that you wanna pay with");
+			lblTurn.setText("The Game Has Finished");
+			lblGameStatus.setText("Game Over!");
+		}
 
 	}
 	public void closePayWaterScene(){
@@ -542,5 +551,10 @@ public class GameView {
 		lblPay.setText("");
 		multiCardsMode=false;
 		tempStage.close();
+	}
+
+	public void setCarsCountForEnemy(int playerIndex, int cardsCount) {
+		HBox enemy = hb
+		
 	}
 }

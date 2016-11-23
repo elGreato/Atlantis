@@ -11,6 +11,7 @@ import messageObjects.turnMessages.BuyCardsMessage;
 import messageObjects.turnMessages.CardsBoughtMessage;
 import messageObjects.turnMessages.EndMYTurnMessage;
 import messageObjects.turnMessages.GameStatusMessage;
+import messageObjects.turnMessages.LastBillMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PaymentDoneMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
@@ -214,14 +215,17 @@ public class Game implements GameInterface {
 						message.getCardsChosen(), message.getTreasuresChosen()));
 
 			}
-			if(message.isNextPlayer())
-			endTurn();
+			if (message.isNextPlayer()&&!message.isGameOver())
+				endTurn();
+			else if(message.isGameOver()){
+				System.out.println("GAME OVER");
+			}
 
 		}
 		// in case of a player ending his turn, he gets an extra card
 		if (igm instanceof EndMYTurnMessage) {
 			EndMYTurnMessage message = (EndMYTurnMessage) igm;
-			performEndTurn(message.getPlayerIndex(),message.isNormalEnd());
+			performEndTurn(message.getPlayerIndex(), message.isNormalEnd());
 
 		}
 		if (igm instanceof RevertTurnMessage) {
@@ -253,23 +257,23 @@ public class Game implements GameInterface {
 				users.get(i).sendMessage(new RevertTurnMessage(getName(), currentPlayerIndex, removedCards,
 						removedTreasure, removedTreasureIndex, selectedPawn, initialLand));
 			}
-			performEndTurn(message.getPlayerIndex(),true);
+			performEndTurn(message.getPlayerIndex(), true);
 		}
 	}
 
 	private void performEndTurn(int playerIndex, boolean normalEnd) {
-		if(normalEnd){
-		Player player = players.get(playerIndex);
-		ArrayList<Card> newCards = dealCards(player);
-		Card extra = cards.deal();
-		extra.setOwner(player);
-		player.addCard(extra);
-		newCards.add(extra);
-		users.get(player.getPlayerIndex())
-				.sendMessage(new EndMYTurnMessage(getName(), player.getPlayerIndex(), newCards));
-		endTurn();
-		}
-		else endTurn();
+		if (normalEnd) {
+			Player player = players.get(playerIndex);
+			ArrayList<Card> newCards = dealCards(player);
+			Card extra = cards.deal();
+			extra.setOwner(player);
+			player.addCard(extra);
+			newCards.add(extra);
+			users.get(player.getPlayerIndex())
+					.sendMessage(new EndMYTurnMessage(getName(), player.getPlayerIndex(), newCards));
+			endTurn();
+		} else
+			endTurn();
 
 	}
 
@@ -318,7 +322,8 @@ public class Game implements GameInterface {
 				waterHasTile = false;
 				LandTile land = (LandTile) water.getChildren().get(topNode);
 				// does this tile has the same color ?
-				if (land.getColor().equals(selectedCard.getColor()) && !land.hasPawn()) {
+				if (selectedCard.getColor() != null && land.getColor().equals(selectedCard.getColor())
+						&& !land.hasPawn()) {
 
 					land.setPawnOnTile(selectedPawn);
 					selectedLand = land;
@@ -336,7 +341,8 @@ public class Game implements GameInterface {
 				}
 				// here a player played a pawn and landed on another that has a
 				// pawn, if he has no other cards, he gets 2 free
-				if (land.getColor().equals(selectedCard.getColor()) && land.hasPawn() && !foundLand) {
+				if (selectedCard.getColor() != null && land.getColor().equals(selectedCard.getColor()) && land.hasPawn()
+						&& !foundLand) {
 					ArrayList<Card> extraCards = new ArrayList<>();
 					selectedPawn.setNewLocation(base.indexOf(water));
 					land.setTempPawn(selectedPawn);
@@ -361,16 +367,7 @@ public class Game implements GameInterface {
 
 				}
 			}
-			if (!foundLand && f == base.size() - 1) {
-				if(mainland.getPawns().size()>=3){
-					int currentPawnsCount =0;
-					for(Pawn p: currentPlayer.getPawns()){
-						if(p.getNewLocation()==f+1) currentPawnsCount++;
-						else currentPawnsCount--;
-					}
-					if(currentPawnsCount==3) gameEnded=true;
-				}
-				
+			if ((!foundLand && f == base.size() - 1) || selectedCard.getColor() == null) {
 				selectedPawn.setNewLocation(f + 1);
 				selectedPawn.setReachedMainLand(true);
 				mainland.getPawns().add(selectedPawn);
@@ -378,13 +375,25 @@ public class Game implements GameInterface {
 				foundLand = true;
 				selectedLand = null;
 				selectedPawn.setPawnSelected(false);
-				nextPlayer = true;
-				giveTreasure = true;
-				if(!gameEnded){
-				newCards = dealCards(currentPlayer);
+
+				if (mainland.getPawns().size() >= 3) {
+					int currentPawnsCount = 0;
+					for (Pawn p : currentPlayer.getPawns()) {
+						if (p.getNewLocation() == f + 1)
+							currentPawnsCount++;
+						else
+							currentPawnsCount--;
+					}
+					if (currentPawnsCount == 3)
+						gameEnded = true;
 				}
-				
-				
+
+				if (!gameEnded) {
+					nextPlayer = true;
+					giveTreasure = true;
+					newCards = dealCards(currentPlayer);
+				}
+
 			}
 
 		}
@@ -398,19 +407,53 @@ public class Game implements GameInterface {
 				users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "No treasure found"));
 
 		}
+		int victoryPoints = currentPlayer.countVictoryPoints();
+		int cardsCount = currentPlayer.getPlayerHand().getNumCards();
 		int numberOfPlayers = getNumOfRegisteredPlayers();
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i).sendMessage(new RefreshPlayerMessage(getName(), currentPlayer, selectedLand, selectedPawn,
-					selectedCard, treasure, newCards, waterBill, waterPassedCount,nextPlayer));
+					selectedCard, treasure, newCards, waterBill, waterPassedCount, nextPlayer,victoryPoints,cardsCount));
 		}
-			 if(gameEnded)
+		if (gameEnded)
 			endThisGame();
 
 	}
 
 	private void endThisGame() {
-		// TODO Auto-generated method stub
-		
+		// the Devil black card, it ends the game
+		Card blackCard = new Card(666, null);
+		// now similar stuff to a normal turn just without giving treasures and
+		// stuff
+		boolean connectedWater = false;
+		int waterPassedCount = 0;
+		int waterBill = 0;
+
+		for (Player p : players) {
+			for (Pawn pawn : p.getPawns()) {
+				if (pawn.ReachedMainLand() == false) {
+					for (int f = selectedPawn.getNewLocation() + 1; f < base.size(); f++) {
+						WaterTile water = base.get(f);
+
+						if (water.getChildren().size() > 0) {
+							connectedWater = false;
+						} else {
+							if (!connectedWater) {
+								connectedWater = true;
+								waterPassedCount++;
+								int i = payForWater(water);
+								waterBill += i;
+							}
+						}
+						if (f == base.size() - 1) {
+							pawn.setNewLocation(f + 1);
+							pawn.setReachedMainLand(true);
+							mainland.getPawns().add(pawn);
+						}
+					}
+				}
+			}
+			users.get(p.getPlayerIndex()).sendMessage(new LastBillMessage(getName(),waterPassedCount,waterBill));
+		}
 	}
 
 	private int payForWater(WaterTile water) {

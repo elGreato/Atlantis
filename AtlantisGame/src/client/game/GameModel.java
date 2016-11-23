@@ -16,6 +16,7 @@ import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
 import messageObjects.turnMessages.GameStatusMessage;
+import messageObjects.turnMessages.LastBillMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PaymentDoneMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
@@ -37,6 +38,7 @@ public class GameModel {
 	private int waterBill = 0;
 	protected Player currentPlayer;
 	private boolean nextPlayer=true;
+	private boolean gameOver =false;
 
 	public String getGameName() {
 		return gameName;
@@ -131,10 +133,13 @@ public class GameModel {
 				for (Pawn p : currentPlayer.getPawns()) {
 					p.setOnMouseClicked(e -> view.handlePawn(p));
 				}
+				//set the cards count for each enemy
+				view.setCarsCountForEnemy(message.getCurrentPlayer().getPlayerIndex(),message.getCardsCount());
 			}
 			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 				nextPlayer = message.isNextPlayer();
-				payForPassingWater(message.getWaterBill(), message.getWaterPassedCount());
+				view.vpHolder.setText(String.valueOf(message.getVictoryPoints()));
+				payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(),false);
 			}
 			LandTile treasure = message.getTreasure();
 			ArrayList<Card> newCards = message.getNewCards();
@@ -231,6 +236,13 @@ public class GameModel {
 
 			assignThenMovePawn(message.getPlayerIndex(), message.getSelectedPawn(), message.getSelectedLand());
 
+		}
+		if(msgIn instanceof LastBillMessage){
+			// true is for the game finished
+			LastBillMessage message = (LastBillMessage) msgIn;
+			gameOver= true;
+			payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(),gameOver);
+			
 		}
 
 	}
@@ -405,13 +417,14 @@ public class GameModel {
 		return result;
 	}
 
-	private void payForPassingWater(int waterBill, int waterPassedCount) {
+	private void payForPassingWater(int waterBill, int waterPassedCount, boolean gameFinished) {
 		if (waterPassedCount > 0) {
 
 			this.waterBill = waterBill;
-			view.showWaterBill(waterBill, waterPassedCount);
+			view.showWaterBill(waterBill, waterPassedCount,gameFinished);
 		}
-		else if(waterPassedCount<1&&nextPlayer)msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(),false));
+		else if(waterPassedCount<1&&nextPlayer&&!gameFinished)msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(),false));
+		
 
 	}
 
@@ -429,13 +442,13 @@ public class GameModel {
 			}
 		}
 		msgOut.sendMessage(
-				new WaterPaidMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen, cardsChosen,nextPlayer));
+				new WaterPaidMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen, cardsChosen,nextPlayer,gameOver));
 		view.closePayWaterScene();
 
 	}
 
 	public void handleCalc() {
-		// try RemoveIf method in Server tomorrow
+		
 		view.lblWaterCalc.setText("");
 		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
