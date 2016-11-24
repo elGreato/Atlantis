@@ -99,7 +99,7 @@ public class GameAI {
 				tilesForPayment = payments.getTilesPaidInEachMove().remove(moves);
 				// }
 				// if(payments != null
-				// &&payments.getCardsPaidInEachMove().containsKey(moves))
+				// &&payments.getCardsPaidInEachMove().containsKey(moves)) 
 				// {
 				cardsForPayment = payments.getCardsPaidInEachMove().remove(moves);
 				// }
@@ -113,13 +113,13 @@ public class GameAI {
 					if(rpm.isNextPlayer())
 					{
 						WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), tilesForPayment,
-								cardsForPayment, true);
+								cardsForPayment, true, false);
 						game.processMessage(wpm);
 					}
 					else
 					{
 						WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), tilesForPayment,
-								cardsForPayment, false);
+								cardsForPayment, false, false);
 						game.processMessage(wpm);
 					}
 				}
