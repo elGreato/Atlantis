@@ -165,7 +165,7 @@ public class Game implements GameInterface {
 
 			}
 
-			performTurn(selectedCard, selectedPawn);
+			performTurn(selectedCard, selectedPawn); 
 		}
 		if (igm instanceof BuyCardsMessage)
 
