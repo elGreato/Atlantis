@@ -1,5 +1,8 @@
 package client.game;
 
+import java.util.ArrayList;
+
+import gameObjects.Card;
 import gameObjects.Pawn;
 import gameObjects.WaterTile;
 import javafx.scene.input.MouseEvent;
@@ -25,10 +28,27 @@ public class GameController {
 		view.btnCalc.setOnAction(e-> handleCalc());
 		view.btnEndMyTurn.setOnAction(e->handleEndMyTurn());
 		view.btnRevert.setOnAction(e-> handleRevert());
+		view.temp.setOnAction(e-> handletemp());
 	}
 
 
 	
+	private void handletemp() {
+		// TODO Auto-generated method stub
+		// the Devil black card, it ends the game
+				Card blackCard = new Card(666, null);
+				blackCard.setOwner(model.currentPlayer);
+				ArrayList<Card> niggahold = new ArrayList<>();
+				niggahold.add(blackCard);
+			model.addCardToPlayer(niggahold);
+			
+		
+		
+		
+	}
+
+
+
 	private void handleRevert() {
 		model.handleRevert();
 	}

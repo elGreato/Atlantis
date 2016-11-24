@@ -238,6 +238,7 @@ public class GameModel {
 
 		}
 		if(msgIn instanceof LastBillMessage){
+			System.out.println("last bill received");
 			// true is for the game finished
 			LastBillMessage message = (LastBillMessage) msgIn;
 			gameOver= true;
@@ -290,7 +291,7 @@ public class GameModel {
 
 	}
 
-	private void addCardToPlayer(ArrayList<Card> newCards) {
+	protected void addCardToPlayer(ArrayList<Card> newCards) {
 		for (Card newCard : newCards) {
 			currentPlayer.addCard(newCard);
 			newCard.setOwner(currentPlayer);

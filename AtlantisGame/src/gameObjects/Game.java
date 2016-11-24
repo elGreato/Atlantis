@@ -144,10 +144,13 @@ public class Game implements GameInterface {
 			Card selectedCard = null;
 
 			for (Card card : currentPlayer.getPlayerHand().getCards()) {
-				if (card.getCardId() == message.getCard().getCardId()) {
+				if (message.getCard().getColor() != null && card.getCardId() == message.getCard().getCardId()) {
 					selectedCard = card;
 					removedCards.add(card);
 					currentPlayer.getPlayerHand().removeCardFromHand(card);
+					break;
+				} else if (message.getCard().getColor() == null) {
+					selectedCard = message.getCard();
 					break;
 				}
 			}
@@ -164,7 +167,9 @@ public class Game implements GameInterface {
 
 			performTurn(selectedCard, selectedPawn);
 		}
-		if (igm instanceof BuyCardsMessage) {
+		if (igm instanceof BuyCardsMessage)
+
+		{
 			BuyCardsMessage message = ((BuyCardsMessage) igm);
 			ArrayList<Card> purchase = new ArrayList<>();
 			ArrayList<LandTile> sold = new ArrayList<>();
@@ -197,21 +202,23 @@ public class Game implements GameInterface {
 			WaterPaidMessage message = (WaterPaidMessage) igm;
 			Player player = players.get(message.getPlayerIndex());
 			Iterator<Card> it = player.getPlayerHand().getCards().iterator();
-				while(it.hasNext()){
-				Card c =it.next();
+			while (it.hasNext()) {
+				Card c = it.next();
 				for (int k = 0; k < message.getCardsChosen().size(); k++) {
-					if (c.getCardId() == message.getCardsChosen().get(k).getCardId()){
+					if (c.getCardId() == message.getCardsChosen().get(k).getCardId()) {
 						it.remove();
-					break;}
+						break;
+					}
 				}
 			}
-				Iterator<LandTile> it2 = player.getPlayerHand().getTreasures().iterator();
-				while(it2.hasNext()){
+			Iterator<LandTile> it2 = player.getPlayerHand().getTreasures().iterator();
+			while (it2.hasNext()) {
 				LandTile t = it2.next();
 				for (int k = 0; k < message.getTreasuresChosen().size(); k++) {
-					if (t.getTileId() == message.getTreasuresChosen().get(k).getTileId()){
+					if (t.getTileId() == message.getTreasuresChosen().get(k).getTileId()) {
 						it2.remove();
-					break;}
+						break;
+					}
 				}
 			}
 
@@ -221,9 +228,9 @@ public class Game implements GameInterface {
 						message.getCardsChosen(), message.getTreasuresChosen()));
 
 			}
-			if (message.isNextPlayer()&&!message.isGameOver())
+			if (message.isNextPlayer() && !message.isGameOver())
 				endTurn();
-			else if(message.isGameOver()){
+			else if (message.isGameOver()) {
 				System.out.println("GAME OVER");
 			}
 
@@ -328,6 +335,8 @@ public class Game implements GameInterface {
 				waterHasTile = false;
 				LandTile land = (LandTile) water.getChildren().get(topNode);
 				// does this tile has the same color ?
+				if (selectedCard.getColor() == null)
+					System.out.println("null getcolor");
 				if (selectedCard.getColor() != null && land.getColor().equals(selectedCard.getColor())
 						&& !land.hasPawn()) {
 
@@ -417,8 +426,10 @@ public class Game implements GameInterface {
 		int cardsCount = currentPlayer.getPlayerHand().getNumCards();
 		int numberOfPlayers = getNumOfRegisteredPlayers();
 		for (int i = 0; i < numberOfPlayers; i++) {
-			users.get(i).sendMessage(new RefreshPlayerMessage(getName(), currentPlayer, selectedLand, selectedPawn,
-					selectedCard, treasure, newCards, waterBill, waterPassedCount, nextPlayer,victoryPoints,cardsCount));
+			users.get(i)
+					.sendMessage(new RefreshPlayerMessage(getName(), currentPlayer, selectedLand, selectedPawn,
+							selectedCard, treasure, newCards, waterBill, waterPassedCount, nextPlayer, victoryPoints,
+							cardsCount));
 		}
 		if (gameEnded)
 			endThisGame();
@@ -426,8 +437,7 @@ public class Game implements GameInterface {
 	}
 
 	private void endThisGame() {
-		// the Devil black card, it ends the game
-		Card blackCard = new Card(666, null);
+
 		// now similar stuff to a normal turn just without giving treasures and
 		// stuff
 		boolean connectedWater = false;
@@ -458,7 +468,7 @@ public class Game implements GameInterface {
 					}
 				}
 			}
-			users.get(p.getPlayerIndex()).sendMessage(new LastBillMessage(getName(),waterPassedCount,waterBill));
+			users.get(p.getPlayerIndex()).sendMessage(new LastBillMessage(getName(), waterPassedCount, waterBill));
 		}
 	}
 
@@ -488,7 +498,7 @@ public class Game implements GameInterface {
 		if (waterIndex != base.size() - 1) {
 
 			int waterAfterIndex = waterIndex + 1;
-			while (!foundAfterWaterWithTiles&&waterAfterIndex<53) {
+			while (!foundAfterWaterWithTiles && waterAfterIndex < 53) {
 				waterAfter = base.get(waterAfterIndex);
 				if (waterAfter.getChildren().size() != 0) {
 					landAfter = (LandTile) waterAfter.getChildren().get(waterAfter.getChildren().size() - 1);

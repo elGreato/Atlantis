@@ -16,44 +16,48 @@ import javafx.scene.shape.Rectangle;
 
 public class Card extends StackPane implements Serializable {
 
-	private final int cardValue=1;
+	private final int cardValue = 1;
 	public ColorChoice colorChoice;
 	private boolean isCardSelected = false;
 	private Player owner;
 	private int cardId;
 	private transient Rectangle rec;
-	
-	public Card(int cardId,ColorChoice colorChoice){
-		
-		this.colorChoice=colorChoice;
-		this.cardId=cardId;
-	}
-	
-	public static Paint FillColor(Card c ) {
-		if (c.getColor().toString().equalsIgnoreCase("blue")) 
-			return (Color.BLUE);
-		else if (c.getColor().toString().equalsIgnoreCase("red")) 
-			return (Color.RED);
-		else if (c.getColor().toString().equalsIgnoreCase("gray")) 
-			return(Color.GRAY);
-		else if (c.getColor().toString().equalsIgnoreCase("yello")) 
-			return(Color.YELLOW);
-		else if (c.getColor().toString().equalsIgnoreCase("green")) 
-			return(Color.GREEN);
-		else if (c.getColor().toString().equalsIgnoreCase("purple")) 
-			return(Color.PURPLE);
-		else if (c.getColor().toString().equalsIgnoreCase("brown")) 
-			return(Color.BROWN);
-		return Color.ORANGE;
-	
+
+	public Card(int cardId, ColorChoice colorChoice) {
+
+		this.colorChoice = colorChoice;
+		this.cardId = cardId;
 	}
 
-	
-	public ColorChoice getColor(){
+	public static Paint FillColor(Card c) {
+		if (c.getColor() != null) {
+			if (c.getColor().toString().equalsIgnoreCase("blue"))
+				return (Color.BLUE);
+			else if (c.getColor().toString().equalsIgnoreCase("red"))
+				return (Color.RED);
+			else if (c.getColor().toString().equalsIgnoreCase("gray"))
+				return (Color.GRAY);
+			else if (c.getColor().toString().equalsIgnoreCase("yello"))
+				return (Color.YELLOW);
+			else if (c.getColor().toString().equalsIgnoreCase("green"))
+				return (Color.GREEN);
+			else if (c.getColor().toString().equalsIgnoreCase("purple"))
+				return (Color.PURPLE);
+			else if (c.getColor().toString().equalsIgnoreCase("brown"))
+				return (Color.BROWN);
+		} else{
+			return Color.BLACK;
+		}
+		return Color.ORANGE;
+
+	}
+
+	public ColorChoice getColor() {
 		return colorChoice;
 	}
-	
-	public int getCardValue(){  // in case we will introduce something like super card this can be changed
+
+	public int getCardValue() { // in case we will introduce something like
+								// super card this can be changed
 		return 1;
 	}
 
@@ -88,6 +92,5 @@ public class Card extends StackPane implements Serializable {
 	public void setRec(Rectangle rec) {
 		this.rec = rec;
 	}
-	
-	 
+
 }

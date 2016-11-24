@@ -61,6 +61,7 @@ public class GameView {
 	public Button btnCalc = new Button("Calculate what I chose");
 	public Button btnEndMyTurn = new Button ("End Turn");
 	public Button btnRevert = new Button ("Cancel my turn and give me my money back");
+	Button temp = new Button ("nigga");
 
 	// Labels for main game controls
 	private Label lblGameBtns = new Label("Action Buttons");
@@ -127,7 +128,7 @@ public class GameView {
 			mainBoard.getRowConstraints().add(con);
 		}
 		// add Buttons
-		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnBuyCards,btnEndMyTurn);
+		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnBuyCards,btnEndMyTurn,temp);
 
 		// set a random picture for each player
 		int numberOfPicturesAvailable = 4;
@@ -504,6 +505,7 @@ public class GameView {
 		tempStage.initOwner(stage);
 		tempStage.show();
 		tempStage.setAlwaysOnTop(true);
+		tempStage.sizeToScene();
 
 	}
 
@@ -550,12 +552,13 @@ public class GameView {
 			lblTurn.setText("The Game Has Finished");
 			lblGameStatus.setText("Game Over!");
 		}
+		tempStage.sizeToScene();
 
 	}
 	public void closePayWaterScene(){
 		vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 1, hbTreasures);
 		vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 2, hboxCards);
-		lblPay.setText("");
+		lblPay.setText(" ");
 		multiCardsMode=false;
 		tempStage.close();
 	}
