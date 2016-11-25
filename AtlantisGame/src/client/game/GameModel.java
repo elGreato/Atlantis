@@ -21,6 +21,7 @@ import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PaymentDoneMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
 import messageObjects.turnMessages.RefreshPlayerMessage;
+import messageObjects.turnMessages.ResultMessage;
 import messageObjects.turnMessages.RevertTurnMessage;
 import messageObjects.turnMessages.ServerMessage;
 import messageObjects.turnMessages.TurnMessage;
@@ -225,12 +226,9 @@ public class GameModel {
 			}
 		}
 		if (msgIn instanceof RevertTurnMessage) {
-			System.out.println("Revert received in client");
 			RevertTurnMessage message = (RevertTurnMessage) msgIn;
 
 			if (message.getRemovedTreasure() != null) {
-
-				System.out.println("trying to put back the land tile");
 				view.base.get(message.getRemovedIndex()).getChildren().add(message.getRemovedTreasure());
 			}
 
@@ -245,17 +243,22 @@ public class GameModel {
 			payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(),gameOver);
 			
 		}
+		if(msgIn instanceof ResultMessage){
+			ResultMessage message = (ResultMessage) msgIn;
+			if(message.getWinner()==currentPlayer.getPlayerIndex()){
+				view.IWin();
+			}
+			else view.ILose();
+		}
 
 	}
 
 	private void assignThenMovePawn(int playerIndex, Pawn selectedPawn, LandTile selectedLand) {
-		System.out.println("revert message player index " + playerIndex);
-		System.out.println("my index" + currentPlayer.getPlayerIndex());
 		if (playerIndex == currentPlayer.getPlayerIndex()) {
 			for (Pawn pp : currentPlayer.getPawns()) {
 				if (selectedPawn.getPawnId() == pp.getPawnId())
 					selectedPawn = pp;
-				System.out.println("owner of pawn " + pp.getOwner().getPlayerName());
+
 			}
 		} else {
 			for (Player enemy : currentPlayer.getOpponents()) {
@@ -263,7 +266,7 @@ public class GameModel {
 					for (Pawn pp : enemy.getPawns()) {
 						if (pp.getPawnId() == selectedPawn.getPawnId()) {
 							selectedPawn = pp;
-							System.out.println("enemy of pawn " + pp.getOwner().getPlayerName());
+
 						}
 					}
 				}
@@ -500,7 +503,6 @@ public class GameModel {
 	}
 
 	public void handleRevert() {
-		System.out.println("Rever from client");
 		msgOut.sendMessage(new RevertTurnMessage(gameName, currentPlayer.getPlayerIndex()));
 
 	}

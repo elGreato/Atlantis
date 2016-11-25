@@ -2,6 +2,7 @@ package gameObjects;
 
 // This class is part of the Gamer Server, should be moved from this package
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 import messageObjects.AtlantisMainLandMessage;
@@ -11,6 +12,7 @@ import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
 import messageObjects.turnMessages.BuyCardsMessage;
 import messageObjects.turnMessages.CardsBoughtMessage;
+import messageObjects.turnMessages.DrawMessage;
 import messageObjects.turnMessages.EndMYTurnMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.LastBillMessage;
@@ -18,6 +20,7 @@ import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PaymentDoneMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
 import messageObjects.turnMessages.RefreshPlayerMessage;
+import messageObjects.turnMessages.ResultMessage;
 import messageObjects.turnMessages.RevertTurnMessage;
 import messageObjects.turnMessages.ServerMessage;
 import messageObjects.turnMessages.TurnMessage;
@@ -50,6 +53,9 @@ public class Game implements GameInterface {
 	// base for water
 	private ArrayList<WaterTile> base;
 	private int currentPlayerIndex;
+	// index for players who paid their last bill
+	private int paidLastBill = 0;
+
 	private Player currentPlayer;
 	private Pawn selectedPawn;
 	private LandTile selectedLand;
@@ -165,7 +171,7 @@ public class Game implements GameInterface {
 
 			}
 
-			performTurn(selectedCard, selectedPawn); 
+			performTurn(selectedCard, selectedPawn);
 		}
 		if (igm instanceof BuyCardsMessage)
 
@@ -230,8 +236,31 @@ public class Game implements GameInterface {
 			}
 			if (message.isNextPlayer() && !message.isGameOver())
 				endTurn();
+			// ending the game
 			else if (message.isGameOver()) {
-				System.out.println("GAME OVER");
+				paidLastBill++;
+				for (int i = 0; i < numberOfPlayers; i++) {
+					users.get(i).sendMessage(
+							new ServerMessage(getName(), "Game Over, wait for other players to finish paying"));
+
+				}
+				if (paidLastBill == numberOfPlayers) {
+					ArrayList<Integer> winners = checkWinner();
+					if (winners.size()==1){
+						for(int i=0; i<numberOfPlayers;i++ ){
+							users.get(i).sendMessage(new ResultMessage(getName(), winners.get(0)));
+						}
+					}
+					else if(winners.size()>1){
+						for(int i=0; i<numberOfPlayers;i++ ){
+							users.get(i).sendMessage(new DrawMessage(getName(), winners));
+						}
+					}
+					
+					
+					
+				}
+
 			}
 
 		}
@@ -272,6 +301,36 @@ public class Game implements GameInterface {
 			}
 			performEndTurn(message.getPlayerIndex(), true);
 		}
+	}
+
+	private ArrayList<Integer> checkWinner() {
+		ArrayList<Integer> result = new ArrayList<>();
+		int size = players.size();
+		int winner = -1;
+
+		ArrayList<Player> sorted = new ArrayList<>(players);
+		Collections.sort(sorted, new PlayersComparator());
+
+		if (sorted.get(0).countVictoryPoints() == sorted.get(1).countVictoryPoints()) {
+			result.add(sorted.get(0).getPlayerIndex(), sorted.get(1).getPlayerIndex());
+			if (size == 3) {
+				if (sorted.get(0).countVictoryPoints() == sorted.get(2).countVictoryPoints()) {
+					result.add(sorted.get(2).getPlayerIndex());
+				}
+			}
+			if(size==4){
+				if (sorted.get(0).countVictoryPoints() == sorted.get(3).countVictoryPoints()) {
+					result.add(sorted.get(3).getPlayerIndex());
+				}					
+			}
+		} else {
+			winner = Collections.max(sorted, new PlayersComparator()).getPlayerIndex();
+			result.clear();
+			result.add(winner);
+		}
+		return result;
+	
+
 	}
 
 	private void performEndTurn(int playerIndex, boolean normalEnd) {
@@ -382,7 +441,7 @@ public class Game implements GameInterface {
 
 				}
 			}
-			if ((!foundLand && f == base.size() - 1) || selectedCard.getColor() == null) {
+			if (((!foundLand && f == base.size() - 1)) || (selectedCard.getColor() == null&&f==base.size()-1)) {
 				selectedPawn.setNewLocation(f + 1);
 				selectedPawn.setReachedMainLand(true);
 				mainland.getPawns().add(selectedPawn);

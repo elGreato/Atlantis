@@ -568,4 +568,22 @@ public class GameView {
 		((Label)enemy.getChildren().get(1)).setText(String.valueOf(cardsCount));
 		
 	}
+
+	public void IWin() {
+		Label lblWin = new Label("YOU WON!!!!!!");
+		Scene winScene = new Scene(lblWin);
+		tempStage = new Stage();
+		tempStage.setScene(winScene);
+		tempStage.show();
+
+	}
+	public void ILose() {
+		Label lblWin = new Label("You Lost");
+		Scene winScene = new Scene(lblWin);
+		tempStage = new Stage();
+		tempStage.setScene(winScene);
+		tempStage.show();
+
+	}
+	
 }
