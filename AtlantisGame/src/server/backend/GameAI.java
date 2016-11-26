@@ -17,6 +17,7 @@ import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
 import messageObjects.turnMessages.EndMYTurnMessage;
 import messageObjects.turnMessages.GameStatusMessage;
+import messageObjects.turnMessages.LastBillMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PaymentDoneMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
@@ -89,23 +90,18 @@ public class GameAI {
 
 			if (rpm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex() && rpm.getWaterBill() > 0) {
 
-				System.out.println(
-						"Payment message arrived...." + " Waterbill: " + rpm.getWaterBill() + " moveNumber: " + moves);
+				System.out.println(me.getPlayerName() + 
+						" Payment message arrived...." + " Waterbill: " + rpm.getWaterBill() + " moveNumber: " + moves);
 				ArrayList<LandTile> tilesForPayment = null;
 				ArrayList<Card> cardsForPayment = null;
-				// if(payments != null &&
-				// payments.getTilesPaidInEachMove().containsKey(moves))
-				// {
+			
 				tilesForPayment = payments.getTilesPaidInEachMove().remove(moves);
-				// }
-				// if(payments != null
-				// &&payments.getCardsPaidInEachMove().containsKey(moves)) 
-				// {
+			
 				cardsForPayment = payments.getCardsPaidInEachMove().remove(moves);
-				// }
-				System.out.println("Payment size: " + tilesForPayment.size());
+				
+				System.out.println("Payment size: Tiles: " + tilesForPayment.size() + " Cards: " + cardsForPayment.size());
 				if (tilesForPayment != null && !tilesForPayment
-						.isEmpty() /* || tilesForPayment != null */) {
+						.isEmpty() || (cardsForPayment != null && !cardsForPayment.isEmpty())) {
 					System.out.println("Send payment message. Payable amount = " + rpm.getWaterBill());
 					for (LandTile lt : tilesForPayment) {
 						System.out.println("Tile with value: " + lt.getLandValue());
@@ -132,9 +128,28 @@ public class GameAI {
 					game.processMessage(new EndMYTurnMessage(game.getName(),me.getPlayerIndex(),true));
 				}
 			}
+			
 		} else if (igm instanceof ServerMessage) {
 			System.out.println(((ServerMessage) igm).getTheMessage());
-		}
+			
+			
+		} else if (igm instanceof LastBillMessage) {
+			int totalPayment = ((LastBillMessage)igm).getWaterBill();
+			int valueOfHand = 0;
+			valueOfHand += me.getPlayerHand().getNumCards();
+			for(LandTile lt : me.getPlayerHand().getTreasures())
+			{
+				valueOfHand += lt.getLandValue();
+			}
+			if(valueOfHand <= totalPayment)
+			{
+				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), me.getPlayerHand().getTreasures(), me.getPlayerHand().getCards(),true,true);
+			}
+			else
+			{
+				AICostObject payment = determineTilesToPay(new AICostObject(null,null),me.getPlayerHand().getCards(),me.getPlayerHand().getTreasures(),totalPayment,0,true);
+			}
+	}
 	}
 
 	private void doATurn() {
@@ -228,7 +243,7 @@ public class GameAI {
 						ArrayList<LandTile> tilesCostCards = new ArrayList<LandTile>();
 						costs.getCardsPaidInEachMove().put(moveNumber, newCostsCards);
 						costs.getTilesPaidInEachMove().put(moveNumber, tilesCostCards);
-						costs = determineTilesToPay(costs, cardsLeftOnHand, tilesLeftInHand,costsForThisMove,moveNumber);
+						costs = determineTilesToPay(costs, cardsLeftOnHand, tilesLeftInHand,costsForThisMove,moveNumber, false);
 						if(costs == null)
 						{
 							canBePaid = false;
@@ -295,25 +310,11 @@ public class GameAI {
 		return bestPossibleTurn;
 	}
 
-	private int getValueOfCosts(AICostObject costs) {
-		int i = 0;
-		System.out.println("Starting cost calc.");
-		for (Integer e : costs.getTilesPaidInEachMove().keySet()) {
-			int moveCosts = 0;
-			System.out.println("Getting values from key " + e);
-			for (LandTile lt : costs.getTilesPaidInEachMove().get(e)) {
-				moveCosts += lt.getLandValue();
-			}
-			System.out.println("Move: " + e + " Costs paid: " + moveCosts);
-			i += moveCosts;
-		}
-		return i;
-	}
-
 	private AICostObject determineTilesToPay(AICostObject input, ArrayList<Card> cardsLeftInHand,
-			ArrayList<LandTile> tilesLeftInHand, int paymentSize, int moveNumber) {
+			ArrayList<LandTile> tilesLeftInHand, int paymentSize, int moveNumber, boolean isLastPayment) {
 		AICostObject bestPayment = null;
 		for (LandTile lt : tilesLeftInHand) {
+			//Copy object
 			ArrayList<LandTile> updatedTilesLeftInHand = new ArrayList<LandTile>(tilesLeftInHand);
 			updatedTilesLeftInHand.remove(lt);
 			ArrayList<LandTile> updatedTilePaymentForThisMove = new ArrayList<LandTile>(
@@ -329,17 +330,45 @@ public class GameAI {
 			}
 			updatedTilePayment.put(moveNumber, updatedTilePaymentForThisMove);
 			AICostObject updatedCosts = new AICostObject(updatedTilePayment, input.getCardsPaidInEachMove());
+			
 			// Iterative
-			if (updatedPaymentSize > 0 && updatedTilesLeftInHand.size() > 0) {
+			// Payment value not reached
+			if (updatedPaymentSize > 0) {
+				//Try to pay with cards if possible
+				if(updatedPaymentSize <= cardsLeftInHand.size())
+				{
+					ArrayList<Card> cardsToPay = new ArrayList<Card>();
+					for(int i = 0; i<updatedPaymentSize; i++)
+					{
+						cardsToPay.add(cardsLeftInHand.get(i));
+					}
+					HashMap<Integer, ArrayList<Card>> updatedCardPayment = new HashMap<Integer, ArrayList<Card>>();
+					for (Integer e : input.getCardsPaidInEachMove().keySet()) {
+						if (e != moveNumber) {
+							ArrayList<Card> copy = input.getCardsPaidInEachMove().get(e);
+							updatedCardPayment.put(e, copy);
+						}
+					}
+					updatedCardPayment.put(moveNumber, cardsToPay);
+					AICostObject paymentWithCards = new AICostObject(updatedTilePayment, updatedCardPayment);
+					if(bestPayment == null
+							||paymentWithCards.getRealCosts(moveNumber, isLastPayment)< bestPayment.getRealCosts(moveNumber, isLastPayment))
+					{
+						bestPayment = paymentWithCards;
+					}
+				}
 				AICostObject finalPayment = determineTilesToPay(updatedCosts, cardsLeftInHand, updatedTilesLeftInHand,
-						updatedPaymentSize, moveNumber);
-				if (bestPayment == null
-						|| finalPayment.getRealCosts(moveNumber) < bestPayment.getRealCosts(moveNumber)) {
+						updatedPaymentSize, moveNumber, isLastPayment);
+				if (finalPayment != null && (bestPayment == null
+						|| finalPayment.getRealCosts(moveNumber,isLastPayment) < bestPayment.getRealCosts(moveNumber,isLastPayment))) {
 					bestPayment = finalPayment;
 				}
+				
+				
+				//Payment value reached
 			} else if (updatedPaymentSize <= 0) {
 				if (bestPayment == null
-						|| updatedCosts.getRealCosts(moveNumber) < bestPayment.getRealCosts(moveNumber)) {
+						|| updatedCosts.getRealCosts(moveNumber,isLastPayment) < bestPayment.getRealCosts(moveNumber,isLastPayment)) {
 					bestPayment = updatedCosts;
 					// System.out.println("New best payment detected: " +
 					// updatedCosts.getRealCosts(moveNumber) + " Costs left: " +

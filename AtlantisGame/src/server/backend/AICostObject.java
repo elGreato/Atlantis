@@ -37,8 +37,16 @@ public class AICostObject {
 		this.cardsPaidInEachMove = cardsPaidInEachMove;
 	
 	}
-	public int getRealCosts(int moveNumber) {
-		int realCosts = cardsPaidInEachMove.get(moveNumber).size()*2;
+	public int getRealCosts(int moveNumber, boolean isLastPayment) {
+		int realCosts = 0;
+		if(!isLastPayment)
+		{
+			realCosts = cardsPaidInEachMove.get(moveNumber).size()*2;
+		}
+		else
+		{
+			realCosts = cardsPaidInEachMove.get(moveNumber).size();
+		}
 		for(LandTile lt:tilesPaidInEachMove.get(moveNumber))
 		{
 			realCosts+=lt.getLandValue();
