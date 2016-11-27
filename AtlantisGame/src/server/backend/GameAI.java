@@ -144,10 +144,13 @@ public class GameAI {
 			if(valueOfHand <= totalPayment)
 			{
 				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), me.getPlayerHand().getTreasures(), me.getPlayerHand().getCards(),true,true);
+				game.processMessage(wpm);
 			}
 			else
 			{
 				AICostObject payment = determineTilesToPay(new AICostObject(null,null),me.getPlayerHand().getCards(),me.getPlayerHand().getTreasures(),totalPayment,0,true);
+				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), payment.getTilesPaidInEachMove().get(0),payment.getCardsPaidInEachMove().get(0),true,true);
+				game.processMessage(wpm);
 			}
 	}
 	}
