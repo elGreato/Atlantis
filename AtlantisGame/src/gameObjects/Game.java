@@ -246,19 +246,16 @@ public class Game implements GameInterface {
 				}
 				if (paidLastBill == numberOfPlayers) {
 					ArrayList<Integer> winners = checkWinner();
-					if (winners.size()==1){
-						for(int i=0; i<numberOfPlayers;i++ ){
+					if (winners.size() == 1) {
+						for (int i = 0; i < numberOfPlayers; i++) {
 							users.get(i).sendMessage(new ResultMessage(getName(), winners.get(0)));
 						}
-					}
-					else if(winners.size()>1){
-						for(int i=0; i<numberOfPlayers;i++ ){
+					} else if (winners.size() > 1) {
+						for (int i = 0; i < numberOfPlayers; i++) {
 							users.get(i).sendMessage(new DrawMessage(getName(), winners));
 						}
 					}
-					
-					
-					
+
 				}
 
 			}
@@ -318,10 +315,10 @@ public class Game implements GameInterface {
 					result.add(sorted.get(2).getPlayerIndex());
 				}
 			}
-			if(size==4){
+			if (size == 4) {
 				if (sorted.get(0).countVictoryPoints() == sorted.get(3).countVictoryPoints()) {
 					result.add(sorted.get(3).getPlayerIndex());
-				}					
+				}
 			}
 		} else {
 			winner = Collections.max(sorted, new PlayersComparator()).getPlayerIndex();
@@ -329,7 +326,6 @@ public class Game implements GameInterface {
 			result.add(winner);
 		}
 		return result;
-	
 
 	}
 
@@ -441,10 +437,11 @@ public class Game implements GameInterface {
 
 				}
 			}
-			if (((!foundLand && f == base.size() - 1)) || (selectedCard.getColor() == null&&f==base.size()-1)) {
+			if (((!foundLand && f == base.size() - 1)) || (selectedCard.getColor() == null && f == base.size() - 1)) {
 				selectedPawn.setNewLocation(f + 1);
 				selectedPawn.setReachedMainLand(true);
 				mainland.getPawns().add(selectedPawn);
+				// here i have a bug when index is 52
 				removePawnFromOldTile(selectedPawn);
 				foundLand = true;
 				selectedLand = null;
@@ -453,7 +450,7 @@ public class Game implements GameInterface {
 				if (mainland.getPawns().size() >= 3) {
 					int currentPawnsCount = 0;
 					for (Pawn p : currentPlayer.getPawns()) {
-						if (p.getNewLocation() == f + 1)
+						if (p.ReachedMainLand() == true)
 							currentPawnsCount++;
 						else
 							currentPawnsCount--;
@@ -502,30 +499,28 @@ public class Game implements GameInterface {
 		boolean connectedWater = false;
 		int waterPassedCount = 0;
 		int waterBill = 0;
-
+		System.out.println("End this game method");
 		for (Player p : players) {
+			System.out.println("looping players");
 			for (Pawn pawn : p.getPawns()) {
+				System.out.println("looping pawns");
 				if (pawn.ReachedMainLand() == false) {
 					for (int f = selectedPawn.getNewLocation() + 1; f < base.size(); f++) {
 						WaterTile water = base.get(f);
-
+						System.out.println("inside for loop; after false pawn in player "+pawn.getOwner().getPlayerName());
 						if (water.getChildren().size() > 0) {
 							connectedWater = false;
-						} else {
-							if (!connectedWater) {
-								connectedWater = true;
-								waterPassedCount++;
-								int i = payForWater(water);
-								waterBill += i;
-							}
+						} else if (!connectedWater) {
+							connectedWater = true;
+							waterPassedCount++;
+							int i = payForWater(water);
+							waterBill += i;
 						}
-						if (f == base.size() - 1) {
-							pawn.setNewLocation(f + 1);
-							pawn.setReachedMainLand(true);
-							mainland.getPawns().add(pawn);
-						}
+
 					}
 				}
+				pawn.setReachedMainLand(true);
+
 			}
 			users.get(p.getPlayerIndex()).sendMessage(new LastBillMessage(getName(), waterPassedCount, waterBill));
 		}

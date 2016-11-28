@@ -140,7 +140,7 @@ public class GameModel {
 			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 				nextPlayer = message.isNextPlayer();
 				view.vpHolder.setText(String.valueOf(message.getVictoryPoints()));
-				payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(),false);
+				payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(),gameOver);
 			}
 			LandTile treasure = message.getTreasure();
 			ArrayList<Card> newCards = message.getNewCards();
@@ -239,6 +239,7 @@ public class GameModel {
 			System.out.println("last bill received");
 			// true is for the game finished
 			LastBillMessage message = (LastBillMessage) msgIn;
+			System.out.println("Bill amount: "+message.getWaterBill()+" you passed: "+message.getWaterPassedCount());
 			gameOver= true;
 			payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(),gameOver);
 			
@@ -426,6 +427,7 @@ public class GameModel {
 
 			this.waterBill = waterBill;
 			view.showWaterBill(waterBill, waterPassedCount,gameFinished);
+			System.out.println("reached show water bill , is it ended ?"+gameFinished);
 		}
 		else if(waterPassedCount<1&&nextPlayer&&!gameFinished)msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(),false));
 		
@@ -482,6 +484,7 @@ public class GameModel {
 		if (allSelectedAndNotEnough && totalChosen < waterBill)
 			view.btnRevert.setDisable(false);
 		if (totalChosen >= waterBill) {
+			view.lblWaterCalc.setText("");
 			view.btnPay4Water.setDisable(false);
 			view.lblWaterCalc
 					.setText("You will pay " + String.valueOf(totalChosen) + "\n Remember, no change is offered");
