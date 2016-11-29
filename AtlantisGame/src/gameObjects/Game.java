@@ -54,7 +54,7 @@ public class Game implements GameInterface {
 	private ArrayList<WaterTile> base;
 	private int currentPlayerIndex;
 	// index for players who paid their last bill
-	private int paidLastBill = 0;
+	private int paidLastBill =0;
 
 	private Player currentPlayer;
 	private Pawn selectedPawn;
@@ -239,6 +239,7 @@ public class Game implements GameInterface {
 			// ending the game
 			else if (message.isGameOver()) {
 				paidLastBill++;
+				System.out.println("paidLastBill count "+paidLastBill);
 				for (int i = 0; i < numberOfPlayers; i++) {
 					users.get(i).sendMessage(
 							new ServerMessage(getName(), "Game Over, wait for other players to finish paying"));
@@ -249,14 +250,29 @@ public class Game implements GameInterface {
 					if (winners.size() == 1) {
 						for (int i = 0; i < numberOfPlayers; i++) {
 							users.get(i).sendMessage(new ResultMessage(getName(), winners.get(0)));
+							lobby.addWin(users.get(winners.get(0)));
+							for (int k = 0; k < users.size(); k++) {
+								if (k != winners.get(0)) {
+									lobby.addLoss(users.get(k));
+								}
+							}
 						}
+						// in case we have a draw between two or more players
 					} else if (winners.size() > 1) {
 						for (int i = 0; i < numberOfPlayers; i++) {
 							users.get(i).sendMessage(new DrawMessage(getName(), winners));
 						}
+						for (Integer k = 0; k < users.size(); k++) {
+							if (winners.contains(k)) {
+								lobby.addTie(users.get(k));
+							}
+							else lobby.addLoss(users.get(k));
+						}
+						
 					}
 
 				}
+				lobby.endGame(this);
 
 			}
 
@@ -390,8 +406,6 @@ public class Game implements GameInterface {
 				waterHasTile = false;
 				LandTile land = (LandTile) water.getChildren().get(topNode);
 				// does this tile has the same color ?
-				if (selectedCard.getColor() == null)
-					System.out.println("null getcolor");
 				if (selectedCard.getColor() != null && land.getColor().equals(selectedCard.getColor())
 						&& !land.hasPawn()) {
 
@@ -440,8 +454,6 @@ public class Game implements GameInterface {
 			if (((!foundLand && f == base.size() - 1)) || (selectedCard.getColor() == null && f == base.size() - 1)) {
 				selectedPawn.setNewLocation(f + 1);
 				selectedPawn.setReachedMainLand(true);
-				System.out.println(
-						"inside if !foundland and the pawn reached mainland " + selectedPawn.ReachedMainLand());
 				mainland.getPawns().add(selectedPawn);
 				// here i have a bug when index is 52
 				removePawnFromOldTile(selectedPawn);
