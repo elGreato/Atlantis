@@ -268,7 +268,6 @@ public class Game implements GameInterface {
 
 		}
 		if (igm instanceof RevertTurnMessage) {
-			System.out.println("Rever from Server");
 			RevertTurnMessage message = (RevertTurnMessage) igm;
 			if (currentPlayerIndex == message.getPlayerIndex()) {
 				for (Card c : removedCards) {
@@ -359,6 +358,7 @@ public class Game implements GameInterface {
 		int waterBill = 0;
 		LandTile treasure = null;
 		selectedLand = null;
+		// in case of revert
 		for (int i = 0; selectedPawn.getNewLocation() != -1
 				&& i < base.get(selectedPawn.getNewLocation()).getChildren().size(); i++) {
 			if (((LandTile) base.get(selectedPawn.getNewLocation()).getChildren().get(i)).hasPawn()
@@ -440,6 +440,8 @@ public class Game implements GameInterface {
 			if (((!foundLand && f == base.size() - 1)) || (selectedCard.getColor() == null && f == base.size() - 1)) {
 				selectedPawn.setNewLocation(f + 1);
 				selectedPawn.setReachedMainLand(true);
+				System.out.println(
+						"inside if !foundland and the pawn reached mainland " + selectedPawn.ReachedMainLand());
 				mainland.getPawns().add(selectedPawn);
 				// here i have a bug when index is 52
 				removePawnFromOldTile(selectedPawn);
@@ -504,10 +506,13 @@ public class Game implements GameInterface {
 			System.out.println("looping players");
 			for (Pawn pawn : p.getPawns()) {
 				System.out.println("looping pawns");
-				if (pawn.ReachedMainLand() == false) {
-					for (int f = selectedPawn.getNewLocation() + 1; f < base.size(); f++) {
+				System.out.println(pawn.ReachedMainLand());
+				if (!pawn.ReachedMainLand()) {
+					System.out.println("*****");
+					for (int f = pawn.getNewLocation() + 1; f < base.size(); f++) {
 						WaterTile water = base.get(f);
-						System.out.println("inside for loop; after false pawn in player "+pawn.getOwner().getPlayerName());
+						System.out.println(
+								"inside for loop; after false pawn in player " + pawn.getOwner().getPlayerName());
 						if (water.getChildren().size() > 0) {
 							connectedWater = false;
 						} else if (!connectedWater) {
