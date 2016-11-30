@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import gameObjects.ColorChoice;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -29,26 +30,6 @@ public class LandTile extends Tile implements Serializable {
 	
 	}
 	
-	public  static Paint getFillColor(LandTile landTile) {
-		
-			if (landTile.getColor().toString().equalsIgnoreCase("blue")) 
-				return (Color.BLUE);
-			else if (landTile.getColor().toString().equalsIgnoreCase("red")) 
-				return (Color.RED);
-			else if (landTile.getColor().toString().equalsIgnoreCase("gray")) 
-				return(Color.GRAY);
-			else if (landTile.getColor().toString().equalsIgnoreCase("yello")) 
-				return(Color.YELLOW);
-			else if (landTile.getColor().toString().equalsIgnoreCase("green")) 
-				return(Color.GREEN);
-			else if (landTile.getColor().toString().equalsIgnoreCase("purple")) 
-				return(Color.PURPLE);
-			else if (landTile.getColor().toString().equalsIgnoreCase("brown")) 
-				return(Color.BROWN);
-			return Color.ORANGE;
-
-	
-	}
 
 	public Pawn getPawnOnTile() {
 		return pawnOnTile;
@@ -125,6 +106,8 @@ public class LandTile extends Tile implements Serializable {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
+
+	
 
 
 	

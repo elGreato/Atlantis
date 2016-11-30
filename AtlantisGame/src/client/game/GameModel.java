@@ -247,9 +247,9 @@ public class GameModel {
 		if(msgIn instanceof ResultMessage){
 			ResultMessage message = (ResultMessage) msgIn;
 			if(message.getWinner()==currentPlayer.getPlayerIndex()){
-				view.IWin();
+				view.IWin(currentPlayer.getPlayerName());
 			}
-			else view.ILose();
+			else view.ILose(message.getWinnerName());
 		}
 
 	}

@@ -249,7 +249,7 @@ public class Game implements GameInterface {
 					ArrayList<Integer> winners = checkWinner();
 					if (winners.size() == 1) {
 						for (int i = 0; i < numberOfPlayers; i++) {
-							users.get(i).sendMessage(new ResultMessage(getName(), winners.get(0)));
+							users.get(i).sendMessage(new ResultMessage(getName(), winners.get(0),players.get(winners.get(0)).getPlayerName()));
 							lobby.addWin(users.get(winners.get(0)));
 							for (int k = 0; k < users.size(); k++) {
 								if (k != winners.get(0)) {
@@ -684,11 +684,11 @@ public class Game implements GameInterface {
 		if (index == 0) {
 			player.setColor(ColorChoice.blue);
 		} else if (index == 1) {
-			player.setColor(ColorChoice.red);
+			player.setColor(ColorChoice.pink);
 		} else if (index == 2) {
 			player.setColor(ColorChoice.green);
 		} else if (index == 3) {
-			player.setColor(ColorChoice.purple);
+			player.setColor(ColorChoice.brown);
 		}
 
 	}

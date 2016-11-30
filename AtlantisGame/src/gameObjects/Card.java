@@ -33,16 +33,16 @@ public class Card extends StackPane implements Serializable {
 		if (c.getColor() != null) {
 			if (c.getColor().toString().equalsIgnoreCase("blue"))
 				return (Color.BLUE);
-			else if (c.getColor().toString().equalsIgnoreCase("red"))
-				return (Color.RED);
+			else if (c.getColor().toString().equalsIgnoreCase("white"))
+				return (Color.WHITE);
 			else if (c.getColor().toString().equalsIgnoreCase("gray"))
 				return (Color.GRAY);
 			else if (c.getColor().toString().equalsIgnoreCase("yello"))
 				return (Color.YELLOW);
 			else if (c.getColor().toString().equalsIgnoreCase("green"))
 				return (Color.GREEN);
-			else if (c.getColor().toString().equalsIgnoreCase("purple"))
-				return (Color.PURPLE);
+			else if (c.getColor().toString().equalsIgnoreCase("pink"))
+				return (Color.PINK);
 			else if (c.getColor().toString().equalsIgnoreCase("brown"))
 				return (Color.BROWN);
 		} else{

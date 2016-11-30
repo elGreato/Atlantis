@@ -1,5 +1,6 @@
 package client.game;
 
+import java.awt.Paint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -50,7 +51,7 @@ public class GameView {
 
 	// fx stuff
 	public Scene scene;
-	public Stage stage;
+	protected Stage stage;
 	public Stage tempStage;
 
 	// the main game controls
@@ -62,6 +63,7 @@ public class GameView {
 	public Button btnEndMyTurn = new Button ("End Turn");
 	public Button btnRevert = new Button ("Cancel my turn and give me my money back");
 	Button temp = new Button ("nigga");
+	public Button btnFinish= new Button();
 
 	// Labels for main game controls
 	private Label lblGameBtns = new Label("Action Buttons");
@@ -221,9 +223,10 @@ public class GameView {
 					Rectangle rec = new Rectangle();
 					rec.setWidth(68.00f);
 					rec.setHeight(68.00f);
-					rec.setFill(LandTile.getFillColor(tile));
-					tile.getChildren().addAll(rec,
-							new Text(String.valueOf(tile.getLandValue()) + "\n" + tile.getColor().toString()));
+				//	rec.setFill(LandTile.getFillColor(tile));
+					rec.setFill(Color.TRANSPARENT);
+					tile.getChildren().add(tile.getColor().addLandTileImage(tile.getLandValue()));
+					tile.getChildren().add(rec);
 
 				}
 			}
@@ -356,9 +359,10 @@ public class GameView {
 		Rectangle rec = new Rectangle();
 		rec.setWidth(31);
 		rec.setHeight(51);
-		rec.setFill(Card.FillColor(c));
+		rec.setFill(Color.TRANSPARENT);
 		c.setRec(rec);
 		c.getChildren().add(rec);
+		c.getChildren().add(c.getColor().addCardImage());
 		getHboxCards().getChildren().add(c);
 
 	}
@@ -386,10 +390,10 @@ public class GameView {
 
 	private void handleTreasure(LandTile treasure) {
 		if (!treasure.isSelected()) {
-			((Rectangle) treasure.getChildren().get(0)).setStroke(Color.BLACK);
+			((Rectangle) treasure.getChildren().get(1)).setStroke(Color.BLACK);
 			treasure.setSelected(true);
 		} else {
-			((Rectangle) treasure.getChildren().get(0)).setStroke(Color.TRANSPARENT);
+			((Rectangle) treasure.getChildren().get(1)).setStroke(Color.TRANSPARENT);
 			treasure.setSelected(false);
 		}
 
@@ -569,20 +573,28 @@ public class GameView {
 		
 	}
 
-	public void IWin() {
-		Label lblWin = new Label("YOU WON!!!!!!");
+	public void IWin(String winner) {
+		tempStage.setOnCloseRequest(e->stage.close());
+		VBox root = new VBox();
+		btnFinish = new Button ("YES I WON");
+		Label lblWin = new Label("Congratulation "+winner+"YOU WON!!!!!!");
+		root.getChildren().addAll(lblWin,btnFinish);
 		Scene winScene = new Scene(lblWin);
 		tempStage = new Stage();
 		tempStage.setScene(winScene);
 		tempStage.show();
+	
 
 	}
-	public void ILose() {
-		Label lblWin = new Label("You Lost");
+	public void ILose(String winner) {
+		tempStage.setOnCloseRequest(e->stage.close());
+		btnFinish = new Button ("I will win next time");
+		Label lblWin = new Label("The player "+winner+" got lucky\nUnfortunately, You Lost :( ");
 		Scene winScene = new Scene(lblWin);
 		tempStage = new Stage();
 		tempStage.setScene(winScene);
 		tempStage.show();
+		
 
 	}
 	
