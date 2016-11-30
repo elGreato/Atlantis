@@ -20,10 +20,10 @@ public class AIUser extends User implements Runnable{
 		incomingMessages = new ArrayList<Message>();
 		activeGames = new ArrayList<GameAI>();
 		switch(ui.getUsername()){
-		case "AI_BernGUY" : aiSpeed = -1d; aiPawnSpread = 4d;
-		case "AI_Bolt" : aiSpeed = 10d; aiPawnSpread = -5d;
-		case "AI_SGASquad" : aiSpeed = 4d; aiPawnSpread = 15d;
-		case "AI_GovOfficials" : aiSpeed = 0.02d; aiPawnSpread = -2d;
+		case "AI_BernGUY" : aiSpeed = -1d; aiPawnSpread = 4d; break;
+		case "AI_Bolt" : aiSpeed = 10d; aiPawnSpread = -5d; break;
+		case "AI_SGASquad" : aiSpeed = 4d; aiPawnSpread = 15d; break;
+		case "AI_GovOfficials" : aiSpeed = 0.02d; aiPawnSpread = -2d; break;
 		default : aiSpeed = 1; aiPawnSpread = 0d;
 		}
 		Thread t = new Thread(this);
