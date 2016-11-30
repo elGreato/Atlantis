@@ -234,11 +234,14 @@ public class Game implements GameInterface {
 						message.getCardsChosen(), message.getTreasuresChosen()));
 
 			}
-			if (message.isNextPlayer() && !message.isGameOver())
+			if (message.isNextPlayer() && !message.isGameOver()) {
 				endTurn();
+				System.out.println("game is not over, ending the turn");
+			}
 			// ending the game
 			else if (message.isGameOver()) {
 				paidLastBill++;
+				System.out.println("paidLastBill count " + paidLastBill);
 				for (int i = 0; i < numberOfPlayers; i++) {
 					users.get(i).sendMessage(
 							new ServerMessage(getName(), "Game Over, wait for other players to finish paying"));
@@ -246,20 +249,33 @@ public class Game implements GameInterface {
 				}
 				if (paidLastBill == numberOfPlayers) {
 					ArrayList<Integer> winners = checkWinner();
-					if (winners.size()==1){
-						for(int i=0; i<numberOfPlayers;i++ ){
-							users.get(i).sendMessage(new ResultMessage(getName(), winners.get(0)));
+					if (winners.size() == 1) {
+						for (int i = 0; i < numberOfPlayers; i++) {
+							users.get(i).sendMessage(new ResultMessage(getName(), winners.get(0),
+									players.get(winners.get(0)).getPlayerName()));
+							lobby.addWin(users.get(winners.get(0)));
+							for (int k = 0; k < users.size(); k++) {
+								if (k != winners.get(0)) {
+									lobby.addLoss(users.get(k));
+								}
+							}
 						}
-					}
-					else if(winners.size()>1){
-						for(int i=0; i<numberOfPlayers;i++ ){
+						// in case we have a draw between two or more players
+					} else if (winners.size() > 1) {
+						for (int i = 0; i < numberOfPlayers; i++) {
 							users.get(i).sendMessage(new DrawMessage(getName(), winners));
 						}
+						for (Integer k = 0; k < users.size(); k++) {
+							if (winners.contains(k)) {
+								lobby.addTie(users.get(k));
+							} else
+								lobby.addLoss(users.get(k));
+						}
+
 					}
-					
-					
-					
+
 				}
+				lobby.endGame(this);
 
 			}
 
@@ -271,7 +287,6 @@ public class Game implements GameInterface {
 
 		}
 		if (igm instanceof RevertTurnMessage) {
-			System.out.println("Rever from Server");
 			RevertTurnMessage message = (RevertTurnMessage) igm;
 			if (currentPlayerIndex == message.getPlayerIndex()) {
 				for (Card c : removedCards) {
@@ -318,10 +333,10 @@ public class Game implements GameInterface {
 					result.add(sorted.get(2).getPlayerIndex());
 				}
 			}
-			if(size==4){
+			if (size == 4) {
 				if (sorted.get(0).countVictoryPoints() == sorted.get(3).countVictoryPoints()) {
 					result.add(sorted.get(3).getPlayerIndex());
-				}					
+				}
 			}
 		} else {
 			winner = Collections.max(sorted, new PlayersComparator()).getPlayerIndex();
@@ -329,7 +344,6 @@ public class Game implements GameInterface {
 			result.add(winner);
 		}
 		return result;
-	
 
 	}
 
@@ -363,6 +377,7 @@ public class Game implements GameInterface {
 		int waterBill = 0;
 		LandTile treasure = null;
 		selectedLand = null;
+		// in case of revert
 		for (int i = 0; selectedPawn.getNewLocation() != -1
 				&& i < base.get(selectedPawn.getNewLocation()).getChildren().size(); i++) {
 			if (((LandTile) base.get(selectedPawn.getNewLocation()).getChildren().get(i)).hasPawn()
@@ -394,8 +409,6 @@ public class Game implements GameInterface {
 				waterHasTile = false;
 				LandTile land = (LandTile) water.getChildren().get(topNode);
 				// does this tile has the same color ?
-				if (selectedCard.getColor() == null)
-					System.out.println("null getcolor");
 				if (selectedCard.getColor() != null && land.getColor().equals(selectedCard.getColor())
 						&& !land.hasPawn()) {
 
@@ -441,10 +454,11 @@ public class Game implements GameInterface {
 
 				}
 			}
-			if (((!foundLand && f == base.size() - 1)) || (selectedCard.getColor() == null&&f==base.size()-1)) {
+			if (((!foundLand && f == base.size() - 1)) || (selectedCard.getColor() == null && f == base.size() - 1)) {
 				selectedPawn.setNewLocation(f + 1);
 				selectedPawn.setReachedMainLand(true);
 				mainland.getPawns().add(selectedPawn);
+				// here i have a bug when index is 52
 				removePawnFromOldTile(selectedPawn);
 				foundLand = true;
 				selectedLand = null;
@@ -453,7 +467,7 @@ public class Game implements GameInterface {
 				if (mainland.getPawns().size() >= 3) {
 					int currentPawnsCount = 0;
 					for (Pawn p : currentPlayer.getPawns()) {
-						if (p.getNewLocation() == f + 1)
+						if (p.ReachedMainLand() == true)
 							currentPawnsCount++;
 						else
 							currentPawnsCount--;
@@ -502,32 +516,33 @@ public class Game implements GameInterface {
 		boolean connectedWater = false;
 		int waterPassedCount = 0;
 		int waterBill = 0;
-
+		System.out.println("End this game method");
 		for (Player p : players) {
+			System.out.println("looping players");
 			for (Pawn pawn : p.getPawns()) {
-				if (pawn.ReachedMainLand() == false) {
-					for (int f = selectedPawn.getNewLocation() + 1; f < base.size(); f++) {
+				System.out.println("looping pawns");
+				System.out.println(pawn.ReachedMainLand());
+				if (!pawn.ReachedMainLand()) {
+					System.out.println("*****");
+					for (int f = pawn.getNewLocation() + 1; f < base.size(); f++) {
 						WaterTile water = base.get(f);
 
 						if (water.getChildren().size() > 0) {
 							connectedWater = false;
-						} else {
-							if (!connectedWater) {
-								connectedWater = true;
-								waterPassedCount++;
-								int i = payForWater(water);
-								waterBill += i;
-							}
+						} else if (!connectedWater) {
+							connectedWater = true;
+							waterPassedCount++;
+							int i = payForWater(water);
+							waterBill += i;
 						}
-						if (f == base.size() - 1) {
-							pawn.setNewLocation(f + 1);
-							pawn.setReachedMainLand(true);
-							mainland.getPawns().add(pawn);
-						}
+
 					}
 				}
+				pawn.setReachedMainLand(true);
+
 			}
-			users.get(p.getPlayerIndex()).sendMessage(new LastBillMessage(getName(), waterPassedCount, waterBill));
+			if (p.getPlayerIndex() != currentPlayerIndex)
+				users.get(p.getPlayerIndex()).sendMessage(new LastBillMessage(getName(), waterPassedCount, waterBill));
 		}
 	}
 
@@ -672,11 +687,11 @@ public class Game implements GameInterface {
 		if (index == 0) {
 			player.setColor(ColorChoice.blue);
 		} else if (index == 1) {
-			player.setColor(ColorChoice.red);
+			player.setColor(ColorChoice.pink);
 		} else if (index == 2) {
 			player.setColor(ColorChoice.green);
 		} else if (index == 3) {
-			player.setColor(ColorChoice.purple);
+			player.setColor(ColorChoice.brown);
 		}
 
 	}

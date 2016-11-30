@@ -29,14 +29,22 @@ public class GameController {
 		view.btnEndMyTurn.setOnAction(e->handleEndMyTurn());
 		view.btnRevert.setOnAction(e-> handleRevert());
 		view.temp.setOnAction(e-> handletemp());
+		view.btnFinish.setOnAction(e-> handleFinish());
 	}
 
 
 	
+	private void handleFinish() {
+		view.stage.close();
+	}
+
+
+
 	private void handletemp() {
 		// TODO Auto-generated method stub
 		// the Devil black card, it ends the game
 				Card blackCard = new Card(666, null);
+				
 				blackCard.setOwner(model.currentPlayer);
 				ArrayList<Card> niggahold = new ArrayList<>();
 				niggahold.add(blackCard);
