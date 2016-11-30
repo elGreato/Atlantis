@@ -132,6 +132,7 @@ public class GameModel {
 			// release the locked pawns
 			if (message.getCurrentPlayer().getPlayerIndex() != currentPlayer.getPlayerIndex()) {
 				for (Pawn p : currentPlayer.getPawns()) {
+					if(!p.ReachedMainLand())
 					p.setOnMouseClicked(e -> view.handlePawn(p));
 				}
 				//set the cards count for each enemy
