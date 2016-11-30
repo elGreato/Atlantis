@@ -14,16 +14,19 @@ public enum ColorChoice implements Serializable {
 	blue, white, grey, yellow, green, pink, brown;
 
 	public ImageView addLandTileImage(int tileValue) {
-		
-		Image image = new Image(getClass().getResourceAsStream("images4Tiles/"+this.toString()+"_" + String.valueOf(tileValue)+".jpg"));
+
+		Image image = new Image(getClass()
+				.getResourceAsStream("images4Tiles/" + this.toString() + "_" + String.valueOf(tileValue) + ".jpg"));
 		ImageView iv = new ImageView(image);
 		iv.setFitHeight(67);
 		iv.setFitWidth(67);
 		return iv;
 	}
+
+
 	public ImageView addCardImage() {
-		System.out.println("images4cards/card_"+this.toString()+".jpg");
-		Image image = new Image(getClass().getResourceAsStream("images4Cards/card_"+this.toString()+".jpg"));
+		System.out.println("images4cards/card_" + this.toString() + ".jpg");
+		Image image = new Image(getClass().getResourceAsStream("images4Cards/card_" + this.toString() + ".jpg"));
 		ImageView iv = new ImageView(image);
 		iv.setFitHeight(49);
 		iv.setFitWidth(29);

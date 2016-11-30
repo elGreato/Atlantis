@@ -362,7 +362,9 @@ public class GameView {
 		rec.setFill(Color.TRANSPARENT);
 		c.setRec(rec);
 		c.getChildren().add(rec);
-		c.getChildren().add(c.getColor().addCardImage());
+		if(c.getColor()!=null){
+		c.getChildren().add(c.getColor().addCardImage());}
+		else c.getRec().setFill(Color.BLACK);
 		getHboxCards().getChildren().add(c);
 
 	}

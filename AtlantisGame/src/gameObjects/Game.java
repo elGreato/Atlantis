@@ -54,7 +54,7 @@ public class Game implements GameInterface {
 	private ArrayList<WaterTile> base;
 	private int currentPlayerIndex;
 	// index for players who paid their last bill
-	private int paidLastBill =0;
+	private int paidLastBill = 0;
 
 	private Player currentPlayer;
 	private Pawn selectedPawn;
@@ -234,12 +234,14 @@ public class Game implements GameInterface {
 						message.getCardsChosen(), message.getTreasuresChosen()));
 
 			}
-			if (message.isNextPlayer() && !message.isGameOver())
+			if (message.isNextPlayer() && !message.isGameOver()) {
 				endTurn();
+				System.out.println("game is not over, ending the turn");
+			}
 			// ending the game
 			else if (message.isGameOver()) {
 				paidLastBill++;
-				System.out.println("paidLastBill count "+paidLastBill);
+				System.out.println("paidLastBill count " + paidLastBill);
 				for (int i = 0; i < numberOfPlayers; i++) {
 					users.get(i).sendMessage(
 							new ServerMessage(getName(), "Game Over, wait for other players to finish paying"));
@@ -249,7 +251,8 @@ public class Game implements GameInterface {
 					ArrayList<Integer> winners = checkWinner();
 					if (winners.size() == 1) {
 						for (int i = 0; i < numberOfPlayers; i++) {
-							users.get(i).sendMessage(new ResultMessage(getName(), winners.get(0),players.get(winners.get(0)).getPlayerName()));
+							users.get(i).sendMessage(new ResultMessage(getName(), winners.get(0),
+									players.get(winners.get(0)).getPlayerName()));
 							lobby.addWin(users.get(winners.get(0)));
 							for (int k = 0; k < users.size(); k++) {
 								if (k != winners.get(0)) {
@@ -265,10 +268,10 @@ public class Game implements GameInterface {
 						for (Integer k = 0; k < users.size(); k++) {
 							if (winners.contains(k)) {
 								lobby.addTie(users.get(k));
-							}
-							else lobby.addLoss(users.get(k));
+							} else
+								lobby.addLoss(users.get(k));
 						}
-						
+
 					}
 
 				}
@@ -523,8 +526,7 @@ public class Game implements GameInterface {
 					System.out.println("*****");
 					for (int f = pawn.getNewLocation() + 1; f < base.size(); f++) {
 						WaterTile water = base.get(f);
-						System.out.println(
-								"inside for loop; after false pawn in player " + pawn.getOwner().getPlayerName());
+
 						if (water.getChildren().size() > 0) {
 							connectedWater = false;
 						} else if (!connectedWater) {
@@ -539,7 +541,8 @@ public class Game implements GameInterface {
 				pawn.setReachedMainLand(true);
 
 			}
-			users.get(p.getPlayerIndex()).sendMessage(new LastBillMessage(getName(), waterPassedCount, waterBill));
+			if (p.getPlayerIndex() != currentPlayerIndex)
+				users.get(p.getPlayerIndex()).sendMessage(new LastBillMessage(getName(), waterPassedCount, waterBill));
 		}
 	}
 

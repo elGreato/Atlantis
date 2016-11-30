@@ -44,6 +44,7 @@ public class GameController {
 		// TODO Auto-generated method stub
 		// the Devil black card, it ends the game
 				Card blackCard = new Card(666, null);
+				
 				blackCard.setOwner(model.currentPlayer);
 				ArrayList<Card> niggahold = new ArrayList<>();
 				niggahold.add(blackCard);
