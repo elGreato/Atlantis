@@ -316,6 +316,28 @@ public class GameAI {
 	private AICostObject determineTilesToPay(AICostObject input, ArrayList<Card> cardsLeftInHand,
 			ArrayList<LandTile> tilesLeftInHand, int paymentSize, int moveNumber, boolean isLastPayment) {
 		AICostObject bestPayment = null;
+		if(paymentSize <= cardsLeftInHand.size())
+		{
+			ArrayList<Card> cardsToPay = new ArrayList<Card>();
+			for(int i = 0; i<paymentSize; i++)
+			{
+				cardsToPay.add(cardsLeftInHand.get(i));
+			}
+			HashMap<Integer, ArrayList<Card>> updatedCardPayment = new HashMap<Integer, ArrayList<Card>>();
+			for (Integer e : input.getCardsPaidInEachMove().keySet()) {
+				if (e != moveNumber) {
+					ArrayList<Card> copy = input.getCardsPaidInEachMove().get(e);
+					updatedCardPayment.put(e, copy);
+				}
+			}
+			updatedCardPayment.put(moveNumber, cardsToPay);
+			AICostObject paymentWithCards = new AICostObject(input.getTilesPaidInEachMove(), updatedCardPayment);
+			if(bestPayment == null
+					||paymentWithCards.getRealCosts(moveNumber, isLastPayment)< bestPayment.getRealCosts(moveNumber, isLastPayment))
+			{
+				bestPayment = paymentWithCards;
+			}
+		}
 		for (LandTile lt : tilesLeftInHand) {
 			//Copy object
 			ArrayList<LandTile> updatedTilesLeftInHand = new ArrayList<LandTile>(tilesLeftInHand);
@@ -338,7 +360,7 @@ public class GameAI {
 			// Payment value not reached
 			if (updatedPaymentSize > 0) {
 				//Try to pay with cards if possible
-				if(updatedPaymentSize <= cardsLeftInHand.size())
+				/*if(updatedPaymentSize <= cardsLeftInHand.size())
 				{
 					ArrayList<Card> cardsToPay = new ArrayList<Card>();
 					for(int i = 0; i<updatedPaymentSize; i++)
@@ -359,7 +381,7 @@ public class GameAI {
 					{
 						bestPayment = paymentWithCards;
 					}
-				}
+				}*/
 				AICostObject finalPayment = determineTilesToPay(updatedCosts, cardsLeftInHand, updatedTilesLeftInHand,
 						updatedPaymentSize, moveNumber, isLastPayment);
 				if (finalPayment != null && (bestPayment == null
