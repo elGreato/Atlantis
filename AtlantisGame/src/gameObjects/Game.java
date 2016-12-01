@@ -427,7 +427,7 @@ public class Game implements GameInterface {
 
 				}
 				// here a player played a pawn and landed on another that has a
-				// pawn, if he has no other cards, he gets 2 free
+				// pawn, if he has no other cards, he gets 2 extra free
 				if (selectedCard.getColor() != null && land.getColor().equals(selectedCard.getColor()) && land.hasPawn()
 						&& !foundLand) {
 					ArrayList<Card> extraCards = new ArrayList<>();
@@ -479,7 +479,7 @@ public class Game implements GameInterface {
 				if (!gameEnded) {
 					nextPlayer = true;
 					giveTreasure = true;
-					newCards = dealCards(currentPlayer);
+				//	newCards = dealCards(currentPlayer);
 				}
 
 			}
