@@ -13,17 +13,16 @@ public class WaterPaidMessage extends InGameMessage implements Serializable {
 	ArrayList<LandTile> treasuresChosen;
 	ArrayList<Card> cardsChosen;
 	private boolean nextPlayer;
-	private boolean gameOver;
+	
 	
 
 	public WaterPaidMessage(String gameName, int playerIndex, ArrayList<LandTile> treasuresChosen,
-			ArrayList<Card> cardsChosen, boolean nextPlayer, boolean gameOver) {
+			ArrayList<Card> cardsChosen, boolean nextPlayer) {
 		super(gameName);
 		this.playerIndex=playerIndex;
 		this.treasuresChosen=treasuresChosen;
 		this.cardsChosen=cardsChosen;
 		this.nextPlayer=nextPlayer;
-		this.gameOver=gameOver;
 	}
 
 
@@ -41,19 +40,8 @@ public class WaterPaidMessage extends InGameMessage implements Serializable {
 		return treasuresChosen;
 	}
 
-
-	public boolean isGameOver() {
-		return gameOver;
-	}
-
-
 	public boolean isNextPlayer() {
 		return nextPlayer;
-	}
-
-
-	public void setTreasuresChosen(ArrayList<LandTile> treasuresChosen) {
-		this.treasuresChosen = treasuresChosen;
 	}
 
 
@@ -61,9 +49,5 @@ public class WaterPaidMessage extends InGameMessage implements Serializable {
 		return cardsChosen;
 	}
 
-
-	public void setCardsChosen(ArrayList<Card> cardsChosen) {
-		this.cardsChosen = cardsChosen;
-	}
 
 }

@@ -449,7 +449,7 @@ public class GameModel {
 			}
 		}
 		msgOut.sendMessage(
-				new WaterPaidMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen, cardsChosen,nextPlayer,gameOver));
+				new WaterPaidMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen, cardsChosen,nextPlayer));
 		view.closePayWaterScene();
 
 	}

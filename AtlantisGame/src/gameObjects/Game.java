@@ -61,6 +61,8 @@ public class Game implements GameInterface {
 	private LandTile selectedLand;
 	private LandTile initialLand;
 
+	private boolean gameOver = false;
+
 	// Constructor (doesn't start game)
 	public Game(String name, String password, int maxPlayers, User creator, Lobby lobby) {
 
@@ -227,19 +229,18 @@ public class Game implements GameInterface {
 					}
 				}
 			}
-
+			// HERE ADD THE REFERSH TO COUNT AND VP
 			int numberOfPlayers = getNumOfRegisteredPlayers();
 			for (int i = 0; i < numberOfPlayers; i++) {
 				users.get(i).sendMessage(new PaymentDoneMessage(getName(), player.getPlayerIndex(),
 						message.getCardsChosen(), message.getTreasuresChosen()));
 
 			}
-			if (message.isNextPlayer() && !message.isGameOver()) {
+			if (message.isNextPlayer() && !gameOver) {
 				endTurn();
-				System.out.println("game is not over, ending the turn");
 			}
 			// ending the game
-			else if (message.isGameOver()) {
+			else if (gameOver) {
 				paidLastBill++;
 				System.out.println("paidLastBill count " + paidLastBill);
 				for (int i = 0; i < numberOfPlayers; i++) {
@@ -247,7 +248,7 @@ public class Game implements GameInterface {
 							new ServerMessage(getName(), "Game Over, wait for other players to finish paying"));
 
 				}
-				if (paidLastBill == numberOfPlayers) {
+				if (paidLastBill == numberOfPlayers-1) {
 					ArrayList<Integer> winners = checkWinner();
 					if (winners.size() == 1) {
 						for (int i = 0; i < numberOfPlayers; i++) {
@@ -273,9 +274,8 @@ public class Game implements GameInterface {
 						}
 
 					}
-
+					lobby.endGame(this);
 				}
-				lobby.endGame(this);
 
 			}
 
@@ -372,7 +372,7 @@ public class Game implements GameInterface {
 		boolean waterHasTile = false;
 		boolean nextPlayer = false;
 		boolean connectedWater = false;
-		boolean gameEnded = false;
+
 		int waterPassedCount = 0;
 		int waterBill = 0;
 		LandTile treasure = null;
@@ -463,7 +463,7 @@ public class Game implements GameInterface {
 				foundLand = true;
 				selectedLand = null;
 				selectedPawn.setPawnSelected(false);
-				newCards=dealCards(currentPlayer);
+				newCards = dealCards(currentPlayer);
 
 				if (mainland.getPawns().size() >= 3) {
 					int currentPawnsCount = 0;
@@ -474,13 +474,13 @@ public class Game implements GameInterface {
 							currentPawnsCount--;
 					}
 					if (currentPawnsCount == 3)
-						gameEnded = true;
+						gameOver = true;
 				}
 
-				if (!gameEnded) {
+				if (!gameOver) {
 					nextPlayer = true;
 					giveTreasure = true;
-			
+
 				}
 
 			}
@@ -499,15 +499,27 @@ public class Game implements GameInterface {
 		int victoryPoints = currentPlayer.countVictoryPoints();
 		int cardsCount = currentPlayer.getPlayerHand().getNumCards();
 		int numberOfPlayers = getNumOfRegisteredPlayers();
-		for (int i = 0; i < numberOfPlayers; i++) {
-			users.get(i)
-					.sendMessage(new RefreshPlayerMessage(getName(), currentPlayer, selectedLand, selectedPawn,
-							selectedCard, treasure, newCards, waterBill, waterPassedCount, nextPlayer, victoryPoints,
-							cardsCount));
-		}
-		if (gameEnded)
-			endThisGame();
+		if (!gameOver) {
+			for (int i = 0; i < numberOfPlayers; i++) {
+				users.get(i)
+						.sendMessage(new RefreshPlayerMessage(getName(), currentPlayer, selectedLand, selectedPawn,
+								selectedCard, treasure, newCards, waterBill, waterPassedCount, nextPlayer,
+								victoryPoints, cardsCount));
+			}
+		} else if (gameOver) {
+			// if game over, then the current player should not get two water
+			// bills
+			for (int i = 0; i < numberOfPlayers; i++) {
+				if (i != currentPlayerIndex) {
+					users.get(i)
+							.sendMessage(new RefreshPlayerMessage(getName(), currentPlayer, selectedLand, selectedPawn,
+									selectedCard, treasure, newCards, waterBill, waterPassedCount, nextPlayer,
+									victoryPoints, cardsCount));
+				}
+			}
 
+			endThisGame();
+		}
 	}
 
 	private void endThisGame() {
@@ -542,8 +554,8 @@ public class Game implements GameInterface {
 				pawn.setReachedMainLand(true);
 
 			}
-			if (p.getPlayerIndex() != currentPlayerIndex)
-				users.get(p.getPlayerIndex()).sendMessage(new LastBillMessage(getName(), waterPassedCount, waterBill));
+			// if (p.getPlayerIndex() != currentPlayerIndex)
+			users.get(p.getPlayerIndex()).sendMessage(new LastBillMessage(getName(), waterPassedCount, waterBill));
 		}
 	}
 

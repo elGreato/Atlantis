@@ -581,7 +581,7 @@ public class GameView {
 		btnFinish = new Button ("YES I WON");
 		Label lblWin = new Label("Congratulation "+winner+"YOU WON!!!!!!");
 		root.getChildren().addAll(lblWin,btnFinish);
-		Scene winScene = new Scene(lblWin);
+		Scene winScene = new Scene(root);
 		tempStage = new Stage();
 		tempStage.setScene(winScene);
 		tempStage.show();
@@ -590,9 +590,11 @@ public class GameView {
 	}
 	public void ILose(String winner) {
 		tempStage.setOnCloseRequest(e->stage.close());
+		VBox root = new VBox();
 		btnFinish = new Button ("I will win next time");
-		Label lblWin = new Label("The player "+winner+" got lucky\nUnfortunately, You Lost :( ");
-		Scene winScene = new Scene(lblWin);
+		Label lblLose = new Label("The player "+winner+" got lucky\nUnfortunately, You Lost :( ");
+		root.getChildren().addAll(lblLose,btnFinish);
+		Scene winScene = new Scene(root);
 		tempStage = new Stage();
 		tempStage.setScene(winScene);
 		tempStage.show();
