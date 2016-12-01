@@ -348,7 +348,7 @@ public class Game implements GameInterface {
 	}
 
 	private void performEndTurn(int playerIndex, boolean normalEnd) {
-		if (normalEnd) {
+		if (!normalEnd) {
 			Player player = players.get(playerIndex);
 			ArrayList<Card> newCards = dealCards(player);
 			Card extra = cards.deal();
@@ -479,7 +479,7 @@ public class Game implements GameInterface {
 				if (!gameEnded) {
 					nextPlayer = true;
 					giveTreasure = true;
-				//	newCards = dealCards(currentPlayer);
+			
 				}
 
 			}

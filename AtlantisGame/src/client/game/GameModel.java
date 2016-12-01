@@ -430,7 +430,7 @@ public class GameModel {
 			view.showWaterBill(waterBill, waterPassedCount,gameFinished);
 			System.out.println("reached show water bill , is it ended ?"+gameFinished);
 		}
-		else if(waterPassedCount<1&&nextPlayer&&!gameFinished)msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(),false));
+		else if(waterPassedCount<1&&nextPlayer&&!gameFinished)msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(),true));
 		
 
 	}
@@ -499,8 +499,9 @@ public class GameModel {
 	}
 
 	public void handleEndMyTurn() {
+		// this is not considered a normal end cuz he pressed the button
 		if (currentPlayer.isYourTurn()) {
-			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(),true));
+			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(),false));
 
 		} else
 			view.showNotYourTurnAlert();
