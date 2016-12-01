@@ -108,13 +108,13 @@ public class GameAI {
 					if(rpm.isNextPlayer())
 					{
 						WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), tilesForPayment,
-								cardsForPayment, true, false);
+								cardsForPayment, true);
 						game.processMessage(wpm);
 					}
 					else
 					{
 						WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), tilesForPayment,
-								cardsForPayment, false, false);
+								cardsForPayment, false);
 						game.processMessage(wpm);
 					}
 				}
@@ -142,13 +142,13 @@ public class GameAI {
 			}
 			if(valueOfHand <= totalPayment)
 			{
-				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), me.getPlayerHand().getTreasures(), me.getPlayerHand().getCards(),true,true);
+				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), me.getPlayerHand().getTreasures(), me.getPlayerHand().getCards(),true);
 				game.processMessage(wpm);
 			}
 			else
 			{
 				AICostObject payment = determineTilesToPay(new AICostObject(null,null),me.getPlayerHand().getCards(),me.getPlayerHand().getTreasures(),totalPayment,0,true);
-				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), payment.getTilesPaidInEachMove().get(0),payment.getCardsPaidInEachMove().get(0),true,true);
+				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), payment.getTilesPaidInEachMove().get(0),payment.getCardsPaidInEachMove().get(0),true);
 				game.processMessage(wpm);
 			}
 	}
