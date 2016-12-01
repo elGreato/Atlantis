@@ -79,8 +79,7 @@ public class GameAI {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			// System.out.println("AI plays another card");
-
+			
 			game.processMessage(
 					new PawnCardSelectedMessage(game.getName(), me.getPlayerIndex(), bestPawn, bestCards.remove(0)));
 
@@ -180,9 +179,11 @@ public class GameAI {
 			bestPawn = thisTurn.getPawnsThatCanBePlayed().get(0);
 			payments = thisTurn.getCostsIncurredPerMove();
 			moves += 1;
+			System.out.println(me.getPlayerName() + " has " + me.getPlayerHand().getNumCards() + " cards");
 			game.processMessage(
+					
 					new PawnCardSelectedMessage(game.getName(), me.getPlayerIndex(), bestPawn, bestCards.remove(0)));
-
+					
 		} else {
 			System.out.println("Can't make a turn");
 			giveUpTurn();
@@ -237,7 +238,7 @@ public class GameAI {
 					int distanceAlreadyTraveled = inputForMove.getDistanceTraveled() + calculateDistanceOfMove(p,inputForMove.getDistanceTraveled(), c);
 					int costsForThisMove =calculateCostsOfMove(p,inputForMove.getDistanceTraveled(), distanceAlreadyTraveled);
 					int costsAlreadyIncurred = inputForMove.getCostsIncurred() + costsForThisMove;
-					AICostObject costs = new AICostObject(tilesPaidInEachMove, inputForMove.getCostsIncurredPerMove().getCardsPaidInEachMove());
+					AICostObject costs = new AICostObject(tilesPaidInEachMove, cardsPaidInEachMove);
 					
 					boolean canBePaid = true;
 					if(costsForThisMove>0)
