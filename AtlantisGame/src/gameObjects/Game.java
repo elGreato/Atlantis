@@ -463,6 +463,7 @@ public class Game implements GameInterface {
 				foundLand = true;
 				selectedLand = null;
 				selectedPawn.setPawnSelected(false);
+				newCards=dealCards(currentPlayer);
 
 				if (mainland.getPawns().size() >= 3) {
 					int currentPawnsCount = 0;
