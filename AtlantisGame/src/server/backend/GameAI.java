@@ -15,6 +15,8 @@ import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
 import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
+import messageObjects.turnMessages.BuyCardsMessage;
+import messageObjects.turnMessages.CardsBoughtMessage;
 import messageObjects.turnMessages.EndMYTurnMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.LastBillMessage;
@@ -69,7 +71,7 @@ public class GameAI {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				doATurn();
+				doATurn(false);
 			}
 		} else if (igm instanceof PlayAnotherCardMessage) {
 
@@ -84,49 +86,10 @@ public class GameAI {
 					new PawnCardSelectedMessage(game.getName(), me.getPlayerIndex(), bestPawn, bestCards.remove(0)));
 
 		} else if (igm instanceof RefreshPlayerMessage) {
-
+			
 			RefreshPlayerMessage rpm = (RefreshPlayerMessage) igm;
+			doPayment(rpm);
 
-			if (rpm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex() && rpm.getWaterBill() > 0) {
-
-				System.out.println(me.getPlayerName() + 
-						" Payment message arrived...." + " Waterbill: " + rpm.getWaterBill() + " moveNumber: " + moves);
-				ArrayList<LandTile> tilesForPayment = null;
-				ArrayList<Card> cardsForPayment = null;
-			
-				tilesForPayment = payments.getTilesPaidInEachMove().remove(moves);
-			
-				cardsForPayment = payments.getCardsPaidInEachMove().remove(moves);
-				
-				System.out.println("Payment size: Tiles: " + tilesForPayment.size() + " Cards: " + cardsForPayment.size());
-				if (tilesForPayment != null && !tilesForPayment
-						.isEmpty() || (cardsForPayment != null && !cardsForPayment.isEmpty())) {
-					System.out.println("Send payment message. Payable amount = " + rpm.getWaterBill());
-					for (LandTile lt : tilesForPayment) {
-						System.out.println("Tile with value: " + lt.getLandValue());
-					}
-					if(rpm.isNextPlayer())
-					{
-						WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), tilesForPayment,
-								cardsForPayment, true);
-						game.processMessage(wpm);
-					}
-					else
-					{
-						WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), tilesForPayment,
-								cardsForPayment, false);
-						game.processMessage(wpm);
-					}
-				}
-				moves += 1;
-			} else if (rpm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex()) {
-				
-				moves += 1;
-				if(rpm.isNextPlayer())
-				{
-					game.processMessage(new EndMYTurnMessage(game.getName(),me.getPlayerIndex(),true));
-				}
-			}
 			
 		} else if (igm instanceof ServerMessage) {
 			System.out.println(((ServerMessage) igm).getTheMessage());
@@ -151,28 +114,87 @@ public class GameAI {
 				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), payment.getTilesPaidInEachMove().get(0),payment.getCardsPaidInEachMove().get(0),true);
 				game.processMessage(wpm);
 			}
-	}
+		} else if(igm instanceof CardsBoughtMessage)
+		{
+			CardsBoughtMessage cbm = (CardsBoughtMessage)igm;
+			if(cbm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex())
+			{
+				System.out.println(me.getPlayerName() + " has successfully bought "+ cbm.getPurchase().size() + " cards");
+				doATurn(true);
+				
+			}
+			
+		}
 	}
 
-	private void doATurn() {
-		// System.out.println("New turn initiated");
+	private void doPayment(RefreshPlayerMessage rpm) {
+		// TODO Auto-generated method stub
+		if (rpm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex() && rpm.getWaterBill() > 0) {
+
+			System.out.println(me.getPlayerName() + 
+					" Payment message arrived...." + " Waterbill: " + rpm.getWaterBill() + " moveNumber: " + moves);
+			ArrayList<LandTile> tilesForPayment = null;
+			ArrayList<Card> cardsForPayment = null;
+		
+			tilesForPayment = payments.getTilesPaidInEachMove().remove(moves);
+		
+			cardsForPayment = payments.getCardsPaidInEachMove().remove(moves);
+			
+			System.out.println("Payment size: Tiles: " + tilesForPayment.size() + " Cards: " + cardsForPayment.size());
+			if (tilesForPayment != null && !tilesForPayment
+					.isEmpty() || (cardsForPayment != null && !cardsForPayment.isEmpty())) {
+				System.out.println("Send payment message. Payable amount = " + rpm.getWaterBill());
+				for (LandTile lt : tilesForPayment) {
+					System.out.println("Tile with value: " + lt.getLandValue());
+				}
+				if(rpm.isNextPlayer())
+				{
+					WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), tilesForPayment,
+							cardsForPayment, true);
+					game.processMessage(wpm);
+				}
+				else
+				{
+					WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), tilesForPayment,
+							cardsForPayment, false);
+					game.processMessage(wpm);
+				}
+			}
+			moves += 1;
+		} else if (rpm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex()) {
+			
+			moves += 1;
+			if(rpm.isNextPlayer())
+			{
+				game.processMessage(new EndMYTurnMessage(game.getName(),me.getPlayerIndex(),true));
+			}
+		}
+	}
+
+	private void doATurn(boolean alreadyBoughtCards) {
+		boolean cardsRequiredToBuy = true;
+		if(!alreadyBoughtCards)
+		{
+			cardsRequiredToBuy = buyCardsIfRequired();
+		}
+		if(!cardsRequiredToBuy ||alreadyBoughtCards)
+		{
+			planMoves();
+		}
+		
+
+	}
+
+	private void planMoves() {
 		bestCards = new ArrayList<Card>();
 		bestCards.clear();
 		bestPawn = null;
 		payments = null;
 		moves = 0;
 		calculateAverageDistances();
-		AITurnObject thisTurn = doMove(
+		AITurnObject thisTurn = determineBestMoves(
 				new AITurnObject(me.getPawns(), me.getPlayerHand().getCards(), me.getPlayerHand().getTreasures()), 1);
-
-		// getValueOfCosts(payments);
-		System.out.println("Showing Indexes");
-		/*
-		 * if(payments != null && payments.getTilesPaidInEachMove() !=null) {
-		 * for(Integer intg : payments.getTilesPaidInEachMove().keySet()) {
-		 * System.out.println("Index: " + intg); } }
-		 */
-		// System.out.println("AI sends turn message");
+	
 		if (thisTurn != null && thisTurn.getCardsAlreadyPlayed() != null
 				&& !thisTurn.getCardsAlreadyPlayed().isEmpty()) {
 			bestCards = thisTurn.getCardsAlreadyPlayed();
@@ -188,7 +210,79 @@ public class GameAI {
 			System.out.println("Can't make a turn");
 			giveUpTurn();
 		}
+		
+	}
 
+	private boolean buyCardsIfRequired() {
+		if(me.getPlayerHand().getNumCards() < 2)
+		{
+			System.out.println("Should buy cards");
+			ArrayList<LandTile> payment = new ArrayList<LandTile>();
+			payment = determineTreasuresForBuyProcess(2,me.getPlayerHand().getTreasures(), new ArrayList<LandTile>());
+			
+			if(payment != null &&payment.size()>0 &&determineValueOfLandTiles(payment)>1)
+			{
+				System.out.println("Will buy cards");
+				BuyCardsMessage bcm = new BuyCardsMessage(game.getName(),me.getPlayerIndex(),payment);
+				game.processMessage(bcm);
+				return true;
+			}
+		}
+		System.out.println("Will not buy Cards");
+		return false;
+		
+		
+	}
+
+	private ArrayList<LandTile> determineTreasuresForBuyProcess(int desiredAmount, ArrayList<LandTile> tilesLeftOnHand, ArrayList<LandTile>payment) {
+		ArrayList<LandTile> bestPayment = null;
+		int valueDesired = 2*desiredAmount;
+		for(LandTile lt: tilesLeftOnHand)
+		{
+			ArrayList<LandTile> updatedTilesLeftOnHand = new ArrayList<LandTile>(tilesLeftOnHand);
+			ArrayList<LandTile> updatedPayment = new ArrayList<LandTile>(payment);
+			updatedPayment.add(lt);
+			updatedTilesLeftOnHand.remove(lt);
+			int valueOfBestPayment = 0;
+			if(bestPayment != null)
+			{
+				valueOfBestPayment = determineValueOfLandTiles(bestPayment);
+			}
+			
+			int valueOfUpdatedPayment = determineValueOfLandTiles(updatedPayment);
+			if(bestPayment == null||bestPayment.isEmpty()
+					||(valueOfUpdatedPayment % 2 == 0 &&valueOfBestPayment%2==1)
+					||(valueOfUpdatedPayment % 2 == valueOfBestPayment % 2
+						&& Math.abs(valueOfUpdatedPayment-valueDesired) < Math.abs(valueOfBestPayment-valueDesired)))
+			{
+				bestPayment = updatedPayment;
+			}
+			if(valueOfUpdatedPayment < valueDesired)
+			{
+				int valueOfAgainUpdatedPayment = 0;
+				ArrayList<LandTile> againUpdatedPayment = determineTreasuresForBuyProcess(desiredAmount, updatedTilesLeftOnHand, updatedPayment);
+				if(againUpdatedPayment != null && 
+						(bestPayment == null||bestPayment.isEmpty()
+						||(valueOfAgainUpdatedPayment % 2 == 0 &&valueOfBestPayment % 2==1)
+						||(valueOfAgainUpdatedPayment % 2 == valueOfBestPayment % 2 
+							&& Math.abs(valueOfAgainUpdatedPayment-valueDesired) < Math.abs(valueOfBestPayment-valueDesired))))
+				{
+					bestPayment = againUpdatedPayment;
+				}
+			}
+		}
+		
+		return bestPayment;
+	}
+	
+
+	private int determineValueOfLandTiles(ArrayList<LandTile> bestPayment) {
+		int valueOfPayment = 0;
+		for(LandTile lt2:bestPayment)
+		{
+			valueOfPayment += lt2.getLandValue();
+		}
+		return valueOfPayment;
 	}
 
 	private void giveUpTurn() {
@@ -211,7 +305,7 @@ public class GameAI {
 		avgDistanceMe /= 3;
 	}
 
-	private AITurnObject doMove(AITurnObject inputForMove, int moveNumber)
+	private AITurnObject determineBestMoves(AITurnObject inputForMove, int moveNumber)
 	{
 		AITurnObject bestPossibleTurn = null;
 		for(Pawn p : inputForMove.getPawnsThatCanBePlayed())
@@ -279,7 +373,7 @@ public class GameAI {
 						if(cardsLeftOnHand.size() != 0)
 						{
 							int updatedMoveNumber = moveNumber + 1;
-							AITurnObject output = doMove(new AITurnObject(pawnsForNextIteration,
+							AITurnObject output = determineBestMoves(new AITurnObject(pawnsForNextIteration,
 									cardsLeftOnHand,cardsAlreadyPlayed,
 									tilesLeftInHand, costs,
 								distanceAlreadyTraveled,costsAlreadyIncurred),updatedMoveNumber);
