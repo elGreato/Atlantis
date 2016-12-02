@@ -110,7 +110,7 @@ public class GameAI {
 			}
 			else
 			{
-				AICostObject payment = determineTilesToPay(new AICostObject(null,null),me.getPlayerHand().getCards(),me.getPlayerHand().getTreasures(),totalPayment,0,true);
+				AICostObject payment = determineTilesToPay(new AICostObject(new HashMap<Integer, ArrayList<LandTile>>(),new HashMap<Integer, ArrayList<Card>>()),me.getPlayerHand().getCards(),me.getPlayerHand().getTreasures(),totalPayment,0,true);
 				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), payment.getTilesPaidInEachMove().get(0),payment.getCardsPaidInEachMove().get(0),true);
 				game.processMessage(wpm);
 			}
