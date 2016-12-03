@@ -30,11 +30,11 @@ public class Pawn extends StackPane implements Serializable{
 	public static Paint FillColor(Player c ) {
 		if (c.getColor().toString().equalsIgnoreCase("blue")) 
 			return (Color.web("0x0099FF"));
-		else if (c.getColor().toString().equalsIgnoreCase("red")) 
-			return (Color.web("0xFF0066"));
+		else if (c.getColor().toString().equalsIgnoreCase("pink")) 
+			return (Color.web("#FF1493"));
 		else if (c.getColor().toString().equalsIgnoreCase("green")) 
 			return(Color.DARKGREEN);
-		else if (c.getColor().toString().equalsIgnoreCase("purple")) 
+		else if (c.getColor().toString().equalsIgnoreCase("brown")) 
 			return(Color.MEDIUMPURPLE);
 			return Color.ORANGE;
 	

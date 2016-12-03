@@ -208,9 +208,7 @@ public class GameView {
 		for (int i = 0; i < base.size(); i++) {
 
 			WaterTile water = base.get(i);
-	/*		final Image im = new Image(getClass().getResourceAsStream("images4Tiles/water.jpg"));
-			water.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
-					BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));*/
+	
 			water.convertToChildren();
 
 			if (water.getChildren().size() != 0) {
@@ -312,14 +310,14 @@ public class GameView {
 
 		stackAtlantis.getChildren().add(atlantis);
 		mainBoard.add(stackAtlantis, 0, 0, 2, 2);
-		Image img = new Image(getClass().getResourceAsStream("images4Tiles/atlantis2.png"));
+		Image img = new Image(getClass().getResourceAsStream("images4Tiles/atlantis.png"));
 		atlantis.setBackground(new Background(new BackgroundImage(img, BackgroundRepeat.NO_REPEAT,
 				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
 		// Mainland
 		stackMainLand.getChildren().add(mainland);
 		mainBoard.add(stackMainLand, 0, 7, 2, 2);
-		Image im = new Image(getClass().getResourceAsStream("images4Tiles/land.jpg"));
+		Image im = new Image(getClass().getResourceAsStream("images4Tiles/land.png"));
 		mainland.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
 				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
