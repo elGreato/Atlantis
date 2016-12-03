@@ -28,6 +28,7 @@ import messageObjects.turnMessages.TurnMessage;
 import messageObjects.turnMessages.WaterPaidMessage;
 import messageObjects.turnMessages.BuyCardsMessage;
 import messageObjects.turnMessages.CardsBoughtMessage;
+import messageObjects.turnMessages.CloseGameMessage;
 import messageObjects.turnMessages.EndMYTurnMessage;
 
 public class GameModel {
@@ -510,6 +511,12 @@ public class GameModel {
 	public void handleRevert() {
 		msgOut.sendMessage(new RevertTurnMessage(gameName, currentPlayer.getPlayerIndex()));
 
+	}
+
+	public void handleFinish() {
+		view.stage.close();
+		msgOut.sendMessage(new CloseGameMessage (gameName));
+		
 	}
 
 }

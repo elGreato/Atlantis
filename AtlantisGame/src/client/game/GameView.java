@@ -50,20 +50,20 @@ public class GameView {
 	ArrayList<WaterTile> base;
 
 	// fx stuff
-	public Scene scene;
+	private Scene scene;
 	protected Stage stage;
-	public Stage tempStage;
+	protected Stage tempStage;
 
 	// the main game controls
-	public Button btnPlayCard = new Button("Play a Selected Card");
-	public Button btnBuyCards = new Button("Buy Cards");
-	public Button btnPay4Water = new Button("Pay");
-	public Button btnPay4cards = new Button("Pay");
-	public Button btnCalc = new Button("Calculate what I chose");
-	public Button btnEndMyTurn = new Button ("End Turn");
-	public Button btnRevert = new Button ("Cancel my turn and give me my money back");
-	Button temp = new Button ("nigga");
-	public Button btnFinish= new Button();
+	protected Button btnPlayCard = new Button("Play a Selected Card");
+	protected Button btnBuyCards = new Button("Buy Cards");
+	protected Button btnPay4Water = new Button("Pay");
+	protected Button btnPay4cards = new Button("Pay");
+	protected Button btnCalc = new Button("Calculate what I chose");
+	protected Button btnEndMyTurn = new Button ("End Turn");
+	protected Button btnRevert = new Button ("Cancel my turn and give me my money back");
+	protected Button temp = new Button ("nigga");
+	protected Button btnFinish= new Button();
 
 	// Labels for main game controls
 	private Label lblGameBtns = new Label("Action Buttons");
@@ -153,10 +153,7 @@ public class GameView {
 		vbPlayerInfo.getChildren().add(hbTreasures);
 		vbPlayer.getChildren().add(vbPlayerInfo);
 		hbPlayersInfo.getChildren().add(vbPlayer);
-	/*	for(int i=0; i<mapOpponents.size();i++){
-			VBox vb = mapOpponents.get(i);
-		hbPlayersInfo.getChildren().add(vb);
-		}*/
+	
 		vbGameStatus.getChildren().addAll(lblGameStatus, lblTurn);
 		root.setBottom(hbPlayersInfo);
 		root.setRight(vbMainControls);

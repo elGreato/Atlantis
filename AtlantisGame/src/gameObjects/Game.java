@@ -12,6 +12,7 @@ import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
 import messageObjects.turnMessages.BuyCardsMessage;
 import messageObjects.turnMessages.CardsBoughtMessage;
+import messageObjects.turnMessages.CloseGameMessage;
 import messageObjects.turnMessages.DrawMessage;
 import messageObjects.turnMessages.EndMYTurnMessage;
 import messageObjects.turnMessages.GameStatusMessage;
@@ -62,6 +63,7 @@ public class Game implements GameInterface {
 	private LandTile initialLand;
 
 	private boolean gameOver = false;
+	private int playersFinished = 0;
 
 	// Constructor (doesn't start game)
 	public Game(String name, String password, int maxPlayers, User creator, Lobby lobby) {
@@ -248,13 +250,14 @@ public class Game implements GameInterface {
 							new ServerMessage(getName(), "Game Over, wait for other players to finish paying"));
 
 				}
-				if (paidLastBill == numberOfPlayers-1) {
+				if (paidLastBill == numberOfPlayers - 1) {
 					ArrayList<Integer> winners = checkWinner();
 					if (winners.size() == 1) {
+						lobby.addWin(users.get(winners.get(0)));
 						for (int i = 0; i < numberOfPlayers; i++) {
 							users.get(i).sendMessage(new ResultMessage(getName(), winners.get(0),
 									players.get(winners.get(0)).getPlayerName()));
-							lobby.addWin(users.get(winners.get(0)));
+
 							for (int k = 0; k < users.size(); k++) {
 								if (k != winners.get(0)) {
 									lobby.addLoss(users.get(k));
@@ -274,7 +277,7 @@ public class Game implements GameInterface {
 						}
 
 					}
-					lobby.endGame(this);
+
 				}
 
 			}
@@ -315,6 +318,12 @@ public class Game implements GameInterface {
 						removedTreasure, removedTreasureIndex, selectedPawn, initialLand));
 			}
 			performEndTurn(message.getPlayerIndex(), true);
+		}
+		if (igm instanceof CloseGameMessage) {
+			playersFinished++;
+			if (playersFinished == getNumOfRegisteredPlayers()) {
+				lobby.endGame(this);
+			}
 		}
 	}
 

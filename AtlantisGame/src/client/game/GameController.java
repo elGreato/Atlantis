@@ -2,9 +2,12 @@ package client.game;
 
 import java.util.ArrayList;
 
+
+
 import gameObjects.Card;
 import gameObjects.Pawn;
 import gameObjects.WaterTile;
+import javafx.application.Platform;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
@@ -35,24 +38,20 @@ public class GameController {
 
 	
 	private void handleFinish() {
-		view.stage.close();
+		model.handleFinish();
 	}
 
 
 
 	private void handletemp() {
-		// TODO Auto-generated method stub
-		// the Devil black card, it ends the game
+		
 				Card blackCard = new Card(666, null);
 				
 				blackCard.setOwner(model.currentPlayer);
 				ArrayList<Card> niggahold = new ArrayList<>();
 				niggahold.add(blackCard);
 			model.addCardToPlayer(niggahold);
-			
-		
-		
-		
+	
 	}
 
 
