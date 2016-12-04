@@ -50,6 +50,8 @@ public class GameModel {
 		this.gameName = gameName;
 		msgOut = lobbyModel;
 		this.view = gameView;
+		// css
+		view.scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 	}
 

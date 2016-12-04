@@ -20,11 +20,9 @@ public class GameController {
 		this.view = gameView;
 		this.model = gameModel;
 		view.btnRevert.setDisable(true);
-		// for (StackPane s: view.getBase()){
-		// s.setOnMouseClicked(e-> handleBase(e));
-
-		// }
 		view.btnPlayCard.setOnAction(e -> handlePlayCard());
+		view.btnPlayCard.setOnMouseEntered(e-> view.rotate.play());
+		view.btnPlayCard.setOnMouseExited(e-> view.rotate.stop());
 		view.btnBuyCards.setOnAction(e -> handleBuyCard());
 		view.btnPay4cards.setOnAction(e-> handlePay4cards());
 		view.btnPay4Water.setOnAction(e-> handlePay4Water());

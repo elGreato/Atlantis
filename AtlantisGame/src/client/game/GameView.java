@@ -12,8 +12,12 @@ import gameObjects.MainLand;
 import gameObjects.Pawn;
 import gameObjects.Player;
 import gameObjects.WaterTile;
+import javafx.animation.Animation;
+import javafx.animation.Interpolator;
 import javafx.animation.PauseTransition;
+import javafx.animation.RotateTransition;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -31,6 +35,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
@@ -113,7 +118,11 @@ public class GameView {
 	protected boolean multiCardsMode = false;
 	int maxColIndex;
 	int maxRowIndex;
-
+	
+	
+	//animation stuff for buttons
+	protected final RotateTransition rotate;
+	
 	public GameView() {
 		root.setCenter(mainBoard);
 		mainBoard.setGridLinesVisible(false);
@@ -135,6 +144,24 @@ public class GameView {
 		}
 		// add Buttons
 		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnBuyCards,btnEndMyTurn,temp);
+		vbMainControls.setPadding(new Insets(10,50,50,50));
+		vbMainControls.setSpacing(10);
+		
+		
+		btnPlayCard.setId("btnPlay");
+		 // Create a rotating image and set it as the graphic for the button
+        Image img = new Image(getClass().getResourceAsStream("images4Tiles/yellow_7.jpg"));
+        ImageView iv = new ImageView(img);
+        iv.setFitHeight(30);
+        iv.setFitWidth(20);
+         final Pane holder = new Pane();
+        holder.getChildren().add(iv);
+        rotate = new RotateTransition(Duration.seconds(1), iv);
+        rotate.setByAngle(360);
+        rotate.setCycleCount(Animation.INDEFINITE);
+        rotate.setInterpolator(Interpolator.LINEAR);
+        
+        btnPlayCard.setGraphic(holder);
 
 		// set a random picture for each player
 		int numberOfPicturesAvailable = 4;
@@ -148,13 +175,7 @@ public class GameView {
 		Image image = new Image(getClass().getResourceAsStream(paths[index]));
 		lblPlayerImage.setGraphic(new ImageView(image));
 
-		vbPlayerInfo.getChildren().add(lblName);
-		vbPlayerInfo.getChildren().add(vpHolder);
-		vbPlayerInfo.getChildren().add(lblPlayerImage);
-		vbPlayerInfo.getChildren().add(lblcards);
-		vbPlayerInfo.getChildren().add(hboxCards);
-		vbPlayerInfo.getChildren().add(lbltreasures);
-		vbPlayerInfo.getChildren().add(hbTreasures);
+		vbPlayerInfo.getChildren().addAll(lblName,vpHolder,lblPlayerImage,lblcards,hboxCards,lbltreasures,hbTreasures);
 		vbPlayer.getChildren().add(vbPlayerInfo);
 		hbPlayersInfo.getChildren().add(vbPlayer);
 	
@@ -595,7 +616,7 @@ public class GameView {
         tempStage.setScene(scene);
         tempStage.show();
         tempStage.sizeToScene();
-        PauseTransition delay = new PauseTransition(Duration.seconds(15));
+        PauseTransition delay = new PauseTransition(Duration.seconds(6));
         delay.setOnFinished( event -> tempStage.close() );
         delay.play();
 	
@@ -615,7 +636,7 @@ public class GameView {
         tempStage.setScene(scene);
         tempStage.show();
         tempStage.sizeToScene();
-        PauseTransition delay = new PauseTransition(Duration.seconds(10));
+        PauseTransition delay = new PauseTransition(Duration.seconds(6));
         delay.setOnFinished( event -> tempStage.close() );
         delay.play();
 		
