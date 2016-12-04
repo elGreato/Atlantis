@@ -518,14 +518,14 @@ public class Game implements GameInterface {
 		} else if (gameOver) {
 			// if game over, then the current player should not get two water
 			// bills
-			for (int i = 0; i < numberOfPlayers; i++) {
+		/*	for (int i = 0; i < numberOfPlayers; i++) {
 				if (i != currentPlayerIndex) {
 					users.get(i)
 							.sendMessage(new RefreshPlayerMessage(getName(), currentPlayer, selectedLand, selectedPawn,
 									selectedCard, treasure, newCards, waterBill, waterPassedCount, nextPlayer,
 									victoryPoints, cardsCount));
 				}
-			}
+			}*/
 
 			endThisGame();
 		}

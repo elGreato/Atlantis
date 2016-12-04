@@ -457,7 +457,7 @@ public class GameModel {
 
 	public void handleCalc() {
 		
-		view.lblWaterCalc.setText("");
+		
 		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
 		boolean allSelectedAndNotEnough = true;
@@ -483,8 +483,10 @@ public class GameModel {
 		}
 		// ability to revert only when you can't afford the water that you
 		// jumped
-		if (allSelectedAndNotEnough && totalChosen < waterBill)
+		if (allSelectedAndNotEnough && totalChosen < waterBill&&!gameOver)
 			view.btnRevert.setDisable(false);
+		if (allSelectedAndNotEnough && totalChosen < waterBill&&gameOver)
+			view.btnNotEnough.setDisable(false);
 		if (totalChosen >= waterBill) {
 			view.lblWaterCalc.setText("");
 			view.btnPay4Water.setDisable(false);
@@ -515,7 +517,14 @@ public class GameModel {
 
 	public void handleFinish() {
 		view.stage.close();
+		System.out.println("Stage should be closed by now");
 		msgOut.sendMessage(new CloseGameMessage (gameName));
+		
+	}
+
+	public void handleNotEnough() {
+		pay4Water();
+		
 		
 	}
 

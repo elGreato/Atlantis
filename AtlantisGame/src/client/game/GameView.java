@@ -12,6 +12,7 @@ import gameObjects.MainLand;
 import gameObjects.Pawn;
 import gameObjects.Player;
 import gameObjects.WaterTile;
+import javafx.animation.PauseTransition;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -41,6 +42,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 public class GameView {
 	private BorderPane root = new BorderPane();
@@ -50,7 +53,7 @@ public class GameView {
 	ArrayList<WaterTile> base;
 
 	// fx stuff
-	private Scene scene;
+	protected Scene scene;
 	protected Stage stage;
 	protected Stage tempStage;
 
@@ -64,6 +67,7 @@ public class GameView {
 	protected Button btnRevert = new Button ("Cancel my turn and give me my money back");
 	protected Button temp = new Button ("nigga");
 	protected Button btnFinish= new Button();
+	protected Button btnNotEnough= new Button("I Don't have enough :(");
 
 	// Labels for main game controls
 	private Label lblGameBtns = new Label("Action Buttons");
@@ -530,6 +534,7 @@ public class GameView {
 		VBox payPane = new VBox();
 		multiCardsMode=true;
 		lblPay.setText("");
+		lblWaterCalc.setText("");
 		 lblPay.setText("You have crossed " + String.valueOf(waterPassedCount) + " Water Tiles"
 				+ "\n Now you have to pay " + String.valueOf(waterBill)
 				+ " points, choose the treasures and cards that you wanna pay with");
@@ -549,11 +554,17 @@ public class GameView {
 			 lblPay.setText("The Game is OVER, now all the pawns are moved to MainLand"
 			 		+ "\n BUT you still have to pay for crossing " + String.valueOf(waterPassedCount) + " Water Tiles"
 						+ "\n total amount:  " + String.valueOf(waterBill)
-						+ " points, choose the treasures and cards that you wanna pay with");
+						+ " points, choose the treasures and cards that you wanna pay with\nIf you don't have enough, then we will register negative score for you");
 			lblTurn.setText("The Game Has Finished");
 			lblGameStatus.setText("Game Over!");
+			payPane.getChildren().remove(btnRevert);
+			payPane.getChildren().add(btnNotEnough);
+			btnNotEnough.setDisable(true);
+			tempStage.sizeToScene();
+			
 		}
 		tempStage.sizeToScene();
+		tempStage.setTitle(lblName.getText()+" Water Bill");
 
 	}
 	public void closePayWaterScene(){
@@ -571,28 +582,42 @@ public class GameView {
 	}
 
 	public void IWin(String winner) {
-		tempStage.setOnCloseRequest(e->stage.close());
-		VBox root = new VBox();
-		btnFinish = new Button ("YES I WON");
-		Label lblWin = new Label("Congratulation "+winner+"YOU WON!!!!!!");
-		root.getChildren().addAll(lblWin,btnFinish);
-		Scene winScene = new Scene(root);
+		tempStage.setOnCloseRequest(e->e.consume());
 		tempStage = new Stage();
-		tempStage.setScene(winScene);
-		tempStage.show();
+		tempStage.initStyle(StageStyle.TRANSPARENT);
+        Text text = new Text("Congratulation "+winner+" YOU WON!!!!!!");
+        text.setFont(Font.font("Tahoma",80));
+        text.setFill(Color.DARKBLUE);
+        VBox box = new VBox();
+        box.getChildren().add(text);
+        final Scene scene = new Scene(box);
+        scene.setFill(null);
+        tempStage.setScene(scene);
+        tempStage.show();
+        tempStage.sizeToScene();
+        PauseTransition delay = new PauseTransition(Duration.seconds(15));
+        delay.setOnFinished( event -> stage.close() );
+        delay.play();
 	
 
 	}
 	public void ILose(String winner) {
-		tempStage.setOnCloseRequest(e->stage.close());
-		VBox root = new VBox();
-		btnFinish = new Button ("I will win next time");
-		Label lblLose = new Label("The player "+winner+" got lucky\nUnfortunately, You Lost :( ");
-		root.getChildren().addAll(lblLose,btnFinish);
-		Scene winScene = new Scene(root);
+		tempStage.setOnCloseRequest(e->e.consume());
 		tempStage = new Stage();
-		tempStage.setScene(winScene);
-		tempStage.show();
+		tempStage.initStyle(StageStyle.TRANSPARENT);
+        Text text = new Text("Unfortunatly You lost \nThe Winner is  "+winner);
+        text.setFont(Font.font("Tahoma",80));
+        text.setFill(Color.RED);
+        VBox box = new VBox();
+        box.getChildren().add(text);
+        final Scene scene = new Scene(box);
+        scene.setFill(null);
+        tempStage.setScene(scene);
+        tempStage.show();
+        tempStage.sizeToScene();
+        PauseTransition delay = new PauseTransition(Duration.seconds(10));
+        delay.setOnFinished( event -> tempStage.close() );
+        delay.play();
 		
 
 	}

@@ -32,11 +32,19 @@ public class GameController {
 		view.btnEndMyTurn.setOnAction(e->handleEndMyTurn());
 		view.btnRevert.setOnAction(e-> handleRevert());
 		view.temp.setOnAction(e-> handletemp());
+		view.btnNotEnough.setOnAction(e-> handleNotEnough());
 		view.btnFinish.setOnAction(e-> handleFinish());
 	}
 
 
 	
+	private void handleNotEnough() {
+		model.handleNotEnough();
+		
+	}
+
+
+
 	private void handleFinish() {
 		model.handleFinish();
 	}
