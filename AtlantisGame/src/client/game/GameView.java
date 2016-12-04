@@ -596,7 +596,7 @@ public class GameView {
         tempStage.show();
         tempStage.sizeToScene();
         PauseTransition delay = new PauseTransition(Duration.seconds(15));
-        delay.setOnFinished( event -> stage.close() );
+        delay.setOnFinished( event -> tempStage.close() );
         delay.play();
 	
 
