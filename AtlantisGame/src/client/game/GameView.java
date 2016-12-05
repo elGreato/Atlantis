@@ -121,7 +121,7 @@ public class GameView {
 	
 	
 	//animation stuff for buttons
-	protected final RotateTransition rotate;
+	protected RotateTransition rotate;
 	
 	public GameView() {
 		root.setCenter(mainBoard);
@@ -147,21 +147,11 @@ public class GameView {
 		vbMainControls.setPadding(new Insets(10,50,50,50));
 		vbMainControls.setSpacing(10);
 		
-		
+		btnPlayCard.getStyleClass().add("btn");
 		btnPlayCard.setId("btnPlay");
-		 // Create a rotating image and set it as the graphic for the button
-        Image img = new Image(getClass().getResourceAsStream("images4Tiles/yellow_7.jpg"));
-        ImageView iv = new ImageView(img);
-        iv.setFitHeight(30);
-        iv.setFitWidth(20);
-         final Pane holder = new Pane();
-        holder.getChildren().add(iv);
-        rotate = new RotateTransition(Duration.seconds(1), iv);
-        rotate.setByAngle(360);
-        rotate.setCycleCount(Animation.INDEFINITE);
-        rotate.setInterpolator(Interpolator.LINEAR);
-        
-        btnPlayCard.setGraphic(holder);
+		
+		styleButton(btnPlayCard);
+		
 
 		// set a random picture for each player
 		int numberOfPicturesAvailable = 4;
@@ -195,6 +185,27 @@ public class GameView {
 		stage.setTitle("Atlantis GAME");
 		stage.show();
 
+	}
+
+	private void styleButton(Button btn) {
+		System.out.println(btn.getId());
+		if(btn.getId().equals("btnPlay")){
+		 // Create a rotating image and set it as the graphic for the button
+        Image img = new Image(getClass().getResourceAsStream("images4Tiles/yellow_7.jpg"));
+        ImageView iv = new ImageView(img);
+        iv.setFitHeight(30);
+        iv.setFitWidth(20);
+         final Pane holder = new Pane();
+        holder.getChildren().add(iv);
+        rotate = new RotateTransition(Duration.seconds(1), iv);
+        rotate.setByAngle(360);
+        rotate.setCycleCount(Animation.INDEFINITE);
+        rotate.setInterpolator(Interpolator.LINEAR);
+        
+        btn.setGraphic(holder);
+		}
+		
+		
 	}
 
 	// those are index for base Children
