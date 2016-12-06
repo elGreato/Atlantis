@@ -176,7 +176,7 @@ public class GameView {
 		root.setTop(vbGameStatus);
 
 		stage = new Stage();
-		mainBoard.setVgap(3);
+		mainBoard.setVgap(3);s
 		mainBoard.setHgap(3);
 		scene = new Scene(root);
 		final Image im = new Image(getClass().getResourceAsStream("images4mainBoard/waterback.jpeg"));
