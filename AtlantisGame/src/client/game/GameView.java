@@ -147,10 +147,12 @@ public class GameView {
 		vbMainControls.setPadding(new Insets(10,50,50,50));
 		vbMainControls.setSpacing(10);
 		
-		btnPlayCard.getStyleClass().add("btn");
+		
 		btnPlayCard.setId("btnPlay");
+		btnBuyCards.setId("btnBuy");
 		
 		styleButton(btnPlayCard);
+		styleButton(btnBuyCards);
 		
 
 		// set a random picture for each player
@@ -191,7 +193,7 @@ public class GameView {
 		System.out.println(btn.getId());
 		if(btn.getId().equals("btnPlay")){
 		 // Create a rotating image and set it as the graphic for the button
-        Image img = new Image(getClass().getResourceAsStream("images4Tiles/yellow_7.jpg"));
+        Image img = new Image(getClass().getResourceAsStream("images4Btns/yellow_7.jpg"));
         ImageView iv = new ImageView(img);
         iv.setFitHeight(30);
         iv.setFitWidth(20);
@@ -203,6 +205,20 @@ public class GameView {
         rotate.setInterpolator(Interpolator.LINEAR);
         
         btn.setGraphic(holder);
+		}
+		if(btn.getId().equals("btnBuy")){
+			
+			Image img = new Image(getClass().getResourceAsStream("images4Btns/dollar.png"));
+	        ImageView iv = new ImageView(img);
+	        iv.setFitHeight(30);
+	        iv.setFitWidth(20);
+	         final Pane holder = new Pane();
+	        holder.getChildren().add(iv);
+			
+	        btn.setGraphic(holder);
+			
+			
+			
 		}
 		
 		
