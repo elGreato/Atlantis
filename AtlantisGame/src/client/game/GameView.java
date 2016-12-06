@@ -68,18 +68,18 @@ public class GameView {
 	protected Button btnPay4Water = new Button("Pay");
 	protected Button btnPay4cards = new Button("Pay");
 	protected Button btnCalc = new Button("Calculate what I chose");
-	protected Button btnEndMyTurn = new Button ("End Turn");
-	protected Button btnRevert = new Button ("Cancel my turn and give me my money back");
-	protected Button temp = new Button ("nigga");
-	protected Button btnFinish= new Button();
-	protected Button btnNotEnough= new Button("I Don't have enough :(");
+	protected Button btnEndMyTurn = new Button("End Turn");
+	protected Button btnRevert = new Button("Cancel my turn and give me my money back");
+	protected Button temp = new Button("nigga");
+	protected Button btnFinish = new Button();
+	protected Button btnNotEnough = new Button("I Don't have enough :(");
 
 	// Labels for main game controls
 	private Label lblGameBtns = new Label("Action Buttons");
 	private Label lblGameStatus = new Label();
 	private Label lblTurn = new Label();
 	protected Label lblWaterCalc = new Label();
-	private Label lblPay= new Label();
+	private Label lblPay = new Label();
 	// Vbox to hold buttons and HBox to hold Game status
 	private VBox vbMainControls = new VBox();
 	private VBox vbGameStatus = new VBox();
@@ -118,11 +118,10 @@ public class GameView {
 	protected boolean multiCardsMode = false;
 	int maxColIndex;
 	int maxRowIndex;
-	
-	
-	//animation stuff for buttons
+
+	// animation stuff for buttons
 	protected RotateTransition rotate;
-	
+
 	public GameView() {
 		root.setCenter(mainBoard);
 		mainBoard.setGridLinesVisible(false);
@@ -143,17 +142,16 @@ public class GameView {
 			mainBoard.getRowConstraints().add(con);
 		}
 		// add Buttons
-		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnBuyCards,btnEndMyTurn,temp);
-		vbMainControls.setPadding(new Insets(10,50,50,50));
+		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnBuyCards, btnEndMyTurn, temp);
+		vbMainControls.setPadding(new Insets(10, 50, 50, 50));
 		vbMainControls.setSpacing(10);
-		
-		
+
 		btnPlayCard.setId("btnPlay");
 		btnBuyCards.setId("btnBuy");
-		
+		btnEndMyTurn.setId("btnEnd");
+
 		styleButton(btnPlayCard);
 		styleButton(btnBuyCards);
-		
 
 		// set a random picture for each player
 		int numberOfPicturesAvailable = 4;
@@ -167,10 +165,11 @@ public class GameView {
 		Image image = new Image(getClass().getResourceAsStream(paths[index]));
 		lblPlayerImage.setGraphic(new ImageView(image));
 
-		vbPlayerInfo.getChildren().addAll(lblName,vpHolder,lblPlayerImage,lblcards,hboxCards,lbltreasures,hbTreasures);
+		vbPlayerInfo.getChildren().addAll(lblName, vpHolder, lblPlayerImage, lblcards, hboxCards, lbltreasures,
+				hbTreasures);
 		vbPlayer.getChildren().add(vbPlayerInfo);
 		hbPlayersInfo.getChildren().add(vbPlayer);
-	
+
 		vbGameStatus.getChildren().addAll(lblGameStatus, lblTurn);
 		root.setBottom(hbPlayersInfo);
 		root.setRight(vbMainControls);
@@ -191,37 +190,36 @@ public class GameView {
 
 	private void styleButton(Button btn) {
 		System.out.println(btn.getId());
-		if(btn.getId().equals("btnPlay")){
-		 // Create a rotating image and set it as the graphic for the button
-        Image img = new Image(getClass().getResourceAsStream("images4Btns/yellow_7.jpg"));
-        ImageView iv = new ImageView(img);
-        iv.setFitHeight(30);
-        iv.setFitWidth(20);
-         final Pane holder = new Pane();
-        holder.getChildren().add(iv);
-        rotate = new RotateTransition(Duration.seconds(1), iv);
-        rotate.setByAngle(360);
-        rotate.setCycleCount(Animation.INDEFINITE);
-        rotate.setInterpolator(Interpolator.LINEAR);
-        
-        btn.setGraphic(holder);
+		if (btn.getId().equals("btnPlay")) {
+			// Create a rotating image and set it as the graphic for the button
+			Image img = new Image(getClass().getResourceAsStream("images4Btns/yellow.jpg"));
+			ImageView iv = new ImageView(img);
+			iv.setFitHeight(30);
+			iv.setFitWidth(20);
+			final Pane holder = new Pane();
+			holder.getChildren().add(iv);
+			rotate = new RotateTransition(Duration.seconds(1), iv);
+			rotate.setByAngle(360);
+			rotate.setCycleCount(Animation.INDEFINITE);
+			rotate.setInterpolator(Interpolator.LINEAR);
+			btn.setMinWidth(180);
+			btn.setMinHeight(90);
+			btn.setGraphic(holder);
 		}
-		if(btn.getId().equals("btnBuy")){
-			
+		if (btn.getId().equals("btnBuy")) {
+
 			Image img = new Image(getClass().getResourceAsStream("images4Btns/dollar.png"));
-	        ImageView iv = new ImageView(img);
-	        iv.setFitHeight(30);
-	        iv.setFitWidth(20);
-	         final Pane holder = new Pane();
-	        holder.getChildren().add(iv);
-			
-	        btn.setGraphic(holder);
-			
-			
-			
+			ImageView iv = new ImageView(img);
+			iv.setFitHeight(30);
+			iv.setFitWidth(20);
+			final Pane holder = new Pane();
+			holder.getChildren().add(iv);
+			btn.setMinWidth(180);
+			btn.setMinHeight(90);
+			btn.setGraphic(holder);
+
 		}
-		
-		
+
 	}
 
 	// those are index for base Children
@@ -260,7 +258,7 @@ public class GameView {
 		for (int i = 0; i < base.size(); i++) {
 
 			WaterTile water = base.get(i);
-	
+
 			water.convertToChildren();
 
 			if (water.getChildren().size() != 0) {
@@ -270,7 +268,7 @@ public class GameView {
 					Rectangle rec = new Rectangle();
 					rec.setWidth(68.00f);
 					rec.setHeight(68.00f);
-				//	rec.setFill(LandTile.getFillColor(tile));
+					// rec.setFill(LandTile.getFillColor(tile));
 					rec.setFill(Color.TRANSPARENT);
 					tile.getChildren().add(tile.getColor().addLandTileImage(tile.getLandValue()));
 					tile.getChildren().add(rec);
@@ -336,11 +334,10 @@ public class GameView {
 		recColor.setWidth(150);
 		recColor.setFill(Pawn.FillColor(opponent));
 		vbOpponentInfo.getChildren().addAll(lblopponentName, lblopponentCardCount, hbEnemyTreasures, recColor);
-		
-		mapOpponents.put(opponent.getPlayerIndex(),vbOpponentInfo);
+
+		mapOpponents.put(opponent.getPlayerIndex(), vbOpponentInfo);
 
 		hbPlayersInfo.getChildren().add(vbOpponentInfo);
-
 
 		// i need to find a way to get the circle of the pawn
 		for (Pawn p : opponent.getPawns()) {
@@ -392,7 +389,6 @@ public class GameView {
 		lblTurn.setText("It is " + curPlayer + " turn");
 		lblTurn.setTextFill(Color.BLACK);
 		lblTurn.setFont(new Font("Cambria", 25));
-		
 
 	}
 
@@ -409,9 +405,10 @@ public class GameView {
 		rec.setFill(Color.TRANSPARENT);
 		c.setRec(rec);
 		c.getChildren().add(rec);
-		if(c.getColor()!=null){
-		c.getChildren().add(c.getColor().addCardImage());}
-		else c.getRec().setFill(Color.BLACK);
+		if (c.getColor() != null) {
+			c.getChildren().add(c.getColor().addCardImage());
+		} else
+			c.getRec().setFill(Color.BLACK);
 		getHboxCards().getChildren().add(c);
 
 	}
@@ -424,17 +421,18 @@ public class GameView {
 					cc.getRec().setStroke(Color.TRANSPARENT);
 					cc.setCardSelected(false);
 				}
-			}}
-			// this is to give the user ability to unselect a card when he
-			// clicks again
-			if (!c.isCardSelected()) {
-				c.getRec().setStroke(Color.BLACK);
-				c.setCardSelected(true);
-			} else {
-				c.getRec().setStroke(Color.TRANSPARENT);
-				c.setCardSelected(false);
 			}
-		
+		}
+		// this is to give the user ability to unselect a card when he
+		// clicks again
+		if (!c.isCardSelected()) {
+			c.getRec().setStroke(Color.BLACK);
+			c.setCardSelected(true);
+		} else {
+			c.getRec().setStroke(Color.TRANSPARENT);
+			c.setCardSelected(false);
+		}
+
 	}
 
 	private void handleTreasure(LandTile treasure) {
@@ -580,15 +578,15 @@ public class GameView {
 
 	public void showWaterBill(int waterBill, int waterPassedCount, boolean gameFinished) {
 		VBox payPane = new VBox();
-		multiCardsMode=true;
+		multiCardsMode = true;
 		lblPay.setText("");
 		lblWaterCalc.setText("");
-		 lblPay.setText("You have crossed " + String.valueOf(waterPassedCount) + " Water Tiles"
+		lblPay.setText("You have crossed " + String.valueOf(waterPassedCount) + " Water Tiles"
 				+ "\n Now you have to pay " + String.valueOf(waterBill)
 				+ " points, choose the treasures and cards that you wanna pay with");
-		
+
 		btnPay4Water.setDisable(true);
-		payPane.getChildren().addAll(lblPay,lblWaterCalc, hbTreasures, hboxCards,btnCalc, btnPay4Water, btnRevert);
+		payPane.getChildren().addAll(lblPay, lblWaterCalc, hbTreasures, hboxCards, btnCalc, btnPay4Water, btnRevert);
 		Scene payScene = new Scene(payPane);
 		tempStage = new Stage();
 		tempStage.setScene(payScene);
@@ -597,77 +595,77 @@ public class GameView {
 		tempStage.setTitle("Payment for water");
 		tempStage.show();
 		tempStage.setAlwaysOnTop(true);
-		tempStage.setOnCloseRequest(e-> e.consume());
-		if(gameFinished){
-			 lblPay.setText("The Game is OVER, now all the pawns are moved to MainLand"
-			 		+ "\n BUT you still have to pay for crossing " + String.valueOf(waterPassedCount) + " Water Tiles"
-						+ "\n total amount:  " + String.valueOf(waterBill)
-						+ " points, choose the treasures and cards that you wanna pay with\nIf you don't have enough, then we will register negative score for you");
+		tempStage.setOnCloseRequest(e -> e.consume());
+		if (gameFinished) {
+			lblPay.setText("The Game is OVER, now all the pawns are moved to MainLand"
+					+ "\n BUT you still have to pay for crossing " + String.valueOf(waterPassedCount) + " Water Tiles"
+					+ "\n total amount:  " + String.valueOf(waterBill)
+					+ " points, choose the treasures and cards that you wanna pay with\nIf you don't have enough, then we will register negative score for you");
 			lblTurn.setText("The Game Has Finished");
 			lblGameStatus.setText("Game Over!");
 			payPane.getChildren().remove(btnRevert);
 			payPane.getChildren().add(btnNotEnough);
 			btnNotEnough.setDisable(true);
 			tempStage.sizeToScene();
-			
+
 		}
 		tempStage.sizeToScene();
-		tempStage.setTitle(lblName.getText()+" Water Bill");
+		tempStage.setTitle(lblName.getText() + " Water Bill");
 
 	}
-	public void closePayWaterScene(){
+
+	public void closePayWaterScene() {
 		vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 1, hbTreasures);
 		vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 2, hboxCards);
 		lblPay.setText(" ");
-		multiCardsMode=false;
+		multiCardsMode = false;
 		tempStage.close();
 	}
 
 	public void setCarsCountForEnemy(int playerIndex, int cardsCount) {
 		VBox enemy = (VBox) mapOpponents.get(playerIndex);
-		((Label)enemy.getChildren().get(1)).setText(String.valueOf(cardsCount));
-		
+		((Label) enemy.getChildren().get(1)).setText(String.valueOf(cardsCount));
+
 	}
 
 	public void IWin(String winner) {
-		tempStage.setOnCloseRequest(e->e.consume());
+		tempStage.setOnCloseRequest(e -> e.consume());
 		tempStage = new Stage();
 		tempStage.initStyle(StageStyle.TRANSPARENT);
-        Text text = new Text("Congratulation "+winner+" YOU WON!!!!!!");
-        text.setFont(Font.font("Tahoma",80));
-        text.setFill(Color.DARKBLUE);
-        VBox box = new VBox();
-        box.getChildren().add(text);
-        final Scene scene = new Scene(box);
-        scene.setFill(null);
-        tempStage.setScene(scene);
-        tempStage.show();
-        tempStage.sizeToScene();
-        PauseTransition delay = new PauseTransition(Duration.seconds(6));
-        delay.setOnFinished( event -> tempStage.close() );
-        delay.play();
-	
+		Text text = new Text("Congratulation " + winner + " YOU WON!!!!!!");
+		text.setFont(Font.font("Tahoma", 80));
+		text.setFill(Color.DARKBLUE);
+		VBox box = new VBox();
+		box.getChildren().add(text);
+		final Scene scene = new Scene(box);
+		scene.setFill(null);
+		tempStage.setScene(scene);
+		tempStage.show();
+		tempStage.sizeToScene();
+		PauseTransition delay = new PauseTransition(Duration.seconds(6));
+		delay.setOnFinished(event -> tempStage.close());
+		delay.play();
 
 	}
+
 	public void ILose(String winner) {
-		tempStage.setOnCloseRequest(e->e.consume());
+		tempStage.setOnCloseRequest(e -> e.consume());
 		tempStage = new Stage();
 		tempStage.initStyle(StageStyle.TRANSPARENT);
-        Text text = new Text("Unfortunatly You lost \nThe Winner is  "+winner);
-        text.setFont(Font.font("Tahoma",80));
-        text.setFill(Color.RED);
-        VBox box = new VBox();
-        box.getChildren().add(text);
-        final Scene scene = new Scene(box);
-        scene.setFill(null);
-        tempStage.setScene(scene);
-        tempStage.show();
-        tempStage.sizeToScene();
-        PauseTransition delay = new PauseTransition(Duration.seconds(6));
-        delay.setOnFinished( event -> tempStage.close() );
-        delay.play();
-		
+		Text text = new Text("Unfortunatly You lost \nThe Winner is  " + winner);
+		text.setFont(Font.font("Tahoma", 80));
+		text.setFill(Color.RED);
+		VBox box = new VBox();
+		box.getChildren().add(text);
+		final Scene scene = new Scene(box);
+		scene.setFill(null);
+		tempStage.setScene(scene);
+		tempStage.show();
+		tempStage.sizeToScene();
+		PauseTransition delay = new PauseTransition(Duration.seconds(6));
+		delay.setOnFinished(event -> tempStage.close());
+		delay.play();
 
 	}
-	
+
 }
