@@ -674,5 +674,10 @@ public class GameView {
 
 	}
 
+	public void showDontUserAllCardsAlert() {
+		lblPay.setText("you are not allowed to pay all your cards\n when you land on a tile that has a pawn already");
+
+	}
+
 
 }

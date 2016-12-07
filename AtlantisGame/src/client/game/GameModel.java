@@ -41,6 +41,7 @@ public class GameModel {
 	protected Player currentPlayer;
 	private boolean nextPlayer = true;
 	private boolean gameOver = false;
+	private boolean landedOnPawn=false;
 
 	public String getGameName() {
 		return gameName;
@@ -119,6 +120,7 @@ public class GameModel {
 						view.removeCardFromHand(selectedCard);
 						msgOut.sendMessage(new PawnCardSelectedMessage(gameName, currentPlayer.getPlayerIndex(),
 								selectedPawn, selectedCard));
+						landedOnPawn=false;
 					} else
 						view.selectCardPlease();
 				} else
@@ -134,6 +136,7 @@ public class GameModel {
 			RefreshPlayerMessage message = (RefreshPlayerMessage) msgIn;
 			// release the locked pawns
 			if (message.getCurrentPlayer().getPlayerIndex() != currentPlayer.getPlayerIndex()) {
+				view.setVpForEnemy(message.getCurrentPlayer().getPlayerIndex(), message.getVictoryPoints());
 				for (Pawn p : currentPlayer.getPawns()) {
 					if (!p.ReachedMainLand())
 						p.setOnMouseClicked(e -> view.handlePawn(p));
@@ -168,6 +171,7 @@ public class GameModel {
 		// inform player to play another card
 		if (msgIn instanceof PlayAnotherCardMessage) {
 			nextPlayer = false;
+			landedOnPawn=true;
 			for (Pawn p : currentPlayer.getPawns()) {
 				if (((PlayAnotherCardMessage) msgIn).getSelectedPawn().getPawnId() != p.getPawnId()) {
 					p.setOnMouseClicked(null);
@@ -429,7 +433,7 @@ public class GameModel {
 	}
 
 	private void payForPassingWater(int waterBill, int waterPassedCount, boolean gameFinished) {
-		if (waterPassedCount > 0) {
+		if (waterPassedCount > 0||waterBill!=0) {
 
 			this.waterBill = waterBill;
 			view.showWaterBill(waterBill, waterPassedCount, gameFinished);
@@ -462,7 +466,8 @@ public class GameModel {
 
 		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
-		boolean allSelectedAndNotEnough = true;
+		boolean allCardsSelected = true;
+		boolean allTreasuresSelected=true;
 		int totalChosen = 0;
 		for (int i = 0; i < currentPlayer.getPlayerHand().getTreasures().size(); i++) {
 			LandTile treasureSelected = currentPlayer.getPlayerHand().getTreasures().get(i);
@@ -471,7 +476,7 @@ public class GameModel {
 				totalChosen += treasureSelected.getLandValue();
 
 			} else
-				allSelectedAndNotEnough = false;
+				allTreasuresSelected = false;
 
 		}
 		for (int i = 0; i < currentPlayer.getPlayerHand().getNumCards(); i++) {
@@ -481,14 +486,17 @@ public class GameModel {
 				totalChosen += 1;
 
 			} else
-				allSelectedAndNotEnough = false;
+				allCardsSelected = false;
 		}
 		// ability to revert only when you can't afford the water that you
 		// jumped
-		if (allSelectedAndNotEnough && totalChosen < waterBill && !gameOver)
+		if (allCardsSelected&&allTreasuresSelected && totalChosen < waterBill && !gameOver)
 			view.btnRevert.setDisable(false);
-		if (allSelectedAndNotEnough && totalChosen < waterBill && gameOver)
+		if (allCardsSelected&&allTreasuresSelected && totalChosen < waterBill && gameOver)
 			view.btnNotEnough.setDisable(false);
+		// if the pawn landed on another pawn he should not be allowed to pay all cards, to prevent cheating
+		
+			
 		if (totalChosen >= waterBill) {
 			view.lblWaterCalc.setText("");
 			view.btnPay4Water.setDisable(false);
@@ -499,6 +507,11 @@ public class GameModel {
 			view.lblWaterCalc.setText("");
 			view.lblWaterCalc.setText(
 					"This is not enough!" + "You still need to pay extra" + String.valueOf(waterBill - totalChosen));
+		}
+		if(landedOnPawn==true&&allCardsSelected){
+			view.btnPay4Water.setDisable(true);
+			view.showDontUserAllCardsAlert();
+		
 		}
 
 	}

@@ -4,6 +4,7 @@ package gameObjects;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Random;
 
 import messageObjects.AtlantisMainLandMessage;
 import messageObjects.InGameMessage;
@@ -234,8 +235,10 @@ public class Game implements GameInterface {
 			// HERE ADD THE REFERSH TO COUNT AND VP
 			int numberOfPlayers = getNumOfRegisteredPlayers();
 			for (int i = 0; i < numberOfPlayers; i++) {
-				users.get(i).sendMessage(new PaymentDoneMessage(getName(), player.getPlayerIndex(),
-						message.getCardsChosen(), message.getTreasuresChosen(),player.countVictoryPoints(),player.getPlayerHand().getNumCards() ));
+				users.get(i)
+						.sendMessage(new PaymentDoneMessage(getName(), player.getPlayerIndex(),
+								message.getCardsChosen(), message.getTreasuresChosen(), player.countVictoryPoints(),
+								player.getPlayerHand().getNumCards()));
 
 			}
 			if (message.isNextPlayer() && !gameOver) {
@@ -516,16 +519,6 @@ public class Game implements GameInterface {
 								victoryPoints, cardsCount));
 			}
 		} else if (gameOver) {
-			// if game over, then the current player should not get two water
-			// bills
-		/*	for (int i = 0; i < numberOfPlayers; i++) {
-				if (i != currentPlayerIndex) {
-					users.get(i)
-							.sendMessage(new RefreshPlayerMessage(getName(), currentPlayer, selectedLand, selectedPawn,
-									selectedCard, treasure, newCards, waterBill, waterPassedCount, nextPlayer,
-									victoryPoints, cardsCount));
-				}
-			}*/
 
 			endThisGame();
 		}
@@ -650,6 +643,17 @@ public class Game implements GameInterface {
 				player.getPlayerHand().addCard(newCard);
 				result.add(newCard);
 			}
+		}
+		// Here we add our own rule, the black Card which allows player to use it to jump 
+		// with a pawn right away to main land, however the chance to get it is relatively low
+		Random rand = new Random();
+		int lucky = rand.nextInt(30);
+		if(lucky==13){
+			Card blackCard = new Card(666, null);	
+			blackCard.setOwner(currentPlayer);
+			player.getPlayerHand().addCard(blackCard);
+			result.add(blackCard);
+			users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "WOW! YOU GOT A BLACK CARD!"));
 		}
 		return result;
 	}
