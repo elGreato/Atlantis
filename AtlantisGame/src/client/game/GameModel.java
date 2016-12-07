@@ -39,8 +39,8 @@ public class GameModel {
 	private ClientLobbyInterface msgOut;
 	private int waterBill = 0;
 	protected Player currentPlayer;
-	private boolean nextPlayer=true;
-	private boolean gameOver =false;
+	private boolean nextPlayer = true;
+	private boolean gameOver = false;
 
 	public String getGameName() {
 		return gameName;
@@ -135,27 +135,27 @@ public class GameModel {
 			// release the locked pawns
 			if (message.getCurrentPlayer().getPlayerIndex() != currentPlayer.getPlayerIndex()) {
 				for (Pawn p : currentPlayer.getPawns()) {
-					if(!p.ReachedMainLand())
-					p.setOnMouseClicked(e -> view.handlePawn(p));
+					if (!p.ReachedMainLand())
+						p.setOnMouseClicked(e -> view.handlePawn(p));
 				}
-				//set the cards count for each enemy
-				view.setCarsCountForEnemy(message.getCurrentPlayer().getPlayerIndex(),message.getCardsCount());
+				// set the cards count for each enemy
+				view.setCardCountForEnemy(message.getCurrentPlayer().getPlayerIndex(), message.getCardsCount());
 			}
 			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 				nextPlayer = message.isNextPlayer();
 				view.vpHolder.setText(String.valueOf(message.getVictoryPoints()));
-				payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(),gameOver);
+				payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(), gameOver);
 			}
 			LandTile treasure = message.getTreasure();
 			ArrayList<Card> newCards = message.getNewCards();
 			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex() && newCards != null) {
 				addCardToPlayer(newCards);
 
-			} 
+			}
 			if (treasure != null) {
 				if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 					givePlayerTreasure(treasure);
-					
+
 				} else {
 					giveEnemyTreasure(message.getCurrentPlayer().getPlayerIndex(), treasure);
 				}
@@ -167,7 +167,7 @@ public class GameModel {
 		}
 		// inform player to play another card
 		if (msgIn instanceof PlayAnotherCardMessage) {
-			nextPlayer=false;
+			nextPlayer = false;
 			for (Pawn p : currentPlayer.getPawns()) {
 				if (((PlayAnotherCardMessage) msgIn).getSelectedPawn().getPawnId() != p.getPawnId()) {
 					p.setOnMouseClicked(null);
@@ -219,6 +219,8 @@ public class GameModel {
 					view.removeEnemyTreasures(message.getPlayerIndex(), paidTreasure);
 
 				}
+				view.setVpForEnemy(message.getPlayerIndex(), message.getVp());
+				view.setCardCountForEnemy(message.getPlayerIndex(), message.getCardCount());
 			}
 		}
 		if (msgIn instanceof EndMYTurnMessage) {
@@ -239,21 +241,22 @@ public class GameModel {
 			assignThenMovePawn(message.getPlayerIndex(), message.getSelectedPawn(), message.getSelectedLand());
 
 		}
-		if(msgIn instanceof LastBillMessage){
+		if (msgIn instanceof LastBillMessage) {
 			System.out.println("last bill received");
 			// true is for the game finished
 			LastBillMessage message = (LastBillMessage) msgIn;
-			System.out.println("Bill amount: "+message.getWaterBill()+" you passed: "+message.getWaterPassedCount());
-			gameOver= true;
-			payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(),gameOver);
-			
+			System.out.println(
+					"Bill amount: " + message.getWaterBill() + " you passed: " + message.getWaterPassedCount());
+			gameOver = true;
+			payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(), gameOver);
+
 		}
-		if(msgIn instanceof ResultMessage){
+		if (msgIn instanceof ResultMessage) {
 			ResultMessage message = (ResultMessage) msgIn;
-			if(message.getWinner()==currentPlayer.getPlayerIndex()){
+			if (message.getWinner() == currentPlayer.getPlayerIndex()) {
 				view.IWin(currentPlayer.getPlayerName());
-			}
-			else view.ILose(message.getWinnerName());
+			} else
+				view.ILose(message.getWinnerName());
 		}
 
 	}
@@ -359,7 +362,6 @@ public class GameModel {
 			}
 
 		}
-
 	}
 
 	public void startTurn(Player player) {
@@ -430,11 +432,10 @@ public class GameModel {
 		if (waterPassedCount > 0) {
 
 			this.waterBill = waterBill;
-			view.showWaterBill(waterBill, waterPassedCount,gameFinished);
-			System.out.println("reached show water bill , is it ended ?"+gameFinished);
-		}
-		else if(waterPassedCount<1&&nextPlayer&&!gameFinished)msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(),true));
-		
+			view.showWaterBill(waterBill, waterPassedCount, gameFinished);
+			System.out.println("reached show water bill , is it ended ?" + gameFinished);
+		} else if (waterPassedCount < 1 && nextPlayer && !gameFinished)
+			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(), true));
 
 	}
 
@@ -451,15 +452,14 @@ public class GameModel {
 				view.removeCardFromHand(cardSelected);
 			}
 		}
-		msgOut.sendMessage(
-				new WaterPaidMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen, cardsChosen,nextPlayer));
+		msgOut.sendMessage(new WaterPaidMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen, cardsChosen,
+				nextPlayer));
 		view.closePayWaterScene();
 
 	}
 
 	public void handleCalc() {
-		
-		
+
 		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
 		boolean allSelectedAndNotEnough = true;
@@ -485,9 +485,9 @@ public class GameModel {
 		}
 		// ability to revert only when you can't afford the water that you
 		// jumped
-		if (allSelectedAndNotEnough && totalChosen < waterBill&&!gameOver)
+		if (allSelectedAndNotEnough && totalChosen < waterBill && !gameOver)
 			view.btnRevert.setDisable(false);
-		if (allSelectedAndNotEnough && totalChosen < waterBill&&gameOver)
+		if (allSelectedAndNotEnough && totalChosen < waterBill && gameOver)
 			view.btnNotEnough.setDisable(false);
 		if (totalChosen >= waterBill) {
 			view.lblWaterCalc.setText("");
@@ -506,7 +506,7 @@ public class GameModel {
 	public void handleEndMyTurn() {
 		// this is not considered a normal end cuz he pressed the button
 		if (currentPlayer.isYourTurn()) {
-			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(),false));
+			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(), false));
 
 		} else
 			view.showNotYourTurnAlert();
@@ -520,14 +520,13 @@ public class GameModel {
 	public void handleFinish() {
 		view.stage.close();
 		System.out.println("Stage should be closed by now");
-		msgOut.sendMessage(new CloseGameMessage (gameName));
-		
+		msgOut.sendMessage(new CloseGameMessage(gameName));
+
 	}
 
 	public void handleNotEnough() {
 		pay4Water();
-		
-		
+
 	}
 
 }

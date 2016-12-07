@@ -58,3 +58,11 @@
     
     -fx-font-size: 1.1em;
 }
+#root{
+	-fx-background-image: url("images4mainBoard/waterback.jpeg");
+	-fx-background-repeat: stretch;
+	-fx-background-size: cover;
+}
+
+
+

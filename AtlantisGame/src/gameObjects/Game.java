@@ -235,7 +235,7 @@ public class Game implements GameInterface {
 			int numberOfPlayers = getNumOfRegisteredPlayers();
 			for (int i = 0; i < numberOfPlayers; i++) {
 				users.get(i).sendMessage(new PaymentDoneMessage(getName(), player.getPlayerIndex(),
-						message.getCardsChosen(), message.getTreasuresChosen()));
+						message.getCardsChosen(), message.getTreasuresChosen(),player.countVictoryPoints(),player.getPlayerHand().getNumCards() ));
 
 			}
 			if (message.isNextPlayer() && !gameOver) {

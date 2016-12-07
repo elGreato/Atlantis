@@ -12,14 +12,18 @@ public class PaymentDoneMessage extends InGameMessage implements Serializable {
 	int playerIndex;
 	ArrayList<Card> cardsChosen;
 	ArrayList<LandTile> treasuresChosen;
+	int vp;
+	int cardCount;
 	
 	
 	public PaymentDoneMessage(String name, int playerIndex, ArrayList<Card> cardsChosen,
-			ArrayList<LandTile> treasuresChosen) {
+			ArrayList<LandTile> treasuresChosen, int vp, int cardCount) {
 		super(name);
 		this.playerIndex=playerIndex;
 		this.cardsChosen=cardsChosen;
 		this.treasuresChosen=treasuresChosen;
+		this.vp=vp;
+		this.cardCount=cardCount;
 	}
 
 
@@ -27,19 +31,8 @@ public class PaymentDoneMessage extends InGameMessage implements Serializable {
 		return playerIndex;
 	}
 
-
-	public void setPlayerIndex(int playerIndex) {
-		this.playerIndex = playerIndex;
-	}
-
-
 	public ArrayList<Card> getCardsChosen() {
 		return cardsChosen;
-	}
-
-
-	public void setCardsChosen(ArrayList<Card> cardsChosen) {
-		this.cardsChosen = cardsChosen;
 	}
 
 
@@ -48,8 +41,15 @@ public class PaymentDoneMessage extends InGameMessage implements Serializable {
 	}
 
 
-	public void setTreasuresChosen(ArrayList<LandTile> treasuresChosen) {
-		this.treasuresChosen = treasuresChosen;
+	public int getVp() {
+		return vp;
 	}
+
+
+	public int getCardCount() {
+		return cardCount;
+	}
+
+
 
 }

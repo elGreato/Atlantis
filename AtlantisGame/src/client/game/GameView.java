@@ -111,10 +111,7 @@ public class GameView {
 	private Label lblcards = new Label("Your Cards");
 	private Label lbltreasures = new Label("Your Treasures");
 
-	// index for pawns on Atlantis
-	private int y = 0;
-	private int x = 5;
-
+	
 	protected boolean multiCardsMode = false;
 	int maxColIndex;
 	int maxRowIndex;
@@ -179,12 +176,11 @@ public class GameView {
 		mainBoard.setVgap(3);
 		mainBoard.setHgap(3);
 		scene = new Scene(root);
-		final Image im = new Image(getClass().getResourceAsStream("images4mainBoard/waterback.jpeg"));
-		mainBoard.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
-				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+		root.setId("root");
 		stage.setScene(scene);
 		stage.setTitle("Atlantis GAME");
 		stage.show();
+		stage.setResizable(false);
 
 	}
 
@@ -323,9 +319,12 @@ public class GameView {
 		VBox vbOpponentInfo = new VBox();
 		Label lblopponentName = new Label();
 		Label lblopponentCardCount = new Label();
+		Label lblOpponentVp = new Label();
+		
 		lblopponentName.setText(opponent.getPlayerName());
 		lblopponentCardCount
 				.setText("This enemy has " + String.valueOf(opponent.getPlayerHand().getNumCards()) + " cards\t");
+		lblOpponentVp.setText("And he has "+String.valueOf(opponent.countVictoryPoints()+" Victory Points\t"));
 		HBox hbEnemyTreasures = new HBox();
 		Integer index = opponent.getPlayerIndex();
 		hbEnemiesTreasures.put(index, hbEnemyTreasures);
@@ -333,7 +332,7 @@ public class GameView {
 		recColor.setHeight(10);
 		recColor.setWidth(150);
 		recColor.setFill(Pawn.FillColor(opponent));
-		vbOpponentInfo.getChildren().addAll(lblopponentName, lblopponentCardCount, hbEnemyTreasures, recColor);
+		vbOpponentInfo.getChildren().addAll(lblopponentName, lblopponentCardCount,lblOpponentVp, hbEnemyTreasures, recColor);
 
 		mapOpponents.put(opponent.getPlayerIndex(), vbOpponentInfo);
 
@@ -576,6 +575,17 @@ public class GameView {
 		}
 	}
 
+	public void setVpForEnemy(int index, int vp) {
+		VBox enemy = (VBox) mapOpponents.get(index);
+		((Label) enemy.getChildren().get(2)).setText(String.valueOf(vp));
+
+	}
+	public void setCardCountForEnemy(int playerIndex, int cardsCount) {
+		VBox enemy = (VBox) mapOpponents.get(playerIndex);
+		((Label) enemy.getChildren().get(1)).setText(String.valueOf(cardsCount));
+
+	}
+
 	public void showWaterBill(int waterBill, int waterPassedCount, boolean gameFinished) {
 		VBox payPane = new VBox();
 		multiCardsMode = true;
@@ -622,11 +632,7 @@ public class GameView {
 		tempStage.close();
 	}
 
-	public void setCarsCountForEnemy(int playerIndex, int cardsCount) {
-		VBox enemy = (VBox) mapOpponents.get(playerIndex);
-		((Label) enemy.getChildren().get(1)).setText(String.valueOf(cardsCount));
 
-	}
 
 	public void IWin(String winner) {
 		tempStage.setOnCloseRequest(e -> e.consume());
@@ -667,5 +673,6 @@ public class GameView {
 		delay.play();
 
 	}
+
 
 }
