@@ -96,6 +96,7 @@ public class GameAI {
 			
 			
 		} else if (igm instanceof LastBillMessage) {
+			System.out.println("Last Bill received");
 			int totalPayment = ((LastBillMessage)igm).getWaterBill();
 			int valueOfHand = 0;
 			valueOfHand += me.getPlayerHand().getNumCards();
@@ -110,7 +111,19 @@ public class GameAI {
 			}
 			else
 			{
-				AICostObject payment = determineTilesToPay(new AICostObject(new HashMap<Integer, ArrayList<LandTile>>(),new HashMap<Integer, ArrayList<Card>>()),me.getPlayerHand().getCards(),me.getPlayerHand().getTreasures(),totalPayment,0,true);
+
+				HashMap<Integer, ArrayList<LandTile>> tilesToPay =new HashMap<Integer, ArrayList<LandTile>>();
+				tilesToPay.put(0, new ArrayList<LandTile>());
+				HashMap<Integer, ArrayList<Card>>cardsToPay = new HashMap<Integer, ArrayList<Card>>();
+				cardsToPay.put(0, new ArrayList<Card>());
+				AICostObject payment = determineTilesToPay(new AICostObject(tilesToPay,cardsToPay),me.getPlayerHand().getCards(),me.getPlayerHand().getTreasures(),totalPayment,0,true);
+				
+				System.out.println("Send payment message. Payable amount = " + ((LastBillMessage)igm).getWaterBill());
+				System.out.println("Payment size: Tiles: " +payment.getTilesPaidInEachMove().get(0).size() + " Cards: " + payment.getCardsPaidInEachMove().get(0).size());
+				for (LandTile lt : payment.getTilesPaidInEachMove().get(0)) {
+					System.out.println("Tile with value: " + lt.getLandValue());
+				}
+				
 				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), payment.getTilesPaidInEachMove().get(0),payment.getCardsPaidInEachMove().get(0),true);
 				game.processMessage(wpm);
 			}
