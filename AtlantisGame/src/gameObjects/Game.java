@@ -189,13 +189,12 @@ public class Game implements GameInterface {
 				for (LandTile t : message.getTreasuresChosen()) {
 					amount += t.getLandValue();
 				}
-				amount = amount / 2;
-				while (amount != 0) {
-					Card c = cards.deal();
-					c.setOwner(currentPlayer);
-					currentPlayer.addCard(c);
-					purchase.add(c);
-					amount--;
+				if (amount < cards.getNumberOfCardsInDeck()) {
+					purchase = cardsPurchase(amount);
+				} else {
+					cards.shuffle();
+					purchase = cardsPurchase(amount);
+
 				}
 				for (LandTile gone : message.getTreasuresChosen()) {
 					sold.add(gone);
@@ -309,15 +308,14 @@ public class Game implements GameInterface {
 				removePawnFromNewTile(selectedPawn);
 				selectedPawn.setNewLocation(selectedPawn.getStartingLocation());
 				selectedPawn.setOldLocation(selectedPawn.getNewLocation());
-				if (initialLand != null){
+				if (initialLand != null) {
 					initialLand.setPawnOnTile(selectedPawn);
-					System.out.println("initial land is " + initialLand.getCol() + " value " + initialLand.getLandValue());
+					System.out.println(
+							"initial land is " + initialLand.getCol() + " value " + initialLand.getLandValue());
 					System.out.println("pawn new location" + selectedPawn.getNewLocation());
-				}
-				else
-				{
+				} else {
 					atlantis.getChildren().add(selectedPawn);
-					
+
 				}
 			}
 			int numberOfPlayers = getNumOfRegisteredPlayers();
@@ -333,6 +331,21 @@ public class Game implements GameInterface {
 				lobby.endGame(this);
 			}
 		}
+	}
+
+	private ArrayList<Card> cardsPurchase(int amount) {
+
+		ArrayList<Card> result = new ArrayList<>();
+		amount = amount / 2;
+		while (amount != 0) {
+
+			Card c = cards.deal();
+			c.setOwner(currentPlayer);
+			currentPlayer.addCard(c);
+			result.add(c);
+			amount--;
+		}
+		return result;
 	}
 
 	private ArrayList<Integer> checkWinner() {
@@ -428,11 +441,10 @@ public class Game implements GameInterface {
 				// does this tile has the same color ?
 				if (selectedCard.getColor() != null && land.getColor().equals(selectedCard.getColor())
 						&& !land.hasPawn()) {
-					
+
 					land.setPawnOnTile(selectedPawn);
 					selectedLand = land;
-					if(waterBill == 0)
-					{
+					if (waterBill == 0) {
 
 						selectedPawn.setStartingLocation(base.indexOf(water));
 						removedCards.clear();
@@ -537,7 +549,7 @@ public class Game implements GameInterface {
 	private void endThisGame() {
 
 		// now similar stuff to a normal turn just without giving treasures and
-		
+
 		System.out.println("End this game method");
 		for (Player p : players) {
 			// stuff
@@ -567,7 +579,7 @@ public class Game implements GameInterface {
 				pawn.setReachedMainLand(true);
 
 			}
-			
+
 			users.get(p.getPlayerIndex()).sendMessage(new LastBillMessage(getName(), waterPassedCount, waterBill));
 		}
 	}
@@ -641,6 +653,12 @@ public class Game implements GameInterface {
 
 	public ArrayList<Card> dealCards(Player player) {
 		ArrayList<Card> result = new ArrayList<>();
+		// check if there is enough cards
+		// Max number is 3 cards for each pawn
+		if (cards.getNumberOfCardsInDeck() < 4) {
+			cards.shuffle();
+		}
+
 		// after each round a player gets a card anyway
 		Card turnCard = cards.deal();
 		turnCard.setOwner(player);
@@ -655,12 +673,14 @@ public class Game implements GameInterface {
 				result.add(newCard);
 			}
 		}
-		// Here we add our own rule, the black Card which allows player to use it to jump 
-		// with a pawn right away to main land, however the chance to get it is relatively low
+		// Here we add our own rule, the black Card which allows player to use
+		// it to jump
+		// with a pawn right away to main land, however the chance to get it is
+		// relatively low
 		Random rand = new Random();
 		int lucky = rand.nextInt(30);
-		if(lucky==13){
-			Card blackCard = new Card(666, null);	
+		if (lucky == 13) {
+			Card blackCard = new Card(666, null);
 			blackCard.setOwner(currentPlayer);
 			player.getPlayerHand().addCard(blackCard);
 			result.add(blackCard);
