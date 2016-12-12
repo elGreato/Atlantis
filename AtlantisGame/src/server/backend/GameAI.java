@@ -96,20 +96,22 @@ public class GameAI {
 			
 			
 		} else if (igm instanceof LastBillMessage) {
-			System.out.println("Last Bill received");
+			System.out.println("Last Bill received by AI");
 			int totalPayment = ((LastBillMessage)igm).getWaterBill();
+			System.out.println("Total payment for last bill" + totalPayment);
 			int valueOfHand = 0;
 			valueOfHand += me.getPlayerHand().getNumCards();
 			for(LandTile lt : me.getPlayerHand().getTreasures())
 			{
 				valueOfHand += lt.getLandValue();
 			}
-			if(valueOfHand <= totalPayment)
+			if(totalPayment > 0 && valueOfHand <= totalPayment)
 			{
+				System.out.println("Pay with everything");
 				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), me.getPlayerHand().getTreasures(), me.getPlayerHand().getCards(),true);
 				game.processMessage(wpm);
 			}
-			else
+			else if (totalPayment > 0)
 			{
 
 				HashMap<Integer, ArrayList<LandTile>> tilesToPay =new HashMap<Integer, ArrayList<LandTile>>();
