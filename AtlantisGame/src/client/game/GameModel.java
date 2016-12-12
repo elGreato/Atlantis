@@ -358,25 +358,14 @@ public class GameModel {
 
 		}
 	}
-	private void removePlayerTreasure(LandTile treasure) {
-		if (treasure != null) {
-			currentPlayer.getPlayerHand().getTreasures().remove(treasure);
-			view.removePlayerTreasure(treasure);
 
-		}
-	}
 	private void giveEnemyTreasure(int indexOfPlayer, LandTile treasure) {
 		if (treasure != null) {
 			view.giveEnemyTreasure(indexOfPlayer, treasure);
 		}
 
 	}
-	private void removeEnemyTreasure(int playerID, LandTile treasure) {
-		if (treasure != null) {
-			view.removeEnemyTreasures(playerID, treasure);
 
-		}
-	}
 	private void removeTreasureFromBoard(LandTile treasure) {
 		for (int g = 0; g < view.getBase().size(); g++) {
 			WaterTile tempWater = view.getBase().get(g);
