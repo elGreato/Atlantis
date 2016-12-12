@@ -527,12 +527,13 @@ public class Game implements GameInterface {
 	private void endThisGame() {
 
 		// now similar stuff to a normal turn just without giving treasures and
-		// stuff
-		boolean connectedWater = false;
-		int waterPassedCount = 0;
-		int waterBill = 0;
+		
 		System.out.println("End this game method");
 		for (Player p : players) {
+			// stuff
+			boolean connectedWater = false;
+			int waterPassedCount = 0;
+			int waterBill = 0;
 			System.out.println("looping players");
 			for (Pawn pawn : p.getPawns()) {
 				System.out.println("looping pawns");
@@ -556,7 +557,7 @@ public class Game implements GameInterface {
 				pawn.setReachedMainLand(true);
 
 			}
-			// if (p.getPlayerIndex() != currentPlayerIndex)
+			
 			users.get(p.getPlayerIndex()).sendMessage(new LastBillMessage(getName(), waterPassedCount, waterBill));
 		}
 	}
