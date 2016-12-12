@@ -213,6 +213,8 @@ public class Game implements GameInterface {
 			WaterPaidMessage message = (WaterPaidMessage) igm;
 			Player player = players.get(message.getPlayerIndex());
 			Iterator<Card> it = player.getPlayerHand().getCards().iterator();
+			selectedPawn.setStartingLocation(base.indexOf(selectedPawn.getNewLocation()));
+			removedCards.clear();
 			while (it.hasNext()) {
 				Card c = it.next();
 				for (int k = 0; k < message.getCardsChosen().size(); k++) {
@@ -305,15 +307,18 @@ public class Game implements GameInterface {
 					currentPlayer.getPlayerHand().getTreasures().remove(removedTreasure);
 				}
 				removePawnFromNewTile(selectedPawn);
-				selectedPawn.setNewLocation(selectedPawn.getOldLocation());
+				selectedPawn.setNewLocation(selectedPawn.getStartingLocation());
 				selectedPawn.setOldLocation(selectedPawn.getNewLocation());
-				if (initialLand != null)
+				if (initialLand != null){
 					initialLand.setPawnOnTile(selectedPawn);
+					System.out.println("initial land is " + initialLand.getCol() + " value " + initialLand.getLandValue());
+					System.out.println("pawn new location" + selectedPawn.getNewLocation());
+				}
 				else
+				{
 					atlantis.getChildren().add(selectedPawn);
-				System.out.println("initial land is " + initialLand.getCol() + " value " + initialLand.getLandValue());
-				System.out.println("pawn new location" + selectedPawn.getNewLocation());
-
+					
+				}
 			}
 			int numberOfPlayers = getNumOfRegisteredPlayers();
 			for (int i = 0; i < numberOfPlayers; i++) {
@@ -423,10 +428,15 @@ public class Game implements GameInterface {
 				// does this tile has the same color ?
 				if (selectedCard.getColor() != null && land.getColor().equals(selectedCard.getColor())
 						&& !land.hasPawn()) {
-
+					
 					land.setPawnOnTile(selectedPawn);
 					selectedLand = land;
+					if(waterBill == 0)
+					{
 
+						selectedPawn.setStartingLocation(base.indexOf(water));
+						removedCards.clear();
+					}
 					selectedPawn.setNewLocation(base.indexOf(water));
 					foundLand = true;
 					giveTreasure = true;

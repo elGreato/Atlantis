@@ -237,11 +237,19 @@ public class GameModel {
 		}
 		if (msgIn instanceof RevertTurnMessage) {
 			RevertTurnMessage message = (RevertTurnMessage) msgIn;
-
 			if (message.getRemovedTreasure() != null) {
-				view.base.get(message.getRemovedIndex()).getChildren().add(message.getRemovedTreasure());
+			view.base.get(message.getRemovedIndex()).getChildren().add(message.getRemovedTreasure());
+				
 			}
+			if(message.getPlayerIndex() == currentPlayer.getPlayerIndex())
+			{
 
+				System.out.println("Removed cards: " + message.getRemovedCards().size());
+					addCardToPlayer(message.getRemovedCards());
+					
+				
+			}
+			
 			assignThenMovePawn(message.getPlayerIndex(), message.getSelectedPawn(), message.getSelectedLand());
 
 		}
@@ -350,14 +358,25 @@ public class GameModel {
 
 		}
 	}
+	private void removePlayerTreasure(LandTile treasure) {
+		if (treasure != null) {
+			currentPlayer.getPlayerHand().getTreasures().remove(treasure);
+			view.removePlayerTreasure(treasure);
 
+		}
+	}
 	private void giveEnemyTreasure(int indexOfPlayer, LandTile treasure) {
 		if (treasure != null) {
 			view.giveEnemyTreasure(indexOfPlayer, treasure);
 		}
 
 	}
+	private void removeEnemyTreasure(int playerID, LandTile treasure) {
+		if (treasure != null) {
+			view.removeEnemyTreasures(playerID, treasure);
 
+		}
+	}
 	private void removeTreasureFromBoard(LandTile treasure) {
 		for (int g = 0; g < view.getBase().size(); g++) {
 			WaterTile tempWater = view.getBase().get(g);
@@ -526,6 +545,7 @@ public class GameModel {
 	}
 
 	public void handleRevert() {
+		view.tempStage.close();
 		msgOut.sendMessage(new RevertTurnMessage(gameName, currentPlayer.getPlayerIndex()));
 
 	}
