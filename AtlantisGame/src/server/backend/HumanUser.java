@@ -198,8 +198,6 @@ public class HumanUser extends User implements Runnable{
 				e.printStackTrace();
 			}
 		}
-		
-		//ADD: logout user
 	}
 
 	public synchronized void sendMessage(Message m) {

@@ -40,6 +40,9 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 	
 	private ArrayList<GameModel> runningGames;
 	
+	boolean connected;
+	boolean selfDisconnect;
+	
 	public LobbyModel(LobbyView view, UserInfoMessage userInfo, ObjectOutputStream oos, ObjectInputStream ois) {
 		this.view = view;
 		this.oos = oos;
@@ -66,7 +69,8 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 	
 	@Override
 	public void run() {
-		boolean connected = true;
+		connected = true;
+		selfDisconnect = false;
 		while(connected)
 		{
 			try {
@@ -192,12 +196,15 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 				
 				connected = false;
 				e.printStackTrace();
-				Platform.runLater(new Runnable(){
-					public void run()
-					{
-						connectionLost();
-					}
-				});
+				if(!selfDisconnect)
+				{
+					Platform.runLater(new Runnable(){
+						public void run()
+						{
+							connectionLost();
+						}
+					});
+				}
 			} catch(Exception e)
 			{
 				e.printStackTrace();
@@ -261,6 +268,18 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 			{
 				runningGames.remove(m);
 			}
+		}
+		
+	}
+
+	public void disconnect() {
+		selfDisconnect = true;
+		connected = false;
+		try {
+			oos.close();
+			ois.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 	}

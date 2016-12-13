@@ -43,7 +43,7 @@ import javafx.stage.Stage;
 import messageObjects.GameListItem;
 
 public class LobbyView {
-	private Stage stage;
+	protected Stage stage;
 	private Scene scene;
 	
 	private GridPane root;
