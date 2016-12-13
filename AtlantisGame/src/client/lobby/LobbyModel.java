@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Optional;
 
 import client.game.GameController;
 import client.game.GameModel;
@@ -13,6 +14,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.util.converter.NumberStringConverter;
 import messageObjects.CreateGameMessage;
@@ -41,7 +43,6 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 	private ArrayList<GameModel> runningGames;
 	
 	boolean connected;
-	boolean selfDisconnect;
 	
 	public LobbyModel(LobbyView view, UserInfoMessage userInfo, ObjectOutputStream oos, ObjectInputStream ois) {
 		this.view = view;
@@ -70,7 +71,6 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 	@Override
 	public void run() {
 		connected = true;
-		selfDisconnect = false;
 		while(connected)
 		{
 			try {
@@ -196,15 +196,9 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 				
 				connected = false;
 				e.printStackTrace();
-				if(!selfDisconnect)
-				{
-					Platform.runLater(new Runnable(){
-						public void run()
-						{
-							connectionLost();
-						}
-					});
-				}
+				
+				connectionLost();
+			
 			} catch(Exception e)
 			{
 				e.printStackTrace();
@@ -273,14 +267,13 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 	}
 
 	public void disconnect() {
-		selfDisconnect = true;
-		connected = false;
-		try {
-			oos.close();
-			ois.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Close Atlantis");
+		alert.setContentText("Do you really want to close Atlantis? You will lose all the games you are currently playing.");
+		Optional<ButtonType> answer = alert.showAndWait();
+		if(answer.get() == ButtonType.OK)
+		{
+			System.exit(0);
 		}
-		
 	}
 }
