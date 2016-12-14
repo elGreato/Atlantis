@@ -2,6 +2,7 @@ package server.backend;
 
 import java.util.ArrayList;
 
+import gameObjects.Game;
 import gameObjects.GameInterface;
 import messageObjects.InGameMessage;
 import messageObjects.Message;
@@ -83,4 +84,17 @@ public class AIUser extends User implements Runnable{
 		}
 		
 	}
+	@Override
+	public synchronized void endGame(Game game) {
+		super.endGame(game);
+		for(GameAI g:activeGames)
+		{
+			if (g.getGameName().equals(game.getName()))
+			{
+				activeGames.remove(g);
+				break;
+			}
+		}
+	}
+	
 }
