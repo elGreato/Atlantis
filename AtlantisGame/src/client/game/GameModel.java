@@ -514,11 +514,13 @@ public class GameModel {
 			view.btnPay4Water.setDisable(false);
 			view.lblWaterCalc
 					.setText("You will pay " + String.valueOf(totalChosen) + "\n Remember, no change is offered");
+			view.tempStage.sizeToScene();
 		} else {
 			view.btnPay4Water.setDisable(true);
 			view.lblWaterCalc.setText("");
 			view.lblWaterCalc.setText(
 					"This is not enough!" + "You still need to pay extra" + String.valueOf(waterBill - totalChosen));
+			view.tempStage.sizeToScene();
 		}
 		if(landedOnPawn==true&&allCardsSelected){
 			view.btnPay4Water.setDisable(true);
