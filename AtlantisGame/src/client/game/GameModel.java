@@ -243,14 +243,13 @@ public class GameModel {
 			}
 			if(message.getPlayerIndex() == currentPlayer.getPlayerIndex())
 			{
-
 				System.out.println("Removed cards: " + message.getRemovedCards().size());
-					addCardToPlayer(message.getRemovedCards());
-					
+					addCardToPlayer(message.getRemovedCards());				
 				
 			}
 			
 			assignThenMovePawn(message.getPlayerIndex(), message.getSelectedPawn(), message.getSelectedLand());
+			view.closePayWaterScene();
 
 		}
 		if (msgIn instanceof LastBillMessage) {
@@ -261,6 +260,10 @@ public class GameModel {
 					"Bill amount: " + message.getWaterBill() + " you passed: " + message.getWaterPassedCount());
 			gameOver = true;
 			payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(), gameOver);
+			for(Pawn p:currentPlayer.getPawns()){
+				if(!p.ReachedMainLand())
+					view.addPawnToMainLand(p);
+			}
 
 		}
 		if (msgIn instanceof ResultMessage) {
@@ -345,6 +348,7 @@ public class GameModel {
 		if (selectedLand == null) {
 			selectedPawn.setPawnSelected(false);
 			selectedPawn.setOnMouseClicked(null);
+			selectedPawn.setReachedMainLand(true);
 			view.addPawnToMainLand(selectedPawn);
 
 		}
@@ -534,7 +538,8 @@ public class GameModel {
 	}
 
 	public void handleRevert() {
-		view.tempStage.close();
+		view.btnRevert.setDisable(true);
+	//	view.tempStage.close();
 		msgOut.sendMessage(new RevertTurnMessage(gameName, currentPlayer.getPlayerIndex()));
 
 	}

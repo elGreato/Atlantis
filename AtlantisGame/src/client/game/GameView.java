@@ -556,6 +556,7 @@ public class GameView {
 		tempStage.show();
 		tempStage.setAlwaysOnTop(true);
 		tempStage.sizeToScene();
+		tempStage.setOnCloseRequest(e -> closeBuyScene());
 
 	}
 
