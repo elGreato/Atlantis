@@ -383,6 +383,7 @@ public class Game implements GameInterface {
 			System.out.println("There are humans left");
 			AIUser replacement = lobby.requestAI(users);
 			users.set(leavingPlayer, replacement);
+			players.get(leavingPlayer).setPlayerName(replacement.getUserInfo().getUsername());
 			replacement.initiateGameStart(this);
 			replacement.sendMessage(new WaterMessage(name,base));
 			replacement.sendMessage(new PlayerMessage(name,players.get(leavingPlayer)));
