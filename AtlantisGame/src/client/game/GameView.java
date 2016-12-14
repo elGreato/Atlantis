@@ -111,7 +111,6 @@ public class GameView {
 	private Label lblcards = new Label("Your Cards");
 	private Label lbltreasures = new Label("Your Treasures");
 
-	
 	protected boolean multiCardsMode = false;
 	int maxColIndex;
 	int maxRowIndex;
@@ -320,11 +319,11 @@ public class GameView {
 		Label lblopponentName = new Label();
 		Label lblopponentCardCount = new Label();
 		Label lblOpponentVp = new Label();
-		
+
 		lblopponentName.setText(opponent.getPlayerName());
 		lblopponentCardCount
 				.setText("This enemy has " + String.valueOf(opponent.getPlayerHand().getNumCards()) + " cards\t");
-		lblOpponentVp.setText("And he has "+String.valueOf(opponent.countVictoryPoints()+" Victory Points\t"));
+		lblOpponentVp.setText("And he has " + String.valueOf(opponent.countVictoryPoints() + " Victory Points\t"));
 		HBox hbEnemyTreasures = new HBox();
 		Integer index = opponent.getPlayerIndex();
 		hbEnemiesTreasures.put(index, hbEnemyTreasures);
@@ -332,7 +331,8 @@ public class GameView {
 		recColor.setHeight(10);
 		recColor.setWidth(150);
 		recColor.setFill(Pawn.FillColor(opponent));
-		vbOpponentInfo.getChildren().addAll(lblopponentName, lblopponentCardCount,lblOpponentVp, hbEnemyTreasures, recColor);
+		vbOpponentInfo.getChildren().addAll(lblopponentName, lblopponentCardCount, lblOpponentVp, hbEnemyTreasures,
+				recColor);
 
 		mapOpponents.put(opponent.getPlayerIndex(), vbOpponentInfo);
 
@@ -581,6 +581,7 @@ public class GameView {
 		((Label) enemy.getChildren().get(2)).setText(String.valueOf(vp));
 
 	}
+
 	public void setCardCountForEnemy(int playerIndex, int cardsCount) {
 		VBox enemy = (VBox) mapOpponents.get(playerIndex);
 		((Label) enemy.getChildren().get(1)).setText(String.valueOf(cardsCount));
@@ -633,8 +634,6 @@ public class GameView {
 		tempStage.close();
 	}
 
-
-
 	public void IWin(String winner) {
 		tempStage.setOnCloseRequest(e -> e.consume());
 		tempStage = new Stage();
@@ -679,6 +678,5 @@ public class GameView {
 		lblPay.setText("you are not allowed to pay all your cards\n when you land on a tile that has a pawn already");
 
 	}
-
 
 }
