@@ -424,4 +424,17 @@ public class Lobby implements LobbyInterface{
 		runningGames.remove(game);
 		
 	}
+
+
+	@Override
+	public synchronized AIUser requestAI(ArrayList<User> playersRegistered) {
+		for(AIUser possibleNewOpponent : aiUsers)
+		{
+			if(!playersRegistered.contains(possibleNewOpponent))
+			{
+				return possibleNewOpponent;
+			}
+		}
+		return null;
+	}
 }

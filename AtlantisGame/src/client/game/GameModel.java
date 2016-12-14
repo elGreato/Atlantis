@@ -13,6 +13,7 @@ import gameObjects.WaterTile;
 import messageObjects.AtlantisMainLandMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
+import messageObjects.PlayerLeftMessage;
 import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
 import messageObjects.turnMessages.GameStatusMessage;
@@ -560,7 +561,7 @@ public class GameModel {
 	}
 
 	public void playerLeft() {
-		msgOut.sendMessage(new PlayerLefMessage(gameName,currentPlayer));
+		msgOut.sendMessage(new PlayerLeftMessage(gameName,currentPlayer.getPlayerIndex()));
 		
 	}
 	

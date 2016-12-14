@@ -1,5 +1,7 @@
 package server.backend;
 
+import java.util.ArrayList;
+
 import gameObjects.Game;
 import messageObjects.CreateGameMessage;
 import messageObjects.GameJoinMessage;
@@ -25,6 +27,8 @@ public interface LobbyInterface {
 	void sendWholeLobby(HumanUser user);
 
 	int getPosition(UserInfo userInfo);
+	
+	public AIUser requestAI(ArrayList<User> playersRegistered);
 	
 	//Invoke these methods to add wins/ties/losses to user data (Stores new value in lobby and updates database but does not message about winner)
 	void addWin(User user);

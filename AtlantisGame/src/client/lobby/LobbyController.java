@@ -143,7 +143,7 @@ public class LobbyController {
 		
 		view.stage.setOnCloseRequest((we)->
 		{
-			model.disconnect();
+			model.disconnect(we);
 		}
 		);
 	

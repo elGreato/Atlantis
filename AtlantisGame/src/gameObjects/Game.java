@@ -28,6 +28,7 @@ import messageObjects.turnMessages.RevertTurnMessage;
 import messageObjects.turnMessages.ServerMessage;
 import messageObjects.turnMessages.TurnMessage;
 import messageObjects.turnMessages.WaterPaidMessage;
+import server.backend.AIUser;
 import server.backend.Lobby;
 import server.backend.LobbyInterface;
 import server.backend.User;
@@ -296,40 +297,13 @@ public class Game implements GameInterface {
 		}
 		if(igm instanceof PlayerLeftMessage){
 			PlayerLeftMessage message = (PlayerLeftMessage) igm;
-			// Kevin 
-			
+			int leavingPlayer = message.getPlayerIndex();
+			handlePlayerLeave(leavingPlayer);
 		}
 		if (igm instanceof RevertTurnMessage) {
 			RevertTurnMessage message = (RevertTurnMessage) igm;
-			if (currentPlayerIndex == message.getPlayerIndex()) {
-				for (Card c : removedCards) {
-					currentPlayer.addCard(c);
-					System.out.println("one card found to give back to player");
-				}
-				if (removedTreasure != null) {
-					System.out.println("a treasure is found to give back to player");
-					base.get(removedTreasureIndex).getChildren().add(removedTreasure);
-					currentPlayer.getPlayerHand().getTreasures().remove(removedTreasure);
-				}
-				removePawnFromNewTile(selectedPawn);
-				selectedPawn.setNewLocation(selectedPawn.getStartingLocation());
-				selectedPawn.setOldLocation(selectedPawn.getNewLocation());
-				if (initialLand != null) {
-					initialLand.setPawnOnTile(selectedPawn);
-					System.out.println(
-							"initial land is " + initialLand.getCol() + " value " + initialLand.getLandValue());
-					System.out.println("pawn new location" + selectedPawn.getNewLocation());
-				} else {
-					atlantis.getChildren().add(selectedPawn);
+			revertThisTurn(message.getPlayerIndex());
 
-				}
-			}
-			int numberOfPlayers = getNumOfRegisteredPlayers();
-			for (int i = 0; i < numberOfPlayers; i++) {
-				users.get(i).sendMessage(new RevertTurnMessage(getName(), currentPlayerIndex, removedCards,
-						removedTreasure, removedTreasureIndex, selectedPawn, initialLand));
-			}
-			performEndTurn(message.getPlayerIndex(), true);
 		}
 		if (igm instanceof CloseGameMessage) {
 			playersFinished++;
@@ -338,7 +312,116 @@ public class Game implements GameInterface {
 			}
 		}
 	}
+	private void revertThisTurn(int playerIndex) {
+		if (currentPlayerIndex == playerIndex) {
+			for (Card c : removedCards) {
+				currentPlayer.addCard(c);
+				System.out.println("one card found to give back to player");
+			}
+			if (removedTreasure != null) {
+				System.out.println("a treasure is found to give back to player");
+				base.get(removedTreasureIndex).getChildren().add(removedTreasure);
+				currentPlayer.getPlayerHand().getTreasures().remove(removedTreasure);
+			}
+			removePawnFromNewTile(selectedPawn);
+			selectedPawn.setNewLocation(selectedPawn.getStartingLocation());
+			selectedPawn.setOldLocation(selectedPawn.getNewLocation());
+			if (initialLand != null) {
+				initialLand.setPawnOnTile(selectedPawn);
+				System.out.println(
+						"initial land is " + initialLand.getCol() + " value " + initialLand.getLandValue());
+				System.out.println("pawn new location" + selectedPawn.getNewLocation());
+			} else {
+				atlantis.getChildren().add(selectedPawn);
 
+			}
+		}
+		int numberOfPlayers = getNumOfRegisteredPlayers();
+		for (int i = 0; i < numberOfPlayers; i++) {
+			users.get(i).sendMessage(new RevertTurnMessage(getName(), currentPlayerIndex, removedCards,
+					removedTreasure, removedTreasureIndex, selectedPawn, initialLand));
+		}
+		performEndTurn(playerIndex, true);
+		
+	}
+
+	//Method created by Kevin Neuschwander
+	private void handlePlayerLeave(int leavingPlayer) {
+		System.out.println("Player left");
+		int numAI = 0;
+		for(User u: users)
+		{
+			if (u instanceof AIUser)
+			{
+				numAI+=1;
+			}
+		}
+		
+		lobby.addLoss(users.get(leavingPlayer));
+		if(numAI==users.size()-1)
+		{
+			System.out.println("No humans left");
+			for(User u:users)
+			{
+				if(users.indexOf(u)!=leavingPlayer)
+				{
+					if(maxPlayers>2)
+					{
+						lobby.addTie(u);
+					}
+					else
+					{
+						lobby.addWin(u);
+					}
+					
+				}
+			}
+			lobby.endGame(this);
+		}
+		else
+		{
+			System.out.println("There are humans left");
+			AIUser replacement = lobby.requestAI(users);
+			users.set(leavingPlayer, replacement);
+			replacement.initiateGameStart(this);
+			replacement.sendMessage(new WaterMessage(name,base));
+			replacement.sendMessage(new PlayerMessage(name,players.get(leavingPlayer)));
+			ArrayList<Player> opponents = new ArrayList<Player>();
+			for(Player pl:players)
+			{
+				if(pl.getPlayerIndex()!=leavingPlayer)
+				{
+					opponents.add(pl);
+				}
+			}
+			System.out.println(opponents.size());
+			replacement.sendMessage(new OpponentMessage(name,opponents));
+			
+			if(currentPlayerIndex == leavingPlayer&&!removedCards.isEmpty())
+			{
+				System.out.println("Revert turn");
+				revertThisTurn(leavingPlayer);
+			}
+			else if(currentPlayerIndex == leavingPlayer)
+			{
+				System.out.println("End turn");
+				performEndTurn(leavingPlayer, false);
+			}
+		}
+	}
+	//Method created by Kevin Neuschwander
+	@Override
+	public void handlePlayerLeave(String leavingPlayer) {
+		for(User u: users)
+		{
+			if (u.getUserInfo().getUsername().equals(leavingPlayer))
+			{
+				handlePlayerLeave(users.indexOf(u));
+				break;
+			}
+		}
+		
+	}
 	private ArrayList<Card> cardsPurchase(int amount) {
 
 		ArrayList<Card> result = new ArrayList<>();

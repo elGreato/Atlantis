@@ -225,6 +225,11 @@ public class HumanUser extends User implements Runnable{
 	{
 		loggedIn = false;
 		connected = false;
+		for(GameInterface g:runningGames)
+		{
+			g.handlePlayerLeave(userInfo.getUsername());
+		}
+		runningGames.clear();
 		lobbyInterface.logoutFromOnlineUsers(this);
 	}
 }

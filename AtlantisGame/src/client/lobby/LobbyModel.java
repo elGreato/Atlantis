@@ -15,6 +15,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.stage.WindowEvent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.util.converter.NumberStringConverter;
 import messageObjects.CreateGameMessage;
@@ -266,7 +267,7 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 		
 	}
 
-	public void disconnect() {
+	public void disconnect(WindowEvent e) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Close Atlantis");
 		alert.setContentText("Do you really want to close Atlantis? You will lose all the games you are currently playing.");
@@ -274,6 +275,10 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 		if(answer.get() == ButtonType.OK)
 		{
 			System.exit(0);
+		}
+		else
+		{
+			e.consume();
 		}
 	}
 }
