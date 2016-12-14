@@ -1,15 +1,18 @@
 package client.game;
 
 import java.util.ArrayList;
-
-
+import java.util.Optional;
 
 import gameObjects.Card;
 import gameObjects.Pawn;
 import gameObjects.WaterTile;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.stage.WindowEvent;
 
 public class GameController {
 
@@ -32,10 +35,28 @@ public class GameController {
 		view.temp.setOnAction(e-> handletemp());
 		view.btnNotEnough.setOnAction(e-> handleNotEnough());
 		view.btnFinish.setOnAction(e-> handleFinish());
+		
+		view.stage.setOnCloseRequest(e ->handleClose(e));
 	}
 
 
 	
+	private void handleClose(WindowEvent e) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Close Atlantis");
+		alert.setContentText("Are you sure you want to close the game? \nYou will lose this game");
+		Optional<ButtonType> answer = alert.showAndWait();
+		if(answer.get() == ButtonType.OK)
+		{
+			model.playerLeft();
+		}
+		else{
+			e.consume();
+		}
+	}
+
+
+
 	private void handleNotEnough() {
 		model.handleNotEnough();
 		

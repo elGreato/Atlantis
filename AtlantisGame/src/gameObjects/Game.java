@@ -9,6 +9,7 @@ import java.util.Random;
 import messageObjects.AtlantisMainLandMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
+import messageObjects.PlayerLeftMessage;
 import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
 import messageObjects.turnMessages.BuyCardsMessage;
@@ -292,6 +293,11 @@ public class Game implements GameInterface {
 			EndMYTurnMessage message = (EndMYTurnMessage) igm;
 			performEndTurn(message.getPlayerIndex(), message.isNormalEnd());
 
+		}
+		if(igm instanceof PlayerLeftMessage){
+			PlayerLeftMessage message = (PlayerLeftMessage) igm;
+			// Kevin 
+			
 		}
 		if (igm instanceof RevertTurnMessage) {
 			RevertTurnMessage message = (RevertTurnMessage) igm;

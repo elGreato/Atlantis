@@ -55,6 +55,7 @@ public class GameModel {
 		view.scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 	}
+	
 
 	// Here messages from server arrive
 	public void processMessage(InGameMessage msgIn) {
@@ -557,5 +558,11 @@ public class GameModel {
 		pay4Water();
 
 	}
+
+	public void playerLeft() {
+		msgOut.sendMessage(new PlayerLefMessage(gameName,currentPlayer));
+		
+	}
+	
 
 }
