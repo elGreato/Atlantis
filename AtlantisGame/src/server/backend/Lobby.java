@@ -411,6 +411,16 @@ public class Lobby implements LobbyInterface{
 
 	@Override
 	public void logoutFromOnlineUsers(HumanUser user) {
+		for(Game g : waitingGames)
+		{
+			for(User u:g.getUsers())
+			{
+				if(u == user)
+				{
+					g.getUsers().remove(u);
+				}
+			}
+		}
 		onlineUsers.remove(user);
 		
 	}

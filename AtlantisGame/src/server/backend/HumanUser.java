@@ -194,7 +194,11 @@ public class HumanUser extends User implements Runnable{
 				
 				e.printStackTrace();
 			} catch (IOException e) {
-				logoutUser();
+				if(loggedIn && connected)
+				{
+					logoutUser();
+				}
+			
 				e.printStackTrace();
 			}
 		}
@@ -205,7 +209,9 @@ public class HumanUser extends User implements Runnable{
 			oos.writeUnshared(m);
 			oos.flush();
 		} catch (IOException e) {
-			logoutUser();
+			if(loggedIn&&connected){
+				logoutUser();
+			}
 		}
 		
 	}
@@ -218,18 +224,24 @@ public class HumanUser extends User implements Runnable{
 			oos.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
-			logoutUser();
+			if(loggedIn&&connected)
+			{
+				logoutUser();
+			}
 		}
 	}
 	private synchronized void logoutUser()
 	{
+		System.out.println("Start logout process. Ending " + runningGames.size() + " games");
 		loggedIn = false;
 		connected = false;
 		for(GameInterface g:runningGames)
 		{
+			System.out.println("Going through games");
 			g.handlePlayerLeave(userInfo.getUsername());
 		}
 		runningGames.clear();
 		lobbyInterface.logoutFromOnlineUsers(this);
+		System.out.println("Finish logout process. " + runningGames.size() + " games left");
 	}
 }
