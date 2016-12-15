@@ -791,10 +791,13 @@ public class Game implements GameInterface {
 
 	private void removePawnFromNewTile(Pawn selectedPawn) {
 		WaterTile w = null;
-		if (selectedPawn.getNewLocation() != -1) {
+		if (selectedPawn.getNewLocation() != -1&&selectedPawn.getNewLocation()!=53) {
 			w = base.get(selectedPawn.getNewLocation());
 			((LandTile) w.getChildren().get((w.getChildren().size() - 1))).removePawn(selectedPawn);
 
+		}
+		else if(selectedPawn.getNewLocation()==53){
+			mainland.getChildren().remove(selectedPawn);
 		}
 	}
 
