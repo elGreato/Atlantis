@@ -50,19 +50,31 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 		this.oos = oos;
 		this.ois = ois;
 		this.userInfo = new UserInfoDataModel(userInfo);
-		
-		view.userInfoName.textProperty().bind(new SimpleStringProperty(userInfo.getUsername()));
+		updateGUIUserStats();
+
+		/*view.userInfoName.textProperty().bind(new SimpleStringProperty(userInfo.getUsername()));
 		view.userInfoPosition.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getPosition()).toString()));
 		view.userInfoPoints.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getPoints()).toString()));
 		view.userInfoGamesPlayed.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getGamesPlayed()).toString()));
 		view.userInfoGamesWon.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getGamesWon()).toString()));
 		view.userInfoGamesTie.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getGamesTie()).toString()));
-		view.userInfoGamesLost.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getGamesLost()).toString()));
+		view.userInfoGamesLost.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getGamesLost()).toString()));*/
 		
 		runningGames = new ArrayList<GameModel>();
 
 	}
 	
+	private void updateGUIUserStats() {
+		
+		view.userInfoName.setText(String.valueOf(userInfo.getUsername()));
+		view.userInfoPosition.setText(String.valueOf(userInfo.getPosition()));
+		view.userInfoPoints.setText(String.valueOf(userInfo.getPoints()));
+		view.userInfoGamesPlayed.setText(String.valueOf(userInfo.getGamesPlayed()));
+		view.userInfoGamesWon.setText(String.valueOf(userInfo.getGamesWon()));
+		view.userInfoGamesTie.setText(String.valueOf(userInfo.getGamesTie()));
+		view.userInfoGamesLost.setText(String.valueOf(userInfo.getGamesLost()));
+	}
+
 	public void startListener()
 	{
 		listener = new Thread(this);
@@ -186,8 +198,19 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 				}
 				else if(obj instanceof UserInfoMessage)	
 				{
+					
 					UserInfoMessage thisUserStats = (UserInfoMessage)obj;
+					System.out.println("UserInfo received! New losses = " + thisUserStats.getGamesLost());
 					userInfo.setUsername(thisUserStats.getUsername());
+					userInfo.setGamesPlayed(thisUserStats.getGamesPlayed());
+					userInfo.setGamesWon(thisUserStats.getGamesWon());
+					userInfo.setGamesTie(thisUserStats.getGamesTie());
+					userInfo.setGamesLost(thisUserStats.getGamesLost());
+					userInfo.setPosition(thisUserStats.getPosition());
+					userInfo.setPoints(thisUserStats.getPoints());
+					Platform.runLater(()->{
+						updateGUIUserStats();
+					});
 				}
 			} catch (ClassNotFoundException e) {
 				
