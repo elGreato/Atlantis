@@ -46,9 +46,9 @@ public class Card extends StackPane implements Serializable {
 			else if (c.getColor().toString().equalsIgnoreCase("brown"))
 				return (Color.BROWN);
 		} else{
-			return Color.BLACK;
+			return Color.ORANGE;
 		}
-		return Color.ORANGE;
+		return Color.BLACK;
 
 	}
 
