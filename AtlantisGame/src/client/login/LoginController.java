@@ -1,15 +1,19 @@
 package client.login;
 
-import com.sun.glass.ui.View;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 
+/**
+* <h1>Handles user input from login screen</h1>
+* Controller for login screen
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class LoginController {
 	private LoginView view;
 	private LoginModel model;

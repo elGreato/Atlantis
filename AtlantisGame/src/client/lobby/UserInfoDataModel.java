@@ -3,7 +3,14 @@ package client.lobby;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import messageObjects.UserInfoMessage;
-
+/**
+* <h1>Data model for user stats</h1>
+* Contains data for leaderboard table in lobby window
+*
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class UserInfoDataModel {
 	private SimpleStringProperty username;
 	private SimpleIntegerProperty gamesPlayed;

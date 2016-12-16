@@ -7,7 +7,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
-
+/**
+* <h1>Connection to database</h1>
+* Loads and updates user data from existing Atlantis database.
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class DatabaseInterface implements Runnable {
 
 	private Connection dbAccessCon;

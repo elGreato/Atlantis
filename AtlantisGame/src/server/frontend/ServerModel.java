@@ -19,7 +19,14 @@ import javafx.scene.control.ButtonType;
 import server.backend.HumanUser;
 import server.backend.Lobby;
 import server.backend.User;
-
+/**
+* <h1>Model of server GUI</h1>
+* Responsible for creating/connecting to database and starting the server
+*
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class ServerModel implements Runnable{
 	
 	private ServerSocket serverSocket;

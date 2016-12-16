@@ -1,8 +1,6 @@
 package client.serverconnect;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -13,7 +11,13 @@ import client.login.LoginView;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-
+/**
+* <h1>Logic for serverconnect window</h1>
+* Tries to connect to server, either automatically via lan or manually with the IP adress entered by the user
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class ServerconnectModel implements Runnable{
 	
 	private ServerconnectView view;
@@ -49,7 +53,6 @@ public class ServerconnectModel implements Runnable{
 	}
 
 	private void showLogin(Socket socket) {
-		// TODO Auto-generated method stub
 		LoginView loginView = new LoginView();
 		LoginModel loginModel = new LoginModel(socket, loginView);
 		LoginController loginController = new LoginController(loginView, loginModel);
@@ -58,7 +61,6 @@ public class ServerconnectModel implements Runnable{
 	}
 
 	public void scanLAN() {
-		// TODO Auto-generated method stub
 		ipEnding = 0;
 		negativeTests = 0;
 		InetAddress localHost;
@@ -79,7 +81,6 @@ public class ServerconnectModel implements Runnable{
 				}
 			}
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			subnetAdress = "192.168.1.";
 		}
@@ -148,7 +149,6 @@ public class ServerconnectModel implements Runnable{
 	}
 
 	private synchronized int getNegativeTests() {
-		// TODO Auto-generated method stub
 		return negativeTests;
 	}
 

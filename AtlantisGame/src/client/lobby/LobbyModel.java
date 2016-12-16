@@ -11,13 +11,10 @@ import client.game.GameController;
 import client.game.GameModel;
 import client.game.GameView;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.WindowEvent;
 import javafx.scene.control.Alert.AlertType;
-import javafx.util.converter.NumberStringConverter;
 import messageObjects.CreateGameMessage;
 import messageObjects.GameJoinMessage;
 import messageObjects.GameListItem;
@@ -29,7 +26,15 @@ import messageObjects.Message;
 import messageObjects.ServerInfoMessage;
 import messageObjects.UserInfoListMessage;
 import messageObjects.UserInfoMessage;
-import server.backend.UserInfo;
+
+/**
+* <h1>Model of the lobby</h1>
+* The client-side logic of the lobby. Responsible for sending and receiving messages about games, users and stats.
+*
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 
 public class LobbyModel implements Runnable, ClientLobbyInterface{
 
@@ -44,7 +49,7 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 	private ArrayList<GameModel> runningGames;
 	
 	boolean connected;
-	
+	//Constructor called after a successful login
 	public LobbyModel(LobbyView view, UserInfoMessage userInfo, ObjectOutputStream oos, ObjectInputStream ois) {
 		this.view = view;
 		this.oos = oos;
@@ -52,18 +57,10 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 		this.userInfo = new UserInfoDataModel(userInfo);
 		updateGUIUserStats();
 
-		/*view.userInfoName.textProperty().bind(new SimpleStringProperty(userInfo.getUsername()));
-		view.userInfoPosition.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getPosition()).toString()));
-		view.userInfoPoints.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getPoints()).toString()));
-		view.userInfoGamesPlayed.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getGamesPlayed()).toString()));
-		view.userInfoGamesWon.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getGamesWon()).toString()));
-		view.userInfoGamesTie.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getGamesTie()).toString()));
-		view.userInfoGamesLost.textProperty().bind(new SimpleStringProperty(((Integer)userInfo.getGamesLost()).toString()));*/
-		
 		runningGames = new ArrayList<GameModel>();
 
 	}
-	
+	//Updates stats of the user that is logged in (top right part of lobby)
 	private void updateGUIUserStats() {
 		
 		view.userInfoName.setText(String.valueOf(userInfo.getUsername()));
@@ -74,13 +71,13 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 		view.userInfoGamesTie.setText(String.valueOf(userInfo.getGamesTie()));
 		view.userInfoGamesLost.setText(String.valueOf(userInfo.getGamesLost()));
 	}
-
+	//Starts message listener thread
 	public void startListener()
 	{
 		listener = new Thread(this);
 		listener.start();
 	}
-	
+	//Listens for messages from server and finds out what type of message it is.
 	@Override
 	public void run() {
 		connected = true;
@@ -91,68 +88,17 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 				if(obj instanceof InGameMessage)
 				{
 					InGameMessage msg = (InGameMessage)obj;
-					String gameName = msg.getGameName();
-					Platform.runLater(new Runnable(){
-					public void run(){
-						for(GameModel gm : runningGames)
-						{
-							if (gm.getGameName().equals(gameName))
-							{
-							gm.processMessage(msg);
-							break;
-							}
-						}
-					}
-					});
+					sendToGame(msg);
 				}
 				else if(obj instanceof ServerInfoMessage)
 				{
 					ServerInfoMessage serverInfoMessage = (ServerInfoMessage)obj;
-					Platform.runLater(new Runnable()
-					{
-						
-						@Override
-						public void run() 
-						{
-							Alert alert = new Alert(AlertType.INFORMATION);
-							alert.setTitle("Server information");
-							alert.setContentText(serverInfoMessage.getMessage());
-							alert.showAndWait();
-							
-						}
-						
-					});
+					showMessageFromServer(serverInfoMessage);
 				}
 				else if(obj instanceof GameListItem)
 				{
 					GameListItemDataModel updatedGame = new GameListItemDataModel((GameListItem)obj);
-					
-					
-					boolean isSelected = false;
-					
-					Iterator<GameListItemDataModel> gameListIt = view.gameData.iterator();
-					while(gameListIt.hasNext())
-					{
-						GameListItemDataModel g = gameListIt.next();
-						if(g.getGameName().equals(updatedGame.getGameName()))
-						{
-							if(view.gameList.getSelectionModel().getSelectedItem() != null && view.gameList.getSelectionModel().getSelectedItem().equals(g))
-							{
-								view.gameList.getSelectionModel().clearSelection();
-								isSelected = true;
-							}
-							gameListIt.remove();
-						}
-					}
-					if(updatedGame.getRegisteredPlayers()<updatedGame.getMaxPlayers())
-					{
-						view.gameData.add(updatedGame);
-						if(isSelected)
-						{
-							view.gameList.getSelectionModel().select(updatedGame);
-						}
-					}
-					
+					updateGameList(updatedGame);
 				}
 				else if(obj instanceof GameListItemList)
 				{
@@ -164,21 +110,10 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 					}
 					
 				}
-				
 				else if (obj instanceof GameStartMessage)
 				{
-					LobbyModel thisModel = this;
-					Platform.runLater(new Runnable(){
-						public void run()
-						{
-							String gameName = ((GameStartMessage)obj).getGameName();
-							GameView gameView = new GameView();
-							GameModel gameModel = new GameModel(gameName, thisModel, gameView);
-							GameController gameController = new GameController(gameView, gameModel);
-							runningGames.add(gameModel);
-						}
-					});
-
+					GameStartMessage gsm = (GameStartMessage)obj;
+					startGame(gsm);
 				}
 				
 				else if(obj instanceof LobbyChatMessage)
@@ -200,17 +135,8 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 				{
 					
 					UserInfoMessage thisUserStats = (UserInfoMessage)obj;
-					System.out.println("UserInfo received! New losses = " + thisUserStats.getGamesLost());
-					userInfo.setUsername(thisUserStats.getUsername());
-					userInfo.setGamesPlayed(thisUserStats.getGamesPlayed());
-					userInfo.setGamesWon(thisUserStats.getGamesWon());
-					userInfo.setGamesTie(thisUserStats.getGamesTie());
-					userInfo.setGamesLost(thisUserStats.getGamesLost());
-					userInfo.setPosition(thisUserStats.getPosition());
-					userInfo.setPoints(thisUserStats.getPoints());
-					Platform.runLater(()->{
-						updateGUIUserStats();
-					});
+					updateUserStats(thisUserStats);
+
 				}
 			} catch (ClassNotFoundException e) {
 				
@@ -230,12 +156,104 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 		}
 		
 	}
-
+	//updates user stats of user that is logged in on this client instance
+	private void updateUserStats(UserInfoMessage thisUserStats) {
+		System.out.println("UserInfo received! New losses = " + thisUserStats.getGamesLost());
+		userInfo.setUsername(thisUserStats.getUsername());
+		userInfo.setGamesPlayed(thisUserStats.getGamesPlayed());
+		userInfo.setGamesWon(thisUserStats.getGamesWon());
+		userInfo.setGamesTie(thisUserStats.getGamesTie());
+		userInfo.setGamesLost(thisUserStats.getGamesLost());
+		userInfo.setPosition(thisUserStats.getPosition());
+		userInfo.setPoints(thisUserStats.getPoints());
+		Platform.runLater(()->{
+			updateGUIUserStats();
+		});
+	}
+	//Starts a game when the required amount of users have registered
+	private void startGame(GameStartMessage gsm) {
+		LobbyModel thisModel = this;
+		Platform.runLater(new Runnable(){
+			public void run()
+			{
+				String gameName = gsm.getGameName();
+				GameView gameView = new GameView();
+				GameModel gameModel = new GameModel(gameName, thisModel, gameView);
+				GameController gameController = new GameController(gameView, gameModel);
+				runningGames.add(gameModel);
+			}
+		});
+		
+	}
+	//Sends message to the respective gameModel instance
+	private void sendToGame(InGameMessage msg) {
+		String gameName = msg.getGameName();
+		Platform.runLater(new Runnable(){
+		public void run(){
+			for(GameModel gm : runningGames)
+			{
+				if (gm.getGameName().equals(gameName))
+				{
+				gm.processMessage(msg);
+				break;
+				}
+			}
+		}
+		});
+		
+	}
+	//Shows a message box if there is a string message from the server (e.g. game name already taken)
+	private void showMessageFromServer(ServerInfoMessage serverInfoMessage) {
+		Platform.runLater(new Runnable()
+		{
+			
+			@Override
+			public void run() 
+			{
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Server information");
+				alert.setContentText(serverInfoMessage.getMessage());
+				alert.showAndWait();
+				
+			}
+			
+		});
+		
+	}
+	//updates game list when a update message arrives
+	private void updateGameList(GameListItemDataModel updatedGame) {
+		boolean isSelected = false;
+		
+		Iterator<GameListItemDataModel> gameListIt = view.gameData.iterator();
+		while(gameListIt.hasNext())
+		{
+			GameListItemDataModel g = gameListIt.next();
+			if(g.getGameName().equals(updatedGame.getGameName()))
+			{
+				if(view.gameList.getSelectionModel().getSelectedItem() != null && view.gameList.getSelectionModel().getSelectedItem().equals(g))
+				{
+					view.gameList.getSelectionModel().clearSelection();
+					isSelected = true;
+				}
+				gameListIt.remove();
+			}
+		}
+		if(updatedGame.getRegisteredPlayers()<updatedGame.getMaxPlayers())
+		{
+			view.gameData.add(updatedGame);
+			if(isSelected)
+			{
+				view.gameList.getSelectionModel().select(updatedGame);
+			}
+		}
+		
+	}
+	//When a user creates a game this method sends a message to the server
 	public void createGame() {
 		CreateGameMessage createGameMsg = new CreateGameMessage(view.createGameNametxt.getText(), view.createGamePasswordtxt.getText(), view.createNumPlayerscbx.getValue(), view.createNumAIPlayerscbx.getValue());
 		sendMessage(createGameMsg);
 	}
-
+	//When a user joins a game this method is invoked and sends a message to the server
 	public void joinGame() {
 	
 		GameListItemDataModel gameToJoin = view.gameList.getSelectionModel().getSelectedItem();
@@ -247,11 +265,12 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 		}
 		
 	}
-	
+	//Sends input from chat to server
 	public void sendChatMessage() {
 		LobbyChatMessage chatMessage = new LobbyChatMessage(userInfo.getUsername(), view.chatField.getText());
 		sendMessage(chatMessage);
 	}
+	//Method that sends all the messages to server
 	@Override
 	public synchronized void sendMessage(Message msg)
 	{
@@ -263,7 +282,7 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 		}
 	}
 	
-	
+	//Displays error message when the connection to a server is lost
 	private void connectionLost() {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("Connection error");
@@ -271,25 +290,13 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 		alert.showAndWait();
 		
 	}
-
+	//Invoked when a game ends
+	@Override
 	public void endGame(GameModel game)
 	{
 		runningGames.remove(game);
 	}
-
-
-	@Override
-	public void endGame(String gameName) {
-		for(GameModel m: runningGames)
-		{
-			if(m.getGameName().equals(gameName))
-			{
-				runningGames.remove(m);
-			}
-		}
-		
-	}
-
+	//Handles case when a user closes the lobby window.
 	public void disconnect(WindowEvent e) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Close Atlantis");

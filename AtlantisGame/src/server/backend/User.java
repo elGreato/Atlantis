@@ -5,7 +5,14 @@ import java.util.ArrayList;
 import gameObjects.Game;
 import gameObjects.GameInterface;
 import messageObjects.Message;
-
+/**
+* <h1>Superclass for Users of game</h1>
+* A user can be either a human connected through a client or an AI running directly on a server.
+* This class contains functionality both of these types of users need.
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public abstract class User {
 	
 	UserInfo userInfo;

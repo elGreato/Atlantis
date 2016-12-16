@@ -3,9 +3,14 @@ package messageObjects;
 import java.io.Serializable;
 
 
-//For games not started yet in lobby, nothing to do with an actual game instance
 
-
+/**
+* <h1>Sends single game item to client</h1>
+* When a new game is created or a user has registered, this message is sent to all the clients
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class GameListItem extends LobbyMessage implements Serializable{
 
 	private String gameName;

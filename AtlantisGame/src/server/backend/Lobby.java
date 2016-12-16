@@ -13,7 +13,14 @@ import messageObjects.GameListItemList;
 import messageObjects.LobbyChatMessage;
 import messageObjects.UserInfoListMessage;
 import messageObjects.UserInfoMessage;
-
+/**
+* <h1>The game's lobby</h1>
+* This class represents the Lobby of the game and is responsible for managing games, users and their stats.
+*
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class Lobby implements LobbyInterface{
 	private ArrayList<HumanUser> onlineUsers;
 	private ArrayList<AIUser> aiUsers;
@@ -266,6 +273,7 @@ public class Lobby implements LobbyInterface{
 		
 		
 	}
+	//Sends leaderboard to newly logged in users
 	private synchronized void sendLeaderboard(HumanUser user) {
 		ArrayList<UserInfoMessage> leaderboard = new ArrayList<UserInfoMessage>();
 		int leaderboardEntries = 0;
@@ -351,7 +359,6 @@ public class Lobby implements LobbyInterface{
 	
 	//Updates leaderboard and sends messages to users that need a update on their leaderboard
 	private synchronized void updateLeaderBoard(User user) {
-		// TODO Auto-generated method stub
 		int listPositionBefore = userInfoAllUsers.indexOf(user.getUserInfo());
 		Collections.sort(userInfoAllUsers);
 		int listPositionAfter = userInfoAllUsers.indexOf(user.getUserInfo());
@@ -408,7 +415,7 @@ public class Lobby implements LobbyInterface{
 		}
 		return userInfoAllUsers.indexOf(userInfo)+1;
 	}
-
+	//Gets called by HumanUser class when a user logs out, removes user from online user
 	@Override
 	public void logoutFromOnlineUsers(HumanUser user) {
 		for(Game g : waitingGames)
@@ -424,6 +431,7 @@ public class Lobby implements LobbyInterface{
 		onlineUsers.remove(user);
 		
 	}
+	//When a game is finished this method is called and the game is removed so that the game name can be used again
 	@Override
 	public void endGame(Game game)
 	{
@@ -435,7 +443,7 @@ public class Lobby implements LobbyInterface{
 		
 	}
 
-
+	//When a user leaves mid-game this method is called by the game to return a AI user to take the place of the leaving user
 	@Override
 	public synchronized AIUser requestAI(ArrayList<User> playersRegistered) {
 		for(AIUser possibleNewOpponent : aiUsers)

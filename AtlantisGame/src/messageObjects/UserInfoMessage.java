@@ -2,9 +2,15 @@ package messageObjects;
 
 import java.io.Serializable;
 
-import javafx.beans.property.SimpleIntegerProperty;
 import server.backend.UserInfo;
-
+/**
+* <h1>Message that sends stats of a user</h1>
+* 
+*
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class UserInfoMessage extends UserMessage implements Serializable {
 
 	private int gamesPlayed;

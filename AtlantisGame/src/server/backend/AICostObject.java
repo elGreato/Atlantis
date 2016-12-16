@@ -5,7 +5,13 @@ import java.util.HashMap;
 
 import gameObjects.Card;
 import gameObjects.LandTile;
-
+/**
+* <h1>Contains Payment AI considers doing</h1>
+* The payments are stored for each move (also if the AI considers playing multiple cards)
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class AICostObject {
 	private HashMap<Integer, ArrayList<LandTile>> tilesPaidInEachMove;
 	private HashMap<Integer, ArrayList<Card>>cardsPaidInEachMove;

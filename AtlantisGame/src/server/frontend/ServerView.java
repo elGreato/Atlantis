@@ -5,7 +5,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+/**
+* <h1>View of server GUI</h1>
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class ServerView {
 	
 	protected Stage stage;

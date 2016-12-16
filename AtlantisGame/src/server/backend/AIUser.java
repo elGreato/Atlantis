@@ -7,7 +7,13 @@ import gameObjects.GameInterface;
 import messageObjects.InGameMessage;
 import messageObjects.Message;
 import messageObjects.WaterMessage;
-
+/**
+* <h1>Representation of an AI user</h1>
+* Represents AI in Lobby. Sends InGameMessages to specific AIGame instance.
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class AIUser extends User implements Runnable{
 	public static String[] aiNames = {"AI_BernGuy", "AI_Bolt","AI_SGASquad","AI_GovOfficials", "AI_TheStandard"};
 	private double aiSpeed;

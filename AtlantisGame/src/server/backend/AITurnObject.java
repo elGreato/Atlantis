@@ -5,7 +5,13 @@ import java.util.ArrayList;
 import gameObjects.Card;
 import gameObjects.LandTile;
 import gameObjects.Pawn;
-
+/**
+* <h1>Contains turns AI considers doing</h1>
+* When an AI calculates its turns it stores the information about played pawns, played cards, costs and values here.
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class AITurnObject {
 	private ArrayList<Pawn> pawnsThatCanBePlayed;
 	private ArrayList<Card> cardsOnHandLeft;

@@ -4,7 +4,14 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import messageObjects.GameListItem;
-
+/**
+* <h1Data model for games</h1>
+* Contains data for game list table in lobby
+*
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class GameListItemDataModel {
 	private SimpleStringProperty gameName;
 	private SimpleIntegerProperty registeredPlayers;

@@ -12,7 +12,13 @@ import messageObjects.CreateUserMessage;
 import messageObjects.ServerInfoMessage;
 import messageObjects.LoginMessage;
 import messageObjects.UserInfoMessage;
-
+/**
+* <h1>Logic for login screen</h1>
+* Client side logic of login and creation of users. Sends messages to server.
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class LoginModel {
 	private Socket socket;
 	private LoginView view;

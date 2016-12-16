@@ -1,6 +1,14 @@
 package server.backend;
 
-import java.util.Comparator;
+/**
+* <h1>Contains stats and info of a registered user</h1>
+* Every user is represented by a UserInfo instance. It contains their name, password and stats. 
+* When a server is started this data is loaded from the database.
+* A UserInfo is also created when there is a new user created.
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 
 public class UserInfo implements Comparable<UserInfo>{
 

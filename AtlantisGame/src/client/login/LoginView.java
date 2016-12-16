@@ -4,7 +4,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
+/**
+* <h1>View for login screen</h1>
+* Creates the view of the login screen
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class LoginView {
 	private Stage stage;
 	private Scene scene;

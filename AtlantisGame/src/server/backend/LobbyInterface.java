@@ -6,7 +6,13 @@ import gameObjects.Game;
 import messageObjects.CreateGameMessage;
 import messageObjects.GameJoinMessage;
 import messageObjects.LobbyChatMessage;
-
+/**
+* <h1>Interface for lobby for external access</h1>
+* Users and games access lobby functionality through this interface.
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public interface LobbyInterface {
 	
 	UserInfo loginUser(String username, String password, HumanUser user);

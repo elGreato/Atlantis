@@ -1,13 +1,16 @@
 package client.intro;
 
 import client.serverconnect.*;
-import gameObjects.Player;
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
-public class MainKevin extends Application{
+/**
+* <h1>Starts client instance of Atlantis</h1>
+* A User needs to start the game from this class
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
+public class AtlantisGame extends Application{
 
 	ServerconnectView view;
 	ServerconnectModel model;

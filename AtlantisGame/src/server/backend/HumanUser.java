@@ -18,6 +18,14 @@ import messageObjects.LoginMessage;
 import messageObjects.Message;
 import messageObjects.UserInfoMessage;
 
+/**
+* <h1>Class for connection to clients</h1>
+* This class is responsible for input and output from clients.
+*
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class HumanUser extends User implements Runnable{
 	
 	private boolean loggedIn;
@@ -159,14 +167,7 @@ public class HumanUser extends User implements Runnable{
 				if(receivedMessage instanceof InGameMessage)
 				{
 					InGameMessage igm = (InGameMessage)receivedMessage;
-					for(GameInterface g : runningGames)
-					{
-						if(igm.getGameName().equals(g.getName()))
-						{
-							g.processMessage(igm);
-							break;
-						}
-					}
+					sendToGame(igm);
 				}
 				else if(receivedMessage instanceof GameJoinMessage)
 				{
@@ -203,7 +204,20 @@ public class HumanUser extends User implements Runnable{
 			}
 		}
 	}
+	//Sends message to the corresponding instance of the Game class
+	private void sendToGame(InGameMessage igm) {
+		for(GameInterface g : runningGames)
+		{
+			if(igm.getGameName().equals(g.getName()))
+			{
+				g.processMessage(igm);
+				break;
+			}
+		}
+		
+	}
 
+	//Sends messages to clients
 	public synchronized void sendMessage(Message m) {
 		try {
 			oos.writeUnshared(m);
@@ -215,7 +229,7 @@ public class HumanUser extends User implements Runnable{
 		}
 		
 	}
-	
+	//User is informed that a game she/he has registered for is being started
 	public synchronized void initiateGameStart(GameInterface game)
 	{
 		runningGames.add(game);
@@ -230,6 +244,7 @@ public class HumanUser extends User implements Runnable{
 			}
 		}
 	}
+	//When the connection to a client fails the user is logged out
 	private synchronized void logoutUser()
 	{
 		System.out.println("Start logout process. Ending " + runningGames.size() + " games");

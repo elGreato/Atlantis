@@ -41,7 +41,14 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import messageObjects.GameListItem;
-
+/**
+* <h1>View of Lobby</h1>
+* This class is responsible for the design and view of the Lobby.
+*
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class LobbyView {
 	protected Stage stage;
 	private Scene scene;
@@ -331,9 +338,8 @@ public class LobbyView {
 		stage.sizeToScene();
 		
 	}
-
+	//Resizes window if screen is too small
 	public void start() {
-		// TODO Auto-generated method stub
 		stage.show();
 		chatHistory.setPrefWidth(chatContent.getWidth());
 		chatField.setPrefWidth(0.9*chatContent.getWidth());

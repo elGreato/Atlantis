@@ -6,7 +6,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-
+/**
+* <h1>Controller of the lobby</h1>
+* This class handles input from the user in the lobby window. It creates the events and invokes the required methods in the LobbyModel class.
+*
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class LobbyController {
 	private LobbyView view;
 	private LobbyModel model;

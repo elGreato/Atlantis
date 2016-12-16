@@ -1,9 +1,7 @@
 package server.backend;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 
 import gameObjects.Card;
 import gameObjects.GameInterface;
@@ -21,12 +19,17 @@ import messageObjects.turnMessages.EndMYTurnMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.LastBillMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
-import messageObjects.turnMessages.PaymentDoneMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
 import messageObjects.turnMessages.RefreshPlayerMessage;
 import messageObjects.turnMessages.ServerMessage;
 import messageObjects.turnMessages.WaterPaidMessage;
-
+/**
+* <h1>Manages a specific game a specific AI players participates in.</h1>
+* Buys cards, calculates best turns, does turns, pays for water etc.
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class GameAI {
 	private GameInterface game;
 	private ArrayList<WaterTile> path;
@@ -34,12 +37,8 @@ public class GameAI {
 	public Player me;
 	private double aiSpeed;
 	private double aiPawnSpread;
-	private double valueBestTurn;
 	private ArrayList<Card> bestCards;
-	private ArrayList<Integer> bestTurnCosts;
 	private Pawn bestPawn;
-	private HashMap<Integer, ArrayList<LandTile>> LandTilesPayments;
-	private HashMap<Integer, ArrayList<Card>> CardPayments;
 	private double avgDistanceOtherPlayers;
 	private double avgDistanceMe;
 	private AICostObject payments;
@@ -68,7 +67,6 @@ public class GameAI {
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				doATurn(false);
@@ -78,7 +76,6 @@ public class GameAI {
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -143,7 +140,6 @@ public class GameAI {
 	}
 
 	private void doPayment(RefreshPlayerMessage rpm) {
-		// TODO Auto-generated method stub
 		if (rpm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex() && rpm.getWaterBill() > 0) {
 
 			System.out.println(me.getPlayerName() + 

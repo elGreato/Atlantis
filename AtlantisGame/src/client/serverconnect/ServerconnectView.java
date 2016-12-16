@@ -4,7 +4,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
+/**
+* <h1>View of serverconnect window</h1>
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class ServerconnectView {
 	protected Stage stage;
 	protected Scene scene;

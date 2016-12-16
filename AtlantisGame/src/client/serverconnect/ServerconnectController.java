@@ -3,7 +3,12 @@ package client.serverconnect;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
-
+/**
+* <h1>Handles user input of serverconnect window</h1>
+* @author  Kevin Neuschwander
+* @version 1.0
+* @since   2016-12-16
+*/
 public class ServerconnectController {
 	
 	private ServerconnectView view;
