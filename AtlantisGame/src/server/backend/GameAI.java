@@ -43,17 +43,17 @@ public class GameAI {
 	private double avgDistanceMe;
 	private AICostObject payments;
 	private int moves;
-
+	//Getter needed
 	public String getGameName() {
 		return game.getName();
 	}
-
+	//Constructor
 	public GameAI(GameInterface game, double aiSpeed, double aiPawnSpread) {
 		this.game = game;
 		this.aiPawnSpread = aiPawnSpread;
 		this.aiSpeed = aiSpeed;
 	}
-
+	//Processes incoming messages
 	public void processMessage(InGameMessage igm) {
 		if (igm instanceof WaterMessage) {
 			path = ((WaterMessage) igm).getBase();
@@ -63,69 +63,17 @@ public class GameAI {
 			opponentInfo = ((OpponentMessage) igm).getOpponents();
 		} else if (igm instanceof GameStatusMessage) {
 			GameStatusMessage gsm = (GameStatusMessage) igm;
-			if (gsm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex()) {
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				doATurn(false);
-			}
+			checkIfMyTurn(gsm);
 		} else if (igm instanceof PlayAnotherCardMessage) {
-
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
-			game.processMessage(
-					new PawnCardSelectedMessage(game.getName(), me.getPlayerIndex(), bestPawn, bestCards.remove(0)));
-
+			playAnotherCard();
 		} else if (igm instanceof RefreshPlayerMessage) {
-			
 			RefreshPlayerMessage rpm = (RefreshPlayerMessage) igm;
 			doPayment(rpm);
-
-			
 		} else if (igm instanceof ServerMessage) {
 			System.out.println(((ServerMessage) igm).getTheMessage());
-			
-			
 		} else if (igm instanceof LastBillMessage) {
-			System.out.println("Last Bill received by AI");
 			int totalPayment = ((LastBillMessage)igm).getWaterBill();
-			System.out.println("Total payment for last bill" + totalPayment);
-			int valueOfHand = 0;
-			valueOfHand += me.getPlayerHand().getNumCards();
-			for(LandTile lt : me.getPlayerHand().getTreasures())
-			{
-				valueOfHand += lt.getLandValue();
-			}
-			if(totalPayment > 0 && valueOfHand <= totalPayment)
-			{
-				System.out.println("Pay with everything");
-				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), me.getPlayerHand().getTreasures(), me.getPlayerHand().getCards(),true);
-				game.processMessage(wpm);
-			}
-			else if (totalPayment > 0)
-			{
-
-				HashMap<Integer, ArrayList<LandTile>> tilesToPay =new HashMap<Integer, ArrayList<LandTile>>();
-				tilesToPay.put(0, new ArrayList<LandTile>());
-				HashMap<Integer, ArrayList<Card>>cardsToPay = new HashMap<Integer, ArrayList<Card>>();
-				cardsToPay.put(0, new ArrayList<Card>());
-				AICostObject payment = determineTilesToPay(new AICostObject(tilesToPay,cardsToPay),me.getPlayerHand().getCards(),me.getPlayerHand().getTreasures(),totalPayment,0,true);
-				
-				System.out.println("Send payment message. Payable amount = " + ((LastBillMessage)igm).getWaterBill());
-				System.out.println("Payment size: Tiles: " +payment.getTilesPaidInEachMove().get(0).size() + " Cards: " + payment.getCardsPaidInEachMove().get(0).size());
-				for (LandTile lt : payment.getTilesPaidInEachMove().get(0)) {
-					System.out.println("Tile with value: " + lt.getLandValue());
-				}
-				
-				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), payment.getTilesPaidInEachMove().get(0),payment.getCardsPaidInEachMove().get(0),true);
-				game.processMessage(wpm);
-			}
+			payLastBill(totalPayment);
 		} else if(igm instanceof CardsBoughtMessage)
 		{
 			CardsBoughtMessage cbm = (CardsBoughtMessage)igm;
@@ -138,7 +86,67 @@ public class GameAI {
 			
 		}
 	}
+	//Does a turn if its the turn of this AI
+	private void checkIfMyTurn(GameStatusMessage gsm) {
+		if (gsm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex()) {
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			doATurn(false);
+		}
+		
+	}
+	//If the AI needs to play another card this method is invoked. It takes card, pawn and costs from calcuation done in the beginning of the turn.
+	private void playAnotherCard() {
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		game.processMessage(
+				new PawnCardSelectedMessage(game.getName(), me.getPlayerIndex(), bestPawn, bestCards.remove(0)));
+		
+	}
+	//Initiates payment of last bill, calls determineTilesToPay to calculate best payment if it doesn't have to pay with everything.
+	private void payLastBill(int totalPayment) {
+		System.out.println("Last Bill received by AI");
+		System.out.println("Total payment for last bill" + totalPayment);
+		int valueOfHand = 0;
+		valueOfHand += me.getPlayerHand().getNumCards();
+		for(LandTile lt : me.getPlayerHand().getTreasures())
+		{
+			valueOfHand += lt.getLandValue();
+		}
+		if(totalPayment > 0 && valueOfHand <= totalPayment)
+		{
+			System.out.println("Pay with everything");
+			WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), me.getPlayerHand().getTreasures(), me.getPlayerHand().getCards(),true);
+			game.processMessage(wpm);
+		}
+		else if (totalPayment > 0)
+		{
 
+			HashMap<Integer, ArrayList<LandTile>> tilesToPay =new HashMap<Integer, ArrayList<LandTile>>();
+			tilesToPay.put(0, new ArrayList<LandTile>());
+			HashMap<Integer, ArrayList<Card>>cardsToPay = new HashMap<Integer, ArrayList<Card>>();
+			cardsToPay.put(0, new ArrayList<Card>());
+			AICostObject payment = determineTilesToPay(new AICostObject(tilesToPay,cardsToPay),me.getPlayerHand().getCards(),me.getPlayerHand().getTreasures(),totalPayment,0,true);
+			
+			System.out.println("Send payment message. Payable amount = " + totalPayment);
+			System.out.println("Payment size: Tiles: " +payment.getTilesPaidInEachMove().get(0).size() + " Cards: " + payment.getCardsPaidInEachMove().get(0).size());
+			for (LandTile lt : payment.getTilesPaidInEachMove().get(0)) {
+				System.out.println("Tile with value: " + lt.getLandValue());
+			}
+			
+			WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), payment.getTilesPaidInEachMove().get(0),payment.getCardsPaidInEachMove().get(0),true);
+			game.processMessage(wpm);
+		}
+		
+	}
+	//Does payment if receives message asking for it. Takes data from calculated move at the beginning of turn.
 	private void doPayment(RefreshPlayerMessage rpm) {
 		if (rpm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex() && rpm.getWaterBill() > 0) {
 
@@ -181,7 +189,7 @@ public class GameAI {
 			}
 		}
 	}
-
+	//Invoked when the AI recevies message that its turn has started
 	private void doATurn(boolean alreadyBoughtCards) {
 		boolean cardsRequiredToBuy = true;
 		if(!alreadyBoughtCards)
@@ -195,7 +203,7 @@ public class GameAI {
 		
 
 	}
-
+	//Plans best move including cards to play, pawn to play (both using determineBestMoves method) and payments(using determineBestPayment method
 	private void planMoves() {
 		bestCards = new ArrayList<Card>();
 		bestCards.clear();
@@ -223,7 +231,7 @@ public class GameAI {
 		}
 		
 	}
-
+	//Determines whether it's necessary to buy cards in the beginning of the turn
 	private boolean buyCardsIfRequired() {
 		if(me.getPlayerHand().getNumCards() < 2)
 		{
@@ -244,7 +252,7 @@ public class GameAI {
 		
 		
 	}
-
+	//When buying cards this method determines the treasures to pay with
 	private ArrayList<LandTile> determineTreasuresForBuyProcess(int desiredAmount, ArrayList<LandTile> tilesLeftOnHand, ArrayList<LandTile>payment) {
 		ArrayList<LandTile> bestPayment = null;
 		int valueDesired = 2*desiredAmount;
@@ -286,7 +294,7 @@ public class GameAI {
 		return bestPayment;
 	}
 	
-
+	//Returns total value of land tiles in an arraylist
 	private int determineValueOfLandTiles(ArrayList<LandTile> bestPayment) {
 		int valueOfPayment = 0;
 		for(LandTile lt2:bestPayment)
@@ -295,12 +303,12 @@ public class GameAI {
 		}
 		return valueOfPayment;
 	}
-
+	//When AI can't find a turn to do this method is invoked to send the message to end the turn.
 	private void giveUpTurn() {
 		game.processMessage(new EndMYTurnMessage(game.getName(), me.getPlayerIndex(),false));
 
 	}
-
+	//Calculates distance of AI and average distance of other players (all together)
 	private void calculateAverageDistances() {
 		avgDistanceOtherPlayers = 0;
 		avgDistanceMe = 0;
@@ -315,7 +323,7 @@ public class GameAI {
 		}
 		avgDistanceMe /= 3;
 	}
-
+	//Recursively plans best moves including cards to play pawn to play and costs(using determineBestPayment method
 	private AITurnObject determineBestMoves(AITurnObject inputForMove, int moveNumber)
 	{
 		AITurnObject bestPossibleTurn = null;
@@ -376,7 +384,6 @@ public class GameAI {
 							(((LandTile) ((path.get(p.getNewLocation()+distanceAlreadyTraveled).getChildren().get(path.get(p.getNewLocation()+distanceAlreadyTraveled).getChildren().size()-1)))).hasPawn())
 						/*&&costsAlreadyIncurred < 0.25 * me.getPlayerHand().getNumCards() + me.getPlayerHand().getTreasuresValue(me.getPlayerHand().getTreasures())"*/)
 					{
-					//System.out.println("plan second move");
 			
 					
 						ArrayList<Pawn> pawnsForNextIteration = new ArrayList<Pawn>();
@@ -406,11 +413,6 @@ public class GameAI {
 							bestPossibleTurn = new AITurnObject(pawn, cardsLeftOnHand,cardsAlreadyPlayed,tilesLeftInHand,costs,
 									distanceAlreadyTraveled,costsAlreadyIncurred);
 							bestPossibleTurn.setValueOfTurn(valueOfTurn);
-						//int i = getValueOfCosts(costs);
-						//System.out.println("Total value of payment: " + i + " costs: " + costsForThisMove);
-						//System.out.println("New best turn detected " + valueBestTurn + " points: " + points + " speed: " + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceForMove)+ " spread: " + aiPawnSpread*(avgDistanceMe - p.getNewLocation()));
-						//System.out.println("Average other players: " + avgDistanceOtherPlayers+ " AVGMe: "+ avgDistanceMe);
-						//System.out.println("Distance: " + distanceForMove);
 						}	
 					}
 				}
@@ -418,7 +420,7 @@ public class GameAI {
 		}
 		return bestPossibleTurn;
 	}
-
+	//Recursively determines best payment to do for a calculated move
 	private AICostObject determineTilesToPay(AICostObject input, ArrayList<Card> cardsLeftInHand,
 			ArrayList<LandTile> tilesLeftInHand, int paymentSize, int moveNumber, boolean isLastPayment) {
 		AICostObject bestPayment = null;
@@ -465,51 +467,23 @@ public class GameAI {
 			// Iterative
 			// Payment value not reached
 			if (updatedPaymentSize > 0) {
-				//Try to pay with cards if possible
-				/*if(updatedPaymentSize <= cardsLeftInHand.size())
-				{
-					ArrayList<Card> cardsToPay = new ArrayList<Card>();
-					for(int i = 0; i<updatedPaymentSize; i++)
-					{
-						cardsToPay.add(cardsLeftInHand.get(i));
-					}
-					HashMap<Integer, ArrayList<Card>> updatedCardPayment = new HashMap<Integer, ArrayList<Card>>();
-					for (Integer e : input.getCardsPaidInEachMove().keySet()) {
-						if (e != moveNumber) {
-							ArrayList<Card> copy = input.getCardsPaidInEachMove().get(e);
-							updatedCardPayment.put(e, copy);
-						}
-					}
-					updatedCardPayment.put(moveNumber, cardsToPay);
-					AICostObject paymentWithCards = new AICostObject(updatedTilePayment, updatedCardPayment);
-					if(bestPayment == null
-							||paymentWithCards.getRealCosts(moveNumber, isLastPayment)< bestPayment.getRealCosts(moveNumber, isLastPayment))
-					{
-						bestPayment = paymentWithCards;
-					}
-				}*/
 				AICostObject finalPayment = determineTilesToPay(updatedCosts, cardsLeftInHand, updatedTilesLeftInHand,
 						updatedPaymentSize, moveNumber, isLastPayment);
 				if (finalPayment != null && (bestPayment == null
 						|| finalPayment.getRealCosts(moveNumber,isLastPayment) < bestPayment.getRealCosts(moveNumber,isLastPayment))) {
 					bestPayment = finalPayment;
 				}
-				
-				
-				//Payment value reached
 			} else if (updatedPaymentSize <= 0) {
 				if (bestPayment == null
 						|| updatedCosts.getRealCosts(moveNumber,isLastPayment) < bestPayment.getRealCosts(moveNumber,isLastPayment)) {
 					bestPayment = updatedCosts;
-					// System.out.println("New best payment detected: " +
-					// updatedCosts.getRealCosts(moveNumber) + " Costs left: " +
-					// updatedPaymentSize);
 				}
 			}
 		}
 		return bestPayment;
 	}
-
+	
+	//calculates the costs of a specific move
 	private int calculateCostsOfMove(Pawn p, int distanceTraveledBefore, int distanceTraveledAfter) {
 		int totalCosts = 0;
 		int costsForThisWater = 0;
@@ -546,7 +520,7 @@ public class GameAI {
 		}
 		return totalCosts;
 	}
-
+	//calculates points for a specific move
 	private int calculatePointsOfTurn(Pawn p, int distance) {
 		for (int i = p.getNewLocation() + distance - 1; i >= 0; i--) {
 			WaterTile wt = path.get(i);
@@ -557,7 +531,7 @@ public class GameAI {
 		}
 		return 0;
 	}
-
+	//calculates distance traveled in a specific move
 	private int calculateDistanceOfMove(Pawn p, int distance, Card c) {
 		int startingLocation = p.getNewLocation() + distance;
 		for (int i = startingLocation + 1; i < path.size(); i++) {

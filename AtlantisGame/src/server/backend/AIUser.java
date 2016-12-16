@@ -36,6 +36,7 @@ public class AIUser extends User implements Runnable{
 		Thread t = new Thread(this);
 		t.start();
 	}
+	//Initiates a game start this AI is involved in
 	@Override
 	public synchronized void initiateGameStart(GameInterface game)
 	{
@@ -90,6 +91,7 @@ public class AIUser extends User implements Runnable{
 		}
 		
 	}
+	//Invoked when a game this ai is involved in ends
 	@Override
 	public synchronized void endGame(Game game) {
 		super.endGame(game);
