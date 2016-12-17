@@ -171,7 +171,7 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 		});
 	}
 	//Starts a game when the required amount of users have registered
-	private void startGame(GameStartMessage gsm) {
+	public void startGame(GameStartMessage gsm) {
 		LobbyModel thisModel = this;
 		Platform.runLater(new Runnable(){
 			public void run()
