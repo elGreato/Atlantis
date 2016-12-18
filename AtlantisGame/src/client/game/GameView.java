@@ -627,11 +627,14 @@ public class GameView {
 	}
 
 	public void closePayWaterScene() {
-		vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 1, hbTreasures);
-		vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 2, hboxCards);
-		lblPay.setText(" ");
-		multiCardsMode = false;
-		tempStage.close();
+		if(tempStage != null && tempStage.isShowing())
+		{
+			vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 1, hbTreasures);
+			vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 2, hboxCards);
+			lblPay.setText(" ");
+			multiCardsMode = false;
+			tempStage.close();
+		}
 	}
 
 	public void IWin(String winner) {

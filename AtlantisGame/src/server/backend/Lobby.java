@@ -415,16 +415,20 @@ public class Lobby implements LobbyInterface{
 		}
 		return userInfoAllUsers.indexOf(userInfo)+1;
 	}
-	//Gets called by HumanUser class when a user logs out, removes user from online user
+	//Gets called by HumanUser class when a user logs out. removes user from online user and removes user from waiting games the user has registered for
 	@Override
-	public void logoutFromOnlineUsers(HumanUser user) {
+	public synchronized void logoutFromOnlineUsers(HumanUser user) {
+		
 		for(Game g : waitingGames)
 		{
-			for(User u:g.getUsers())
+			Iterator<User> userIt = g.getUsers().iterator();
+			while(userIt.hasNext())
 			{
+				User u = userIt.next();
 				if(u == user)
 				{
-					g.getUsers().remove(u);
+					userIt.remove();
+					updateLobby(g);
 				}
 			}
 		}

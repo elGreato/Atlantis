@@ -42,17 +42,8 @@ public class GameController {
 
 	
 	private void handleClose(WindowEvent e) {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Close Atlantis");
-		alert.setContentText("Are you sure you want to close the game? \nYou will lose this game");
-		Optional<ButtonType> answer = alert.showAndWait();
-		if(answer.get() == ButtonType.OK)
-		{
-			model.playerLeft();
-		}
-		else{
-			e.consume();
-		}
+		model.playerLeft(e);
+
 	}
 
 

@@ -2,6 +2,7 @@ package client.game;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Optional;
 
 import client.lobby.ClientLobbyInterface;
 import client.lobby.LobbyModel;
@@ -10,6 +11,10 @@ import gameObjects.Pawn;
 import gameObjects.LandTile;
 import gameObjects.Player;
 import gameObjects.WaterTile;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.WindowEvent;
+import javafx.scene.control.Alert.AlertType;
 import messageObjects.AtlantisMainLandMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
@@ -552,6 +557,7 @@ public class GameModel {
 		view.stage.close();
 		System.out.println("Stage should be closed by now");
 		msgOut.sendMessage(new CloseGameMessage(gameName));
+		msgOut.endGame(this);
 
 	}
 
@@ -560,8 +566,23 @@ public class GameModel {
 
 	}
 
-	public void playerLeft() {
-		msgOut.sendMessage(new PlayerLeftMessage(gameName,currentPlayer.getPlayerIndex()));
+	public void playerLeft(WindowEvent e) {
+		if(!gameOver)
+		{
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Close Atlantis");
+			alert.setContentText("Are you sure you want to close the game? \nYou will lose this game");
+			Optional<ButtonType> answer = alert.showAndWait();
+			if(answer.get() == ButtonType.OK)
+			{
+				msgOut.sendMessage(new PlayerLeftMessage(gameName,currentPlayer.getPlayerIndex()));
+				msgOut.endGame(this);
+			}
+			else{
+				e.consume();
+			}
+		}
+		
 		
 	}
 	
