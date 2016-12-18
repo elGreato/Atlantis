@@ -382,6 +382,7 @@ public class Game implements GameInterface {
 		{
 			System.out.println("There are humans left");
 			AIUser replacement = lobby.requestAI(users);
+			System.out.println("Replacement = " + replacement.getUserInfo().getUsername());
 			users.set(leavingPlayer, replacement);
 			players.get(leavingPlayer).setPlayerName(replacement.getUserInfo().getUsername());
 			replacement.initiateGameStart(this);
@@ -395,9 +396,11 @@ public class Game implements GameInterface {
 					opponents.add(pl);
 				}
 			}
-			System.out.println(opponents.size());
 			replacement.sendMessage(new OpponentMessage(name,opponents));
-			
+			for(User u:users)
+			{
+				u.sendMessage(new PlayerLeftMessage(name, leavingPlayer,replacement.getUserInfo().getUsername()));
+			}
 			if(currentPlayerIndex == leavingPlayer&&!removedCards.isEmpty())
 			{
 				System.out.println("Revert turn");

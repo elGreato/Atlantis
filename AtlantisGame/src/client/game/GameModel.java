@@ -280,6 +280,11 @@ public class GameModel {
 			} else
 				view.ILose(message.getWinnerName());
 		}
+		if(msgIn instanceof PlayerLeftMessage)
+		{
+			PlayerLeftMessage plm = (PlayerLeftMessage)msgIn;
+			view.replaceLeavingPlayer(plm.getPlayerIndex(), plm.getNewPlayerName());
+		}
 
 	}
 

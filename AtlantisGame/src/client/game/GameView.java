@@ -348,7 +348,12 @@ public class GameView {
 			atlantis.getChildren().add(p);
 		}
 	}
-
+	public void replaceLeavingPlayer(int playerIndex, String playerName)
+	{
+		VBox opponentToChange = mapOpponents.get(playerIndex);
+		Label nameChanging = (Label) opponentToChange.getChildren().get(0);
+		nameChanging.setText(playerName);
+	}
 	public void placeAtlantisMainLand(AtlantisTile atlantis, MainLand mainland) {
 
 		this.atlantis = atlantis;
