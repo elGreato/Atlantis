@@ -381,6 +381,7 @@ public class Game implements GameInterface {
 		else
 		{
 			System.out.println("There are humans left");
+			lobby.endGameForSpecificUser(this, users.get(leavingPlayer));
 			AIUser replacement = lobby.requestAI(users);
 			System.out.println("Replacement = " + replacement.getUserInfo().getUsername());
 			users.set(leavingPlayer, replacement);
@@ -411,6 +412,7 @@ public class Game implements GameInterface {
 				System.out.println("End turn");
 				performEndTurn(leavingPlayer, false);
 			}
+			
 		}
 	}
 	//Method created by Kevin Neuschwander

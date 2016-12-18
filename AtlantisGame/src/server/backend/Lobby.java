@@ -459,4 +459,11 @@ public class Lobby implements LobbyInterface{
 		}
 		return null;
 	}
+
+
+	@Override
+	public void endGameForSpecificUser(Game game, User user) {
+		user.endGame(game);
+		
+	}
 }

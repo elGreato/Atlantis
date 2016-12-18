@@ -45,6 +45,8 @@ public interface LobbyInterface {
 	
 	//Invoke this method at the end of the game (after adding wins losses and ties above)
 	void endGame(Game game);
+
+	void endGameForSpecificUser(Game game, User user);
 	
 
 
