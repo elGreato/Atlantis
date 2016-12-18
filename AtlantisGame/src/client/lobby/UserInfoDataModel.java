@@ -2,7 +2,7 @@ package client.lobby;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import messageObjects.UserInfoMessage;
+import messageObjects.userMessages.UserInfoMessage;
 /**
 * <h1>Data model for user stats</h1>
 * Contains data for leaderboard table in lobby window

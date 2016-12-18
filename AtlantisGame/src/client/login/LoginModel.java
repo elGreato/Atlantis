@@ -8,10 +8,10 @@ import java.net.Socket;
 import client.lobby.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import messageObjects.CreateUserMessage;
 import messageObjects.ServerInfoMessage;
-import messageObjects.LoginMessage;
-import messageObjects.UserInfoMessage;
+import messageObjects.userMessages.CreateUserMessage;
+import messageObjects.userMessages.LoginMessage;
+import messageObjects.userMessages.UserInfoMessage;
 /**
 * <h1>Logic for login screen</h1>
 * Client side logic of login and creation of users. Sends messages to server.

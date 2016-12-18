@@ -1,7 +1,9 @@
-package messageObjects;
+package messageObjects.lobbyMessages;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import messageObjects.userMessages.UserInfoMessage;
 /**
 * <h1>Message with data for leaderboard</h1>
 * Sends leaderboard data to clients.

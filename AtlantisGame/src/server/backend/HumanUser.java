@@ -7,16 +7,16 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import gameObjects.GameInterface;
-import messageObjects.CreateGameMessage;
-import messageObjects.CreateUserMessage;
 import messageObjects.ServerInfoMessage;
-import messageObjects.GameJoinMessage;
-import messageObjects.GameStartMessage;
+import messageObjects.lobbyMessages.CreateGameMessage;
+import messageObjects.lobbyMessages.GameJoinMessage;
+import messageObjects.lobbyMessages.GameStartMessage;
+import messageObjects.lobbyMessages.LobbyChatMessage;
 import messageObjects.InGameMessage;
-import messageObjects.LobbyChatMessage;
-import messageObjects.LoginMessage;
 import messageObjects.Message;
-import messageObjects.UserInfoMessage;
+import messageObjects.userMessages.CreateUserMessage;
+import messageObjects.userMessages.LoginMessage;
+import messageObjects.userMessages.UserInfoMessage;
 
 /**
 * <h1>Class for connection to clients</h1>

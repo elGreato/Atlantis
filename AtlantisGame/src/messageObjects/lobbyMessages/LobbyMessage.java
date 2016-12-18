@@ -1,6 +1,8 @@
- package messageObjects;
+ package messageObjects.lobbyMessages;
 
 import java.io.Serializable;
+
+import messageObjects.Message;
 /**
 * <h1>Superclass for messages concerning lobby information</h1>
 *

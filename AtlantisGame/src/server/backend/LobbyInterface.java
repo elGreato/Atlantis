@@ -3,9 +3,9 @@ package server.backend;
 import java.util.ArrayList;
 
 import gameObjects.Game;
-import messageObjects.CreateGameMessage;
-import messageObjects.GameJoinMessage;
-import messageObjects.LobbyChatMessage;
+import messageObjects.lobbyMessages.CreateGameMessage;
+import messageObjects.lobbyMessages.GameJoinMessage;
+import messageObjects.lobbyMessages.LobbyChatMessage;
 /**
 * <h1>Interface for lobby for external access</h1>
 * Users and games access lobby functionality through this interface.

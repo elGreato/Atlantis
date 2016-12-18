@@ -40,7 +40,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import messageObjects.GameListItem;
+import messageObjects.lobbyMessages.GameListItem;
 /**
 * <h1>View of Lobby</h1>
 * This class is responsible for the design and view of the Lobby.

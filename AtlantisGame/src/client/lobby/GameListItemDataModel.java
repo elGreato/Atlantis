@@ -3,7 +3,7 @@ package client.lobby;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import messageObjects.GameListItem;
+import messageObjects.lobbyMessages.GameListItem;
 /**
 * <h1Data model for games</h1>
 * Contains data for game list table in lobby

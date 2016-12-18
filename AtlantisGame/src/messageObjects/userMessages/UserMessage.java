@@ -1,6 +1,8 @@
-package messageObjects;
+package messageObjects.userMessages;
 
 import java.io.Serializable;
+
+import messageObjects.Message;
 /**
 * <h1>Superclass for messages containing user data</h1>
 * Contains the username which is required for every user related message.

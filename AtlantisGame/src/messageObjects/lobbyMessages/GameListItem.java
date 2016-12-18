@@ -1,4 +1,4 @@
-package messageObjects;
+package messageObjects.lobbyMessages;
 
 import java.io.Serializable;
 

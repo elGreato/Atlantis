@@ -6,13 +6,13 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import gameObjects.Game;
-import messageObjects.CreateGameMessage;
-import messageObjects.GameJoinMessage;
-import messageObjects.GameListItem;
-import messageObjects.GameListItemList;
-import messageObjects.LobbyChatMessage;
-import messageObjects.UserInfoListMessage;
-import messageObjects.UserInfoMessage;
+import messageObjects.lobbyMessages.CreateGameMessage;
+import messageObjects.lobbyMessages.GameJoinMessage;
+import messageObjects.lobbyMessages.GameListItem;
+import messageObjects.lobbyMessages.GameListItemList;
+import messageObjects.lobbyMessages.LobbyChatMessage;
+import messageObjects.lobbyMessages.UserInfoListMessage;
+import messageObjects.userMessages.UserInfoMessage;
 /**
 * <h1>The game's lobby</h1>
 * This class represents the Lobby of the game and is responsible for managing games, users and their stats.

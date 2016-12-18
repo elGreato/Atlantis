@@ -15,17 +15,17 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.WindowEvent;
 import javafx.scene.control.Alert.AlertType;
-import messageObjects.CreateGameMessage;
-import messageObjects.GameJoinMessage;
-import messageObjects.GameListItem;
-import messageObjects.GameListItemList;
-import messageObjects.GameStartMessage;
 import messageObjects.InGameMessage;
-import messageObjects.LobbyChatMessage;
 import messageObjects.Message;
 import messageObjects.ServerInfoMessage;
-import messageObjects.UserInfoListMessage;
-import messageObjects.UserInfoMessage;
+import messageObjects.lobbyMessages.CreateGameMessage;
+import messageObjects.lobbyMessages.GameJoinMessage;
+import messageObjects.lobbyMessages.GameListItem;
+import messageObjects.lobbyMessages.GameListItemList;
+import messageObjects.lobbyMessages.GameStartMessage;
+import messageObjects.lobbyMessages.LobbyChatMessage;
+import messageObjects.lobbyMessages.UserInfoListMessage;
+import messageObjects.userMessages.UserInfoMessage;
 
 /**
 * <h1>Model of the lobby</h1>
