@@ -177,7 +177,11 @@ public class Game implements GameInterface {
 					p.setPawnSelected(false);
 
 			}
-
+			if(removedCards.size() <=1)
+			{
+				selectedPawn.setStartingLocation(selectedPawn.getNewLocation());
+			}
+			System.out.println("Starting location: " + selectedPawn.getStartingLocation());
 			performTurn(selectedCard, selectedPawn);
 		}
 		if (igm instanceof BuyCardsMessage)
@@ -214,7 +218,7 @@ public class Game implements GameInterface {
 			WaterPaidMessage message = (WaterPaidMessage) igm;
 			Player player = players.get(message.getPlayerIndex());
 			Iterator<Card> it = player.getPlayerHand().getCards().iterator();
-			selectedPawn.setStartingLocation(base.indexOf(selectedPawn.getNewLocation()));
+			
 			
 			while (it.hasNext()) {
 				Card c = it.next();
@@ -544,7 +548,6 @@ public class Game implements GameInterface {
 					selectedLand = land;
 					if (waterBill == 0) {
 
-						selectedPawn.setStartingLocation(base.indexOf(water));
 						removedCards.clear();
 					}
 					selectedPawn.setNewLocation(base.indexOf(water));
