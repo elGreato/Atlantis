@@ -548,6 +548,11 @@ public class GameView {
 
 	}
 	public void addPawnToAtlantis(Pawn selectedPawn) {
+		//prevent duplicate children added exception
+		if(atlantis.getChildren().contains(selectedPawn))
+		{
+			atlantis.getChildren().remove(selectedPawn);
+		}
 		atlantis.getChildren().add(selectedPawn);
 		mainland.convertToChildren();
 

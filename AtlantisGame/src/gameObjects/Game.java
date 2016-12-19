@@ -337,6 +337,7 @@ public class Game implements GameInterface {
 
 			}
 		}
+		System.out.println("Argument: " + playerIndex + " ,CurrPlayerIndex: " + currentPlayerIndex);
 		int numberOfPlayers = getNumOfRegisteredPlayers();
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i).sendMessage(new RevertTurnMessage(getName(), currentPlayerIndex, removedCards,
