@@ -1,4 +1,4 @@
-package SplashScreen;
+package client.splashscreen;
 
 import javafx.application.Preloader;
 import javafx.scene.Scene;

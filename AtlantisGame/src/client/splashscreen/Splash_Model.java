@@ -1,4 +1,4 @@
-package SplashScreen;
+package client.splashscreen;
 
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
