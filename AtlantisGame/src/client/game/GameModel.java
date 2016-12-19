@@ -176,7 +176,7 @@ public class GameModel {
 
 		}
 		// inform player to play another card
-		if (msgIn instanceof PlayAnotherCardMessage) {
+		if (msgIn instanceof PlayAnotherCardMessage) { 
 			nextPlayer = false;
 			landedOnPawn=true;
 			for (Pawn p : currentPlayer.getPawns()) {
