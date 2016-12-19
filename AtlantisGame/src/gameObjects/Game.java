@@ -245,8 +245,9 @@ public class Game implements GameInterface {
 
 			}
 			if (message.isNextPlayer() && !gameOver) {
-				endTurn();
 				removedCards.clear();
+				endTurn();
+				
 			}
 			// ending the game
 			else if (gameOver) {
