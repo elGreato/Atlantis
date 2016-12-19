@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import gameObjects.Game;
 import gameObjects.GameInterface;
 import messageObjects.ServerInfoMessage;
 import messageObjects.lobbyMessages.CreateGameMessage;
@@ -37,6 +38,7 @@ public class HumanUser extends User implements Runnable{
 	private Socket client;
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
+	private boolean startedLogoutProcess;
 	
 	//Required Getters/Setters
 	public UserInfo getUserInfo() {
@@ -49,6 +51,7 @@ public class HumanUser extends User implements Runnable{
 		super();
 		this.client = client;
 		this.lobbyInterface = lobbyInterface;
+		startedLogoutProcess = false;
 	}
 	
 	
@@ -99,7 +102,6 @@ public class HumanUser extends User implements Runnable{
 				e.printStackTrace();
 				
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -251,6 +253,7 @@ public class HumanUser extends User implements Runnable{
 		System.out.println("Start logout process. Ending " + runningGames.size() + " games");
 		loggedIn = false;
 		connected = false;
+		startedLogoutProcess = true;
 		Iterator<GameInterface> gameIt = runningGames.iterator();
 		while(gameIt.hasNext())
 		{
@@ -261,5 +264,13 @@ public class HumanUser extends User implements Runnable{
 		runningGames.clear();
 		lobbyInterface.logoutFromOnlineUsers(this);
 		System.out.println("Finish logout process. " + runningGames.size() + " games left");
+	}
+	@Override
+	public void endGame(Game game)
+	{
+		if(!startedLogoutProcess)
+		{
+			super.endGame(game);
+		}
 	}
 }
