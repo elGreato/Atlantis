@@ -178,7 +178,7 @@ public class GameView {
 		root.setId("root");
 		stage.setScene(scene);
 		stage.setTitle("Atlantis GAME");
-		stage.show();
+		
 		stage.setResizable(false);
 
 	}

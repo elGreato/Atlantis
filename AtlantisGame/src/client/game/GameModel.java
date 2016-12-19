@@ -59,7 +59,7 @@ public class GameModel {
 		this.view = gameView;
 		// css
 		view.scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-
+		view.stage.show();
 	}
 	
 
