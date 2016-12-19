@@ -346,7 +346,7 @@ public class Game implements GameInterface {
 		int numberOfPlayers = getNumOfRegisteredPlayers();
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i).sendMessage(new RevertTurnMessage(getName(), currentPlayerIndex, removedCards,
-					removedTreasure, removedTreasureIndex, selectedPawn, initialLand));
+					removedTreasure, removedTreasureIndex, selectedPawn,selectedPawn.getStartingLocation(), initialLand));
 		}
 		performEndTurn(playerIndex, true);
 		

@@ -247,16 +247,16 @@ public class GameModel {
 		if (msgIn instanceof RevertTurnMessage) {
 			RevertTurnMessage message = (RevertTurnMessage) msgIn;
 			if (message.getRemovedTreasure() != null) {
-			view.base.get(message.getRemovedIndex()).getChildren().add(message.getRemovedTreasure());
+				view.base.get(message.getRemovedIndex()).getChildren().add(message.getRemovedTreasure());
 				
 			}
 			if(message.getPlayerIndex() == currentPlayer.getPlayerIndex())
 			{
 				System.out.println("Removed cards: " + message.getRemovedCards().size());
-					addCardToPlayer(message.getRemovedCards());				
+				addCardToPlayer(message.getRemovedCards());				
 				
 			}
-			
+			message.getSelectedPawn().setStartingLocation(message.getStartingLocation());
 			assignThenMovePawn(message.getPlayerIndex(), message.getSelectedPawn(), message.getSelectedLand(), true);
 			view.closePayWaterScene();
 
@@ -313,9 +313,43 @@ public class GameModel {
 				}
 			}
 		}
+		if(isRevert)
+		{
+			revertPawn(currentPlayer.getPlayerIndex(),pawnToPlay, selectedPawn.getStartingLocation());
+		}
+		else
+		{
+			movePawn(currentPlayer.getPlayerIndex(), pawnToPlay, selectedLand);
+		}
 
-		movePawn(currentPlayer.getPlayerIndex(), pawnToPlay, selectedLand, isRevert);
+	}
+	//ADDED BY KEVIN
+	private void revertPawn(int playerIndex, Pawn selectedPawn, int startingLocation) {
+		Pawn viewPawn = null;
 
+		if (currentPlayer.getPawns().contains(selectedPawn)) {
+			viewPawn = selectedPawn;
+		} else {
+			for (int i = 0; i < currentPlayer.getOpponents().size(); i++) {
+				if (currentPlayer.getOpponents().get(i).getPawns().contains(selectedPawn)) {
+					viewPawn = selectedPawn;
+				}
+			}
+		}
+		if(startingLocation == -1 )
+		{
+			view.addPawnToAtlantis(selectedPawn);
+		}
+		else
+		{
+			WaterTile tempWater = view.getBase().get(startingLocation);
+			((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).setPawnOnTile(viewPawn);
+			((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).convertPawns();
+		}
+			
+
+		
+		
 	}
 
 	private Pawn scanPawns() {
@@ -343,7 +377,7 @@ public class GameModel {
 		}
 	}
 	//edited with new parameter
-	private void movePawn(int indexOfPlayer, Pawn selectedPawn, LandTile selectedLand, boolean isRevert) {
+	private void movePawn(int indexOfPlayer, Pawn selectedPawn, LandTile selectedLand) {
 		Pawn viewPawn = null;
 
 		if (currentPlayer.getPawns().contains(selectedPawn)) {
@@ -363,15 +397,12 @@ public class GameModel {
 			}
 
 		}
-		if (selectedLand == null&&!isRevert) {
+		if (selectedLand == null) {
 			selectedPawn.setPawnSelected(false);
 			selectedPawn.setOnMouseClicked(null);
 			selectedPawn.setReachedMainLand(true);
 			view.addPawnToMainLand(selectedPawn);
 
-		} else if(selectedLand == null && isRevert)
-		{
-			view.addPawnToAtlantis(selectedPawn);
 		}
 
 	}

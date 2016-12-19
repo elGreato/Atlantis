@@ -17,6 +17,9 @@ public class RevertTurnMessage extends InGameMessage implements Serializable {
 	private Pawn selectedPawn;
 	private LandTile selectedLand;
 	
+	//Added by Kevin
+	private int startingLocation;
+	
 	
 	// from Client to server
 	public RevertTurnMessage(String gameName, int playerIndex) {
@@ -25,7 +28,7 @@ public class RevertTurnMessage extends InGameMessage implements Serializable {
 	}
 
 	//from Server to Client
-	public RevertTurnMessage(String gameName, int playerIndex, ArrayList<Card> removedCards, LandTile removedTreasure, int removedIndex, Pawn selectedPawn, LandTile selectedLand){
+	public RevertTurnMessage(String gameName, int playerIndex, ArrayList<Card> removedCards, LandTile removedTreasure, int removedIndex, Pawn selectedPawn, int startingLocation, LandTile selectedLand){
 		super(gameName);
 		this.playerIndex=playerIndex;
 		this.removedCards= removedCards;
@@ -33,6 +36,7 @@ public class RevertTurnMessage extends InGameMessage implements Serializable {
 		this.removedIndex = removedIndex;
 		this.selectedPawn = selectedPawn;
 		this.selectedLand = selectedLand;
+		this.startingLocation = startingLocation;
 	}
 	
 	
@@ -64,6 +68,14 @@ public class RevertTurnMessage extends InGameMessage implements Serializable {
 
 	public void setSelectedLand(LandTile selectedLand) {
 		this.selectedLand = selectedLand;
+	}
+
+	public int getStartingLocation() {
+		return startingLocation;
+	}
+
+	public void setStartingLocation(int startingLocation) {
+		this.startingLocation = startingLocation;
 	}
 	
 	
