@@ -289,10 +289,11 @@ public class GameModel {
 	}
 
 	private void assignThenMovePawn(int playerIndex, Pawn selectedPawn, LandTile selectedLand) {
+		Pawn pawnToPlay = null;
 		if (playerIndex == currentPlayer.getPlayerIndex()) {
 			for (Pawn pp : currentPlayer.getPawns()) {
 				if (selectedPawn.getPawnId() == pp.getPawnId())
-					selectedPawn = pp;
+					pawnToPlay = pp;
 
 			}
 		} else {
@@ -300,7 +301,7 @@ public class GameModel {
 				if (enemy.getPlayerIndex() == playerIndex) {
 					for (Pawn pp : enemy.getPawns()) {
 						if (pp.getPawnId() == selectedPawn.getPawnId()) {
-							selectedPawn = pp;
+							pawnToPlay = pp;
 
 						}
 					}
@@ -308,7 +309,7 @@ public class GameModel {
 			}
 		}
 
-		movePawn(currentPlayer.getPlayerIndex(), selectedPawn, selectedLand);
+		movePawn(currentPlayer.getPlayerIndex(), pawnToPlay, selectedLand);
 
 	}
 
