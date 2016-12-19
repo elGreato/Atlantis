@@ -215,7 +215,7 @@ public class Game implements GameInterface {
 			Player player = players.get(message.getPlayerIndex());
 			Iterator<Card> it = player.getPlayerHand().getCards().iterator();
 			selectedPawn.setStartingLocation(base.indexOf(selectedPawn.getNewLocation()));
-			removedCards.clear();
+			
 			while (it.hasNext()) {
 				Card c = it.next();
 				for (int k = 0; k < message.getCardsChosen().size(); k++) {
@@ -246,6 +246,7 @@ public class Game implements GameInterface {
 			}
 			if (message.isNextPlayer() && !gameOver) {
 				endTurn();
+				removedCards.clear();
 			}
 			// ending the game
 			else if (gameOver) {
