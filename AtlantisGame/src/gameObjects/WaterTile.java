@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public class WaterTile extends Tile {
 
-	int col;
-	int row;
 	ArrayList<LandTile> childrenTiles = new ArrayList<>();
 
 	public WaterTile(int tileId) {
@@ -17,21 +15,6 @@ public class WaterTile extends Tile {
 		return false;
 	}
 
-	public int getCol() {
-		return col;
-	}
-
-	public void setCol(int col) {
-		this.col = col;
-	}
-
-	public int getRow() {
-		return row;
-	}
-
-	public void setRow(int row) {
-		this.row = row;
-	}
 
 	public ArrayList<LandTile> getChildrenTiles() {
 		return childrenTiles;
