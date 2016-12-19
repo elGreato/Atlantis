@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import client.lobby.ClientLobbyInterface;
 import client.lobby.LobbyModel;
+import client.splashscreen.SplashScreen;
 import gameObjects.Card;
 import gameObjects.Pawn;
 import gameObjects.LandTile;
@@ -59,7 +60,8 @@ public class GameModel {
 		this.view = gameView;
 		// css
 		view.scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-		view.stage.show();
+		SplashScreen intro= new SplashScreen(view.stage);
+		
 	}
 	
 
