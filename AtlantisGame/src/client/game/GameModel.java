@@ -523,9 +523,9 @@ public class GameModel {
 		}
 		// ability to revert only when you can't afford the water that you
 		// jumped
-		if (allCardsSelected&&allTreasuresSelected && totalChosen < waterBill && !gameOver)
+		if (allCardsSelected&&allTreasuresSelected && totalChosen <= waterBill && !gameOver)
 			view.btnRevert.setDisable(false);
-		if (allCardsSelected&&allTreasuresSelected && totalChosen < waterBill && gameOver)
+		if (allCardsSelected&&allTreasuresSelected && totalChosen <= waterBill && gameOver)
 			view.btnNotEnough.setDisable(false);
 		// if the pawn landed on another pawn he should not be allowed to pay all cards, to prevent cheating
 		
