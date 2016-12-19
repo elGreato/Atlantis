@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import gameObjects.GameInterface;
 import messageObjects.ServerInfoMessage;
@@ -250,8 +251,10 @@ public class HumanUser extends User implements Runnable{
 		System.out.println("Start logout process. Ending " + runningGames.size() + " games");
 		loggedIn = false;
 		connected = false;
-		for(GameInterface g:runningGames)
+		Iterator<GameInterface> gameIt = runningGames.iterator();
+		while(gameIt.hasNext())
 		{
+			GameInterface g = gameIt.next();
 			System.out.println("Going through games");
 			g.handlePlayerLeave(userInfo.getUsername());
 		}
