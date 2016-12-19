@@ -15,7 +15,6 @@ public class WaterTile extends Tile {
 		return false;
 	}
 
-
 	public ArrayList<LandTile> getChildrenTiles() {
 		return childrenTiles;
 	}
