@@ -291,12 +291,14 @@ public class GameModel {
 	private void assignThenMovePawn(int playerIndex, Pawn selectedPawn, LandTile selectedLand, boolean isRevert) {
 		Pawn pawnToPlay = null;
 		if (playerIndex == currentPlayer.getPlayerIndex()) {
+			System.out.println("I, " + currentPlayer.getPlayerName() + " have reverted.");
 			for (Pawn pp : currentPlayer.getPawns()) {
 				if (selectedPawn.getPawnId() == pp.getPawnId())
 					pawnToPlay = pp;
 
 			}
 		} else {
+			System.out.println("Enemy has reverted. I am " + currentPlayer.getPlayerName());
 			for (Player enemy : currentPlayer.getOpponents()) {
 				if (enemy.getPlayerIndex() == playerIndex) {
 					for (Pawn pp : enemy.getPawns()) {
