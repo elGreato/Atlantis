@@ -737,6 +737,7 @@ public class Game implements GameInterface {
 	public void endTurn() {
 
 		// end current player turn
+		removedTreasure = null;
 		if (currentPlayerIndex == players.size() - 1) {
 			currentPlayerIndex = 0;
 			currentPlayer = players.get(currentPlayerIndex);
