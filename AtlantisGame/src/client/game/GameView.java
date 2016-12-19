@@ -547,7 +547,11 @@ public class GameView {
 		mainland.convertToChildren();
 
 	}
+	public void addPawnToAtlantis(Pawn selectedPawn) {
+		atlantis.getChildren().add(selectedPawn);
+		mainland.convertToChildren();
 
+	}
 	public void showBuyCards() {
 		VBox buyPane = new VBox();
 		Label lblBuyCards = new Label("Choose the treasures that you would like to Sacrfice to buy cards"

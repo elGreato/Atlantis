@@ -172,7 +172,7 @@ public class GameModel {
 				removeTreasureFromBoard(treasure);
 			}
 			Pawn selectedPawn = message.getSelectedPawn();
-			assignThenMovePawn(message.getCurrentPlayer().getPlayerIndex(), selectedPawn, message.getSelectedLand());
+			assignThenMovePawn(message.getCurrentPlayer().getPlayerIndex(), selectedPawn, message.getSelectedLand(),false);
 
 		}
 		// inform player to play another card
@@ -255,7 +255,7 @@ public class GameModel {
 				
 			}
 			
-			assignThenMovePawn(message.getPlayerIndex(), message.getSelectedPawn(), message.getSelectedLand());
+			assignThenMovePawn(message.getPlayerIndex(), message.getSelectedPawn(), message.getSelectedLand(), true);
 			view.closePayWaterScene();
 
 		}
@@ -288,7 +288,7 @@ public class GameModel {
 
 	}
 
-	private void assignThenMovePawn(int playerIndex, Pawn selectedPawn, LandTile selectedLand) {
+	private void assignThenMovePawn(int playerIndex, Pawn selectedPawn, LandTile selectedLand, boolean isRevert) {
 		Pawn pawnToPlay = null;
 		if (playerIndex == currentPlayer.getPlayerIndex()) {
 			for (Pawn pp : currentPlayer.getPawns()) {
@@ -309,7 +309,7 @@ public class GameModel {
 			}
 		}
 
-		movePawn(currentPlayer.getPlayerIndex(), pawnToPlay, selectedLand);
+		movePawn(currentPlayer.getPlayerIndex(), pawnToPlay, selectedLand, isRevert);
 
 	}
 
@@ -337,8 +337,8 @@ public class GameModel {
 			addClickToCard(newCard);
 		}
 	}
-
-	private void movePawn(int indexOfPlayer, Pawn selectedPawn, LandTile selectedLand) {
+	//edited with new parameter
+	private void movePawn(int indexOfPlayer, Pawn selectedPawn, LandTile selectedLand, boolean isRevert) {
 		Pawn viewPawn = null;
 
 		if (currentPlayer.getPawns().contains(selectedPawn)) {
@@ -358,12 +358,15 @@ public class GameModel {
 			}
 
 		}
-		if (selectedLand == null) {
+		if (selectedLand == null&&!isRevert) {
 			selectedPawn.setPawnSelected(false);
 			selectedPawn.setOnMouseClicked(null);
 			selectedPawn.setReachedMainLand(true);
 			view.addPawnToMainLand(selectedPawn);
 
+		} else if(selectedLand == null && isRevert)
+		{
+			view.addPawnToAtlantis(selectedPawn);
 		}
 
 	}
