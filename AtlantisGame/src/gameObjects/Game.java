@@ -640,6 +640,20 @@ public class Game implements GameInterface {
 		int victoryPoints = currentPlayer.countVictoryPoints();
 		int cardsCount = currentPlayer.getPlayerHand().getNumCards();
 		int numberOfPlayers = getNumOfRegisteredPlayers();
+		//Cards test
+		System.out.println(currentPlayer.getPlayerName() + " has " + currentPlayer.getPlayerHand().getNumCards());
+		for(Card c:currentPlayer.getPlayerHand().getCards())
+		{
+			if(c.getColor()!= null)
+			{
+			System.out.println(c.getColor() + " " + c.getCardId());
+			}
+			else
+			{
+				System.out.println("Black card");
+			}
+				
+		}
 		if (!gameOver) {
 			for (int i = 0; i < numberOfPlayers; i++) {
 				users.get(i)
