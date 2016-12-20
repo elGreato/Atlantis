@@ -127,12 +127,13 @@ public class GameView {
 		// col and row constraints for the gridpane
 		for (int i = 0; i < 14; i++) {
 			ColumnConstraints colcon = new ColumnConstraints();
-			colcon.setPrefWidth(70);
+			colcon.setMinWidth(70);
+			
 			mainBoard.getColumnConstraints().add(colcon);
 		}
 		for (int i = 0; i < 9; i++) {
 			RowConstraints con = new RowConstraints();
-			con.setPrefHeight(70);
+			con.setMinHeight(70);
 			mainBoard.getRowConstraints().add(con);
 		}
 		// add Buttons
@@ -229,18 +230,18 @@ public class GameView {
 			co++;
 		} else if (co == maxColIndex && ((ro == 1) || (ro == 5) || (ro == 9))) {
 
-			mainBoard.add(water, maxColIndex - 1, ro + 1);
-			ro += 2;
-			co -= 1;
+			mainBoard.add(water, maxColIndex - 1, ++ro);
+			ro++;
+			co--;
 		} else if (((ro == 3) || (ro == 7) || (ro == 11)) && co <= maxColIndex && co != 0) {
 
 			mainBoard.add(water, co, ro);
 			co--;
 
 		} else if (co == 0 && ((ro == 3) || (ro == 7) || (ro == 11))) {
-			mainBoard.add(water, 1, ro + 1);
-			ro += 2;
-			co += 1;
+			mainBoard.add(water, 1, ++ro);
+			ro++;
+			co++;
 		}
 
 	}
@@ -368,9 +369,9 @@ public class GameView {
 		// Mainland
 		stackMainLand.getChildren().add(mainland);
 		mainBoard.add(stackMainLand, 0, 7, 2, 2);
-		Image im = new Image(getClass().getResourceAsStream("images4Tiles/land.png"));
+		/*Image im = new Image(getClass().getResourceAsStream("images4Tiles/land.png"));
 		mainland.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
-				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));*/
 
 	}
 
