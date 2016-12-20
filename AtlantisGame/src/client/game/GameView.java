@@ -370,7 +370,7 @@ public class GameView {
 
 		// Mainland
 	//	stackMainLand.getChildren().add(mainland);
-		mainBoard.add(mainland, 0, 7, 2, 2);
+		mainBoard.add(mainland, 0, 7, 2, 2); 
 		mainland.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
 		/*Image im = new Image(getClass().getResourceAsStream("images4Tiles/land.png"));
 		mainland.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
