@@ -157,7 +157,7 @@ public class GameModel {
 			}
 			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 				nextPlayer = message.isNextPlayer();
-				view.vpHolder.setText(String.valueOf(message.getVictoryPoints()));
+				view.vpHolder.setText("Your Victory Points: "+String.valueOf(message.getVictoryPoints()));
 				payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(), gameOver);
 			}
 			LandTile treasure = message.getTreasure();
@@ -458,7 +458,6 @@ public class GameModel {
 		for (Card card : currentPlayer.getPlayerHand().getCards()) {
 			if (card.isCardSelected()) {
 				cardSelected = card;
-
 				break;
 			}
 		}
@@ -516,10 +515,10 @@ public class GameModel {
 		while (it.hasNext()) {
 			Card cardSelected = it.next();
 			if (cardSelected.isCardSelected()) {
+				cardSelected.setCardSelected(false);
 				cardsChosen.add(cardSelected);
-
-				it.remove();
 				view.removeCardFromHand(cardSelected);
+				it.remove();
 			}
 		}
 		msgOut.sendMessage(new WaterPaidMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen, cardsChosen,
@@ -595,7 +594,7 @@ public class GameModel {
 
 	public void handleRevert() {
 		view.btnRevert.setDisable(true);
-	//	view.tempStage.close();
+	
 		msgOut.sendMessage(new RevertTurnMessage(gameName, currentPlayer.getPlayerIndex()));
 
 	}

@@ -1,6 +1,5 @@
 package client.game;
 
-import java.awt.Paint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -36,7 +35,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -519,6 +517,7 @@ public class GameView {
 	}
 
 	public void removeCardFromHand(Card card) {
+		
 		hboxCards.getChildren().remove(card);
 
 	}
@@ -599,13 +598,13 @@ public class GameView {
 
 	public void setVpForEnemy(int index, int vp) {
 		VBox enemy = (VBox) mapOpponents.get(index);
-		((Label) enemy.getChildren().get(2)).setText(String.valueOf(vp));
+		((Label) enemy.getChildren().get(2)).setText("Victory Points: " + String.valueOf(vp));
 
 	}
 
 	public void setCardCountForEnemy(int playerIndex, int cardsCount) {
 		VBox enemy = (VBox) mapOpponents.get(playerIndex);
-		((Label) enemy.getChildren().get(1)).setText(String.valueOf(cardsCount));
+		((Label) enemy.getChildren().get(1)).setText("Number of Cards: "+String.valueOf(cardsCount));
 
 	}
 

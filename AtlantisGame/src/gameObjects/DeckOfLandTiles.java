@@ -8,8 +8,8 @@ import java.util.Random;
 public class DeckOfLandTiles implements Serializable {
 
 	private ArrayList<LandTile> deckOfTiles = new ArrayList<>();
-	// i put K as class variable for it not to reset with the loop
-	int k = 1;
+	
+	int k = 0;
 	// random object to remove one land tile from each color 
 	Random r = new Random();
 

@@ -90,7 +90,13 @@ public class Game implements GameInterface {
 
 		base = new ArrayList<>();
 		deckA = new DeckOfLandTiles();
+		for(LandTile tile: deckA.getDeckOfTiles()){
+			tile.setDeckAorB("a");
+		}
 		deckB = new DeckOfLandTiles();
+		for(LandTile tile: deckB.getDeckOfTiles()){
+			tile.setDeckAorB("b");
+		}
 		cards = new DeckOfCards();
 		// create water tiles which will hold land tiles later on
 		for (int i = 1; i < 54; i++) {
