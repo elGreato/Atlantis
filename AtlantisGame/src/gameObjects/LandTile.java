@@ -22,6 +22,8 @@ public class LandTile extends Tile implements Serializable {
 	private int landValue;
 	private ArrayList<Pawn> pawns=new ArrayList<>();
 	private boolean selected=false;
+	// assign deck name in case of revert
+	private String deckAorB;
 
 	public LandTile(int tileId,ColorChoice color, int value ){
 		super(tileId);
@@ -105,6 +107,16 @@ public class LandTile extends Tile implements Serializable {
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+
+
+	public String getDeckAorB() {
+		return deckAorB;
+	}
+
+
+	public void setDeckAorB(String deckAorB) {
+		this.deckAorB = deckAorB;
 	}
 
 	
