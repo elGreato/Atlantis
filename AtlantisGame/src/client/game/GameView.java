@@ -18,6 +18,7 @@ import javafx.animation.RotateTransition;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -69,7 +70,6 @@ public class GameView {
 	protected Button btnCalc = new Button("Calculate what I chose");
 	protected Button btnEndMyTurn = new Button("End Turn");
 	protected Button btnRevert = new Button("Cancel my turn and give me my money back");
-	protected Button temp = new Button("nigga");
 	protected Button btnFinish = new Button();
 	protected Button btnNotEnough = new Button("I Don't have enough :(");
 
@@ -134,7 +134,7 @@ public class GameView {
 			mainBoard.getRowConstraints().add(con);
 		}
 		// add Buttons
-		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnBuyCards, btnEndMyTurn, temp);
+		vbMainControls.getChildren().addAll(lblGameBtns, btnPlayCard, btnBuyCards, btnEndMyTurn);
 		vbMainControls.setPadding(new Insets(10, 50, 50, 50));
 		vbMainControls.setSpacing(10);
 
@@ -170,7 +170,7 @@ public class GameView {
 		stage = new Stage();
 		mainBoard.setVgap(3);
 		mainBoard.setHgap(3);
-		scene = new Scene(root,1280,980);
+		scene = new Scene(root, 1280, 980);
 		root.setId("root");
 		stage.setScene(scene);
 		stage.sizeToScene();
@@ -344,12 +344,13 @@ public class GameView {
 			atlantis.getChildren().add(p);
 		}
 	}
-	public void replaceLeavingPlayer(int playerIndex, String playerName)
-	{
+
+	public void replaceLeavingPlayer(int playerIndex, String playerName) {
 		VBox opponentToChange = mapOpponents.get(playerIndex);
 		Label nameChanging = (Label) opponentToChange.getChildren().get(0);
 		nameChanging.setText(playerName);
 	}
+
 	public void placeAtlantisMainLand(AtlantisTile atlantis, MainLand mainland) {
 
 		this.atlantis = atlantis;
@@ -364,8 +365,8 @@ public class GameView {
 
 		// Mainland
 
-		mainBoard.add(mainland, 0, 7, 2, 2); 
-		
+		mainBoard.add(mainland, 0, 7, 2, 2);
+
 		Image im = new Image(getClass().getResourceAsStream("images4Tiles/land.png"));
 		mainland.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
 				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
@@ -409,15 +410,23 @@ public class GameView {
 		c.getChildren().add(rec);
 		if (c.getColor() != null) {
 			c.getChildren().add(c.getColor().addCardImage());
-		} else
-			c.getRec().setFill(Color.BLACK);
-		//fix duplicate children added exception, that occurs from time to time
-		if(getHboxCards().getChildren().contains(c))
-		{
+		} else {
+			c.getChildren().add(getJokerView());
+		}
+		// fix duplicate children added exception, that occurs from time to time
+		if (getHboxCards().getChildren().contains(c)) {
 			getHboxCards().getChildren().remove(c);
 		}
 		getHboxCards().getChildren().add(c);
 
+	}
+
+	private ImageView getJokerView() {
+		Image image = new Image(getClass().getResourceAsStream("joker.jpg"));
+		ImageView iv = new ImageView(image);
+		iv.setFitHeight(49);
+		iv.setFitWidth(29);
+		return iv;
 	}
 
 	public void handleCard(Card c) {
@@ -515,7 +524,7 @@ public class GameView {
 	}
 
 	public void removeCardFromHand(Card card) {
-		
+
 		hboxCards.getChildren().remove(card);
 
 	}
@@ -551,15 +560,16 @@ public class GameView {
 		mainland.convertToChildren();
 
 	}
+
 	public void addPawnToAtlantis(Pawn selectedPawn) {
-		//prevent duplicate children added exception
-		if(atlantis.getChildren().contains(selectedPawn))
-		{
+		// prevent duplicate children added exception
+		if (atlantis.getChildren().contains(selectedPawn)) {
 			atlantis.getChildren().remove(selectedPawn);
 		}
 		atlantis.getChildren().add(selectedPawn);
 
 	}
+
 	public void showBuyCards() {
 		VBox buyPane = new VBox();
 		Label lblBuyCards = new Label("Choose the treasures that you would like to Sacrfice to buy cards"
@@ -601,7 +611,7 @@ public class GameView {
 
 	public void setCardCountForEnemy(int playerIndex, int cardsCount) {
 		VBox enemy = (VBox) mapOpponents.get(playerIndex);
-		((Label) enemy.getChildren().get(1)).setText("Number of Cards: "+String.valueOf(cardsCount));
+		((Label) enemy.getChildren().get(1)).setText("Number of Cards: " + String.valueOf(cardsCount));
 
 	}
 
@@ -644,8 +654,7 @@ public class GameView {
 	}
 
 	public void closePayWaterScene() {
-		if(tempStage != null && tempStage.isShowing())
-		{
+		if (tempStage != null && tempStage.isShowing()) {
 			vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 1, hbTreasures);
 			vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 2, hboxCards);
 			lblPay.setText(" ");
@@ -700,13 +709,14 @@ public class GameView {
 		lblPay.setText("you are not allowed to pay all your cards\n when you land on a tile that has a pawn already");
 
 	}
-	//Added by Kevin
+
+	// Added by Kevin
 	public void removePawnFromMainLand(Pawn viewPawn) {
 		mainland.getPawns().remove(viewPawn);
 		mainland.getChildren().remove(viewPawn);
 		mainland.convertToChildren();
 		viewPawn.setOnMouseClicked((e) -> handlePawn(viewPawn));
-		
+
 	}
 
 }

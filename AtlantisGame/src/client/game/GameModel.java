@@ -175,25 +175,7 @@ public class GameModel {
 				}
 				removeTreasureFromBoard(treasure);
 			}
-			//Cards + treasures test
-			System.out.println(currentPlayer.getPlayerName() + " has " + currentPlayer.getPlayerHand().getTreasures().size() + " treasures");
-			for(LandTile t: currentPlayer.getPlayerHand().getTreasures())
-			{	
-				System.out.println(t.getCol() + t.getLandValue());
-			}
-			System.out.println(currentPlayer.getPlayerName() + " has " + currentPlayer.getPlayerHand().getNumCards());
-			for(Card c:currentPlayer.getPlayerHand().getCards())
-			{
-				if(c.getColor()!= null)
-				{
-				System.out.println(c.getColor() + " " + c.getCardId());
-				}
-				else
-				{
-					System.out.println("Black card");
-				}
-					
-			}
+	
 			Pawn selectedPawn = message.getSelectedPawn();
 			assignThenMovePawn(message.getCurrentPlayer().getPlayerIndex(), selectedPawn, message.getSelectedLand(),false);
 

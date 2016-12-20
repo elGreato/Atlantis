@@ -29,35 +29,12 @@ public class Card extends StackPane implements Serializable {
 		this.cardId = cardId;
 	}
 
-	public static Paint FillColor(Card c) {
-		if (c.getColor() != null) {
-			if (c.getColor().toString().equalsIgnoreCase("blue"))
-				return (Color.BLUE);
-			else if (c.getColor().toString().equalsIgnoreCase("white"))
-				return (Color.WHITE);
-			else if (c.getColor().toString().equalsIgnoreCase("gray"))
-				return (Color.GRAY);
-			else if (c.getColor().toString().equalsIgnoreCase("yello"))
-				return (Color.YELLOW);
-			else if (c.getColor().toString().equalsIgnoreCase("green"))
-				return (Color.GREEN);
-			else if (c.getColor().toString().equalsIgnoreCase("pink"))
-				return (Color.PINK);
-			else if (c.getColor().toString().equalsIgnoreCase("brown"))
-				return (Color.BROWN);
-		} else{
-			return Color.ORANGE;
-		}
-		return Color.BLACK;
-
-	}
-
 	public ColorChoice getColor() {
 		return colorChoice;
 	}
 
-	public int getCardValue() { // in case we will introduce something like
-								// super card this can be changed
+	public int getCardValue() { 
+								
 		return 1;
 	}
 

@@ -628,7 +628,7 @@ public class Game implements GameInterface {
 			if (c.getColor() != null) {
 				System.out.println(c.getColor() + " " + c.getCardId());
 			} else {
-				System.out.println("Black card");
+				System.out.println("Joker card");
 			}
 
 		}
@@ -773,18 +773,18 @@ public class Game implements GameInterface {
 				result.add(newCard);
 			}
 		}
-		// Here we add our own rule, the black Card which allows player to use
+		// Here we add our own rule, the JOKER Card which allows player to use
 		// it to jump
 		// with a pawn right away to main land, however the chance to get it is
 		// relatively low
 		Random rand = new Random();
 		int lucky = rand.nextInt(30);
 		if (lucky == 13) {
-			Card blackCard = new Card(666, null);
-			blackCard.setOwner(currentPlayer);
-			player.getPlayerHand().addCard(blackCard);
-			result.add(blackCard);
-			users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "WOW! YOU GOT A BLACK CARD!"));
+			Card joker = new Card(666, null);
+			joker.setOwner(currentPlayer);
+			player.getPlayerHand().addCard(joker);
+			result.add(joker);
+			users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "WOW! YOU GOT A JOKER CARD!"));
 		}
 		return result;
 	}

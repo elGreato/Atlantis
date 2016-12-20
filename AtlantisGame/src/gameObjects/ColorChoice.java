@@ -25,7 +25,6 @@ public enum ColorChoice implements Serializable {
 
 
 	public ImageView addCardImage() {
-		System.out.println("images4cards/card_" + this.toString() + ".jpg");
 		Image image = new Image(getClass().getResourceAsStream("images4Cards/card_" + this.toString() + ".jpg"));
 		ImageView iv = new ImageView(image);
 		iv.setFitHeight(49);

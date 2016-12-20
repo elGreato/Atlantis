@@ -32,7 +32,6 @@ public class GameController {
 		view.btnCalc.setOnAction(e-> handleCalc());
 		view.btnEndMyTurn.setOnAction(e->handleEndMyTurn());
 		view.btnRevert.setOnAction(e-> handleRevert());
-		view.temp.setOnAction(e-> handletemp());
 		view.btnNotEnough.setOnAction(e-> handleNotEnough());
 		view.btnFinish.setOnAction(e-> handleFinish());
 		
@@ -58,20 +57,6 @@ public class GameController {
 	private void handleFinish() {
 		model.handleFinish();
 	}
-
-
-
-	private void handletemp() {
-		
-				Card blackCard = new Card(666, null);
-				
-				blackCard.setOwner(model.currentPlayer);
-				ArrayList<Card> niggahold = new ArrayList<>();
-				niggahold.add(blackCard);
-			model.addCardToPlayer(niggahold);
-	
-	}
-
 
 
 	private void handleRevert() {
