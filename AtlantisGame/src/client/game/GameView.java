@@ -703,4 +703,11 @@ public class GameView {
 
 	}
 
+	public void removePawnFromMainLand(Pawn viewPawn) {
+		mainland.getChildren().remove(viewPawn);
+		mainland.convertToChildren();
+		viewPawn.setOnMouseClicked((e) -> handlePawn(viewPawn));
+		
+	}
+
 }

@@ -175,6 +175,20 @@ public class GameModel {
 				}
 				removeTreasureFromBoard(treasure);
 			}
+			//Cards test
+			System.out.println(currentPlayer.getPlayerName() + " has " + currentPlayer.getPlayerHand().getNumCards());
+			for(Card c:currentPlayer.getPlayerHand().getCards())
+			{
+				if(c.getColor()!= null)
+				{
+				System.out.println(c.getColor() + " " + c.getCardId());
+				}
+				else
+				{
+					System.out.println("Black card");
+				}
+					
+			}
 			Pawn selectedPawn = message.getSelectedPawn();
 			assignThenMovePawn(message.getCurrentPlayer().getPlayerIndex(), selectedPawn, message.getSelectedLand(),false);
 
@@ -327,6 +341,7 @@ public class GameModel {
 	}
 	//ADDED BY KEVIN
 	private void revertPawn(int playerIndex, Pawn selectedPawn, int startingLocation) {
+		System.out.println("revert pawn");
 		Pawn viewPawn = null;
 
 		if (currentPlayer.getPawns().contains(selectedPawn)) {
@@ -338,9 +353,16 @@ public class GameModel {
 				}
 			}
 		}
+		if(viewPawn.ReachedMainLand())
+		{
+			System.out.println("Pawn reached mainland but needs to revert");
+			viewPawn.setReachedMainLand(false);
+			view.removePawnFromMainLand(viewPawn);
+			viewPawn.setPawnSelected(true);
+		}
 		if(startingLocation == -1 )
 		{
-			view.addPawnToAtlantis(selectedPawn);
+			view.addPawnToAtlantis(viewPawn);
 		}
 		else
 		{
@@ -529,7 +551,7 @@ public class GameModel {
 	}
 
 	public void handleCalc() {
-
+		System.out.println("HandleCalc");
 		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
 		boolean allCardsSelected = true;
@@ -541,8 +563,10 @@ public class GameModel {
 				treasuresChosen.add(treasureSelected);
 				totalChosen += treasureSelected.getLandValue();
 
-			} else
+			} else{
+				System.out.println("not all treasures selected");
 				allTreasuresSelected = false;
+			}
 
 		}
 		for (int i = 0; i < currentPlayer.getPlayerHand().getNumCards(); i++) {
@@ -551,18 +575,24 @@ public class GameModel {
 				cardsChosen.add(cardSelected);
 				totalChosen += 1;
 
-			} else
+			} else{
+				System.out.println("not all cards selected");
 				allCardsSelected = false;
+			}
 		}
 		// ability to revert only when you can't afford the water that you
 		// jumped
 		if (allCardsSelected&&allTreasuresSelected && totalChosen <= waterBill && !gameOver)
+		{
+			System.out.println("activating revert button");
 			view.btnRevert.setDisable(false);
+		}
 		if (allCardsSelected&&allTreasuresSelected && totalChosen <= waterBill && gameOver)
+		{
 			view.btnNotEnough.setDisable(false);
 		// if the pawn landed on another pawn he should not be allowed to pay all cards, to prevent cheating
 		
-			
+		}
 		if (totalChosen >= waterBill) {
 			view.lblWaterCalc.setText("");
 			view.btnPay4Water.setDisable(false);
