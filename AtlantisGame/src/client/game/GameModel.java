@@ -251,10 +251,14 @@ public class GameModel {
 			RevertTurnMessage message = (RevertTurnMessage) msgIn;
 			System.out.println("Revert message arrived " + currentPlayer.getPlayerHand().getTreasures().size() + " treasures");
 			if (message.getRemovedTreasure() != null) {
-				Rectangle rec = (Rectangle)message.getRemovedTreasure().getChildren().get(1);
-				rec.setStroke(Color.TRANSPARENT);
-				message.getRemovedTreasure().setSelected(false);
 				view.base.get(message.getRemovedIndex()).getChildren().add(message.getRemovedTreasure());
+				if(message.getPlayerIndex() == currentPlayer.getPlayerIndex())
+				{
+					Rectangle rec = (Rectangle)message.getRemovedTreasure().getChildren().get(1);
+					rec.setStroke(Color.TRANSPARENT);
+					message.getRemovedTreasure().setSelected(false);
+				}
+				
 				
 			}
 			if(message.getPlayerIndex() == currentPlayer.getPlayerIndex())
@@ -293,7 +297,14 @@ public class GameModel {
 		{
 			PlayerLeftMessage plm = (PlayerLeftMessage)msgIn;
 			view.replaceLeavingPlayer(plm.getPlayerIndex(), plm.getNewPlayerName());
-			currentPlayer.setPlayerName(plm.getNewPlayerName());
+			for(Player p: currentPlayer.getOpponents())
+			{
+				if(p.getPlayerIndex() == plm.getPlayerIndex())
+					
+				{
+					p.setPlayerName(plm.getNewPlayerName());
+				}
+			}
 		}
 
 	}
@@ -331,33 +342,26 @@ public class GameModel {
 	//ADDED BY KEVIN
 	private void revertPawn(int playerIndex, Pawn selectedPawn, int startingLocation) {
 		System.out.println("revert pawn");
-		Pawn viewPawn = null;
-
+		boolean isThisPlayer = false;
 		if (currentPlayer.getPawns().contains(selectedPawn)) {
-			viewPawn = selectedPawn;
-		} else {
-			for (int i = 0; i < currentPlayer.getOpponents().size(); i++) {
-				if (currentPlayer.getOpponents().get(i).getPawns().contains(selectedPawn)) {
-					viewPawn = selectedPawn;
-				}
-			}
+			isThisPlayer = true;
 		}
-		if(viewPawn.ReachedMainLand())
+		if(selectedPawn.ReachedMainLand())
 		{
 			System.out.println("Pawn reached mainland but needs to revert");
-			viewPawn.setReachedMainLand(false);
-			view.removePawnFromMainLand(viewPawn);
-			viewPawn.setPawnSelected(true);
+			selectedPawn.setReachedMainLand(false);
+			view.removePawnFromMainLand(selectedPawn, isThisPlayer);
+			
 		}
 		if(startingLocation == -1 )
 		{
 			System.out.println("Revert to atlantis");
-			view.addPawnToAtlantis(viewPawn); 
+			view.addPawnToAtlantis(selectedPawn); 
 		}
 		else
 		{
 			WaterTile tempWater = view.getBase().get(startingLocation);
-			((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).setPawnOnTile(viewPawn);
+			((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).setPawnOnTile(selectedPawn);
 			((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).convertPawns();
 		}
 			
@@ -393,7 +397,7 @@ public class GameModel {
 	
 	private void movePawn(int indexOfPlayer, Pawn selectedPawn, LandTile selectedLand) {
 		Pawn viewPawn = null;
-
+		//????
 		if (currentPlayer.getPawns().contains(selectedPawn)) {
 			viewPawn = selectedPawn;
 		} else {
@@ -614,7 +618,8 @@ public class GameModel {
 
 	public void handleRevert() {
 		view.btnRevert.setDisable(true);
-		currentPlayer.getPlayerHand().getTreasures().clear();
+		//currentPlayer.getPlayerHand().getTreasures().clear();
+		
 		msgOut.sendMessage(new RevertTurnMessage(gameName, currentPlayer.getPlayerIndex()));
 
 	}

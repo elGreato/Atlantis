@@ -715,11 +715,15 @@ public class GameView {
 	}
 
 	// Added by Kevin
-	public void removePawnFromMainLand(Pawn viewPawn) {
-		mainland.getPawns().remove(viewPawn);
-		mainland.getChildren().remove(viewPawn);
+	public void removePawnFromMainLand(Pawn selectedPawn, boolean thisPlayerReverted) {
+		mainland.getPawns().remove(selectedPawn);
+		mainland.getChildren().remove(selectedPawn);
 		mainland.convertToChildren();
-		viewPawn.setOnMouseClicked((e) -> handlePawn(viewPawn));
+		if(thisPlayerReverted)
+		{
+			selectedPawn.setOnMouseClicked((e) -> handlePawn(selectedPawn));
+			selectedPawn.setPawnSelected(true);
+		}
 
 	}
 

@@ -253,7 +253,6 @@ public class Game implements GameInterface {
 
 			}
 			if (message.isNextPlayer() && !gameOver) {
-				removedCards.clear();
 				endTurn();
 
 			}
@@ -337,9 +336,13 @@ public class Game implements GameInterface {
 			removePawnFromNewTile(selectedPawn);
 			selectedPawn.setNewLocation(selectedPawn.getStartingLocation());
 			selectedPawn.setOldLocation(selectedPawn.getNewLocation());
-			if (initialLand != null) {
-				initialLand.setPawnOnTile(selectedPawn);
+			if (selectedPawn.getStartingLocation() != -1) {
+				//initialLand.setPawnOnTile(selectedPawn);
+				WaterTile wt = base.get(selectedPawn.getStartingLocation());
+				LandTile lt = (LandTile)wt.getChildren().get(wt.getChildren().size()-1);
+				lt.setPawnOnTile(selectedPawn);
 				System.out.println("initial land is " + initialLand.getCol() + " value " + initialLand.getLandValue());
+				System.out.println("old loc " + base.indexOf(wt));
 				System.out.println("pawn new location" + selectedPawn.getNewLocation());
 			} else {
 				atlantis.getChildren().add(selectedPawn);
@@ -534,10 +537,6 @@ public class Game implements GameInterface {
 
 					land.setPawnOnTile(selectedPawn);
 					selectedLand = land;
-					if (waterBill == 0) {
-
-						removedCards.clear();
-					}
 					selectedPawn.setNewLocation(base.indexOf(water));
 					foundLand = true;
 					giveTreasure = true;
@@ -736,6 +735,7 @@ public class Game implements GameInterface {
 
 		// end current player turn
 		removedTreasure = null;
+		removedCards.clear();
 		if (currentPlayerIndex == players.size() - 1) {
 			currentPlayerIndex = 0;
 			currentPlayer = players.get(currentPlayerIndex);
@@ -807,6 +807,7 @@ public class Game implements GameInterface {
 
 		} else if (selectedPawn.getNewLocation() == 53) {
 			mainland.getChildren().remove(selectedPawn);
+			selectedPawn.setReachedMainLand(false);
 		}
 	}
 
