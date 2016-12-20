@@ -373,7 +373,7 @@ public class GameView {
 	}
 
 	public void gameStarted() {
-		lblGameStatus.setText("The GAME HAS BEGAN");
+		lblGameStatus.setText("The GAME HAS BEGUN");
 		lblGameStatus.setTextFill(Color.web("#ce2323"));
 		lblGameStatus.setFont(new Font("Cambria", 32));
 		vbGameStatus.setAlignment(Pos.CENTER);
@@ -655,6 +655,7 @@ public class GameView {
 	}
 
 	public void IWin(String winner) {
+		lblTurn.setText("Game is Over");
 		tempStage.setOnCloseRequest(e -> e.consume());
 		tempStage = new Stage();
 		tempStage.initStyle(StageStyle.TRANSPARENT);
@@ -675,6 +676,7 @@ public class GameView {
 	}
 
 	public void ILose(String winner) {
+		lblTurn.setText("Game is Over");
 		tempStage.setOnCloseRequest(e -> e.consume());
 		tempStage = new Stage();
 		tempStage.initStyle(StageStyle.TRANSPARENT);
