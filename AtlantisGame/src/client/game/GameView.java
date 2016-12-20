@@ -83,10 +83,6 @@ public class GameView {
 	private VBox vbMainControls = new VBox();
 	private VBox vbGameStatus = new VBox();
 
-	/*// Atlantis and mainland Holders
-	private StackPane stackAtlantis = new StackPane();
-	private StackPane stackMainLand = new StackPane();*/
-
 	// Player View
 
 	private HBox hbPlayersInfo = new HBox();
@@ -174,11 +170,11 @@ public class GameView {
 		stage = new Stage();
 		mainBoard.setVgap(3);
 		mainBoard.setHgap(3);
-		scene = new Scene(root);
+		scene = new Scene(root,1280,980);
 		root.setId("root");
 		stage.setScene(scene);
+		stage.sizeToScene();
 		stage.setTitle("Atlantis GAME");
-		
 		stage.setResizable(false);
 
 	}
@@ -361,21 +357,19 @@ public class GameView {
 
 		// the Atlantis
 
-		//stackAtlantis.getChildren().add(atlantis);
 		mainBoard.add(atlantis, 0, 0, 2, 2);
-		atlantis.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
-		/*Image img = new Image(getClass().getResourceAsStream("images4Tiles/atlantis.png"));
+		Image img = new Image(getClass().getResourceAsStream("images4Tiles/atlantis.png"));
 		atlantis.setBackground(new Background(new BackgroundImage(img, BackgroundRepeat.NO_REPEAT,
-				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));*/
+				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
 		// Mainland
-	//	stackMainLand.getChildren().add(mainland);
+
 		mainBoard.add(mainland, 0, 7, 2, 2); 
-		mainland.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
-		/*Image im = new Image(getClass().getResourceAsStream("images4Tiles/land.png"));
+		
+		Image im = new Image(getClass().getResourceAsStream("images4Tiles/land.png"));
 		mainland.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
 				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-*/
+
 	}
 
 	public void gameStarted() {
