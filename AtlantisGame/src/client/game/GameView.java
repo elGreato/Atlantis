@@ -24,6 +24,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -34,6 +35,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -44,6 +46,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -88,9 +91,9 @@ public class GameView {
 	private HBox hbPlayersInfo = new HBox();
 
 	private HBox hboxCards = new HBox();
-	private HBox hbTreasures = new HBox();
+	private FlowPane fpTreasures = new FlowPane();
 
-	private HashMap<Integer, HBox> hbEnemiesTreasures = new HashMap<Integer, HBox>();
+	private HashMap<Integer, FlowPane> fpEnemiesTreasures = new HashMap<Integer, FlowPane>();
 	private HashMap<Integer, VBox> mapOpponents = new HashMap<>();
 
 	private MainLand mainland;
@@ -124,13 +127,13 @@ public class GameView {
 		// col and row constraints for the gridpane
 		for (int i = 0; i < 14; i++) {
 			ColumnConstraints colcon = new ColumnConstraints();
-			colcon.setMinWidth(70);
-			colcon.setMaxWidth(70);
+			colcon.setMinWidth(65);
+			colcon.setMaxWidth(65);
 			mainBoard.getColumnConstraints().add(colcon);
 		}
 		for (int i = 0; i < 9; i++) {
 			RowConstraints con = new RowConstraints();
-			con.setMinHeight(70);
+			con.setMinHeight(65);
 			mainBoard.getRowConstraints().add(con);
 		}
 		// add Buttons
@@ -158,7 +161,7 @@ public class GameView {
 		lblPlayerImage.setGraphic(new ImageView(image));
 
 		vbPlayerInfo.getChildren().addAll(lblName, vpHolder, lblPlayerImage, lblcards, hboxCards, lbltreasures,
-				hbTreasures);
+				fpTreasures);
 		vbPlayer.getChildren().add(vbPlayerInfo);
 		hbPlayersInfo.getChildren().add(vbPlayer);
 
@@ -166,11 +169,11 @@ public class GameView {
 		root.setBottom(hbPlayersInfo);
 		root.setRight(vbMainControls);
 		root.setTop(vbGameStatus);
-
+	
 		stage = new Stage();
 		mainBoard.setVgap(3);
 		mainBoard.setHgap(3);
-		scene = new Scene(root, 1280, 980);
+		scene = new Scene(root, 1280, 1000);
 		root.setId("root");
 		stage.setScene(scene);
 		stage.sizeToScene();
@@ -257,9 +260,8 @@ public class GameView {
 
 					LandTile tile = (LandTile) water.getChildren().get(k);
 					Rectangle rec = new Rectangle();
-					rec.setWidth(68.00f);
-					rec.setHeight(68.00f);
-					// rec.setFill(LandTile.getFillColor(tile));
+					rec.setWidth(65);
+					rec.setHeight(65);
 					rec.setFill(Color.TRANSPARENT);
 					tile.getChildren().add(tile.getColor().addLandTileImage(tile.getLandValue()));
 					tile.getChildren().add(rec);
@@ -275,6 +277,7 @@ public class GameView {
 	public void showPlayer(Player player) {
 
 		lblName.setText(player.getPlayerName());
+		lblName.setFont(Font.font(null, FontWeight.BOLD, 70));
 		Rectangle recColor = new Rectangle();
 		recColor.setHeight(10);
 		recColor.setWidth(150);
@@ -320,14 +323,14 @@ public class GameView {
 		lblopponentCardCount
 				.setText("This enemy has " + String.valueOf(opponent.getPlayerHand().getNumCards()) + " cards\t");
 		lblOpponentVp.setText("And he has " + String.valueOf(opponent.countVictoryPoints() + " Victory Points\t"));
-		HBox hbEnemyTreasures = new HBox();
+		FlowPane fpEnemyTreasures = new FlowPane();
 		Integer index = opponent.getPlayerIndex();
-		hbEnemiesTreasures.put(index, hbEnemyTreasures);
+		fpEnemiesTreasures.put(index, fpEnemyTreasures);
 		Rectangle recColor = new Rectangle();
 		recColor.setHeight(10);
 		recColor.setWidth(150);
 		recColor.setFill(Pawn.FillColor(opponent));
-		vbOpponentInfo.getChildren().addAll(lblopponentName, lblopponentCardCount, lblOpponentVp, hbEnemyTreasures,
+		vbOpponentInfo.getChildren().addAll(lblopponentName, lblopponentCardCount, lblOpponentVp, fpEnemyTreasures,
 				recColor);
 
 		mapOpponents.put(opponent.getPlayerIndex(), vbOpponentInfo);
@@ -404,7 +407,7 @@ public class GameView {
 		c.setCardSelected(false);
 		Rectangle rec = new Rectangle();
 		rec.setWidth(39);
-		rec.setHeight(77);
+		rec.setHeight(70);
 		rec.setFill(Color.TRANSPARENT);
 		c.setRec(rec);
 		c.getChildren().add(rec);
@@ -424,8 +427,8 @@ public class GameView {
 	private ImageView getJokerView() {
 		Image image = new Image(getClass().getResourceAsStream("joker.jpg"));
 		ImageView iv = new ImageView(image);
-		iv.setFitHeight(49);
-		iv.setFitWidth(29);
+		iv.setFitHeight(70);
+		iv.setFitWidth(39);
 		return iv;
 	}
 
@@ -514,12 +517,12 @@ public class GameView {
 
 	public void givePlayerTreasure(LandTile landTile) {
 		landTile.setOnMouseClicked(e -> handleTreasure(landTile));
-		hbTreasures.getChildren().add(landTile);
+		fpTreasures.getChildren().add(landTile);
 
 	}
 
 	public void removePlayerTreasure(LandTile landTile) {
-		hbTreasures.getChildren().remove(landTile);
+		fpTreasures.getChildren().remove(landTile);
 
 	}
 
@@ -531,7 +534,7 @@ public class GameView {
 
 	public void giveEnemyTreasure(int indexOfPlayer, LandTile treasure) {
 		Integer index = indexOfPlayer;
-		HBox hbOpponentTreasure = hbEnemiesTreasures.get(index);
+		FlowPane hbOpponentTreasure = fpEnemiesTreasures.get(index);
 		hbOpponentTreasure.getChildren().add(treasure);
 
 	}
@@ -574,7 +577,7 @@ public class GameView {
 		VBox buyPane = new VBox();
 		Label lblBuyCards = new Label("Choose the treasures that you would like to Sacrfice to buy cards"
 				+ "\nRemember, half of what you pay, rounded down, will be refunded as cards");
-		buyPane.getChildren().addAll(lblBuyCards, hbTreasures, btnPay4cards);
+		buyPane.getChildren().addAll(lblBuyCards, fpTreasures, btnPay4cards);
 		Scene buyScene = new Scene(buyPane);
 		tempStage = new Stage();
 		tempStage.setScene(buyScene);
@@ -584,17 +587,18 @@ public class GameView {
 		tempStage.setAlwaysOnTop(true);
 		tempStage.sizeToScene();
 		tempStage.setOnCloseRequest(e -> closeBuyScene());
+		
 
 	}
 
 	public void closeBuyScene() {
-		vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 1, hbTreasures);
+		vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 1, fpTreasures);
 		tempStage.close();
 
 	}
 
 	public void removeEnemyTreasures(int index, LandTile soldLand) {
-		HBox hbOpponentTreasure = hbEnemiesTreasures.get(index);
+		FlowPane hbOpponentTreasure = fpEnemiesTreasures.get(index);
 		for (int i = 0; i < hbOpponentTreasure.getChildren().size(); i++) {
 			if (((LandTile) hbOpponentTreasure.getChildren().get(i)).getTileId() == soldLand.getTileId()) {
 				hbOpponentTreasure.getChildren().remove(i);
@@ -625,8 +629,8 @@ public class GameView {
 				+ " points, choose the treasures and cards that you wanna pay with");
 
 		btnPay4Water.setDisable(true);
-		payPane.getChildren().addAll(lblPay, lblWaterCalc, hbTreasures, hboxCards, btnCalc, btnPay4Water, btnRevert);
-		Scene payScene = new Scene(payPane);
+		payPane.getChildren().addAll(lblPay, lblWaterCalc, fpTreasures, hboxCards, btnCalc, btnPay4Water, btnRevert);
+		Scene payScene = new Scene(payPane,500,400);
 		tempStage = new Stage();
 		tempStage.setScene(payScene);
 		tempStage.initModality(Modality.WINDOW_MODAL);
@@ -655,7 +659,7 @@ public class GameView {
 
 	public void closePayWaterScene() {
 		if (tempStage != null && tempStage.isShowing()) {
-			vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 1, hbTreasures);
+			vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 1, fpTreasures);
 			vbPlayer.getChildren().add(vbPlayer.getChildren().size() - 2, hboxCards);
 			lblPay.setText(" ");
 			multiCardsMode = false;
@@ -673,7 +677,7 @@ public class GameView {
 		text.setFill(Color.DARKBLUE);
 		VBox box = new VBox();
 		box.getChildren().add(text);
-		final Scene scene = new Scene(box);
+		final Scene scene = new Scene(box,500,400);
 		scene.setFill(null);
 		tempStage.setScene(scene);
 		tempStage.show();
