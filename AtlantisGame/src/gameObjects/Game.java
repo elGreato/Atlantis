@@ -90,11 +90,11 @@ public class Game implements GameInterface {
 
 		base = new ArrayList<>();
 		deckA = new DeckOfLandTiles();
-		for(LandTile tile: deckA.getDeckOfTiles()){
+		for (LandTile tile : deckA.getDeckOfTiles()) {
 			tile.setDeckAorB("a");
 		}
 		deckB = new DeckOfLandTiles();
-		for(LandTile tile: deckB.getDeckOfTiles()){
+		for (LandTile tile : deckB.getDeckOfTiles()) {
 			tile.setDeckAorB("b");
 		}
 		cards = new DeckOfCards();
@@ -183,8 +183,7 @@ public class Game implements GameInterface {
 					p.setPawnSelected(false);
 
 			}
-			if(removedCards.size() <=1)
-			{
+			if (removedCards.size() <= 1) {
 				selectedPawn.setStartingLocation(selectedPawn.getNewLocation());
 			}
 			System.out.println("Starting location: " + selectedPawn.getStartingLocation());
@@ -224,8 +223,7 @@ public class Game implements GameInterface {
 			WaterPaidMessage message = (WaterPaidMessage) igm;
 			Player player = players.get(message.getPlayerIndex());
 			Iterator<Card> it = player.getPlayerHand().getCards().iterator();
-			
-			
+
 			while (it.hasNext()) {
 				Card c = it.next();
 				for (int k = 0; k < message.getCardsChosen().size(); k++) {
@@ -255,9 +253,9 @@ public class Game implements GameInterface {
 
 			}
 			if (message.isNextPlayer() && !gameOver) {
-				removedCards.clear(); 
+				removedCards.clear();
 				endTurn();
-				
+
 			}
 			// ending the game
 			else if (gameOver) {
@@ -307,7 +305,7 @@ public class Game implements GameInterface {
 			performEndTurn(message.getPlayerIndex(), message.isNormalEnd());
 
 		}
-		if(igm instanceof PlayerLeftMessage){
+		if (igm instanceof PlayerLeftMessage) {
 			PlayerLeftMessage message = (PlayerLeftMessage) igm;
 			int leavingPlayer = message.getPlayerIndex();
 			handlePlayerLeave(leavingPlayer);
@@ -324,6 +322,7 @@ public class Game implements GameInterface {
 			}
 		}
 	}
+
 	private void revertThisTurn(int playerIndex) {
 		if (currentPlayerIndex == playerIndex) {
 			for (Card c : removedCards) {
@@ -340,8 +339,7 @@ public class Game implements GameInterface {
 			selectedPawn.setOldLocation(selectedPawn.getNewLocation());
 			if (initialLand != null) {
 				initialLand.setPawnOnTile(selectedPawn);
-				System.out.println(
-						"initial land is " + initialLand.getCol() + " value " + initialLand.getLandValue());
+				System.out.println("initial land is " + initialLand.getCol() + " value " + initialLand.getLandValue());
 				System.out.println("pawn new location" + selectedPawn.getNewLocation());
 			} else {
 				atlantis.getChildren().add(selectedPawn);
@@ -351,48 +349,38 @@ public class Game implements GameInterface {
 		System.out.println("Argument: " + playerIndex + " ,CurrPlayerIndex: " + currentPlayerIndex);
 		int numberOfPlayers = getNumOfRegisteredPlayers();
 		for (int i = 0; i < numberOfPlayers; i++) {
-			users.get(i).sendMessage(new RevertTurnMessage(getName(), currentPlayerIndex, removedCards,
-					removedTreasure, removedTreasureIndex, selectedPawn,selectedPawn.getStartingLocation(), initialLand));
+			users.get(i).sendMessage(new RevertTurnMessage(getName(), currentPlayerIndex, removedCards, removedTreasure,
+					removedTreasureIndex, selectedPawn, selectedPawn.getStartingLocation(), initialLand));
 		}
 		performEndTurn(playerIndex, true);
-		
+
 	}
 
-	//Method created by Kevin Neuschwander
+	// Method created by Kevin Neuschwander
 	private void handlePlayerLeave(int leavingPlayer) {
 		System.out.println("Player left");
 		int numAI = 0;
-		for(User u: users)
-		{
-			if (u instanceof AIUser)
-			{
-				numAI+=1;
+		for (User u : users) {
+			if (u instanceof AIUser) {
+				numAI += 1;
 			}
 		}
-		
+
 		lobby.addLoss(users.get(leavingPlayer));
-		if(numAI==users.size()-1)
-		{
+		if (numAI == users.size() - 1) {
 			System.out.println("No humans left");
-			for(User u:users)
-			{
-				if(users.indexOf(u)!=leavingPlayer)
-				{
-					if(maxPlayers>2)
-					{
+			for (User u : users) {
+				if (users.indexOf(u) != leavingPlayer) {
+					if (maxPlayers > 2) {
 						lobby.addTie(u);
-					}
-					else
-					{
+					} else {
 						lobby.addWin(u);
 					}
-					
+
 				}
 			}
 			lobby.endGame(this);
-		}
-		else
-		{
+		} else {
 			System.out.println("There are humans left");
 			lobby.endGameForSpecificUser(this, users.get(leavingPlayer));
 			AIUser replacement = lobby.requestAI(users);
@@ -400,47 +388,41 @@ public class Game implements GameInterface {
 			users.set(leavingPlayer, replacement);
 			players.get(leavingPlayer).setPlayerName(replacement.getUserInfo().getUsername());
 			replacement.initiateGameStart(this);
-			replacement.sendMessage(new WaterMessage(name,base));
-			replacement.sendMessage(new PlayerMessage(name,players.get(leavingPlayer)));
+			replacement.sendMessage(new WaterMessage(name, base));
+			replacement.sendMessage(new PlayerMessage(name, players.get(leavingPlayer)));
 			ArrayList<Player> opponents = new ArrayList<Player>();
-			for(Player pl:players)
-			{
-				if(pl.getPlayerIndex()!=leavingPlayer)
-				{
+			for (Player pl : players) {
+				if (pl.getPlayerIndex() != leavingPlayer) {
 					opponents.add(pl);
 				}
 			}
-			replacement.sendMessage(new OpponentMessage(name,opponents));
-			for(User u:users)
-			{
-				u.sendMessage(new PlayerLeftMessage(name, leavingPlayer,replacement.getUserInfo().getUsername()));
+			replacement.sendMessage(new OpponentMessage(name, opponents));
+			for (User u : users) {
+				u.sendMessage(new PlayerLeftMessage(name, leavingPlayer, replacement.getUserInfo().getUsername()));
 			}
-			if(currentPlayerIndex == leavingPlayer&&!removedCards.isEmpty())
-			{
+			if (currentPlayerIndex == leavingPlayer && !removedCards.isEmpty()) {
 				System.out.println("Revert turn");
 				revertThisTurn(leavingPlayer);
-			}
-			else if(currentPlayerIndex == leavingPlayer)
-			{
+			} else if (currentPlayerIndex == leavingPlayer) {
 				System.out.println("End turn");
 				performEndTurn(leavingPlayer, false);
 			}
-			
+
 		}
 	}
-	//Method created by Kevin Neuschwander
+
+	// Method created by Kevin Neuschwander
 	@Override
 	public void handlePlayerLeave(String leavingPlayer) {
-		for(User u: users)
-		{
-			if (u.getUserInfo().getUsername().equals(leavingPlayer))
-			{
+		for (User u : users) {
+			if (u.getUserInfo().getUsername().equals(leavingPlayer)) {
 				handlePlayerLeave(users.indexOf(u));
 				break;
 			}
 		}
-		
+
 	}
+
 	private ArrayList<Card> cardsPurchase(int amount) {
 
 		ArrayList<Card> result = new ArrayList<>();
@@ -640,19 +622,15 @@ public class Game implements GameInterface {
 		int victoryPoints = currentPlayer.countVictoryPoints();
 		int cardsCount = currentPlayer.getPlayerHand().getNumCards();
 		int numberOfPlayers = getNumOfRegisteredPlayers();
-		//Cards test
+		// Cards test
 		System.out.println(currentPlayer.getPlayerName() + " has " + currentPlayer.getPlayerHand().getNumCards());
-		for(Card c:currentPlayer.getPlayerHand().getCards())
-		{
-			if(c.getColor()!= null)
-			{
-			System.out.println(c.getColor() + " " + c.getCardId());
-			}
-			else
-			{
+		for (Card c : currentPlayer.getPlayerHand().getCards()) {
+			if (c.getColor() != null) {
+				System.out.println(c.getColor() + " " + c.getCardId());
+			} else {
 				System.out.println("Black card");
 			}
-				
+
 		}
 		if (!gameOver) {
 			for (int i = 0; i < numberOfPlayers; i++) {
@@ -823,12 +801,11 @@ public class Game implements GameInterface {
 
 	private void removePawnFromNewTile(Pawn selectedPawn) {
 		WaterTile w = null;
-		if (selectedPawn.getNewLocation() != -1&&selectedPawn.getNewLocation()!=53) {
+		if (selectedPawn.getNewLocation() != -1 && selectedPawn.getNewLocation() != 53) {
 			w = base.get(selectedPawn.getNewLocation());
 			((LandTile) w.getChildren().get((w.getChildren().size() - 1))).removePawn(selectedPawn);
 
-		}
-		else if(selectedPawn.getNewLocation()==53){
+		} else if (selectedPawn.getNewLocation() == 53) {
 			mainland.getChildren().remove(selectedPawn);
 		}
 	}

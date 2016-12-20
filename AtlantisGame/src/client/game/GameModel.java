@@ -528,7 +528,7 @@ public class GameModel {
 	}
 
 	private void payForPassingWater(int waterBill, int waterPassedCount, boolean gameFinished) {
-		if (waterPassedCount > 0||waterBill!=0) {
+		if (waterBill!=0) {
 
 			this.waterBill = waterBill;
 			view.showWaterBill(waterBill, waterPassedCount, gameFinished);
