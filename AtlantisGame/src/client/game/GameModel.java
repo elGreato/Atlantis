@@ -14,8 +14,10 @@ import gameObjects.Player;
 import gameObjects.WaterTile;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.WindowEvent;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.paint.Color;
 import messageObjects.AtlantisMainLandMessage;
 import messageObjects.InGameMessage;
 import messageObjects.OpponentMessage;
@@ -247,6 +249,9 @@ public class GameModel {
 		if (msgIn instanceof RevertTurnMessage) {
 			RevertTurnMessage message = (RevertTurnMessage) msgIn;
 			if (message.getRemovedTreasure() != null) {
+				Rectangle rec = (Rectangle)message.getRemovedTreasure().getChildren().get(1);
+				rec.setStroke(Color.TRANSPARENT);
+				message.getRemovedTreasure().setSelected(false);
 				view.base.get(message.getRemovedIndex()).getChildren().add(message.getRemovedTreasure());
 				
 			}
@@ -292,16 +297,13 @@ public class GameModel {
 
 	private void assignThenMovePawn(int playerIndex, Pawn selectedPawn, LandTile selectedLand, boolean isRevert) {
 		Pawn pawnToPlay = null;
-		System.out.println(playerIndex+" comparing to curr  "+currentPlayer.getPlayerIndex());
 		if (playerIndex == currentPlayer.getPlayerIndex()) {
-			System.out.println("I, " + currentPlayer.getPlayerName() + " have reverted.");
 			for (Pawn pp : currentPlayer.getPawns()) {
 				if (selectedPawn.getPawnId() == pp.getPawnId())
 					pawnToPlay = pp;
 
 			}
 		} else {
-			System.out.println("Enemy has reverted. I am " + currentPlayer.getPlayerName());
 			for (Player enemy : currentPlayer.getOpponents()) {
 				if (enemy.getPlayerIndex() == playerIndex) {
 					for (Pawn pp : enemy.getPawns()) {

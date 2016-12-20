@@ -403,6 +403,8 @@ public class GameView {
 	}
 
 	public void createCardView(Card c) {
+		c.getChildren().clear();
+		c.setCardSelected(false);
 		Rectangle rec = new Rectangle();
 		rec.setWidth(31);
 		rec.setHeight(51);
@@ -413,6 +415,11 @@ public class GameView {
 			c.getChildren().add(c.getColor().addCardImage());
 		} else
 			c.getRec().setFill(Color.BLACK);
+		//fix duplicate children added exception, that occurs from time to time
+		if(getHboxCards().getChildren().contains(c))
+		{
+			getHboxCards().getChildren().remove(c);
+		}
 		getHboxCards().getChildren().add(c);
 
 	}
