@@ -362,6 +362,7 @@ public class GameModel {
 		}
 		if(startingLocation == -1 )
 		{
+			System.out.println("Revert to atlantis");
 			view.addPawnToAtlantis(viewPawn); 
 		}
 		else

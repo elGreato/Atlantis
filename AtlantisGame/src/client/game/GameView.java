@@ -560,7 +560,6 @@ public class GameView {
 			atlantis.getChildren().remove(selectedPawn);
 		}
 		atlantis.getChildren().add(selectedPawn);
-		mainland.convertToChildren();
 
 	}
 	public void showBuyCards() {
@@ -703,6 +702,10 @@ public class GameView {
 	}
 
 	public void removePawnFromMainLand(Pawn viewPawn) {
+		if(!mainland.getChildren().contains(viewPawn))
+		{
+			System.out.println("Does not contain pawn");
+		}
 		mainland.getChildren().remove(viewPawn);
 		mainland.convertToChildren();
 		viewPawn.setOnMouseClicked((e) -> handlePawn(viewPawn));
