@@ -26,6 +26,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
@@ -82,9 +83,9 @@ public class GameView {
 	private VBox vbMainControls = new VBox();
 	private VBox vbGameStatus = new VBox();
 
-	// Atlantis and mainland Holders
+	/*// Atlantis and mainland Holders
 	private StackPane stackAtlantis = new StackPane();
-	private StackPane stackMainLand = new StackPane();
+	private StackPane stackMainLand = new StackPane();*/
 
 	// Player View
 
@@ -128,7 +129,7 @@ public class GameView {
 		for (int i = 0; i < 14; i++) {
 			ColumnConstraints colcon = new ColumnConstraints();
 			colcon.setMinWidth(70);
-			
+			colcon.setMaxWidth(70);
 			mainBoard.getColumnConstraints().add(colcon);
 		}
 		for (int i = 0; i < 9; i++) {
@@ -360,19 +361,21 @@ public class GameView {
 
 		// the Atlantis
 
-		stackAtlantis.getChildren().add(atlantis);
-		mainBoard.add(stackAtlantis, 0, 0, 2, 2);
-		Image img = new Image(getClass().getResourceAsStream("images4Tiles/atlantis.png"));
+		//stackAtlantis.getChildren().add(atlantis);
+		mainBoard.add(atlantis, 0, 0, 2, 2);
+		atlantis.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+		/*Image img = new Image(getClass().getResourceAsStream("images4Tiles/atlantis.png"));
 		atlantis.setBackground(new Background(new BackgroundImage(img, BackgroundRepeat.NO_REPEAT,
-				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-
-		// Mainland
-		stackMainLand.getChildren().add(mainland);
-		mainBoard.add(stackMainLand, 0, 7, 2, 2);
-		/*Image im = new Image(getClass().getResourceAsStream("images4Tiles/land.png"));
-		mainland.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
 				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));*/
 
+		// Mainland
+	//	stackMainLand.getChildren().add(mainland);
+		mainBoard.add(mainland, 0, 7, 2, 2);
+		mainland.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+		/*Image im = new Image(getClass().getResourceAsStream("images4Tiles/land.png"));
+		mainland.setBackground(new Background(new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,
+				BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+*/
 	}
 
 	public void gameStarted() {
