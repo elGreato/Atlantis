@@ -403,8 +403,8 @@ public class GameView {
 		c.getChildren().clear();
 		c.setCardSelected(false);
 		Rectangle rec = new Rectangle();
-		rec.setWidth(31);
-		rec.setHeight(51);
+		rec.setWidth(39);
+		rec.setHeight(77);
 		rec.setFill(Color.TRANSPARENT);
 		c.setRec(rec);
 		c.getChildren().add(rec);
