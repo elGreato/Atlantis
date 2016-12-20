@@ -362,7 +362,7 @@ public class GameModel {
 		}
 		if(startingLocation == -1 )
 		{
-			view.addPawnToAtlantis(viewPawn);
+			view.addPawnToAtlantis(viewPawn); 
 		}
 		else
 		{
