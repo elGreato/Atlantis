@@ -175,7 +175,12 @@ public class GameModel {
 				}
 				removeTreasureFromBoard(treasure);
 			}
-			//Cards test
+			//Cards + treasures test
+			System.out.println(currentPlayer.getPlayerName() + " has " + currentPlayer.getPlayerHand().getTreasures().size() + " treasures");
+			for(LandTile t: currentPlayer.getPlayerHand().getTreasures())
+			{	
+				System.out.println(t.getCol() + t.getLandValue());
+			}
 			System.out.println(currentPlayer.getPlayerName() + " has " + currentPlayer.getPlayerHand().getNumCards());
 			for(Card c:currentPlayer.getPlayerHand().getCards())
 			{
@@ -262,6 +267,7 @@ public class GameModel {
 		}
 		if (msgIn instanceof RevertTurnMessage) {
 			RevertTurnMessage message = (RevertTurnMessage) msgIn;
+			System.out.println("Revert message arrived " + currentPlayer.getPlayerHand().getTreasures().size() + " treasures");
 			if (message.getRemovedTreasure() != null) {
 				Rectangle rec = (Rectangle)message.getRemovedTreasure().getChildren().get(1);
 				rec.setStroke(Color.TRANSPARENT);
@@ -305,6 +311,7 @@ public class GameModel {
 		{
 			PlayerLeftMessage plm = (PlayerLeftMessage)msgIn;
 			view.replaceLeavingPlayer(plm.getPlayerIndex(), plm.getNewPlayerName());
+			currentPlayer.setPlayerName(plm.getNewPlayerName());
 		}
 
 	}
@@ -401,7 +408,7 @@ public class GameModel {
 			addClickToCard(newCard);
 		}
 	}
-	//edited with new parameter
+	
 	private void movePawn(int indexOfPlayer, Pawn selectedPawn, LandTile selectedLand) {
 		Pawn viewPawn = null;
 
@@ -625,7 +632,7 @@ public class GameModel {
 
 	public void handleRevert() {
 		view.btnRevert.setDisable(true);
-	
+		currentPlayer.getPlayerHand().getTreasures().clear();
 		msgOut.sendMessage(new RevertTurnMessage(gameName, currentPlayer.getPlayerIndex()));
 
 	}

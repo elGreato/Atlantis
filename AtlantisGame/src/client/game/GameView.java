@@ -700,12 +700,9 @@ public class GameView {
 		lblPay.setText("you are not allowed to pay all your cards\n when you land on a tile that has a pawn already");
 
 	}
-
+	//Added by Kevin
 	public void removePawnFromMainLand(Pawn viewPawn) {
-		if(!mainland.getChildren().contains(viewPawn))
-		{
-			System.out.println("Does not contain pawn");
-		}
+		mainland.getPawns().remove(viewPawn);
 		mainland.getChildren().remove(viewPawn);
 		mainland.convertToChildren();
 		viewPawn.setOnMouseClicked((e) -> handlePawn(viewPawn));
