@@ -15,12 +15,14 @@ import messageObjects.PlayerMessage;
 import messageObjects.WaterMessage;
 import messageObjects.turnMessages.BuyCardsMessage;
 import messageObjects.turnMessages.CardsBoughtMessage;
+import messageObjects.turnMessages.CloseGameMessage;
 import messageObjects.turnMessages.EndMYTurnMessage;
 import messageObjects.turnMessages.GameStatusMessage;
 import messageObjects.turnMessages.LastBillMessage;
 import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
 import messageObjects.turnMessages.RefreshPlayerMessage;
+import messageObjects.turnMessages.ResultMessage;
 import messageObjects.turnMessages.ServerMessage;
 import messageObjects.turnMessages.WaterPaidMessage;
 /**
@@ -84,6 +86,9 @@ public class GameAI {
 				
 			}
 			
+		} else if(igm instanceof ResultMessage)
+		{
+			game.processMessage(new CloseGameMessage(game.getName()));
 		}
 	}
 	//Does a turn if its the turn of this AI
