@@ -311,7 +311,6 @@ public class GameModel {
 			view.replaceLeavingPlayer(plm.getPlayerIndex(), plm.getNewPlayerName());
 			for (Player p : currentPlayer.getOpponents()) {
 				if (p.getPlayerIndex() == plm.getPlayerIndex())
-
 				{
 					p.setPlayerName(plm.getNewPlayerName());
 				}
