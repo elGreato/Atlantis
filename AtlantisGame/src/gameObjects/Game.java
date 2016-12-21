@@ -163,13 +163,10 @@ public class Game implements GameInterface {
 			Card selectedCard = null;
 
 			for (Card card : currentPlayer.getPlayerHand().getCards()) {
-				if (message.getCard().getColor() != null && card.getCardId() == message.getCard().getCardId()) {
+				if (card.getCardId() == message.getCard().getCardId()) {
 					selectedCard = card;
 					removedCards.add(card);
 					currentPlayer.getPlayerHand().removeCardFromHand(card);
-					break;
-				} else if (message.getCard().getColor() == null) {
-					selectedCard = message.getCard();
 					break;
 				}
 			}
@@ -225,12 +222,10 @@ public class Game implements GameInterface {
 			System.out.println("waterpaid message received from : "+message.getPlayerIndex()+" name: "+users.get(message.getPlayerIndex()).getUserInfo().getUsername()+
 					" to make sure, player is also in players list "+players.get(message.getPlayerIndex()));
 			Player player = players.get(message.getPlayerIndex());
-			System.out.println("Cards chosen SERVER size333 "+message.getCardsChosen().size());
-			System.out.println("land chosen SERVER size333 "+message.getTreasuresChosen().size());
+			
 			Iterator<Card> it = player.getPlayerHand().getCards().iterator();
 			while (it.hasNext()) {
 				Card c = it.next();
-	
 				for (int k = 0; k < message.getCardsChosen().size(); k++) {
 					if (c.getCardId() == message.getCardsChosen().get(k).getCardId()) {
 						System.out.println("Card from owner "+c.getOwner().getPlayerName()+ " Color: "+c.getColor().toString());
@@ -784,10 +779,10 @@ public class Game implements GameInterface {
 		// relatively low
 		Random rand = new Random();
 		int lucky = rand.nextInt(30);
-		if (lucky == 13) {
+		if (lucky >= 1) {
 			Card joker = new Card(666, null);
 			joker.setOwner(currentPlayer);
-			player.getPlayerHand().addCard(joker);
+			player.getPlayerHand().getCards().add(joker);
 			result.add(joker);
 			users.get(currentPlayerIndex).sendMessage(new ServerMessage(getName(), "WOW! YOU GOT A JOKER CARD!"));
 		}
