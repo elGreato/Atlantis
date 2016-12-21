@@ -234,9 +234,14 @@ public class Game implements GameInterface {
 	
 				for (int k = 0; k < message.getCardsChosen().size(); k++) {
 					if (c.getCardId() == message.getCardsChosen().get(k).getCardId()) {
+<<<<<<< HEAD
 						System.out.println("Card from owner "+c.getOwner().getPlayerName()+ " Color: "+c.getColor().toString());
 						it.remove();		
 						break;
+=======
+
+						it.remove();					
+>>>>>>> branch 'master' of https://github.com/Hyp-nos/Atlantis.git
 					}
 				}
 			}
