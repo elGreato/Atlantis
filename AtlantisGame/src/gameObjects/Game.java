@@ -213,7 +213,8 @@ public class Game implements GameInterface {
 				}
 				int numberOfPlayers = getNumOfRegisteredPlayers();
 				for (int i = 0; i < numberOfPlayers; i++) {
-					users.get(i).sendMessage(new CardsBoughtMessage(getName(), currentPlayer, purchase, sold,currentPlayer.countVictoryPoints()));
+					users.get(i).sendMessage(new CardsBoughtMessage(getName(), currentPlayer, purchase, sold,
+							currentPlayer.countVictoryPoints()));
 
 				}
 
@@ -337,9 +338,9 @@ public class Game implements GameInterface {
 			selectedPawn.setNewLocation(selectedPawn.getStartingLocation());
 			selectedPawn.setOldLocation(selectedPawn.getNewLocation());
 			if (selectedPawn.getStartingLocation() != -1) {
-				//initialLand.setPawnOnTile(selectedPawn);
+				// initialLand.setPawnOnTile(selectedPawn);
 				WaterTile wt = base.get(selectedPawn.getStartingLocation());
-				LandTile lt = (LandTile)wt.getChildren().get(wt.getChildren().size()-1);
+				LandTile lt = (LandTile) wt.getChildren().get(wt.getChildren().size() - 1);
 				lt.setPawnOnTile(selectedPawn);
 
 				System.out.println("pawn new location" + selectedPawn.getNewLocation());
@@ -511,11 +512,11 @@ public class Game implements GameInterface {
 
 		// loop through the base and assign watertile
 		for (int f = selectedPawn.getNewLocation(); f < base.size() && !foundLand; f++) {
-			WaterTile water=null;
-			if(f==52){
-			 water = base.get(f);}
-			else {
-				 water= base.get(f+1);
+			WaterTile water = null;
+			if (f == 52) {
+				water = base.get(f);
+			} else {
+				water = base.get(f + 1);
 			}
 			// check if water has tiles
 			int topNode = 0;
@@ -581,8 +582,8 @@ public class Game implements GameInterface {
 				}
 			}
 			if (((!foundLand && f == base.size() - 1)) || (selectedCard.getColor() == null && f == base.size() - 1)) {
-				System.out.println("Reached Main Land , index of new location is "+f+1);
-				selectedPawn.setNewLocation(f+1);
+				System.out.println("Reached Main Land , index of new location is " + f + 1);
+				selectedPawn.setNewLocation(f + 1);
 				selectedPawn.setReachedMainLand(true);
 				mainland.getPawns().add(selectedPawn);
 				removePawnFromOldTile(selectedPawn);
@@ -599,8 +600,10 @@ public class Game implements GameInterface {
 						else
 							currentPawnsCount--;
 					}
-					if (currentPawnsCount == 3)
+					if (currentPawnsCount == 3){
 						gameOver = true;
+						nextPlayer=true;
+					}
 				}
 
 				if (!gameOver) {
@@ -610,7 +613,7 @@ public class Game implements GameInterface {
 				}
 
 			}
-			
+
 		}
 		if (selectedPawn.getNewLocation() > 0 && foundLand && giveTreasure) {
 			treasure = giveTreasureToPlayer(selectedPawn.getNewLocation());
@@ -625,7 +628,7 @@ public class Game implements GameInterface {
 		int victoryPoints = currentPlayer.countVictoryPoints();
 		int cardsCount = currentPlayer.getPlayerHand().getNumCards();
 		int numberOfPlayers = getNumOfRegisteredPlayers();
-		
+
 		if (!gameOver) {
 			for (int i = 0; i < numberOfPlayers; i++) {
 				users.get(i)

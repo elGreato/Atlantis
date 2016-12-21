@@ -159,8 +159,10 @@ public class GameView {
 		int index = (r.nextInt(paths.length));
 		Image image = new Image(getClass().getResourceAsStream(paths[index]));
 		lblPlayerImage.setGraphic(new ImageView(image));
+		HBox nameAndPic = new HBox();
+		nameAndPic.getChildren().addAll(lblName,lblPlayerImage);
 
-		vbPlayerInfo.getChildren().addAll(lblName, vpHolder, lblPlayerImage, lblcards, hboxCards, lbltreasures,
+		vbPlayerInfo.getChildren().addAll(nameAndPic, vpHolder, lblcards, hboxCards, lbltreasures,
 				fpTreasures);
 		vbPlayer.getChildren().add(vbPlayerInfo);
 		hbPlayersInfo.getChildren().add(vbPlayer);
