@@ -277,7 +277,7 @@ public class GameView {
 	public void showPlayer(Player player) {
 
 		lblName.setText(player.getPlayerName());
-		lblName.setFont(Font.font(null, FontWeight.BOLD, 70));
+		lblName.setFont(Font.font(null, FontWeight.BOLD, 22));
 		Rectangle recColor = new Rectangle();
 		recColor.setHeight(10);
 		recColor.setWidth(150);
@@ -578,7 +578,7 @@ public class GameView {
 		Label lblBuyCards = new Label("Choose the treasures that you would like to Sacrfice to buy cards"
 				+ "\nRemember, half of what you pay, rounded down, will be refunded as cards");
 		buyPane.getChildren().addAll(lblBuyCards, fpTreasures, btnPay4cards);
-		Scene buyScene = new Scene(buyPane);
+		Scene buyScene = new Scene(buyPane,500,400);
 		tempStage = new Stage();
 		tempStage.setScene(buyScene);
 		tempStage.initModality(Modality.WINDOW_MODAL);
@@ -677,7 +677,7 @@ public class GameView {
 		text.setFill(Color.DARKBLUE);
 		VBox box = new VBox();
 		box.getChildren().add(text);
-		final Scene scene = new Scene(box,500,400);
+		final Scene scene = new Scene(box);
 		scene.setFill(null);
 		tempStage.setScene(scene);
 		tempStage.show();
