@@ -216,6 +216,8 @@ public class GameModel {
 					addCardToPlayer(boughtCards);
 
 				}
+				currentPlayer.setVictoryPoints(message.getVp());
+				view.vpHolder.setText("Your Victory Points: "+String.valueOf(message.getVp()));
 
 			} else {
 				for (int i = 0; i < sold.size(); i++) {

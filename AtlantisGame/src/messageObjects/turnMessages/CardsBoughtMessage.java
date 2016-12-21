@@ -13,12 +13,14 @@ public class CardsBoughtMessage extends InGameMessage implements Serializable{
 	ArrayList<Card> purchase;
 	ArrayList<LandTile> sold;
 	Player currentPlayer;
+	private int vp;
 	
-	public CardsBoughtMessage(String gameName, Player currentPlayer, ArrayList<Card> purchase, ArrayList<LandTile> sold) {
+	public CardsBoughtMessage(String gameName, Player currentPlayer, ArrayList<Card> purchase, ArrayList<LandTile> sold, int vp) {
 		super(gameName);
 		this.purchase=purchase;
 		this.currentPlayer=currentPlayer;
 		this.sold=sold;
+		this.vp=vp;
 		
 	}
 
@@ -44,6 +46,10 @@ public class CardsBoughtMessage extends InGameMessage implements Serializable{
 
 	public void setCurrentPlayer(Player currentPlayer) {
 		this.currentPlayer = currentPlayer;
+	}
+
+	public int getVp() {
+		return vp;
 	}
 
 }
