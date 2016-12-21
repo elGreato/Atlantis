@@ -215,7 +215,6 @@ public class Game implements GameInterface {
 				for (int i = 0; i < numberOfPlayers; i++) {
 					users.get(i).sendMessage(new CardsBoughtMessage(getName(), currentPlayer, purchase, sold,
 							currentPlayer.countVictoryPoints()));
-
 				}
 
 			}
