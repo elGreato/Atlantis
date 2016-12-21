@@ -50,7 +50,7 @@ public class GameModel {
 	protected Player currentPlayer;
 	private boolean nextPlayer = true;
 	private boolean gameOver = false;
-	private boolean landedOnPawn=false;
+	private boolean landedOnPawn = false;
 
 	public String getGameName() {
 		return gameName;
@@ -62,10 +62,9 @@ public class GameModel {
 		this.view = gameView;
 		// css
 		view.scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-		SplashScreen intro= new SplashScreen(view.stage);
-		
+		SplashScreen intro = new SplashScreen(view.stage);
+
 	}
-	
 
 	// Here messages from server arrive
 	public void processMessage(InGameMessage msgIn) {
@@ -131,7 +130,7 @@ public class GameModel {
 						view.removeCardFromHand(selectedCard);
 						msgOut.sendMessage(new PawnCardSelectedMessage(gameName, currentPlayer.getPlayerIndex(),
 								selectedPawn, selectedCard));
-						landedOnPawn=false;
+						landedOnPawn = false;
 					} else
 						view.selectCardPlease();
 				} else
@@ -157,7 +156,7 @@ public class GameModel {
 			}
 			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 				nextPlayer = message.isNextPlayer();
-				view.vpHolder.setText("Your Victory Points: "+String.valueOf(message.getVictoryPoints()));
+				view.vpHolder.setText("Your Victory Points: " + String.valueOf(message.getVictoryPoints()));
 				payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(), gameOver);
 			}
 			LandTile treasure = message.getTreasure();
@@ -175,15 +174,16 @@ public class GameModel {
 				}
 				removeTreasureFromBoard(treasure);
 			}
-	
+
 			Pawn selectedPawn = message.getSelectedPawn();
-			assignThenMovePawn(message.getCurrentPlayer().getPlayerIndex(), selectedPawn, message.getSelectedLand(),false);
+			assignThenMovePawn(message.getCurrentPlayer().getPlayerIndex(), selectedPawn, message.getSelectedLand(),
+					false);
 
 		}
 		// inform player to play another card
-		if (msgIn instanceof PlayAnotherCardMessage) { 
+		if (msgIn instanceof PlayAnotherCardMessage) {
 			nextPlayer = false;
-			landedOnPawn=true;
+			landedOnPawn = true;
 			for (Pawn p : currentPlayer.getPawns()) {
 				if (((PlayAnotherCardMessage) msgIn).getSelectedPawn().getPawnId() != p.getPawnId()) {
 					p.setOnMouseClicked(null);
@@ -217,7 +217,7 @@ public class GameModel {
 
 				}
 				currentPlayer.setVictoryPoints(message.getVp());
-				view.vpHolder.setText("Your Victory Points: "+String.valueOf(message.getVp()));
+				view.vpHolder.setText("Your Victory Points: " + String.valueOf(message.getVp()));
 
 			} else {
 				for (int i = 0; i < sold.size(); i++) {
@@ -251,23 +251,21 @@ public class GameModel {
 		}
 		if (msgIn instanceof RevertTurnMessage) {
 			RevertTurnMessage message = (RevertTurnMessage) msgIn;
-			System.out.println("Revert message arrived " + currentPlayer.getPlayerHand().getTreasures().size() + " treasures");
+			System.out.println(
+					"Revert message arrived " + currentPlayer.getPlayerHand().getTreasures().size() + " treasures");
 			if (message.getRemovedTreasure() != null) {
 				view.base.get(message.getRemovedIndex()).getChildren().add(message.getRemovedTreasure());
-				if(message.getPlayerIndex() == currentPlayer.getPlayerIndex())
-				{
-					Rectangle rec = (Rectangle)message.getRemovedTreasure().getChildren().get(1);
+				if (message.getPlayerIndex() == currentPlayer.getPlayerIndex()) {
+					Rectangle rec = (Rectangle) message.getRemovedTreasure().getChildren().get(1);
 					rec.setStroke(Color.TRANSPARENT);
 					message.getRemovedTreasure().setSelected(false);
 				}
-				
-				
+
 			}
-			if(message.getPlayerIndex() == currentPlayer.getPlayerIndex())
-			{
+			if (message.getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 				System.out.println("Removed cards: " + message.getRemovedCards().size());
-				addCardToPlayer(message.getRemovedCards());				
-				
+				addCardToPlayer(message.getRemovedCards());
+
 			}
 			message.getSelectedPawn().setStartingLocation(message.getStartingLocation());
 			assignThenMovePawn(message.getPlayerIndex(), message.getSelectedPawn(), message.getSelectedLand(), true);
@@ -282,8 +280,19 @@ public class GameModel {
 					"Bill amount: " + message.getWaterBill() + " you passed: " + message.getWaterPassedCount());
 			gameOver = true;
 			payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(), gameOver);
-			for(Pawn p:currentPlayer.getPawns()){
-				if(!p.ReachedMainLand())
+			for (Pawn p : currentPlayer.getPawns()) {
+				if (!p.ReachedMainLand())
+					view.addPawnToMainLand(p);
+			}
+			for (Player enemy : currentPlayer.getOpponents()) {
+				for (Pawn pp : enemy.getPawns()) {
+					if (!pp.ReachedMainLand()) {
+						view.addPawnToMainLand(pp);
+					}
+				}
+			}
+			for (Pawn p : currentPlayer.getPawns()) {
+				if (!p.ReachedMainLand())
 					view.addPawnToMainLand(p);
 			}
 
@@ -295,14 +304,12 @@ public class GameModel {
 			} else
 				view.ILose(message.getWinnerName());
 		}
-		if(msgIn instanceof PlayerLeftMessage)
-		{
-			PlayerLeftMessage plm = (PlayerLeftMessage)msgIn;
+		if (msgIn instanceof PlayerLeftMessage) {
+			PlayerLeftMessage plm = (PlayerLeftMessage) msgIn;
 			view.replaceLeavingPlayer(plm.getPlayerIndex(), plm.getNewPlayerName());
-			for(Player p: currentPlayer.getOpponents())
-			{
-				if(p.getPlayerIndex() == plm.getPlayerIndex())
-					
+			for (Player p : currentPlayer.getOpponents()) {
+				if (p.getPlayerIndex() == plm.getPlayerIndex())
+
 				{
 					p.setPlayerName(plm.getNewPlayerName());
 				}
@@ -331,45 +338,36 @@ public class GameModel {
 				}
 			}
 		}
-		if(isRevert)
-		{
-			revertPawn(currentPlayer.getPlayerIndex(),pawnToPlay, selectedPawn.getStartingLocation());
-		}
-		else
-		{
+		if (isRevert) {
+			revertPawn(currentPlayer.getPlayerIndex(), pawnToPlay, selectedPawn.getStartingLocation());
+		} else {
 			movePawn(currentPlayer.getPlayerIndex(), pawnToPlay, selectedLand);
 		}
 
 	}
-	//ADDED BY KEVIN
+
+	// ADDED BY KEVIN
 	private void revertPawn(int playerIndex, Pawn selectedPawn, int startingLocation) {
 		System.out.println("revert pawn");
 		boolean isThisPlayer = false;
 		if (currentPlayer.getPawns().contains(selectedPawn)) {
 			isThisPlayer = true;
 		}
-		if(selectedPawn.ReachedMainLand())
-		{
+		if (selectedPawn.ReachedMainLand()) {
 			System.out.println("Pawn reached mainland but needs to revert");
 			selectedPawn.setReachedMainLand(false);
 			view.removePawnFromMainLand(selectedPawn, isThisPlayer);
-			
+
 		}
-		if(startingLocation == -1 )
-		{
+		if (startingLocation == -1) {
 			System.out.println("Revert to atlantis");
-			view.addPawnToAtlantis(selectedPawn); 
-		}
-		else
-		{
+			view.addPawnToAtlantis(selectedPawn);
+		} else {
 			WaterTile tempWater = view.getBase().get(startingLocation);
 			((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).setPawnOnTile(selectedPawn);
 			((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).convertPawns();
 		}
-			
 
-		
-		
 	}
 
 	private Pawn scanPawns() {
@@ -396,10 +394,10 @@ public class GameModel {
 			addClickToCard(newCard);
 		}
 	}
-	
+
 	private void movePawn(int indexOfPlayer, Pawn selectedPawn, LandTile selectedLand) {
 		Pawn viewPawn = null;
-		//????
+		// ????
 		if (currentPlayer.getPawns().contains(selectedPawn)) {
 			viewPawn = selectedPawn;
 		} else {
@@ -516,7 +514,7 @@ public class GameModel {
 	}
 
 	private void payForPassingWater(int waterBill, int waterPassedCount, boolean gameFinished) {
-		if (waterBill!=0) {
+		if (waterBill != 0) {
 
 			this.waterBill = waterBill;
 			view.showWaterBill(waterBill, waterPassedCount, gameFinished);
@@ -550,7 +548,7 @@ public class GameModel {
 		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
 		boolean allCardsSelected = true;
-		boolean allTreasuresSelected=true;
+		boolean allTreasuresSelected = true;
 		int totalChosen = 0;
 		for (int i = 0; i < currentPlayer.getPlayerHand().getTreasures().size(); i++) {
 			LandTile treasureSelected = currentPlayer.getPlayerHand().getTreasures().get(i);
@@ -558,7 +556,7 @@ public class GameModel {
 				treasuresChosen.add(treasureSelected);
 				totalChosen += treasureSelected.getLandValue();
 
-			} else{
+			} else {
 				System.out.println("not all treasures selected");
 				allTreasuresSelected = false;
 			}
@@ -570,23 +568,22 @@ public class GameModel {
 				cardsChosen.add(cardSelected);
 				totalChosen += 1;
 
-			} else{
+			} else {
 				System.out.println("not all cards selected");
 				allCardsSelected = false;
 			}
 		}
 		// ability to revert only when you can't afford the water that you
 		// jumped
-		if (allCardsSelected&&allTreasuresSelected && totalChosen <= waterBill && !gameOver)
-		{
+		if (allCardsSelected && allTreasuresSelected && totalChosen <= waterBill && !gameOver) {
 			System.out.println("activating revert button");
 			view.btnRevert.setDisable(false);
 		}
-		if (allCardsSelected&&allTreasuresSelected && totalChosen <= waterBill && gameOver)
-		{
+		if (allCardsSelected && allTreasuresSelected && totalChosen <= waterBill && gameOver) {
 			view.btnNotEnough.setDisable(false);
-		// if the pawn landed on another pawn he should not be allowed to pay all cards, to prevent cheating
-		
+			// if the pawn landed on another pawn he should not be allowed to
+			// pay all cards, to prevent cheating
+
 		}
 		if (totalChosen >= waterBill) {
 			view.lblWaterCalc.setText("");
@@ -601,10 +598,10 @@ public class GameModel {
 					"This is not enough!" + "You still need to pay extra" + String.valueOf(waterBill - totalChosen));
 			view.tempStage.sizeToScene();
 		}
-		if(landedOnPawn==true&&allCardsSelected){
+		if (landedOnPawn == true && allCardsSelected) {
 			view.btnPay4Water.setDisable(true);
 			view.showDontUserAllCardsAlert();
-		
+
 		}
 
 	}
@@ -620,8 +617,8 @@ public class GameModel {
 
 	public void handleRevert() {
 		view.btnRevert.setDisable(true);
-		//currentPlayer.getPlayerHand().getTreasures().clear();
-		
+		// currentPlayer.getPlayerHand().getTreasures().clear();
+
 		msgOut.sendMessage(new RevertTurnMessage(gameName, currentPlayer.getPlayerIndex()));
 
 	}
@@ -640,24 +637,19 @@ public class GameModel {
 	}
 
 	public void playerLeft(WindowEvent e) {
-		if(!gameOver)
-		{
+		if (!gameOver) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Close Atlantis");
 			alert.setContentText("Are you sure you want to close the game? \nYou will lose this game");
 			Optional<ButtonType> answer = alert.showAndWait();
-			if(answer.get() == ButtonType.OK)
-			{
-				msgOut.sendMessage(new PlayerLeftMessage(gameName,currentPlayer.getPlayerIndex()));
+			if (answer.get() == ButtonType.OK) {
+				msgOut.sendMessage(new PlayerLeftMessage(gameName, currentPlayer.getPlayerIndex()));
 				msgOut.endGame(this);
-			}
-			else{
+			} else {
 				e.consume();
 			}
 		}
-		
-		
+
 	}
-	
 
 }
