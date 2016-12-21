@@ -304,6 +304,7 @@ public class GameModel {
 				view.IWin(currentPlayer.getPlayerName());
 			} else
 				view.ILose(message.getWinnerName());
+			finishGame();
 		}
 		if (msgIn instanceof PlayerLeftMessage) {
 			PlayerLeftMessage plm = (PlayerLeftMessage) msgIn;
@@ -628,7 +629,7 @@ public class GameModel {
 
 	}
 
-	public void handleFinish() {
+	public void finishGame() {
 		view.stage.close();
 		System.out.println("Stage should be closed by now");
 		msgOut.sendMessage(new CloseGameMessage(gameName));

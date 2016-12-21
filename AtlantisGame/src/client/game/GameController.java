@@ -32,9 +32,7 @@ public class GameController {
 		view.btnCalc.setOnAction(e-> handleCalc());
 		view.btnEndMyTurn.setOnAction(e->handleEndMyTurn());
 		view.btnRevert.setOnAction(e-> handleRevert());
-		view.btnNotEnough.setOnAction(e-> handleNotEnough());
-		view.btnFinish.setOnAction(e-> handleFinish());
-		
+		view.btnNotEnough.setOnAction(e-> handleNotEnough());	
 		view.stage.setOnCloseRequest(e ->handleClose(e));
 	}
 
@@ -51,13 +49,6 @@ public class GameController {
 		model.handleNotEnough();
 		
 	}
-
-
-
-	private void handleFinish() {
-		model.handleFinish();
-	}
-
 
 	private void handleRevert() {
 		model.handleRevert();
@@ -99,12 +90,12 @@ public class GameController {
 		model.tryPlayCard();
 
 	}
-
+/*
 	private void handleBase(MouseEvent e) {
 		if (!(((StackPane) e.getSource()).getChildren()
 				.get(((StackPane) e.getSource()).getChildren().size() - 1) instanceof WaterTile))
 			((StackPane) e.getSource()).getChildren().remove(((StackPane) e.getSource()).getChildren().size() - 1);
 
-	}
+	}*/
 
 }
