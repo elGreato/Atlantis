@@ -12,10 +12,12 @@ import gameObjects.Pawn;
 import gameObjects.LandTile;
 import gameObjects.Player;
 import gameObjects.WaterTile;
+import javafx.animation.PauseTransition;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
 import messageObjects.AtlantisMainLandMessage;
@@ -629,8 +631,9 @@ public class GameModel {
 	}
 
 	public void finishGame() {
-		view.stage.close();
-		System.out.println("Stage should be closed by now");
+		PauseTransition delay = new PauseTransition(Duration.seconds(4));
+		delay.setOnFinished(event -> view.stage.close());
+		delay.play();
 		msgOut.sendMessage(new CloseGameMessage(gameName));
 		msgOut.endGame(this);
 
