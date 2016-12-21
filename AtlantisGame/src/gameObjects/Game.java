@@ -777,7 +777,7 @@ public class Game implements GameInterface {
 		// relatively low
 		Random rand = new Random();
 		int lucky = rand.nextInt(30);
-		if (lucky == 13) {
+		if (lucky >= 1) {
 			Card joker = new Card(666, null);
 			joker.setOwner(currentPlayer);
 			player.getPlayerHand().addCard(joker);
