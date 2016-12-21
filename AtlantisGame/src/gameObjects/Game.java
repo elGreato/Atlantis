@@ -99,7 +99,7 @@ public class Game implements GameInterface {
 		}
 		cards = new DeckOfCards();
 		// create water tiles which will hold land tiles later on
-		for (int i = 1; i < 54; i++) {
+		for (int i = 0; i < 53; i++) {
 			WaterTile water = new WaterTile(i);
 			base.add(water);
 		}
@@ -341,8 +341,7 @@ public class Game implements GameInterface {
 				WaterTile wt = base.get(selectedPawn.getStartingLocation());
 				LandTile lt = (LandTile)wt.getChildren().get(wt.getChildren().size()-1);
 				lt.setPawnOnTile(selectedPawn);
-				System.out.println("initial land is " + initialLand.getCol() + " value " + initialLand.getLandValue());
-				System.out.println("old loc " + base.indexOf(wt));
+
 				System.out.println("pawn new location" + selectedPawn.getNewLocation());
 			} else {
 				atlantis.getChildren().add(selectedPawn);
@@ -577,10 +576,10 @@ public class Game implements GameInterface {
 				}
 			}
 			if (((!foundLand && f == base.size() - 1)) || (selectedCard.getColor() == null && f == base.size() - 1)) {
-				selectedPawn.setNewLocation(f + 1);
+				System.out.println("Reached Main Land , index of new location is "+f);
+				selectedPawn.setNewLocation(f+1);
 				selectedPawn.setReachedMainLand(true);
 				mainland.getPawns().add(selectedPawn);
-				// here i have a bug when index is 52
 				removePawnFromOldTile(selectedPawn);
 				foundLand = true;
 				selectedLand = null;
@@ -621,16 +620,7 @@ public class Game implements GameInterface {
 		int victoryPoints = currentPlayer.countVictoryPoints();
 		int cardsCount = currentPlayer.getPlayerHand().getNumCards();
 		int numberOfPlayers = getNumOfRegisteredPlayers();
-		// Cards test
-		System.out.println(currentPlayer.getPlayerName() + " has " + currentPlayer.getPlayerHand().getNumCards());
-		for (Card c : currentPlayer.getPlayerHand().getCards()) {
-			if (c.getColor() != null) {
-				System.out.println(c.getColor() + " " + c.getCardId());
-			} else {
-				System.out.println("Joker card");
-			}
-
-		}
+		
 		if (!gameOver) {
 			for (int i = 0; i < numberOfPlayers; i++) {
 				users.get(i)
