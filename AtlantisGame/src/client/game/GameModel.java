@@ -240,6 +240,7 @@ public class GameModel {
 				view.setVpForEnemy(message.getPlayerIndex(), message.getVp());
 				view.setCardCountForEnemy(message.getPlayerIndex(), message.getCardCount());
 			}
+			else view.setVpForPlayer(message.getVp());
 		}
 		if (msgIn instanceof EndMYTurnMessage) {
 			EndMYTurnMessage message = (EndMYTurnMessage) msgIn;
@@ -527,6 +528,7 @@ public class GameModel {
 	public void pay4Water() {
 		ArrayList<LandTile> treasuresChosen = removeSelectedLandTiles();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
+		System.out.println("Cards chosen size "+cardsChosen.size());
 		Iterator<Card> it = currentPlayer.getPlayerHand().getCards().iterator();
 		while (it.hasNext()) {
 			Card cardSelected = it.next();
@@ -534,9 +536,12 @@ public class GameModel {
 				cardSelected.setCardSelected(false);
 				cardsChosen.add(cardSelected);
 				view.removeCardFromHand(cardSelected);
-				it.remove();
+				System.out.println("Cards chosen size "+cardsChosen.size());
+	
 			}
+			
 		}
+		System.out.println("Cards chosen size333 "+cardsChosen.size());
 		msgOut.sendMessage(new WaterPaidMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen, cardsChosen,
 				nextPlayer));
 		view.closePayWaterScene();

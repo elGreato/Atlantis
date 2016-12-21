@@ -221,16 +221,21 @@ public class Game implements GameInterface {
 			}
 		}
 		if (igm instanceof WaterPaidMessage) {
+		
 			WaterPaidMessage message = (WaterPaidMessage) igm;
+			System.out.println("waterpaid message received from : "+message.getPlayerIndex()+" name: "+users.get(message.getPlayerIndex()).getUserInfo().getUsername()+
+					" to make sure, player is also in players list "+players.get(message.getPlayerIndex()));
 			Player player = players.get(message.getPlayerIndex());
+			System.out.println("Cards chosen SERVER size333 "+message.getCardsChosen().size());
+			System.out.println("land chosen SERVER size333 "+message.getTreasuresChosen().size());
 			Iterator<Card> it = player.getPlayerHand().getCards().iterator();
-
 			while (it.hasNext()) {
 				Card c = it.next();
+	
 				for (int k = 0; k < message.getCardsChosen().size(); k++) {
 					if (c.getCardId() == message.getCardsChosen().get(k).getCardId()) {
-						it.remove();
-						break;
+						System.out.println("Card from owner "+c.getOwner().getPlayerName()+ " Color: "+c.getColor().toString());
+						it.remove();					
 					}
 				}
 			}
@@ -239,11 +244,11 @@ public class Game implements GameInterface {
 				LandTile t = it2.next();
 				for (int k = 0; k < message.getTreasuresChosen().size(); k++) {
 					if (t.getTileId() == message.getTreasuresChosen().get(k).getTileId()) {
-						it2.remove();
-						break;
+						it2.remove();			
 					}
 				}
 			}
+			System.out.println("land size after delete " + player.getPlayerHand().getTreasures().size());
 			// HERE ADD THE REFERSH TO COUNT AND VP
 			int numberOfPlayers = getNumOfRegisteredPlayers();
 			for (int i = 0; i < numberOfPlayers; i++) {
@@ -273,12 +278,13 @@ public class Game implements GameInterface {
 						for (int i = 0; i < numberOfPlayers; i++) {
 							users.get(i).sendMessage(new ResultMessage(getName(), winners.get(0),
 									players.get(winners.get(0)).getPlayerName()));
-
-							for (int k = 0; k < users.size(); k++) {
-								if (k != winners.get(0)) {
-									lobby.addLoss(users.get(k));
-								}
+						}
+						for (int k = 0; k < users.size(); k++) {
+							if (k != winners.get(0)) {
+								lobby.addLoss(users.get(k));
+								System.out.println(" the player lose: " + users.get(k).getUserInfo().getUsername());
 							}
+
 						}
 						// in case we have a draw between two or more players
 					} else if (winners.size() > 1) {
@@ -600,9 +606,9 @@ public class Game implements GameInterface {
 						else
 							currentPawnsCount--;
 					}
-					if (currentPawnsCount == 3){
+					if (currentPawnsCount == 3) {
 						gameOver = true;
-						nextPlayer=true;
+						nextPlayer = true;
 					}
 				}
 
@@ -777,7 +783,7 @@ public class Game implements GameInterface {
 		// relatively low
 		Random rand = new Random();
 		int lucky = rand.nextInt(30);
-		if (lucky >= 1) {
+		if (lucky == 13) {
 			Card joker = new Card(666, null);
 			joker.setOwner(currentPlayer);
 			player.getPlayerHand().addCard(joker);

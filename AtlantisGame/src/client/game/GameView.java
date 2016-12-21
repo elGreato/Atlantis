@@ -298,6 +298,9 @@ public class GameView {
 		stage.sizeToScene();
 
 	}
+	public void setVpForPlayer(int amount){
+		vpHolder.setText("Your Victory Points: " + amount);
+	}
 
 	protected void handlePawn(Pawn p) {
 		for (Pawn pp : (p.getOwner()).getPawns()) {
@@ -529,7 +532,7 @@ public class GameView {
 	}
 
 	public void removeCardFromHand(Card card) {
-
+		card.setCardSelected(false);
 		hboxCards.getChildren().remove(card);
 
 	}
