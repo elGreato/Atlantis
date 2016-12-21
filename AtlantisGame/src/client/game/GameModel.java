@@ -399,21 +399,11 @@ public class GameModel {
 	}
 
 	private void movePawn(int indexOfPlayer, Pawn selectedPawn, LandTile selectedLand) {
-		Pawn viewPawn = null;
-		// ????
-		if (currentPlayer.getPawns().contains(selectedPawn)) {
-			viewPawn = selectedPawn;
-		} else {
-			for (int i = 0; i < currentPlayer.getOpponents().size(); i++) {
-				if (currentPlayer.getOpponents().get(i).getPawns().contains(selectedPawn)) {
-					viewPawn = selectedPawn;
-				}
-			}
-		}
+
 		for (int g = 0; g < view.getBase().size() && selectedLand != null; g++) {
 			WaterTile tempWater = view.getBase().get(g);
 			if (tempWater.getChildren().contains(selectedLand)) {
-				((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).setPawnOnTile(viewPawn);
+				((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).setPawnOnTile(selectedPawn);
 				((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).convertPawns();
 			}
 
