@@ -235,7 +235,8 @@ public class Game implements GameInterface {
 				for (int k = 0; k < message.getCardsChosen().size(); k++) {
 					if (c.getCardId() == message.getCardsChosen().get(k).getCardId()) {
 						System.out.println("Card from owner "+c.getOwner().getPlayerName()+ " Color: "+c.getColor().toString());
-						it.remove();					
+						it.remove();		
+						break;
 					}
 				}
 			}
@@ -244,7 +245,8 @@ public class Game implements GameInterface {
 				LandTile t = it2.next();
 				for (int k = 0; k < message.getTreasuresChosen().size(); k++) {
 					if (t.getTileId() == message.getTreasuresChosen().get(k).getTileId()) {
-						it2.remove();			
+						it2.remove();		
+						break;
 					}
 				}
 			}
