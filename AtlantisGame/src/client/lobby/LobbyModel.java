@@ -284,10 +284,12 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 	
 	//Displays error message when the connection to a server is lost
 	private void connectionLost() {
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("Connection error");
-		alert.setContentText("Connection to server lost. Please try to restart the program later.");
-		alert.showAndWait();
+		Platform.runLater(() -> {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Connection error");
+			alert.setContentText("Connection to server lost. Please try to restart the program later.");
+			alert.showAndWait();
+		});
 		
 	}
 	//Invoked when a game ends

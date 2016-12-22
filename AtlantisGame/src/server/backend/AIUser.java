@@ -15,9 +15,10 @@ import messageObjects.WaterMessage;
 * @since   2016-12-16
 */
 public class AIUser extends User implements Runnable{
-	public static String[] aiNames = {"AI_BernGuy", "AI_Bolt","AI_SGASquad","AI_GovOfficials", "AI_TheStandard"};
+	public static String[] aiNames = {"AI_BernGuy", "AI_Bolt","AI_SGASquad","AI_GovOfficials", "AI_TheStandard", "AI_EvilGenius"};
 	private double aiSpeed;
-	private double aiPawnSpread;
+	private double aiTeamSpirit;
+	private double aiEvilness;
 	private ArrayList<Message> incomingMessages;
 	private ArrayList<GameAI> activeGames;
 	//Constructor
@@ -27,11 +28,12 @@ public class AIUser extends User implements Runnable{
 		incomingMessages = new ArrayList<Message>();
 		activeGames = new ArrayList<GameAI>();
 		switch(ui.getUsername()){
-		case "AI_BernGUY" : aiSpeed = -1d; aiPawnSpread = 4d; break; 
-		case "AI_Bolt" : aiSpeed = 10d; aiPawnSpread = -5d; break;
-		case "AI_SGASquad" : aiSpeed = 4d; aiPawnSpread = 15d; break;
-		case "AI_GovOfficials" : aiSpeed = 0.02d; aiPawnSpread = -2d; break;
-		default : aiSpeed = 1; aiPawnSpread = 0d;
+		case "AI_BernGUY" : aiSpeed = -1d; aiTeamSpirit = 4d; aiEvilness = 0d; break; 
+		case "AI_Bolt" : aiSpeed = 10d; aiTeamSpirit = -5d; aiEvilness = 0d; break;
+		case "AI_SGASquad" : aiSpeed = 4d; aiTeamSpirit = 15d; aiEvilness = 0d; break;
+		case "AI_GovOfficials" : aiSpeed = 0.02d; aiTeamSpirit = -2d; aiEvilness = 5d; break;
+		case "AI_EvilGenius" : aiSpeed = 8d; aiTeamSpirit = 8d; aiEvilness = 10000d; break;
+		default : aiSpeed = 1; aiTeamSpirit = 0d; aiEvilness = 0d;
 		}
 		Thread t = new Thread(this);
 		t.start();
@@ -40,7 +42,7 @@ public class AIUser extends User implements Runnable{
 	@Override
 	public synchronized void initiateGameStart(GameInterface game)
 	{
-		activeGames.add(new GameAI(game,aiSpeed,aiPawnSpread));
+		activeGames.add(new GameAI(game,aiSpeed,aiTeamSpirit,aiEvilness));
 		super.initiateGameStart(game);
 	}
 	//Process messages

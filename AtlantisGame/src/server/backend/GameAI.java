@@ -38,7 +38,8 @@ public class GameAI {
 	private ArrayList<Player> opponentInfo;
 	public Player me;
 	private double aiSpeed;
-	private double aiPawnSpread;
+	private double aiTeamSpirit;
+	private double aiEvilness;
 	private ArrayList<Card> bestCards;
 	private Pawn bestPawn;
 	private double avgDistanceOtherPlayers;
@@ -50,10 +51,11 @@ public class GameAI {
 		return game.getName();
 	}
 	//Constructor
-	public GameAI(GameInterface game, double aiSpeed, double aiPawnSpread) {
+	public GameAI(GameInterface game, double aiSpeed, double aiTeamSpirit, double aiEvilness) {
 		this.game = game;
-		this.aiPawnSpread = aiPawnSpread;
+		this.aiTeamSpirit = aiTeamSpirit;
 		this.aiSpeed = aiSpeed;
+		this.aiEvilness = aiEvilness;
 	}
 	//Processes incoming messages
 	public void processMessage(InGameMessage igm) {
@@ -242,7 +244,7 @@ public class GameAI {
 		{
 			System.out.println("Should buy cards");
 			ArrayList<LandTile> payment = new ArrayList<LandTile>();
-			payment = determineTreasuresForBuyProcess(2,me.getPlayerHand().getTreasures(), new ArrayList<LandTile>());
+			payment = determineTreasuresForBuyProcess(4-me.getPlayerHand().getNumCards(),me.getPlayerHand().getTreasures(), new ArrayList<LandTile>());
 			
 			if(payment != null &&payment.size()>0 &&determineValueOfLandTiles(payment)>1)
 			{
@@ -386,8 +388,7 @@ public class GameAI {
 						}
 					}
 					if(canBePaid&&(path.size()>p.getNewLocation()+distanceAlreadyTraveled) && 
-							(((LandTile) ((path.get(p.getNewLocation()+distanceAlreadyTraveled).getChildren().get(path.get(p.getNewLocation()+distanceAlreadyTraveled).getChildren().size()-1)))).hasPawn())
-						/*&&costsAlreadyIncurred < 0.25 * me.getPlayerHand().getNumCards() + me.getPlayerHand().getTreasuresValue(me.getPlayerHand().getTreasures())"*/)
+							(((LandTile) ((path.get(p.getNewLocation()+distanceAlreadyTraveled).getChildren().get(path.get(p.getNewLocation()+distanceAlreadyTraveled).getChildren().size()-1)))).hasPawn()))
 					{
 			
 					
@@ -408,8 +409,26 @@ public class GameAI {
 					}
 					else if(canBePaid)
 					{
-						int points = calculatePointsOfTurn(p,distanceAlreadyTraveled);
-						double valueOfTurn = (points - costsAlreadyIncurred - 2*cardsAlreadyPlayed.size()) + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceAlreadyTraveled)+(aiPawnSpread*(avgDistanceMe- p.getNewLocation()));
+						int positionOfRemoval = calculatePositionOfTileRemoved(p,distanceAlreadyTraveled);
+						int points = 0;
+						int newWaterCosts = 0;
+						if(positionOfRemoval >=0)
+						{
+							points = ((LandTile) (path.get(positionOfRemoval).getChildren().get(path.get(positionOfRemoval).getChildren().size() - 1))).getLandValue();
+							//Tests if ai can open a new water to make opponents pay more
+							if(morePawnsOfOpponentsBehind(positionOfRemoval, p) && positionOfRemoval != 0 && positionOfRemoval != 52 && 
+									landBeforeAndAfter(positionOfRemoval) && path.get(positionOfRemoval).getChildren().size() == 1)
+							{
+								newWaterCosts = ((LandTile) (path.get(positionOfRemoval-1).getChildren().get(path.get(positionOfRemoval-1).getChildren().size() - 1))).getLandValue();
+								if(((LandTile) (path.get(positionOfRemoval+1).getChildren().get(path.get(positionOfRemoval+1).getChildren().size() - 1))).getLandValue() < newWaterCosts)
+								{
+									newWaterCosts = ((LandTile) (path.get(positionOfRemoval+1).getChildren().get(path.get(positionOfRemoval+1).getChildren().size() - 1))).getLandValue();
+								}
+							}
+						}
+						
+						//calculates value of this turn
+						double valueOfTurn = (points - costsAlreadyIncurred - 2*cardsAlreadyPlayed.size()) + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceAlreadyTraveled)+(aiTeamSpirit*(avgDistanceMe- p.getNewLocation()))+ aiEvilness * newWaterCosts;
 						//System.out.println("New calculation for turn: " + valueOfTurn + " points: " + points +" Comparing to: " + valueBestTurn);
 						if(bestPossibleTurn == null||valueOfTurn > bestPossibleTurn.getValueOfTurn())
 						{
@@ -418,12 +437,48 @@ public class GameAI {
 							bestPossibleTurn = new AITurnObject(pawn, cardsLeftOnHand,cardsAlreadyPlayed,tilesLeftInHand,costs,
 									distanceAlreadyTraveled,costsAlreadyIncurred);
 							bestPossibleTurn.setValueOfTurn(valueOfTurn);
+							System.out.println("New best possible turn. Position of removal = " + positionOfRemoval + ", water costs "+ newWaterCosts);
 						}	
 					}
 				}
 			}
 		}
 		return bestPossibleTurn;
+	}
+	private boolean landBeforeAndAfter(int positionOfRemoval) {
+		if(path.get(positionOfRemoval +1).getChildren().size() >= 1 && path.get(positionOfRemoval -1).getChildren().size() >=1)
+		{
+			return true;
+		}
+		return false;
+	}
+	private boolean morePawnsOfOpponentsBehind(int positionOfRemoval, Pawn p) {
+		int numOfMyPawns = 0;
+		int numOfOpponentsPawns = 0;
+		double avgNumberOpponentsPawns = 0;
+		for(Pawn pawn: me.getPawns())
+		{
+			if(pawn != p && pawn.getNewLocation() < positionOfRemoval)
+			{
+				numOfMyPawns +=1;
+			}
+		}
+		for(Player opponent : opponentInfo)
+		{
+			for(Pawn pawn : opponent.getPawns())
+			{
+				if(pawn.getNewLocation() < positionOfRemoval)
+				{
+					numOfOpponentsPawns += 1;
+				}
+			}
+		}
+		avgNumberOpponentsPawns = numOfOpponentsPawns/opponentInfo.size();
+		if(avgNumberOpponentsPawns > numOfMyPawns)
+		{
+			return true;
+		}
+		return false;
 	}
 	//Recursively determines best payment to do for a calculated move
 	private AICostObject determineTilesToPay(AICostObject input, ArrayList<Card> cardsLeftInHand,
@@ -526,15 +581,15 @@ public class GameAI {
 		return totalCosts;
 	}
 	//calculates points for a specific move
-	private int calculatePointsOfTurn(Pawn p, int distance) {
+	private int calculatePositionOfTileRemoved(Pawn p, int distance) {
 		for (int i = p.getNewLocation() + distance - 1; i >= 0; i--) {
 			WaterTile wt = path.get(i);
 			if (!(wt.getChildren().isEmpty())
 					&& !(((LandTile) wt.getChildren().get(wt.getChildren().size() - 1))).hasPawn()) {
-				return ((LandTile) (wt.getChildren().get(wt.getChildren().size() - 1))).getLandValue();
+				return i;
 			}
 		}
-		return 0;
+		return -1;
 	}
 	//calculates distance traveled in a specific move
 	private int calculateDistanceOfMove(Pawn p, int distance, Card c) {
