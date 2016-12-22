@@ -4,7 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-
+/**
+* <h1>Deck of land tiles</h1>
+* this class contains the landtiles to distrupte on clients
+* 
+* @author  Ali Habbabeh
+* @version 1.2
+* @since   2016-12-22
+*/
 public class DeckOfLandTiles implements Serializable {
 
 	private ArrayList<LandTile> deckOfTiles = new ArrayList<>();

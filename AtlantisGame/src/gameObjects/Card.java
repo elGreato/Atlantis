@@ -10,10 +10,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
-/*
+/**
+ * <h1> Card</h1> 
+ * card class
+ * 
+ * 
+ * 
  * @author Ali Habbabeh
+ * @version 1.2
+ * @since 2016-12-22
  */
-
 public class Card extends StackPane implements Serializable {
 
 	private final int cardValue = 1;

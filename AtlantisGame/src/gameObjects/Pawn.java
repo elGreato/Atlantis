@@ -8,7 +8,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
-
+/**
+* <h1>Pawn</h1>
+* pawn is the piece that players move 
+* they take the color of the player
+* 
+* @author  Ali Habbabeh
+* @version 1.2
+* @since   2016-12-22
+*/
 public class Pawn extends StackPane implements Serializable{
 
 	private  ColorChoice pawnColor;
@@ -37,7 +45,7 @@ public class Pawn extends StackPane implements Serializable{
 			return(Color.DARKGREEN);
 		else if (c.getColor().toString().equalsIgnoreCase("brown")) 
 			return(Color.MEDIUMPURPLE);
-			return Color.ORANGE;
+			return null;
 	
 	}
 

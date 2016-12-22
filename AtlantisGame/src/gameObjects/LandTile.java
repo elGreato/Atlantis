@@ -1,9 +1,5 @@
 package gameObjects;
 
-
-
-
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -13,7 +9,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-
+/**
+* <h1>LandTile</h1>
+* this class has 2 names in the game, a land tile and a treasure
+* depending on where u use it
+* 
+* @author  Ali Habbabeh
+* @version 1.2
+* @since   2016-12-22
+*/
 public class LandTile extends Tile implements Serializable {
 	
 	private volatile Pawn pawnOnTile;

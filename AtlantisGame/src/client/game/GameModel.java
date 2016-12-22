@@ -41,7 +41,14 @@ import messageObjects.turnMessages.BuyCardsMessage;
 import messageObjects.turnMessages.CardsBoughtMessage;
 import messageObjects.turnMessages.CloseGameMessage;
 import messageObjects.turnMessages.EndMYTurnMessage;
-
+/**
+* <h1>Game Logic On Client Side</h1>
+* Here we have the client logic side, some rules will be checked here but not all
+* client received and send messages (objects) to server 
+* @author  Ali Habbabeh
+* @version 1.2
+* @since   2016-12-22
+*/
 public class GameModel {
 
 	private String gameName;

@@ -4,7 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javafx.scene.layout.FlowPane;
-
+/**
+* <h1>Main land</h1>
+* Pawns are supposed to arrive here
+* 
+* @author  Ali Habbabeh
+* @version 1.2
+* @since   2016-12-22
+*/
 public class MainLand extends FlowPane implements Serializable {
 
 	private final int mainLandid = 999;

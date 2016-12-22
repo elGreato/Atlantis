@@ -32,7 +32,14 @@ import server.backend.AIUser;
 import server.backend.Lobby;
 import server.backend.LobbyInterface;
 import server.backend.User;
-
+/**
+* <h1>Game Logic On Server Side</h1>
+* This is the main business logic of the game, here the server send the client all the data it needs 
+* such as cards and tiles, the server is the one responsible to check most of the moves validity 
+* @author  Ali Habbabeh
+* @version 1.2
+* @since   2016-12-22
+*/
 public class Game implements GameInterface {
 
 	private String name;

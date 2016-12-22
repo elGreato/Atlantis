@@ -5,10 +5,16 @@ import java.io.Serializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-/*
- * I know this might look stupid to create a color clas while there exist a color class
- * however, this will help us in creating the dick using limited values, 7 in this case. Moreover, 
- * this allow us to replace normal colors with images of cooler colors
+
+/**
+ * <h1></h1> I know this might look stupid to create a color clas while there
+ * exist a color class however, this will help us in creating the dick using
+ * limited values, 7 in this case. Moreover, this allow us to replace normal
+ * colors with images of cooler colors
+ * 
+ * @author Ali Habbabeh
+ * @version 1.2
+ * @since 2016-12-22
  */
 public enum ColorChoice implements Serializable {
 	blue, white, grey, yellow, green, pink, brown;
@@ -22,7 +28,6 @@ public enum ColorChoice implements Serializable {
 		iv.setFitWidth(67);
 		return iv;
 	}
-
 
 	public ImageView addCardImage() {
 		Image image = new Image(getClass().getResourceAsStream("images4Cards/card_" + this.toString() + ".jpg"));

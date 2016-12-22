@@ -6,7 +6,14 @@ import java.util.Iterator;
 
 import javafx.scene.layout.HBox;
 
-//Ali
+/**
+* <h1>Player Hand</h1>
+*  each player has a hand, obviously, the hand contains the cards and treasures that a 
+* player collect on his way to redemption, sorry mainland 
+* @author  Ali Habbabeh
+* @version 1.2
+* @since   2016-12-22
+*/
 public class PlayerHand implements Serializable {
 
 	private String playerName;

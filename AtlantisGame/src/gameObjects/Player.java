@@ -5,10 +5,15 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import gameObjects.ColorChoice;
-/*
- * @author Ali Habbabeh
- */
-
+/**
+* <h1>Player</h1>
+*  player object 
+*  self explainatory 
+* 
+* @author  Ali Habbabeh
+* @version 1.2
+* @since   2016-12-22
+*/
 public class Player implements Serializable {
 
 	private String name; 

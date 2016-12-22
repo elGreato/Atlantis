@@ -52,7 +52,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-
+/**
+* <h1>GUI client side</h1>
+* This is the gui of the client, very nice and sexy
+* 
+* @author  Ali Habbabeh
+* @version 1.2
+* @since   2016-12-22
+*/
 public class GameView {
 	private BorderPane root = new BorderPane();
 	private GridPane mainBoard = new GridPane();

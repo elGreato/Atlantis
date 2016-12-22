@@ -5,6 +5,16 @@ import java.io.Serializable;
 import gameObjects.AtlantisTile;
 import gameObjects.MainLand;
 
+/**
+ * <h1>atlantis main land message</h1> 
+ * this is to send the same object to all the clients 
+ * 
+ * 
+ * 
+ * @author Ali Habbabeh
+ * @version 1.2
+ * @since 2016-12-22
+ */
 public class AtlantisMainLandMessage extends InGameMessage implements Serializable{
 
 	AtlantisTile atlantis;

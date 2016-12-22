@@ -5,9 +5,14 @@ import java.util.ArrayList;
 
 import java.util.Collections;
 
-/*
- * @author Ali Habbabeh
- */
+/**
+* <h1>Deck of Cards</h1>
+*  daa 
+* 
+* @author  Ali Habbabeh
+* @version 1.2
+* @since   2016-12-22
+*/
 public class DeckOfCards implements Serializable {
 
 	private ArrayList<Card> cards = new ArrayList<>();

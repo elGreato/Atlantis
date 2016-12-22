@@ -1,7 +1,14 @@
 package gameObjects;
 
 import java.util.Comparator;
-
+/**
+* <h1>Player comparator</h1>
+*  comapres the victory points of 2 players
+* 
+* @author  Ali Habbabeh
+* @version 1.2
+* @since   2016-12-22
+*/
 public class PlayersComparator implements Comparator<Player> {
 
 	@Override
