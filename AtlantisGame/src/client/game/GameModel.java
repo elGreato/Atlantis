@@ -496,10 +496,10 @@ public class GameModel {
 		while (it.hasNext()) {
 			LandTile treasureSelected = it.next();
 			if (treasureSelected.isSelected()) {
-
 				result.add(treasureSelected);
-				it.remove();
 				view.removePlayerTreasure(treasureSelected);
+				it.remove();
+				break;			
 			}
 		}
 		return result;
@@ -526,7 +526,7 @@ public class GameModel {
 				cardsChosen.add(cardSelected);
 				it.remove();
 				view.removeCardFromHand(cardSelected);
-				System.out.println("Cards chosen size "+cardsChosen.size());
+				break;
 	
 			}
 			
