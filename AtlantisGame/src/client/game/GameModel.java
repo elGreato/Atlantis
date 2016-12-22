@@ -41,14 +41,16 @@ import messageObjects.turnMessages.BuyCardsMessage;
 import messageObjects.turnMessages.CardsBoughtMessage;
 import messageObjects.turnMessages.CloseGameMessage;
 import messageObjects.turnMessages.EndMYTurnMessage;
+
 /**
-* <h1>Game Logic On Client Side</h1>
-* Here we have the client logic side, some rules will be checked here but not all
-* client received and send messages (objects) to server 
-* @author  Ali Habbabeh
-* @version 1.2
-* @since   2016-12-22
-*/
+ * <h1>Game Logic On Client Side</h1> Here we have the client logic side, some
+ * rules will be checked here but not all client received and send messages
+ * (objects) to server
+ * 
+ * @author Ali Habbabeh
+ * @version 1.2
+ * @since 2016-12-22
+ */
 public class GameModel {
 
 	private String gameName;
@@ -248,8 +250,8 @@ public class GameModel {
 				}
 				view.setVpForEnemy(message.getPlayerIndex(), message.getVp());
 				view.setCardCountForEnemy(message.getPlayerIndex(), message.getCardCount());
-			}
-			else view.setVpForPlayer(message.getVp());
+			} else
+				view.setVpForPlayer(message.getVp());
 		}
 		if (msgIn instanceof EndMYTurnMessage) {
 			EndMYTurnMessage message = (EndMYTurnMessage) msgIn;
@@ -260,7 +262,7 @@ public class GameModel {
 			}
 		}
 		if (msgIn instanceof RevertTurnMessage) {
-			RevertTurnMessage message = (RevertTurnMessage) msgIn;	
+			RevertTurnMessage message = (RevertTurnMessage) msgIn;
 			if (message.getRemovedTreasure() != null) {
 				view.base.get(message.getRemovedIndex()).getChildren().add(message.getRemovedTreasure());
 				if (message.getPlayerIndex() == currentPlayer.getPlayerIndex()) {
@@ -282,7 +284,7 @@ public class GameModel {
 		if (msgIn instanceof LastBillMessage) {
 
 			// true is for the game finished
-			LastBillMessage message = (LastBillMessage) msgIn;	
+			LastBillMessage message = (LastBillMessage) msgIn;
 			gameOver = true;
 			payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(), gameOver);
 			for (Pawn p : currentPlayer.getPawns()) {
@@ -314,8 +316,7 @@ public class GameModel {
 			PlayerLeftMessage plm = (PlayerLeftMessage) msgIn;
 			view.replaceLeavingPlayer(plm.getPlayerIndex(), plm.getNewPlayerName());
 			for (Player p : currentPlayer.getOpponents()) {
-				if (p.getPlayerIndex() == plm.getPlayerIndex())
-				{
+				if (p.getPlayerIndex() == plm.getPlayerIndex()) {
 					p.setPlayerName(plm.getNewPlayerName());
 				}
 			}
@@ -402,7 +403,8 @@ public class GameModel {
 		for (int g = 0; g < view.getBase().size() && selectedLand != null; g++) {
 			WaterTile tempWater = view.getBase().get(g);
 			if (tempWater.getChildren().contains(selectedLand)) {
-				((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).setPawnOnTile(selectedPawn);
+				((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1))
+						.setPawnOnTile(selectedPawn);
 				((LandTile) tempWater.getChildren().get(tempWater.getChildren().size() - 1)).convertPawns();
 			}
 
@@ -497,9 +499,9 @@ public class GameModel {
 			LandTile treasureSelected = it.next();
 			if (treasureSelected.isSelected()) {
 				result.add(treasureSelected);
-				view.removePlayerTreasure(treasureSelected);
 				it.remove();
-						
+				view.removePlayerTreasure(treasureSelected);
+
 			}
 		}
 		return result;
@@ -513,11 +515,10 @@ public class GameModel {
 			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(), true));
 	}
 
-	
 	public void pay4Water() {
 		ArrayList<LandTile> treasuresChosen = removeSelectedLandTiles();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
-		System.out.println("Cards chosen size "+cardsChosen.size());
+		System.out.println("Cards chosen size " + cardsChosen.size());
 		Iterator<Card> it = currentPlayer.getPlayerHand().getCards().iterator();
 		while (it.hasNext()) {
 			Card cardSelected = it.next();
@@ -526,12 +527,11 @@ public class GameModel {
 				cardsChosen.add(cardSelected);
 				it.remove();
 				view.removeCardFromHand(cardSelected);
-				
-	
+
 			}
-			
+
 		}
-		System.out.println("Cards chosen size333 "+cardsChosen.size());
+		System.out.println("Cards chosen size333 " + cardsChosen.size());
 		msgOut.sendMessage(new WaterPaidMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen, cardsChosen,
 				nextPlayer));
 		view.closePayWaterScene();
@@ -540,7 +540,8 @@ public class GameModel {
 
 	public void handleCalc() {
 		System.out.println("-------- handl calc --------------");
-		System.out.println("curren player cards count "+currentPlayer.getPlayerHand().getNumCards()+" to make sure "+currentPlayer.getPlayerHand().getCards().size());
+		System.out.println("curren player cards count " + currentPlayer.getPlayerHand().getNumCards() + " to make sure "
+				+ currentPlayer.getPlayerHand().getCards().size());
 		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
 		boolean allCardsSelected = true;
@@ -560,7 +561,8 @@ public class GameModel {
 		}
 		for (int i = 0; i < currentPlayer.getPlayerHand().getNumCards(); i++) {
 			Card cardSelected = currentPlayer.getPlayerHand().getCards().get(i);
-			System.out.println("card selected in client "+cardSelected.getColor().toString()+" owner "+cardSelected.getOwner().getPlayerName()+ "is selected: "+cardSelected.isCardSelected());
+			System.out.println("card selected in client " + cardSelected.getColor().toString() + " owner "
+					+ cardSelected.getOwner().getPlayerName() + "is selected: " + cardSelected.isCardSelected());
 			if (cardSelected.isCardSelected()) {
 
 				cardsChosen.add(cardSelected);

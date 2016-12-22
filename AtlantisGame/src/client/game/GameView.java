@@ -534,6 +534,7 @@ public class GameView {
 	}
 
 	public void removePlayerTreasure(LandTile landTile) {
+		landTile.setSelected(false);
 		fpTreasures.getChildren().remove(landTile);
 
 	}
