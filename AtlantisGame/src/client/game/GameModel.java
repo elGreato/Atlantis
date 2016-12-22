@@ -499,7 +499,7 @@ public class GameModel {
 				result.add(treasureSelected);
 				view.removePlayerTreasure(treasureSelected);
 				it.remove();
-				break;			
+						
 			}
 		}
 		return result;
@@ -526,7 +526,7 @@ public class GameModel {
 				cardsChosen.add(cardSelected);
 				it.remove();
 				view.removeCardFromHand(cardSelected);
-				break;
+				
 	
 			}
 			
