@@ -81,7 +81,6 @@ public class ServerconnectModel implements Runnable{
 				}
 			}
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
 			subnetAdress = "192.168.1.";
 		}
 		

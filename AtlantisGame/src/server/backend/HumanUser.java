@@ -69,7 +69,6 @@ public class HumanUser extends User implements Runnable{
 			
 		} catch (IOException e) {
 			connected = false;
-			e.printStackTrace();
 		} 
 	}
 	
@@ -99,7 +98,6 @@ public class HumanUser extends User implements Runnable{
 				
 			} catch (IOException e) {
 				connected = false;
-				e.printStackTrace();
 				
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -203,7 +201,6 @@ public class HumanUser extends User implements Runnable{
 					logoutUser();
 				}
 			
-				e.printStackTrace();
 			}
 		}
 	}
@@ -240,7 +237,6 @@ public class HumanUser extends User implements Runnable{
 			oos.writeObject(new GameStartMessage(game.getName()));
 			oos.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
 			if(loggedIn&&connected)
 			{
 				logoutUser();
@@ -250,7 +246,6 @@ public class HumanUser extends User implements Runnable{
 	//When the connection to a client fails the user is logged out
 	private synchronized void logoutUser()
 	{
-		System.out.println("Start logout process. Ending " + runningGames.size() + " games");
 		loggedIn = false;
 		connected = false;
 		startedLogoutProcess = true;
@@ -258,12 +253,10 @@ public class HumanUser extends User implements Runnable{
 		while(gameIt.hasNext())
 		{
 			GameInterface g = gameIt.next();
-			System.out.println("Going through games");
 			g.handlePlayerLeave(userInfo.getUsername());
 		}
 		runningGames.clear();
 		lobbyInterface.logoutFromOnlineUsers(this);
-		System.out.println("Finish logout process. " + runningGames.size() + " games left");
 	}
 	@Override
 	public void endGame(Game game)

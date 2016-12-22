@@ -79,6 +79,13 @@ public class LoginController {
 					alert.setContentText("Please enter a username that does not contain any spaces");
 					alert.showAndWait();
 				}
+				else if(view.createusernametxt.getText().substring(0,3).equals("AI_"))
+				{
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Illegal username");
+					alert.setContentText("It is illegal to start the username with AI_, because other users might think that you are, in fact, an AI.");
+					alert.showAndWait();
+				}
 				else if(view.createpasswordtxt.getText().length() < 5)
 				{
 					Alert alert = new Alert(AlertType.INFORMATION);

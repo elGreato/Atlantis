@@ -348,9 +348,7 @@ public class LobbyView {
 		double scaling = 1.0d;
 		if(rootHeight > 0.95*Screen.getPrimary().getVisualBounds().getHeight())
 		{
-			scaling = 0.95*Screen.getPrimary().getVisualBounds().getHeight()/rootHeight;
-			System.out.println("primary: " + 0.8*Screen.getPrimary().getVisualBounds().getHeight() + "rootHeight: " + rootHeight);
-			System.out.println("Scaling: "+ scaling);
+			scaling = 0.95*Screen.getPrimary().getVisualBounds().getHeight()/rootHeight;;
 			stage.setHeight(scaling * stage.getHeight());
 			
 		}

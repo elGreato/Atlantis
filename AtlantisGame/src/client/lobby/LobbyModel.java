@@ -145,7 +145,6 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 			} catch (IOException e) {
 				
 				connected = false;
-				e.printStackTrace();
 				
 				connectionLost();
 			
@@ -158,7 +157,6 @@ public class LobbyModel implements Runnable, ClientLobbyInterface{
 	}
 	//updates user stats of user that is logged in on this client instance
 	private void updateUserStats(UserInfoMessage thisUserStats) {
-		System.out.println("UserInfo received! New losses = " + thisUserStats.getGamesLost());
 		userInfo.setUsername(thisUserStats.getUsername());
 		userInfo.setGamesPlayed(thisUserStats.getGamesPlayed());
 		userInfo.setGamesWon(thisUserStats.getGamesWon());

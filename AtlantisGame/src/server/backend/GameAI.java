@@ -75,8 +75,6 @@ public class GameAI {
 		} else if (igm instanceof RefreshPlayerMessage) {
 			RefreshPlayerMessage rpm = (RefreshPlayerMessage) igm;
 			doPayment(rpm);
-		} else if (igm instanceof ServerMessage) {
-			System.out.println(((ServerMessage) igm).getTheMessage());
 		} else if (igm instanceof LastBillMessage) {
 			int totalPayment = ((LastBillMessage)igm).getWaterBill();
 			payLastBill(totalPayment);
@@ -85,7 +83,6 @@ public class GameAI {
 			CardsBoughtMessage cbm = (CardsBoughtMessage)igm;
 			if(cbm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex())
 			{
-				System.out.println(me.getPlayerName() + " has successfully bought "+ cbm.getPurchase().size() + " cards");
 				doATurn(true);
 				
 			}
@@ -121,8 +118,6 @@ public class GameAI {
 	}
 	//Initiates payment of last bill, calls determineTilesToPay to calculate best payment if it doesn't have to pay with everything.
 	private void payLastBill(int totalPayment) {
-		System.out.println("Last Bill received by AI");
-		System.out.println("Total payment for last bill" + totalPayment);
 		int valueOfHand = 0;
 		valueOfHand += me.getPlayerHand().getNumCards();
 		for(LandTile lt : me.getPlayerHand().getTreasures())
@@ -131,7 +126,6 @@ public class GameAI {
 		}
 		if(totalPayment > 0 && valueOfHand <= totalPayment)
 		{
-			System.out.println("Pay with everything");
 			WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), me.getPlayerHand().getTreasures(), me.getPlayerHand().getCards(),true);
 			game.processMessage(wpm);
 		}
@@ -144,13 +138,12 @@ public class GameAI {
 			cardsToPay.put(0, new ArrayList<Card>());
 			AICostObject payment = determineTilesToPay(new AICostObject(tilesToPay,cardsToPay),me.getPlayerHand().getCards(),me.getPlayerHand().getTreasures(),totalPayment,0,true);
 			
-			System.out.println("Send payment message. Payable amount = " + totalPayment);
-			System.out.println("Payment size: Tiles: " +payment.getTilesPaidInEachMove().get(0).size() + " Cards: " + payment.getCardsPaidInEachMove().get(0).size());
-			for (LandTile lt : payment.getTilesPaidInEachMove().get(0)) {
-				System.out.println("Tile with value: " + lt.getLandValue());
-			}
-			
 			WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), payment.getTilesPaidInEachMove().get(0),payment.getCardsPaidInEachMove().get(0),true);
+			game.processMessage(wpm);
+		}
+		else
+		{
+			WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), new ArrayList<LandTile>(),new ArrayList<Card>(),true);
 			game.processMessage(wpm);
 		}
 		
@@ -159,8 +152,6 @@ public class GameAI {
 	private void doPayment(RefreshPlayerMessage rpm) {
 		if (rpm.getCurrentPlayer().getPlayerIndex() == me.getPlayerIndex() && rpm.getWaterBill() > 0) {
 
-			System.out.println(me.getPlayerName() + 
-					" Payment message arrived...." + " Waterbill: " + rpm.getWaterBill() + " moveNumber: " + moves);
 			ArrayList<LandTile> tilesForPayment = null;
 			ArrayList<Card> cardsForPayment = null;
 		
@@ -168,13 +159,9 @@ public class GameAI {
 		
 			cardsForPayment = payments.getCardsPaidInEachMove().remove(moves);
 			
-			System.out.println("Payment size: Tiles: " + tilesForPayment.size() + " Cards: " + cardsForPayment.size());
 			if (tilesForPayment != null && !tilesForPayment
 					.isEmpty() || (cardsForPayment != null && !cardsForPayment.isEmpty())) {
-				System.out.println("Send payment message. Payable amount = " + rpm.getWaterBill());
-				for (LandTile lt : tilesForPayment) {
-					System.out.println("Tile with value: " + lt.getLandValue());
-				}
+				
 				if(rpm.isNextPlayer())
 				{
 					WaterPaidMessage wpm = new WaterPaidMessage(game.getName(), me.getPlayerIndex(), tilesForPayment,
@@ -229,13 +216,11 @@ public class GameAI {
 			bestPawn = thisTurn.getPawnsThatCanBePlayed().get(0);
 			payments = thisTurn.getCostsIncurredPerMove();
 			moves += 1;
-			System.out.println(me.getPlayerName() + " has " + me.getPlayerHand().getNumCards() + " cards");
 			game.processMessage(
 					
 					new PawnCardSelectedMessage(game.getName(), me.getPlayerIndex(), bestPawn, bestCards.remove(0)));
 					
 		} else {
-			System.out.println("Can't make a turn");
 			giveUpTurn();
 		}
 		
@@ -244,19 +229,16 @@ public class GameAI {
 	private boolean buyCardsIfRequired() {
 		if(me.getPlayerHand().getNumCards() < 2)
 		{
-			System.out.println("Should buy cards");
 			ArrayList<LandTile> payment = new ArrayList<LandTile>();
 			payment = determineTreasuresForBuyProcess(4-me.getPlayerHand().getNumCards(),me.getPlayerHand().getTreasures(), new ArrayList<LandTile>());
 			
 			if(payment != null &&payment.size()>0 &&determineValueOfLandTiles(payment)>1)
 			{
-				System.out.println("Will buy cards");
 				BuyCardsMessage bcm = new BuyCardsMessage(game.getName(),me.getPlayerIndex(),payment);
 				game.processMessage(bcm);
 				return true;
 			}
 		}
-		System.out.println("Will not buy Cards");
 		return false;
 		
 		
@@ -431,7 +413,6 @@ public class GameAI {
 						
 						//calculates value of this turn
 						double valueOfTurn = ((aiGreediness * points) - costsAlreadyIncurred - 2*cardsAlreadyPlayed.size()) + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceAlreadyTraveled)+(aiTeamSpirit*(avgDistanceMe- p.getNewLocation()))+ (aiEvilness * newWaterCosts);
-						//System.out.println("New calculation for turn: " + valueOfTurn + " points: " + points +" Comparing to: " + valueBestTurn);
 						if(bestPossibleTurn == null||valueOfTurn > bestPossibleTurn.getValueOfTurn())
 						{
 							ArrayList<Pawn> pawn = new ArrayList<Pawn>();
@@ -439,7 +420,6 @@ public class GameAI {
 							bestPossibleTurn = new AITurnObject(pawn, cardsLeftOnHand,cardsAlreadyPlayed,tilesLeftInHand,costs,
 									distanceAlreadyTraveled,costsAlreadyIncurred);
 							bestPossibleTurn.setValueOfTurn(valueOfTurn);
-							System.out.println("New best possible turn. Position of removal = " + positionOfRemoval + ", water costs "+ newWaterCosts);
 						}	
 					}
 				}
@@ -547,6 +527,21 @@ public class GameAI {
 	
 	//calculates the costs of a specific move
 	private int calculateCostsOfMove(Pawn p, int distanceTraveledBefore, int distanceTraveledAfter) {
+		if(p.getNewLocation() + distanceTraveledBefore + distanceTraveledAfter == 53)
+		{
+			int numReached = 0;
+			for(Pawn pawn:me.getPawns())
+			{
+				if (pawn.ReachedMainLand())
+				{
+					numReached +=1;
+				}
+			}
+			if(numReached == 2)
+			{
+				return 0;
+			}
+		}
 		int totalCosts = 0;
 		int costsForThisWater = 0;
 		boolean isInWater = false;
@@ -567,8 +562,6 @@ public class GameAI {
 								.getLandValue();
 					}
 					totalCosts += costsForThisWater;
-					// System.out.println("Could add " + costsForThisWater + "
-					// to these total costs: " + totalCosts);
 				}
 
 				else if (wt.getChildren().isEmpty() && i == 0) {

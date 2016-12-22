@@ -157,11 +157,9 @@ public class Lobby implements LobbyInterface{
 			for(int i = 0; i<numAIPlayers;i++)
 			{
 				newGame.addUser(aiUsers.get(i));
-				System.out.println("AI User added");
 			}
 			if(newGame.getMaxPlayers() == newGame.getNumOfRegisteredPlayers())
 			{
-				System.out.println("I'm here");
 				newGame.start();
 				runningGames.add(newGame);
 			}

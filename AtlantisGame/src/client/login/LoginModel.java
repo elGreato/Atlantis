@@ -80,7 +80,6 @@ public class LoginModel {
 			alert.setContentText("An unexpected error ocurred. Please try to restart the program");
 			alert.showAndWait();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -128,7 +127,6 @@ public class LoginModel {
 			alert.setContentText("An unexpected error ocurred. Please try to restart the program");
 			alert.showAndWait();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

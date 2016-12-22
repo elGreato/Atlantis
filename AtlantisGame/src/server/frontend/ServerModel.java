@@ -88,7 +88,7 @@ public class ServerModel implements Runnable{
 		{
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("No instance existing");
-			alert.setContentText("Did not detect a valid instance of atlantisdb on this host. Create?"
+			alert.setContentText("Did not detect a valid instance of atlantisdb on this host. Create?\n"
 					+ "Warning: If there is an existing instance of 'atlantisdb', it will be deleted");
 			Optional<ButtonType> answer = alert.showAndWait();
 			if(answer.get() == ButtonType.OK)
