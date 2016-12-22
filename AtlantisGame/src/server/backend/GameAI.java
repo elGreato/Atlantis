@@ -143,8 +143,14 @@ public class GameAI {
 		}
 		else
 		{
-			WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), new ArrayList<LandTile>(),new ArrayList<Card>(),true);
-			game.processMessage(wpm);
+			for(Pawn p : me.getPawns())
+			{
+				if(p.ReachedMainLand())
+				{
+					WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), new ArrayList<LandTile>(),new ArrayList<Card>(),true);
+					game.processMessage(wpm);
+				}
+			}
 		}
 		
 	}
