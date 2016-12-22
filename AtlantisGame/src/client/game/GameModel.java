@@ -561,8 +561,8 @@ public class GameModel {
 		}
 		for (int i = 0; i < currentPlayer.getPlayerHand().getNumCards(); i++) {
 			Card cardSelected = currentPlayer.getPlayerHand().getCards().get(i);
-			System.out.println("card selected in client " + cardSelected.getColor().toString() + " owner "
-					+ cardSelected.getOwner().getPlayerName() + "is selected: " + cardSelected.isCardSelected());
+			/*System.out.println("card selected in client " + cardSelected.getColor().toString() + " owner "
+					+ cardSelected.getOwner().getPlayerName() + "is selected: " + cardSelected.isCardSelected());*/
 			if (cardSelected.isCardSelected()) {
 
 				cardsChosen.add(cardSelected);
@@ -617,8 +617,11 @@ public class GameModel {
 
 	public void handleRevert() {
 		view.btnRevert.setDisable(true);
-		// currentPlayer.getPlayerHand().getTreasures().clear();
-
+		for(LandTile lt: currentPlayer.getPlayerHand().getTreasures()){
+			view.removePlayerTreasure(lt);
+		}
+	
+		currentPlayer.getPlayerHand().getTreasures().clear();
 		msgOut.sendMessage(new RevertTurnMessage(gameName, currentPlayer.getPlayerIndex()));
 
 	}

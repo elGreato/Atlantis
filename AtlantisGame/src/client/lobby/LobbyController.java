@@ -62,7 +62,6 @@ public class LobbyController {
 					model.createGame();
 					view.createGameNametxt.setText("");
 					view.createGamePasswordtxt.setText("");
-					view.createNumPlayerscbx.setValue(2);
 				}
 			}
 			

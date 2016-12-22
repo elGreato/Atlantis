@@ -235,7 +235,7 @@ public class Game implements GameInterface {
 				Card c = it.next();
 				for (int k = 0; k < message.getCardsChosen().size(); k++) {
 					if (c.getCardId() == message.getCardsChosen().get(k).getCardId()) {
-						System.out.println("Card from owner "+c.getOwner().getPlayerName()+ " Color: "+c.getColor().toString());
+						//System.out.println("Card from owner "+c.getOwner().getPlayerName()+ " Color: "+c.getColor().toString());
 						it.remove();		
 						break;
 					}
@@ -339,10 +339,11 @@ public class Game implements GameInterface {
 				System.out.println("one card found to give back to player");
 			}
 			if (removedTreasure != null) {
-				System.out.println("a treasure is found to give back to player");
+				System.out.println("a treasure is found to give back to field");
 				base.get(removedTreasureIndex).getChildren().add(removedTreasure);
 				currentPlayer.getPlayerHand().getTreasures().remove(removedTreasure);
 			}
+			currentPlayer.getPlayerHand().getTreasures().clear();
 			removePawnFromNewTile(selectedPawn);
 			selectedPawn.setNewLocation(selectedPawn.getStartingLocation());
 			selectedPawn.setOldLocation(selectedPawn.getNewLocation());

@@ -37,6 +37,7 @@ public class GameAI {
 	private ArrayList<WaterTile> path;
 	private ArrayList<Player> opponentInfo;
 	public Player me;
+	private double aiGreediness;
 	private double aiSpeed;
 	private double aiTeamSpirit;
 	private double aiEvilness;
@@ -51,8 +52,9 @@ public class GameAI {
 		return game.getName();
 	}
 	//Constructor
-	public GameAI(GameInterface game, double aiSpeed, double aiTeamSpirit, double aiEvilness) {
+	public GameAI(GameInterface game, double aiGreediness, double aiSpeed, double aiTeamSpirit, double aiEvilness) {
 		this.game = game;
+		this.aiGreediness = aiGreediness;
 		this.aiTeamSpirit = aiTeamSpirit;
 		this.aiSpeed = aiSpeed;
 		this.aiEvilness = aiEvilness;
@@ -428,7 +430,7 @@ public class GameAI {
 						}
 						
 						//calculates value of this turn
-						double valueOfTurn = (points - costsAlreadyIncurred - 2*cardsAlreadyPlayed.size()) + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceAlreadyTraveled)+(aiTeamSpirit*(avgDistanceMe- p.getNewLocation()))+ aiEvilness * newWaterCosts;
+						double valueOfTurn = ((aiGreediness * points) - costsAlreadyIncurred - 2*cardsAlreadyPlayed.size()) + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceAlreadyTraveled)+(aiTeamSpirit*(avgDistanceMe- p.getNewLocation()))+ (aiEvilness * newWaterCosts);
 						//System.out.println("New calculation for turn: " + valueOfTurn + " points: " + points +" Comparing to: " + valueBestTurn);
 						if(bestPossibleTurn == null||valueOfTurn > bestPossibleTurn.getValueOfTurn())
 						{
