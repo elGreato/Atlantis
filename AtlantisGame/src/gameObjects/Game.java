@@ -598,7 +598,6 @@ public class Game implements GameInterface {
 				mainland.getPawns().add(selectedPawn);
 				removePawnFromOldTile(selectedPawn);
 				foundLand = true;
-				nextPlayer=true;
 				selectedLand = null;
 				selectedPawn.setPawnSelected(false);
 				newCards = dealCards(currentPlayer);

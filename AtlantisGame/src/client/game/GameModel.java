@@ -167,7 +167,6 @@ public class GameModel {
 			}
 			if (message.getCurrentPlayer().getPlayerIndex() == currentPlayer.getPlayerIndex()) {
 				nextPlayer = message.isNextPlayer();
-				view.vpHolder.setText("Your Victory Points: " + String.valueOf(message.getVictoryPoints()));
 				payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(), gameOver);
 			}
 			LandTile treasure = message.getTreasure();
@@ -508,7 +507,7 @@ public class GameModel {
 	}
 
 	private void payForPassingWater(int waterBill, int waterPassedCount, boolean gameFinished) {
-		if (waterBill != 0) {
+		if (waterBill != 0||waterPassedCount!=0) {
 			this.waterBill = waterBill;
 			view.showWaterBill(waterBill, waterPassedCount, gameFinished);
 		} else if (waterPassedCount < 1 && nextPlayer && !gameFinished)
