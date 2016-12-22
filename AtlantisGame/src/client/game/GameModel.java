@@ -253,9 +253,7 @@ public class GameModel {
 			}
 		}
 		if (msgIn instanceof RevertTurnMessage) {
-			RevertTurnMessage message = (RevertTurnMessage) msgIn;
-			System.out.println(
-					"Revert message arrived " + currentPlayer.getPlayerHand().getTreasures().size() + " treasures");
+			RevertTurnMessage message = (RevertTurnMessage) msgIn;	
 			if (message.getRemovedTreasure() != null) {
 				view.base.get(message.getRemovedIndex()).getChildren().add(message.getRemovedTreasure());
 				if (message.getPlayerIndex() == currentPlayer.getPlayerIndex()) {
@@ -266,7 +264,6 @@ public class GameModel {
 
 			}
 			if (message.getPlayerIndex() == currentPlayer.getPlayerIndex()) {
-				System.out.println("Removed cards: " + message.getRemovedCards().size());
 				addCardToPlayer(message.getRemovedCards());
 
 			}
@@ -276,11 +273,9 @@ public class GameModel {
 
 		}
 		if (msgIn instanceof LastBillMessage) {
-			System.out.println("last bill received");
+
 			// true is for the game finished
-			LastBillMessage message = (LastBillMessage) msgIn;
-			System.out.println(
-					"Bill amount: " + message.getWaterBill() + " you passed: " + message.getWaterPassedCount());
+			LastBillMessage message = (LastBillMessage) msgIn;	
 			gameOver = true;
 			payForPassingWater(message.getWaterBill(), message.getWaterPassedCount(), gameOver);
 			for (Pawn p : currentPlayer.getPawns()) {
@@ -351,19 +346,16 @@ public class GameModel {
 
 	// ADDED BY KEVIN
 	private void revertPawn(int playerIndex, Pawn selectedPawn, int startingLocation) {
-		System.out.println("revert pawn");
 		boolean isThisPlayer = false;
 		if (currentPlayer.getPawns().contains(selectedPawn)) {
 			isThisPlayer = true;
 		}
 		if (selectedPawn.ReachedMainLand()) {
-			System.out.println("Pawn reached mainland but needs to revert");
 			selectedPawn.setReachedMainLand(false);
 			view.removePawnFromMainLand(selectedPawn, isThisPlayer);
 
 		}
 		if (startingLocation == -1) {
-			System.out.println("Revert to atlantis");
 			view.addPawnToAtlantis(selectedPawn);
 		} else {
 			WaterTile tempWater = view.getBase().get(startingLocation);
@@ -508,15 +500,13 @@ public class GameModel {
 
 	private void payForPassingWater(int waterBill, int waterPassedCount, boolean gameFinished) {
 		if (waterBill != 0) {
-
 			this.waterBill = waterBill;
 			view.showWaterBill(waterBill, waterPassedCount, gameFinished);
-			System.out.println("reached show water bill , is it ended ?" + gameFinished);
 		} else if (waterPassedCount < 1 && nextPlayer && !gameFinished)
 			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(), true));
-
 	}
 
+	
 	public void pay4Water() {
 		ArrayList<LandTile> treasuresChosen = removeSelectedLandTiles();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
@@ -527,6 +517,7 @@ public class GameModel {
 			if (cardSelected.isCardSelected()) {
 				cardSelected.setCardSelected(false);
 				cardsChosen.add(cardSelected);
+				it.remove();
 				view.removeCardFromHand(cardSelected);
 				System.out.println("Cards chosen size "+cardsChosen.size());
 	
@@ -541,7 +532,8 @@ public class GameModel {
 	}
 
 	public void handleCalc() {
-		System.out.println("HandleCalc");
+		System.out.println("-------- handl calc --------------");
+		System.out.println("curren player cards count "+currentPlayer.getPlayerHand().getNumCards()+" to make sure "+currentPlayer.getPlayerHand().getCards().size());
 		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
 		boolean allCardsSelected = true;
@@ -561,7 +553,9 @@ public class GameModel {
 		}
 		for (int i = 0; i < currentPlayer.getPlayerHand().getNumCards(); i++) {
 			Card cardSelected = currentPlayer.getPlayerHand().getCards().get(i);
+			System.out.println("card selected in client "+cardSelected.getColor().toString()+" owner "+cardSelected.getOwner().getPlayerName()+ "is selected: "+cardSelected.isCardSelected());
 			if (cardSelected.isCardSelected()) {
+
 				cardsChosen.add(cardSelected);
 				totalChosen += 1;
 
