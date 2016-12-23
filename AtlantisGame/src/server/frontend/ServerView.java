@@ -83,10 +83,5 @@ public class ServerView {
 	{
 		stage.show();
 		dbusernametxt.requestFocus();
-		
-		//For development purposes
-		dbconnectbtn.requestFocus();
-		dbusernametxt.setText("root");
-		dbpasswordtxt.setText("root");
 	}
 }
