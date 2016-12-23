@@ -29,7 +29,7 @@ public class SplashScreen  {
 		Scene scene = new Scene(root, 1200, 690);
 		primaryStage.setScene(scene);
 		primaryStage.show();
-		PauseTransition delay = new PauseTransition(Duration.seconds(9));
+		PauseTransition delay = new PauseTransition(Duration.seconds(11));
 		delay.setOnFinished(event -> showandhide());
 		delay.play();
 		

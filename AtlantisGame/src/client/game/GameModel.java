@@ -227,7 +227,7 @@ public class GameModel {
 
 				}
 				currentPlayer.setVictoryPoints(message.getVp());
-				view.vpHolder.setText("Your Victory Points: " + String.valueOf(message.getVp()));
+				view.setVpForPlayer(message.getVp());
 
 			} else {
 				for (int i = 0; i < sold.size(); i++) {
@@ -258,6 +258,7 @@ public class GameModel {
 				if (message.getNewCards().size() != 0) {
 					addCardToPlayer(message.getNewCards());
 				}
+				view.setVpForPlayer(message.getVp());
 			}
 		}
 		if (msgIn instanceof RevertTurnMessage) {
@@ -507,7 +508,7 @@ public class GameModel {
 	}
 
 	private void payForPassingWater(int waterBill, int waterPassedCount, boolean gameFinished) {
-		if (waterBill != 0||waterPassedCount!=0) {
+		if (waterBill != 0&&waterPassedCount!=0) {
 			this.waterBill = waterBill;
 			view.showWaterBill(waterBill, waterPassedCount, gameFinished);
 		} else if (waterPassedCount < 1 && nextPlayer && !gameFinished)
@@ -606,7 +607,7 @@ public class GameModel {
 	}
 
 	public void handleEndMyTurn() {
-		// this is not considered a normal end cuz he pressed the button
+		// this is not considered a normal end cuz he pressed the button (end turn)
 		if (currentPlayer.isYourTurn()) {
 			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(), false));
 

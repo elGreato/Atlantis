@@ -489,7 +489,7 @@ public class Game implements GameInterface {
 			player.addCard(extra);
 			newCards.add(extra);
 			users.get(player.getPlayerIndex())
-					.sendMessage(new EndMYTurnMessage(getName(), player.getPlayerIndex(), newCards));
+					.sendMessage(new EndMYTurnMessage(getName(), player.getPlayerIndex(), newCards,player.countVictoryPoints()));
 			endTurn();
 		} else
 			endTurn();

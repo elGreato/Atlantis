@@ -21,6 +21,7 @@ public class EndMYTurnMessage extends InGameMessage  implements Serializable {
 	int playerIndex;
 	private ArrayList<Card> newCards;
 	private boolean normalEnd;
+	private int vp;
 	
 	// from client to Server
 	public EndMYTurnMessage(String gameName, int playerIndex, boolean normalEnd) {
@@ -30,16 +31,20 @@ public class EndMYTurnMessage extends InGameMessage  implements Serializable {
 	}
 	
 	// from Server to Client
-		public EndMYTurnMessage(String gameName,int playerIndex,ArrayList<Card>newCards){
+		public EndMYTurnMessage(String gameName,int playerIndex,ArrayList<Card>newCards, int vp){
 		super(gameName);
 		this.playerIndex=playerIndex;
 		this.newCards=newCards;
+		this.vp=vp;
 	}
 	
 	
 	
 	
-	
+	public int getVp() {
+			return vp;
+		}
+
 	public ArrayList<Card> getNewCards() {
 		return newCards;
 	}
