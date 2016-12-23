@@ -511,7 +511,7 @@ public class GameModel {
 		if (waterBill != 0 && waterPassedCount != 0) {
 			this.waterBill = waterBill;
 			view.showWaterBill(waterBill, waterPassedCount, gameFinished);
-		} else if (waterPassedCount < 1 && nextPlayer && !gameFinished)
+		} else if (waterBill < 1 && nextPlayer && !gameFinished)
 			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(), true));
 	}
 
