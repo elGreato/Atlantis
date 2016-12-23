@@ -513,6 +513,8 @@ public class GameModel {
 			view.showWaterBill(waterBill, waterPassedCount, gameFinished);
 		} else if (waterBill < 1 && nextPlayer && !gameFinished)
 			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(), true));
+		else if(waterBill<1&&gameFinished)
+			msgOut.sendMessage(new WaterPaidMessage(gameName, currentPlayer.getPlayerIndex(), null, null, gameFinished));
 	}
 
 	public void pay4Water() {
