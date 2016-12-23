@@ -23,6 +23,7 @@ import messageObjects.turnMessages.PawnCardSelectedMessage;
 import messageObjects.turnMessages.PlayAnotherCardMessage;
 import messageObjects.turnMessages.RefreshPlayerMessage;
 import messageObjects.turnMessages.ResultMessage;
+import messageObjects.turnMessages.RevertTurnMessage;
 import messageObjects.turnMessages.ServerMessage;
 import messageObjects.turnMessages.WaterPaidMessage;
 /**
@@ -111,9 +112,16 @@ public class GameAI {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		game.processMessage(
+		if(bestCards.size() > 0)
+		{
+			game.processMessage(
 				new PawnCardSelectedMessage(game.getName(), me.getPlayerIndex(), bestPawn, bestCards.remove(0)));
+		}
+		else
+		{
+			//If there should be a problem with turn calculation (never happened) the game wont crash since the AI reverts in this case
+			game.processMessage(new RevertTurnMessage(game.getName(),me.getPlayerIndex()));
+		}
 		
 	}
 	//Initiates payment of last bill, calls determineTilesToPay to calculate best payment if it doesn't have to pay with everything.
@@ -423,7 +431,7 @@ public class GameAI {
 						}
 						
 						//calculates value of this turn
-						double valueOfTurn = ((aiGreediness * Math.pow(points-3, 3)) - costsAlreadyIncurred - 2*cardsAlreadyPlayed.size()) + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceAlreadyTraveled)+(aiTeamSpirit*(avgDistanceMe- p.getNewLocation()))+ (aiEvilness * (newWaterCosts-1));
+						double valueOfTurn = ((aiGreediness * Math.pow((points-3)/2, 3)) - costsAlreadyIncurred - 2*cardsAlreadyPlayed.size()) + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceAlreadyTraveled)+(aiTeamSpirit*(avgDistanceMe- p.getNewLocation()))+ (aiEvilness * (newWaterCosts-1));
 						if(bestPossibleTurn == null||valueOfTurn > bestPossibleTurn.getValueOfTurn())
 						{
 							ArrayList<Pawn> pawn = new ArrayList<Pawn>();

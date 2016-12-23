@@ -245,6 +245,7 @@ public class LobbyView {
 		
 		positionCol.setCellValueFactory(new PropertyValueFactory<UserInfoDataModel, Integer>("position"));
 		usernameCol.setCellValueFactory(new PropertyValueFactory<UserInfoDataModel, String>("username"));
+		usernameCol.setMinWidth(100);
 		gamesCol.setCellValueFactory(new PropertyValueFactory<UserInfoDataModel, Integer>("games"));
 		gamesPlayedCol.setCellValueFactory(new PropertyValueFactory<UserInfoDataModel, Integer>("gamesPlayed"));
 		gamesWonCol.setCellValueFactory(new PropertyValueFactory<UserInfoDataModel, Integer>("gamesWon"));

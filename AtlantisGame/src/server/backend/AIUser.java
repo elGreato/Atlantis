@@ -15,7 +15,7 @@ import messageObjects.WaterMessage;
 * @since   2016-12-16
 */
 public class AIUser extends User implements Runnable{
-	public static String[] aiNames = {"AI_BernGuy", "AI_Bolt","AI_SGASquad","AI_GovOfficials", "AI_TheStandard", "AI_EvilGenius"};
+	public static String[] aiNames = {"AI_BernCityGuy", "AI_Bolt","AI_SGASquad","AI_GovOfficials", "AI_TheStandard", "AI_EvilGenius"};
 	private double aiGreediness;
 	private double aiSpeed;
 	private double aiTeamSpirit;
@@ -29,7 +29,7 @@ public class AIUser extends User implements Runnable{
 		incomingMessages = new ArrayList<Message>();
 		activeGames = new ArrayList<GameAI>();
 		switch(ui.getUsername()){
-		case "AI_BernGuy" :aiGreediness = 5d; aiSpeed = -1d; aiTeamSpirit = 4d; aiEvilness = 0d; break; 
+		case "AI_BernCityGuy" :aiGreediness = 5d; aiSpeed = -1d; aiTeamSpirit = 4d; aiEvilness = 0d; break; 
 		case "AI_Bolt" : aiGreediness = 1d; aiSpeed = 10d; aiTeamSpirit = -5d; aiEvilness = 0d; break;
 		case "AI_SGASquad" : aiGreediness = 3d; aiSpeed = 4d; aiTeamSpirit = 15d; aiEvilness = 0d; break;
 		case "AI_GovOfficials" : aiGreediness = 8d; aiSpeed = 0.02d; aiTeamSpirit = -2d; aiEvilness = 5d; break;
