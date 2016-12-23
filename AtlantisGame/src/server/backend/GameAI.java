@@ -143,13 +143,18 @@ public class GameAI {
 		}
 		else
 		{
+			int pawnsReachedMainland = 0;
 			for(Pawn p : me.getPawns())
 			{
 				if(p.ReachedMainLand())
 				{
-					WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), new ArrayList<LandTile>(),new ArrayList<Card>(),true);
-					game.processMessage(wpm);
+					pawnsReachedMainland +=1;
 				}
+			}
+			if(pawnsReachedMainland<3)
+			{
+				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), new ArrayList<LandTile>(),new ArrayList<Card>(),true);
+				game.processMessage(wpm);
 			}
 		}
 		
@@ -418,7 +423,7 @@ public class GameAI {
 						}
 						
 						//calculates value of this turn
-						double valueOfTurn = ((aiGreediness * points) - costsAlreadyIncurred - 2*cardsAlreadyPlayed.size()) + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceAlreadyTraveled)+(aiTeamSpirit*(avgDistanceMe- p.getNewLocation()))+ (aiEvilness * newWaterCosts);
+						double valueOfTurn = ((aiGreediness * Math.pow(points-3, 3)) - costsAlreadyIncurred - 2*cardsAlreadyPlayed.size()) + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceAlreadyTraveled)+(aiTeamSpirit*(avgDistanceMe- p.getNewLocation()))+ (aiEvilness * (newWaterCosts-1));
 						if(bestPossibleTurn == null||valueOfTurn > bestPossibleTurn.getValueOfTurn())
 						{
 							ArrayList<Pawn> pawn = new ArrayList<Pawn>();
