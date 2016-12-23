@@ -529,7 +529,6 @@ public class GameModel {
 				cardsChosen.add(cardSelected);
 				it.remove();
 				view.removeCardFromHand(cardSelected);
-
 			}
 
 		}
