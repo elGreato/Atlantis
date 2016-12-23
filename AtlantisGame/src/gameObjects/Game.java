@@ -32,14 +32,16 @@ import server.backend.AIUser;
 import server.backend.Lobby;
 import server.backend.LobbyInterface;
 import server.backend.User;
+
 /**
-* <h1>Game Logic On Server Side</h1>
-* This is the main business logic of the game, here the server send the client all the data it needs 
-* such as cards and tiles, the server is the one responsible to check most of the moves validity 
-* @author  Ali Habbabeh
-* @version 1.2
-* @since   2016-12-22
-*/
+ * <h1>Game Logic On Server Side</h1> This is the main business logic of the
+ * game, here the server send the client all the data it needs such as cards and
+ * tiles, the server is the one responsible to check most of the moves validity
+ * 
+ * @author Ali Habbabeh
+ * @version 1.2
+ * @since 2016-12-22
+ */
 public class Game implements GameInterface {
 
 	private String name;
@@ -190,7 +192,7 @@ public class Game implements GameInterface {
 			if (removedCards.size() <= 1) {
 				selectedPawn.setStartingLocation(selectedPawn.getNewLocation());
 			}
-			System.out.println("Starting location: " + selectedPawn.getStartingLocation());
+
 			performTurn(selectedCard, selectedPawn);
 		}
 		if (igm instanceof BuyCardsMessage)
@@ -224,19 +226,18 @@ public class Game implements GameInterface {
 			}
 		}
 		if (igm instanceof WaterPaidMessage) {
-		
+
 			WaterPaidMessage message = (WaterPaidMessage) igm;
-			System.out.println("waterpaid message received from : "+message.getPlayerIndex()+" name: "+users.get(message.getPlayerIndex()).getUserInfo().getUsername()+
-					" to make sure, player is also in players list "+players.get(message.getPlayerIndex()));
+
 			Player player = players.get(message.getPlayerIndex());
-			
+
 			Iterator<Card> it = player.getPlayerHand().getCards().iterator();
 			while (it.hasNext()) {
 				Card c = it.next();
 				for (int k = 0; k < message.getCardsChosen().size(); k++) {
 					if (c.getCardId() == message.getCardsChosen().get(k).getCardId()) {
-						//System.out.println("Card from owner "+c.getOwner().getPlayerName()+ " Color: "+c.getColor().toString());
-						it.remove();		
+
+						it.remove();
 						break;
 					}
 				}
@@ -246,12 +247,12 @@ public class Game implements GameInterface {
 				LandTile t = it2.next();
 				for (int k = 0; k < message.getTreasuresChosen().size(); k++) {
 					if (t.getTileId() == message.getTreasuresChosen().get(k).getTileId()) {
-						it2.remove();		
+						it2.remove();
 						break;
 					}
 				}
 			}
-			System.out.println("land size after delete " + player.getPlayerHand().getTreasures().size());
+
 			// HERE ADD THE REFERSH TO COUNT AND VP
 			int numberOfPlayers = getNumOfRegisteredPlayers();
 			for (int i = 0; i < numberOfPlayers; i++) {
@@ -268,7 +269,7 @@ public class Game implements GameInterface {
 			// ending the game
 			else if (gameOver) {
 				paidLastBill++;
-				System.out.println("paidLastBill count " + paidLastBill);
+
 				for (int i = 0; i < numberOfPlayers; i++) {
 					users.get(i).sendMessage(
 							new ServerMessage(getName(), "Game Over, wait for other players to finish paying"));
@@ -285,7 +286,7 @@ public class Game implements GameInterface {
 						for (int k = 0; k < users.size(); k++) {
 							if (k != winners.get(0)) {
 								lobby.addLoss(users.get(k));
-								System.out.println(" the player lose: " + users.get(k).getUserInfo().getUsername());
+
 							}
 
 						}
@@ -336,10 +337,10 @@ public class Game implements GameInterface {
 		if (currentPlayerIndex == playerIndex) {
 			for (Card c : removedCards) {
 				currentPlayer.addCard(c);
-				System.out.println("one card found to give back to player");
+
 			}
 			if (removedTreasure != null) {
-				System.out.println("a treasure is found to give back to field");
+
 				base.get(removedTreasureIndex).getChildren().add(removedTreasure);
 				currentPlayer.getPlayerHand().getTreasures().remove(removedTreasure);
 			}
@@ -353,13 +354,12 @@ public class Game implements GameInterface {
 				LandTile lt = (LandTile) wt.getChildren().get(wt.getChildren().size() - 1);
 				lt.setPawnOnTile(selectedPawn);
 
-				System.out.println("pawn new location" + selectedPawn.getNewLocation());
 			} else {
 				atlantis.getChildren().add(selectedPawn);
 
 			}
 		}
-		System.out.println("Argument: " + playerIndex + " ,CurrPlayerIndex: " + currentPlayerIndex);
+
 		int numberOfPlayers = getNumOfRegisteredPlayers();
 		for (int i = 0; i < numberOfPlayers; i++) {
 			users.get(i).sendMessage(new RevertTurnMessage(getName(), currentPlayerIndex, removedCards, removedTreasure,
@@ -371,7 +371,7 @@ public class Game implements GameInterface {
 
 	// Method created by Kevin Neuschwander
 	private void handlePlayerLeave(int leavingPlayer) {
-		System.out.println("Player left");
+
 		int numAI = 0;
 		for (User u : users) {
 			if (u instanceof AIUser) {
@@ -381,7 +381,7 @@ public class Game implements GameInterface {
 
 		lobby.addLoss(users.get(leavingPlayer));
 		if (numAI == users.size() - 1) {
-			System.out.println("No humans left");
+
 			for (User u : users) {
 				if (users.indexOf(u) != leavingPlayer) {
 					if (maxPlayers > 2) {
@@ -394,10 +394,10 @@ public class Game implements GameInterface {
 			}
 			lobby.endGame(this);
 		} else {
-			System.out.println("There are humans left");
+
 			lobby.endGameForSpecificUser(this, users.get(leavingPlayer));
 			AIUser replacement = lobby.requestAI(users);
-			System.out.println("Replacement = " + replacement.getUserInfo().getUsername());
+
 			users.set(leavingPlayer, replacement);
 			players.get(leavingPlayer).setPlayerName(replacement.getUserInfo().getUsername());
 			replacement.initiateGameStart(this);
@@ -414,10 +414,10 @@ public class Game implements GameInterface {
 				u.sendMessage(new PlayerLeftMessage(name, leavingPlayer, replacement.getUserInfo().getUsername()));
 			}
 			if (currentPlayerIndex == leavingPlayer && !removedCards.isEmpty()) {
-				System.out.println("Revert turn");
+
 				revertThisTurn(leavingPlayer);
 			} else if (currentPlayerIndex == leavingPlayer) {
-				System.out.println("End turn");
+
 				performEndTurn(leavingPlayer, false);
 			}
 
@@ -488,8 +488,8 @@ public class Game implements GameInterface {
 			extra.setOwner(player);
 			player.addCard(extra);
 			newCards.add(extra);
-			users.get(player.getPlayerIndex())
-					.sendMessage(new EndMYTurnMessage(getName(), player.getPlayerIndex(), newCards,player.countVictoryPoints()));
+			users.get(player.getPlayerIndex()).sendMessage(
+					new EndMYTurnMessage(getName(), player.getPlayerIndex(), newCards, player.countVictoryPoints()));
 			endTurn();
 		} else
 			endTurn();
@@ -592,7 +592,7 @@ public class Game implements GameInterface {
 				}
 			}
 			if (((!foundLand && f == base.size() - 1)) || (selectedCard.getColor() == null && f == base.size() - 1)) {
-				System.out.println("Reached Main Land , index of new location is " + f + 1);
+
 				selectedPawn.setNewLocation(f + 1);
 				selectedPawn.setReachedMainLand(true);
 				mainland.getPawns().add(selectedPawn);
@@ -656,18 +656,16 @@ public class Game implements GameInterface {
 
 		// now similar stuff to a normal turn just without giving treasures and
 
-		System.out.println("End this game method");
 		for (Player p : players) {
 			// stuff
 			boolean connectedWater = false;
 			int waterPassedCount = 0;
 			int waterBill = 0;
-			System.out.println("looping players");
+
 			for (Pawn pawn : p.getPawns()) {
-				System.out.println("looping pawns");
-				System.out.println(pawn.ReachedMainLand());
+
 				if (!pawn.ReachedMainLand()) {
-					System.out.println("*****");
+
 					for (int f = pawn.getNewLocation() + 1; f < base.size(); f++) {
 						WaterTile water = base.get(f);
 

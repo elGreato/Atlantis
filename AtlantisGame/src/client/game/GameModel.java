@@ -508,7 +508,7 @@ public class GameModel {
 	}
 
 	private void payForPassingWater(int waterBill, int waterPassedCount, boolean gameFinished) {
-		if (waterBill != 0&&waterPassedCount!=0) {
+		if (waterBill != 0 && waterPassedCount != 0) {
 			this.waterBill = waterBill;
 			view.showWaterBill(waterBill, waterPassedCount, gameFinished);
 		} else if (waterPassedCount < 1 && nextPlayer && !gameFinished)
@@ -518,7 +518,7 @@ public class GameModel {
 	public void pay4Water() {
 		ArrayList<LandTile> treasuresChosen = removeSelectedLandTiles();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
-		System.out.println("Cards chosen size " + cardsChosen.size());
+
 		Iterator<Card> it = currentPlayer.getPlayerHand().getCards().iterator();
 		while (it.hasNext()) {
 			Card cardSelected = it.next();
@@ -531,7 +531,7 @@ public class GameModel {
 			}
 
 		}
-		System.out.println("Cards chosen size333 " + cardsChosen.size());
+
 		msgOut.sendMessage(new WaterPaidMessage(gameName, currentPlayer.getPlayerIndex(), treasuresChosen, cardsChosen,
 				nextPlayer));
 		view.closePayWaterScene();
@@ -539,9 +539,7 @@ public class GameModel {
 	}
 
 	public void handleCalc() {
-		System.out.println("-------- handl calc --------------");
-		System.out.println("curren player cards count " + currentPlayer.getPlayerHand().getNumCards() + " to make sure "
-				+ currentPlayer.getPlayerHand().getCards().size());
+
 		ArrayList<LandTile> treasuresChosen = new ArrayList<>();
 		ArrayList<Card> cardsChosen = new ArrayList<>();
 		boolean allCardsSelected = true;
@@ -554,29 +552,28 @@ public class GameModel {
 				totalChosen += treasureSelected.getLandValue();
 
 			} else {
-				System.out.println("not all treasures selected");
+
 				allTreasuresSelected = false;
 			}
 
 		}
 		for (int i = 0; i < currentPlayer.getPlayerHand().getNumCards(); i++) {
 			Card cardSelected = currentPlayer.getPlayerHand().getCards().get(i);
-			/*System.out.println("card selected in client " + cardSelected.getColor().toString() + " owner "
-					+ cardSelected.getOwner().getPlayerName() + "is selected: " + cardSelected.isCardSelected());*/
+
 			if (cardSelected.isCardSelected()) {
 
 				cardsChosen.add(cardSelected);
 				totalChosen += 1;
 
 			} else {
-				System.out.println("not all cards selected");
+
 				allCardsSelected = false;
 			}
 		}
 		// ability to revert only when you can't afford the water that you
 		// jumped
 		if (allCardsSelected && allTreasuresSelected && totalChosen <= waterBill && !gameOver) {
-			System.out.println("activating revert button");
+
 			view.btnRevert.setDisable(false);
 		}
 		if (allCardsSelected && allTreasuresSelected && totalChosen <= waterBill && gameOver) {
@@ -607,7 +604,8 @@ public class GameModel {
 	}
 
 	public void handleEndMyTurn() {
-		// this is not considered a normal end cuz he pressed the button (end turn)
+		// this is not considered a normal end cuz he pressed the button (end
+		// turn)
 		if (currentPlayer.isYourTurn()) {
 			msgOut.sendMessage(new EndMYTurnMessage(gameName, currentPlayer.getPlayerIndex(), false));
 
@@ -617,10 +615,10 @@ public class GameModel {
 
 	public void handleRevert() {
 		view.btnRevert.setDisable(true);
-		for(LandTile lt: currentPlayer.getPlayerHand().getTreasures()){
+		for (LandTile lt : currentPlayer.getPlayerHand().getTreasures()) {
 			view.removePlayerTreasure(lt);
 		}
-	
+
 		currentPlayer.getPlayerHand().getTreasures().clear();
 		msgOut.sendMessage(new RevertTurnMessage(gameName, currentPlayer.getPlayerIndex()));
 
