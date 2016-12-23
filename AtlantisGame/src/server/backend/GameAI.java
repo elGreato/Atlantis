@@ -47,6 +47,7 @@ public class GameAI {
 	private double avgDistanceOtherPlayers;
 	private double avgDistanceMe;
 	private AICostObject payments;
+	private boolean isNextPlayer;
 	private int moves;
 	//Getter needed
 	public String getGameName() {
@@ -59,6 +60,8 @@ public class GameAI {
 		this.aiTeamSpirit = aiTeamSpirit;
 		this.aiSpeed = aiSpeed;
 		this.aiEvilness = aiEvilness;
+		
+		isNextPlayer = true;
 	}
 	//Processes incoming messages
 	public void processMessage(InGameMessage igm) {
@@ -75,6 +78,7 @@ public class GameAI {
 			playAnotherCard();
 		} else if (igm instanceof RefreshPlayerMessage) {
 			RefreshPlayerMessage rpm = (RefreshPlayerMessage) igm;
+			isNextPlayer = rpm.isNextPlayer();
 			doPayment(rpm);
 		} else if (igm instanceof LastBillMessage) {
 			int totalPayment = ((LastBillMessage)igm).getWaterBill();
@@ -149,21 +153,11 @@ public class GameAI {
 			WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), payment.getTilesPaidInEachMove().get(0),payment.getCardsPaidInEachMove().get(0),true);
 			game.processMessage(wpm);
 		}
-		else
+		else if(!isNextPlayer)
 		{
-			int pawnsReachedMainland = 0;
-			for(Pawn p : me.getPawns())
-			{
-				if(p.ReachedMainLand())
-				{
-					pawnsReachedMainland +=1;
-				}
-			}
-			if(pawnsReachedMainland<3)
-			{
 				WaterPaidMessage wpm = new WaterPaidMessage(game.getName(),me.getPlayerIndex(), new ArrayList<LandTile>(),new ArrayList<Card>(),true);
 				game.processMessage(wpm);
-			}
+			
 		}
 		
 	}
@@ -339,7 +333,7 @@ public class GameAI {
 		AITurnObject bestPossibleTurn = null;
 		for(Pawn p : inputForMove.getPawnsThatCanBePlayed())
 		{
-			if(p.getNewLocation() < 53)
+			if(p.getNewLocation() < path.size())
 			{
 				for(Card c : inputForMove.getCardsOnHandLeft())
 				{
@@ -419,7 +413,7 @@ public class GameAI {
 						{
 							points = ((LandTile) (path.get(positionOfRemoval).getChildren().get(path.get(positionOfRemoval).getChildren().size() - 1))).getLandValue();
 							//Tests if ai can open a new water to make opponents pay more
-							if(morePawnsOfOpponentsBehind(positionOfRemoval, p) && positionOfRemoval != 0 && positionOfRemoval != 52 && 
+							if(morePawnsOfOpponentsBehind(positionOfRemoval, p) && positionOfRemoval != 0 && positionOfRemoval != path.size()-1 && 
 									landBeforeAndAfter(positionOfRemoval) && path.get(positionOfRemoval).getChildren().size() == 1)
 							{
 								newWaterCosts = ((LandTile) (path.get(positionOfRemoval-1).getChildren().get(path.get(positionOfRemoval-1).getChildren().size() - 1))).getLandValue();
@@ -429,9 +423,13 @@ public class GameAI {
 								}
 							}
 						}
-						
+						double valueOfFinalTile = 1; //if normal tile then value is one, atlantis has a higher value (AI is more likely to go to atlantis instead of going to the tiles before)
+						if(p.getNewLocation()+distanceAlreadyTraveled == path.size())
+						{
+							valueOfFinalTile = 3;
+						}
 						//calculates value of this turn
-						double valueOfTurn = ((aiGreediness * Math.pow((points-3)/2, 3)) - costsAlreadyIncurred - 2*cardsAlreadyPlayed.size()) + (aiSpeed * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceAlreadyTraveled)+(aiTeamSpirit*(avgDistanceMe- p.getNewLocation()))+ (aiEvilness * (newWaterCosts-1));
+						double valueOfTurn = ((aiGreediness * Math.pow((points-3)/1.5, 3)) - costsAlreadyIncurred - 2*cardsAlreadyPlayed.size()) + (aiSpeed * valueOfFinalTile * ((avgDistanceOtherPlayers+2)/(avgDistanceMe+2))*distanceAlreadyTraveled)+(aiTeamSpirit*(avgDistanceMe- p.getNewLocation()))+ (aiEvilness * (newWaterCosts));
 						if(bestPossibleTurn == null||valueOfTurn > bestPossibleTurn.getValueOfTurn())
 						{
 							ArrayList<Pawn> pawn = new ArrayList<Pawn>();

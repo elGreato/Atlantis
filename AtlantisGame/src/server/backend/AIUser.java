@@ -33,7 +33,7 @@ public class AIUser extends User implements Runnable{
 		case "AI_Bolt" : aiGreediness = 1d; aiSpeed = 10d; aiTeamSpirit = -5d; aiEvilness = 0d; break;
 		case "AI_SGASquad" : aiGreediness = 3d; aiSpeed = 4d; aiTeamSpirit = 15d; aiEvilness = 0d; break;
 		case "AI_GovOfficials" : aiGreediness = 8d; aiSpeed = 0.02d; aiTeamSpirit = -2d; aiEvilness = 5d; break;
-		case "AI_EvilGenius" : aiGreediness = 1d; aiSpeed = 8d; aiTeamSpirit = 8d; aiEvilness = 10000d; break;
+		case "AI_EvilGenius" : aiGreediness = 1d; aiSpeed = 8d; aiTeamSpirit = 8d; aiEvilness = 100d; break;
 		default : aiGreediness = 1d; aiSpeed = 1d; aiTeamSpirit = 1d; aiEvilness = 1d;
 		}
 		Thread t = new Thread(this);
