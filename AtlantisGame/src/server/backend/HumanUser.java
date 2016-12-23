@@ -115,7 +115,7 @@ public class HumanUser extends User implements Runnable{
 		if(userInfo != null)
 		{
 			//inform user about successful create and login, send user information at the same time
-			UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo, lobbyInterface.getPosition(userInfo));
+			UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo.getUsername(),userInfo.getGamesPlayed(), userInfo.getGamesWon(), userInfo.getGamesLost(), userInfo.getPoints(), lobbyInterface.getPosition(userInfo));
 			oos.writeObject(nowLoggedInAs);
 			oos.flush();
 			lobbyInterface.sendWholeLobby(this);
@@ -140,7 +140,7 @@ public class HumanUser extends User implements Runnable{
 		if(userInfo != null)
 		{
 			//inform user about successful login, send user information at the same time
-			UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo, lobbyInterface.getPosition(userInfo));
+			UserInfoMessage nowLoggedInAs = new UserInfoMessage(userInfo.getUsername(),userInfo.getGamesPlayed(), userInfo.getGamesWon(), userInfo.getGamesLost(), userInfo.getPoints(), lobbyInterface.getPosition(userInfo));
 			oos.writeObject(nowLoggedInAs);
 			oos.flush();
 			lobbyInterface.sendWholeLobby(this);

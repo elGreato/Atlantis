@@ -2,7 +2,6 @@ package messageObjects.userMessages;
 
 import java.io.Serializable;
 
-import server.backend.UserInfo;
 /**
 * <h1>Message that sends stats of a user</h1>
 * 
@@ -20,12 +19,12 @@ public class UserInfoMessage extends UserMessage implements Serializable {
 	private int position;
 	
 	
-	public UserInfoMessage(UserInfo userInfo, int position) {
-		super(userInfo.getUsername());
-		this.gamesPlayed = userInfo.getGamesPlayed();
-		this.gamesWon = userInfo.getGamesWon();
-		this.gamesLost = userInfo.getGamesLost();
-		this.points = userInfo.getPoints();
+	public UserInfoMessage(String username, int gamesPlayed, int gamesWon, int gamesLost, int points, int position) {
+		super(username);
+		this.gamesPlayed = gamesPlayed;
+		this.gamesWon = gamesWon;
+		this.gamesLost = gamesLost;
+		this.points = points;
 		this.position = position;
 	}
 

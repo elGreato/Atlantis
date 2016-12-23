@@ -286,7 +286,7 @@ public class Lobby implements LobbyInterface{
 		for(int i = 0; i < leaderboardEntries; i++)
 		{
 			UserInfo ui = userInfoAllUsers.get(i);
-			leaderboard.add(new UserInfoMessage(ui,getPosition(ui)));
+			leaderboard.add(new UserInfoMessage(ui.getUsername(),ui.getGamesPlayed(), ui.getGamesWon(), ui.getGamesLost(), ui.getPoints(),getPosition(ui)));
 		}
 		user.sendMessage(new UserInfoListMessage(leaderboard));
 		
@@ -370,7 +370,8 @@ public class Lobby implements LobbyInterface{
 				{
 					if(userInfoAllUsers.get(i).equals(u.getUserInfo()))
 					{
-						u.sendMessage(new UserInfoMessage(u.getUserInfo(),getPosition(u.getUserInfo())));
+						UserInfo userInfo = u.getUserInfo();
+						u.sendMessage(new UserInfoMessage(userInfo.getUsername(),userInfo.getGamesPlayed(), userInfo.getGamesWon(), userInfo.getGamesLost(), userInfo.getPoints(),getPosition(u.getUserInfo())));
 					}
 				}
 			}
@@ -383,7 +384,8 @@ public class Lobby implements LobbyInterface{
 				{
 					if(userInfoAllUsers.get(i).equals(u.getUserInfo()))
 					{
-						u.sendMessage(new UserInfoMessage(u.getUserInfo(),getPosition(u.getUserInfo())));
+						UserInfo userInfo = u.getUserInfo();
+						u.sendMessage(new UserInfoMessage(userInfo.getUsername(),userInfo.getGamesPlayed(), userInfo.getGamesWon(), userInfo.getGamesLost(), userInfo.getPoints(),getPosition(u.getUserInfo())));
 					}
 				}
 			}
@@ -397,7 +399,8 @@ public class Lobby implements LobbyInterface{
 			}
 		}
 		//Inform the user that has caused the update about change in leaderboard and stats
-		user.sendMessage(new UserInfoMessage(user.getUserInfo(), getPosition(user.getUserInfo())));
+		UserInfo userInfo = user.getUserInfo();
+		user.sendMessage(new UserInfoMessage(userInfo.getUsername(),userInfo.getGamesPlayed(), userInfo.getGamesWon(), userInfo.getGamesLost(), userInfo.getPoints(), getPosition(user.getUserInfo())));
 	}
 
 	//returns position in leaderboard of a user
